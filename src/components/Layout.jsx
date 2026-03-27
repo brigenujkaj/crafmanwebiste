@@ -139,7 +139,11 @@ export default function Layout({ children }) {
           >
             <Link to="/" style={navLinkStyle}>
               Home
-            </Link>
+                      </Link>
+
+                      < Link to= "/house-extensions-london" style={navLinkStyle} >
+                      House Extensions
+                      </Link>
 
             <select
               defaultValue=""
