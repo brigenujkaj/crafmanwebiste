@@ -46,7 +46,7 @@ export default function App() {
       <Route path="/" element={<Home />} />
 
       {/* ✅ WORKING PAGES */}
-      <Route path="/houseextension" element={<HouseExtensions />} />
+      <Route path="/house-extensions-london" element={<HouseExtensions />} />
       <Route path="/renovations-london" element={<RenovationsLondon />} />
       <Route path="/about" element={<Abotu />} />
       <Route path="/contact" element={<Contact />} />
