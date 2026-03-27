@@ -6,7 +6,7 @@ import HouseExtensions from "./pages/HouseExtensions.jsx";
 import RenovationsLondon from "./pages/RenovationsLondon.jsx";
 import Abotu from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
-import CommercialFitoutsLondon from "./pages/CommercialFitoutsLondon.jsx";
+import CommercialFitOutsLondon from "./pages/CommercialFitOutsLondon.jsx";
 import DrawingsPlanning from "./pages/DrawingsPlanning.jsx";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
