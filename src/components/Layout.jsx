@@ -146,22 +146,15 @@ export default function Layout({ children }) {
               onChange={handleServiceChange}
               style={selectStyle}
             >
-              <option value="" disabled>
-                Services
-              </option>
-              <option value="/house-extensions-london">
-                House Extensions
-              </option>
-              <option value="/renovations-london">
-                Renovations
-              </option>
-              <option value="/commercial-fit-outs-london">
-                Commercial Fit-Outs
-              </option>
-              <option value="/drawings-planning">
-                Drawings & Planning
-              </option>
-            </select>
+                         
+                              <option value="" disabled>
+                                  Services
+                              </option>
+                              <option value="/house-extensions-london">House Extensions</option>
+                              <option value="/renovations-london">Renovations</option>
+                              <option value="/commercial-fit-outs-london">Commercial Fit-Outs</option>
+                              <option value="/drawings-planning">Drawings & Planning</option>
+                          </select>
 
             <Link to="/projects" style={navLinkStyle}>
               Projects
