@@ -50,7 +50,7 @@ export default function App() {
       <Route path="/renovations-london" element={<RenovationsLondon />} />
       <Route path="/about" element={<Abotu />} />
       <Route path="/contact" element={<Contact />} />
-      <Route path="/commercial-fit-outs-london" element={<CommercialFitoutsLondon />} />
+      <Route path="/commercial-fit-outs-london" element={<CommercialFitOutsLondon />} />
       <Route path="/drawings-planning" element={<DrawingsPlanning />} />
 
       {/* ✅ TEMP PAGE */}
