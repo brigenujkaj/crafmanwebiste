@@ -10,6 +10,7 @@ import CommercialFitOutsLondon from "./pages/CommercialFitOutsLondon.jsx";
 import DrawingsPlanning from "./pages/DrawingsPlanning.jsx";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import Projects from "./pages/Projects.jsx";
 
 // TEMP (until you build it)
 function TestPage({ title }) {
@@ -50,7 +51,8 @@ export default function App() {
       <Route path="/renovations-london" element={<RenovationsLondon />} />
       <Route path="/about" element={<Abotu />} />
       <Route path="/contact" element={<Contact />} />
-      <Route path="/commercial-fit-outs-london" element={<CommercialFitOutsLondon />} />
+          <Route path="/commercial-fit-outs-london" element={<CommercialFitOutsLondon />} />
+          <Route path="/projects" element={<Projects />} />
       <Route path="/drawings-planning" element={<DrawingsPlanning />} />
 
       {/* ✅ TEMP PAGE */}
