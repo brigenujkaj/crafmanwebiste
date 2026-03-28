@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Layout, { siteStyles } from "../components/Layout.jsx";
 import RenovationCalculator from "../components/RenovationCalculator";
 import { useState } from "react";
+import ContactForm from "../components/ContactForm.jsx";
 
 export default function RenovationsLondon() {
   const { section, card, buttonPrimary, buttonSecondary, tag } = siteStyles;
@@ -444,289 +445,104 @@ const pillStyle = (active) => ({
         </div>
       </section>
 
-      <section style={section}>
-  <div
-    style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-      gap: "28px",
-      alignItems: "start",
-    }}
-  >
-    <div style={{ display: "grid", gap: "20px" }}>
-      <div style={card}>
-        <h2 style={{ marginTop: 0, fontSize: "30px" }}>Start your enquiry</h2>
-        <p style={{ color: "#57534e", lineHeight: "1.8" }}>
-          Keep it simple. The more we know, the more useful our first reply will be.
-        </p>
-
-        <form style={{ display: "grid", gap: "18px", marginTop: "18px" }}>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-              gap: "14px",
-            }}
-          >
-            <label style={labelStyle}>
-              <span>Name</span>
-              <input
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                placeholder="Your name"
-                style={inputStyle}
-              />
-            </label>
-
-            <label style={labelStyle}>
-              <span>Phone number</span>
-              <input
-                name="phone"
-                value={form.phone}
-                onChange={handleChange}
-                placeholder="Your phone number"
-                style={inputStyle}
-              />
-            </label>
-          </div>
-
-          <label style={labelStyle}>
-            <span>Email</span>
-            <input
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="Your email address"
-              style={inputStyle}
-            />
-          </label>
-
-          <label style={labelStyle}>
-            <span>Project required</span>
-            <select
-              name="service"
-              value={form.service}
-              onChange={handleChange}
-              style={inputStyle}
-            >
-              <option value="">Select a service</option>
-              {serviceOptions.map((service) => (
-                <option key={service} value={service}>
-                  {service}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          {form.service === "Other" && (
-            <label style={labelStyle}>
-              <span>Tell us the service you need</span>
-              <input
-                name="otherService"
-                value={form.otherService}
-                onChange={handleChange}
-                placeholder="Describe your project"
-                style={inputStyle}
-              />
-            </label>
-          )}
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-              gap: "14px",
-            }}
-          >
-            <label style={labelStyle}>
-              <span>When would you like to start?</span>
-              <select
-                name="startTime"
-                value={form.startTime}
-                onChange={handleChange}
-                style={inputStyle}
+          <section style={section}>
+              <div
+                  style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+                      gap: "28px",
+                      alignItems: "start",
+                  }}
               >
-                <option value="">Choose timing</option>
-                {startOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </label>
 
-            <label style={labelStyle}>
-              <span>Do you own the property?</span>
-              <select
-                name="ownsProperty"
-                value={form.ownsProperty}
-                onChange={handleChange}
-                style={inputStyle}
-              >
-                <option value="">Select</option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-                <option value="In progress">In progress</option>
-              </select>
-            </label>
-          </div>
+                  <div style={{ display: "grid", gap: "20px" }}>
+                      <ContactForm endpoint="https://formspree.io/f/mojpjokd" />
+                  </div>
 
-          <div style={labelStyle}>
-            <span>Preferred contact days</span>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
-                gap: "10px",
-              }}
-            >
-              {dayOptions.map((day) => (
-                <button
-                  key={day}
-                  type="button"
-                  onClick={() => toggleDay(day)}
-                  style={pillStyle(form.contactDays.includes(day))}
-                >
-                  {day}
-                </button>
-              ))}
-            </div>
-          </div>
+                  <div style={{ display: "grid", gap: "20px" }}>
+                      <div
+                          style={{
+                              background: "#A67C00",
+                              color: "#fff",
+                              borderRadius: "24px",
+                              padding: "30px",
+                              boxShadow: "0 10px 28px rgba(0,0,0,0.14)",
+                          }}
+                      >
+                          <div
+                              style={{
+                                  fontSize: "12px",
+                                  letterSpacing: "2px",
+                                  textTransform: "uppercase",
+                                  color: "#d6d3d1",
+                                  fontWeight: "700",
+                              }}
+                          >
+                              Why enquire with us
+                          </div>
 
-          <div style={labelStyle}>
-            <span>Preferred contact time</span>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
-                gap: "10px",
-              }}
-            >
-              {contactTimeOptions.map((time) => (
-                <button
-                  key={time}
-                  type="button"
-                  onClick={() =>
-                    setForm((prev) => ({ ...prev, contactTime: time }))
-                  }
-                  style={pillStyle(form.contactTime === time)}
-                >
-                  {time}
-                </button>
-              ))}
-            </div>
-          </div>
+                          <h2 style={{ fontSize: "30px", marginTop: "12px", marginBottom: "12px" }}>
+                              A smoother start to your project
+                          </h2>
 
-          <label style={labelStyle}>
-            <span>Brief project details</span>
-            <textarea
-              name="message"
-              value={form.message}
-              onChange={handleChange}
-              placeholder="Tell us what you are planning"
-              rows="5"
-              style={{
-                ...inputStyle,
-                resize: "vertical",
-              }}
-            />
-          </label>
+                          <div style={{ display: "grid", gap: "14px", color: "#f5f5f4", lineHeight: "1.8" }}>
+                              <div>• Clear early guidance on project direction</div>
+                              <div>• Practical input on design and buildability</div>
+                              <div>• Help with planning and approvals where needed</div>
+                              <div>• One team focused on quality and delivery</div>
+                          </div>
+                      </div>
 
-          <button
-            type="button"
-            style={{ ...buttonPrimary, border: "none", cursor: "pointer" }}
-          >
-            Send Enquiry
-          </button>
-        </form>
-      </div>
-    </div>
+                      <div style={card}>
+                          <div
+                              style={{
+                                  fontSize: "12px",
+                                  letterSpacing: "2px",
+                                  textTransform: "uppercase",
+                                  color: "#78716c",
+                                  fontWeight: "700",
+                              }}
+                          >
+                              Direct Contact
+                          </div>
 
-    <div style={{ display: "grid", gap: "20px" }}>
-      <div
-        style={{
-          background: "#1f1f1f",
-          color: "#fff",
-          borderRadius: "24px",
-          padding: "30px",
-          boxShadow: "0 10px 28px rgba(0,0,0,0.14)",
-        }}
-      >
-        <div
-          style={{
-            fontSize: "12px",
-            letterSpacing: "2px",
-            textTransform: "uppercase",
-            color: "#d6d3d1",
-            fontWeight: "700",
-          }}
-        >
-          Why enquire with us
-        </div>
+                          <h3 style={{ fontSize: "28px", marginTop: "12px", marginBottom: "12px" }}>
+                              Prefer to contact us directly?
+                          </h3>
 
-        <h2 style={{ fontSize: "30px", marginTop: "12px", marginBottom: "12px" }}>
-          A smoother start to your project
-        </h2>
+                          <div style={{ color: "#57534e", lineHeight: "1.9" }}>
+                              <p><strong>Phone:</strong> 02036335634</p>
+                              <p><strong>Email:</strong> info@crafman.co.uk</p>
+                              <p><strong>Location:</strong> London, United Kingdom</p>
+                          </div>
+                      </div>
 
-        <div style={{ display: "grid", gap: "14px", color: "#f5f5f4", lineHeight: "1.8" }}>
-          <div>• Clear early guidance on project direction</div>
-          <div>• Practical input on design and buildability</div>
-          <div>• Help with planning and approvals where needed</div>
-          <div>• One team focused on quality and delivery</div>
-        </div>
-      </div>
+                      <div style={card}>
+                          <div
+                              style={{
+                                  fontSize: "12px",
+                                  letterSpacing: "2px",
+                                  textTransform: "uppercase",
+                                  color: "#78716c",
+                                  fontWeight: "700",
+                              }}
+                          >
+                              What Happens Next
+                          </div>
 
-      <div style={card}>
-        <div
-          style={{
-            fontSize: "12px",
-            letterSpacing: "2px",
-            textTransform: "uppercase",
-            color: "#78716c",
-            fontWeight: "700",
-          }}
-        >
-          Direct Contact
-        </div>
+                          <h3 style={{ fontSize: "28px", marginTop: "12px", marginBottom: "12px" }}>
+                              A simple next step
+                          </h3>
 
-        <h3 style={{ fontSize: "28px", marginTop: "12px", marginBottom: "12px" }}>
-          Prefer to contact us directly?
-        </h3>
-
-        <div style={{ color: "#57534e", lineHeight: "1.9" }}>
-          <p><strong>Phone:</strong> 02036335634</p>
-          <p><strong>Email:</strong> info@crafman.co.uk</p>
-          <p><strong>Location:</strong> London, United Kingdom</p>
-        </div>
-      </div>
-
-      <div style={card}>
-        <div
-          style={{
-            fontSize: "12px",
-            letterSpacing: "2px",
-            textTransform: "uppercase",
-            color: "#78716c",
-            fontWeight: "700",
-          }}
-        >
-          What Happens Next
-        </div>
-
-        <h3 style={{ fontSize: "28px", marginTop: "12px", marginBottom: "12px" }}>
-          A simple next step
-        </h3>
-
-        <div style={{ display: "grid", gap: "12px", color: "#57534e", lineHeight: "1.8" }}>
-          <div>1. We review your enquiry</div>
-          <div>2. We contact you on your preferred days and times</div>
-          <div>3. We discuss scope, goals, and the best route forward</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+                          <div style={{ display: "grid", gap: "12px", color: "#57534e", lineHeight: "1.8" }}>
+                              <div>1. We review your enquiry</div>
+                              <div>2. We contact you on your preferred days and times</div>
+                              <div>3. We discuss scope, goals, and the best route forward</div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </section>
 
       <section style={section}>
         <div style={{ maxWidth: "820px" }}>
