@@ -72,6 +72,20 @@ export default function Layout({ children }) {
         whiteSpace: "nowrap",
     });
 
+    const callLinkStyle = {
+        display: "inline-block",
+        background: "#A67C00",
+        color: "#fff",
+        textDecoration: "none",
+        fontSize: "15px",
+        fontWeight: "700",
+        padding: "11px 18px",
+        borderRadius: "12px",
+        border: "1px solid #A67C00",
+        whiteSpace: "nowrap",
+        boxShadow: "0 8px 18px rgba(166,124,0,0.18)",
+    };
+
     const contactLinkStyle = {
         display: "inline-block",
         background: "#1c1917",
@@ -260,6 +274,10 @@ export default function Layout({ children }) {
                         <Link to="/about" style={navLinkStyle("/about")}>
                             About
                         </Link>
+
+                        <a href="tel:02036335634" style={callLinkStyle}>
+                            Call Now
+                        </a>
 
                         <Link to="/contact" style={contactLinkStyle}>
                             Contact

@@ -277,6 +277,7 @@ export default function ExtensionCalculator() {
 
     return (
         <section
+            id="cost-calculator"
             style={{
                 maxWidth: "1100px",
                 margin: "0 auto",
@@ -293,6 +294,7 @@ export default function ExtensionCalculator() {
                 }}
             >
                 <div
+                    id="cost-calculator"
                     style={{
                         fontSize: "12px",
                         letterSpacing: "2px",
