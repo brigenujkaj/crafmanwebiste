@@ -1,10 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
 
+const FORM_ENDPOINT = "https://formspree.io/f/xzdkevbg";
+
+function createProject(id = Date.now()) {
+    return {
+        id,
+        type: "rear",
+        size: 20,
+        spec: "standard",
+    };
+}
+
 export default function ExtensionCalculator() {
-    const [type, setType] = useState("rear");
-    const [size, setSize] = useState(20);
-    const [spec, setSpec] = useState("standard");
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    const [projects, setProjects] = useState([createProject(1)]);
+    const [screenWidth, setScreenWidth] = useState(
+        typeof window !== "undefined" ? window.innerWidth : 1200
+    );
 
     const [lead, setLead] = useState({
         name: "",
@@ -14,14 +25,21 @@ export default function ExtensionCalculator() {
 
     const [showResult, setShowResult] = useState(false);
     const [error, setError] = useState("");
+    const [submitStatus, setSubmitStatus] = useState({
+        loading: false,
+        success: false,
+        error: "",
+    });
 
     useEffect(() => {
         function handleResize() {
             setScreenWidth(window.innerWidth);
         }
 
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
+        if (typeof window !== "undefined") {
+            window.addEventListener("resize", handleResize);
+            return () => window.removeEventListener("resize", handleResize);
+        }
     }, []);
 
     const isMobile = screenWidth < 768;
@@ -55,15 +73,41 @@ export default function ExtensionCalculator() {
         high: "High-End",
     };
 
-    const { low, high } = useMemo(() => {
-        const basePrice = baseRates[type] * size;
-        const adjusted = basePrice * specMultiplier[spec];
+    const projectResults = useMemo(() => {
+        return projects.map((project) => {
+            const baseRate = baseRates[project.type];
+            const multiplier = specMultiplier[project.spec];
+            const basePrice = baseRate * project.size;
+            const adjusted = basePrice * multiplier;
+            const low = adjusted * 0.85;
+            const high = adjusted * 1.15;
 
-        return {
-            low: adjusted * 0.85,
-            high: adjusted * 1.15,
-        };
-    }, [type, size, spec]);
+            return {
+                ...project,
+                label: typeLabels[project.type],
+                specLabel: specLabels[project.spec],
+                baseRate,
+                multiplier,
+                basePrice,
+                adjusted,
+                low,
+                high,
+            };
+        });
+    }, [projects]);
+
+    const totals = useMemo(() => {
+        return projectResults.reduce(
+            (acc, project) => {
+                acc.low += project.low;
+                acc.high += project.high;
+                acc.base += project.basePrice;
+                acc.adjusted += project.adjusted;
+                return acc;
+            },
+            { low: 0, high: 0, base: 0, adjusted: 0 }
+        );
+    }, [projectResults]);
 
     const pillButton = (active) => ({
         padding: isMobile ? "14px 12px" : "12px 14px",
@@ -91,13 +135,38 @@ export default function ExtensionCalculator() {
 
     function handleLeadChange(e) {
         const { name, value } = e.target;
+
         setLead((prev) => ({
             ...prev,
             [name]: value,
         }));
+
+        if (error) setError("");
+        if (submitStatus.error) {
+            setSubmitStatus((prev) => ({ ...prev, error: "" }));
+        }
     }
 
-    function handleSubmit(e) {
+    function updateProject(projectId, field, value) {
+        setProjects((prev) =>
+            prev.map((project) =>
+                project.id === projectId ? { ...project, [field]: value } : project
+            )
+        );
+    }
+
+    function addProject() {
+        setProjects((prev) => [...prev, createProject(Date.now() + Math.random())]);
+    }
+
+    function removeProject(projectId) {
+        setProjects((prev) => {
+            if (prev.length === 1) return prev;
+            return prev.filter((project) => project.id !== projectId);
+        });
+    }
+
+    async function handleSubmit(e) {
         e.preventDefault();
 
         if (!lead.name.trim() || !lead.email.trim() || !lead.phone.trim()) {
@@ -106,16 +175,104 @@ export default function ExtensionCalculator() {
         }
 
         setError("");
-        setShowResult(true);
-
-        console.log("Lead captured:", {
-            ...lead,
-            extensionType: typeLabels[type],
-            size,
-            spec: specLabels[spec],
-            estimateLow: Math.round(low),
-            estimateHigh: Math.round(high),
+        setSubmitStatus({
+            loading: true,
+            success: false,
+            error: "",
         });
+
+        const flatProjectFields = {};
+        projectResults.forEach((project, index) => {
+            const number = index + 1;
+
+            flatProjectFields[`project_${number}_type`] = project.label;
+            flatProjectFields[`project_${number}_type_key`] = project.type;
+            flatProjectFields[`project_${number}_size_m2`] = project.size;
+            flatProjectFields[`project_${number}_spec`] = project.specLabel;
+            flatProjectFields[`project_${number}_spec_key`] = project.spec;
+            flatProjectFields[`project_${number}_base_rate_per_m2`] = project.baseRate;
+            flatProjectFields[`project_${number}_spec_multiplier`] = project.multiplier;
+            flatProjectFields[`project_${number}_base_price`] = Math.round(project.basePrice);
+            flatProjectFields[`project_${number}_adjusted_price`] = Math.round(project.adjusted);
+            flatProjectFields[`project_${number}_estimate_low`] = Math.round(project.low);
+            flatProjectFields[`project_${number}_estimate_high`] = Math.round(project.high);
+        });
+
+        const payload = {
+            name: lead.name,
+            email: lead.email,
+            phone: lead.phone,
+
+            projectCount: projects.length,
+
+            totalBasePrice: Math.round(totals.base),
+            totalAdjustedPrice: Math.round(totals.adjusted),
+            totalEstimateLow: Math.round(totals.low),
+            totalEstimateHigh: Math.round(totals.high),
+
+            projects: projectResults.map((project, index) => ({
+                number: index + 1,
+                type: project.label,
+                typeKey: project.type,
+                size: project.size,
+                spec: project.specLabel,
+                specKey: project.spec,
+                baseRatePerM2: project.baseRate,
+                specMultiplier: project.multiplier,
+                basePrice: Math.round(project.basePrice),
+                adjustedPrice: Math.round(project.adjusted),
+                estimateLow: Math.round(project.low),
+                estimateHigh: Math.round(project.high),
+            })),
+
+            projectsSummary: projectResults
+                .map(
+                    (project, index) =>
+                        `${index + 1}. ${project.label} | ${project.size} m² | ${project.specLabel
+                        } | Base £${Math.round(project.basePrice).toLocaleString()} | Adjusted £${Math.round(
+                            project.adjusted
+                        ).toLocaleString()} | Range £${Math.round(project.low).toLocaleString()} - £${Math.round(
+                            project.high
+                        ).toLocaleString()}`
+                )
+                .join("\n"),
+
+            ...flatProjectFields,
+        };
+
+        try {
+            const response = await fetch(FORM_ENDPOINT, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    result?.errors?.[0]?.message || "Something went wrong. Please try again."
+                );
+            }
+
+            setShowResult(true);
+            setSubmitStatus({
+                loading: false,
+                success: true,
+                error: "",
+            });
+
+            console.log("Lead captured:", payload);
+        } catch (err) {
+            setSubmitStatus({
+                loading: false,
+                success: false,
+                error: err.message || "Something went wrong. Please try again.",
+            });
+        }
     }
 
     return (
@@ -167,8 +324,8 @@ export default function ExtensionCalculator() {
                         fontSize: isMobile ? "15px" : "16px",
                     }}
                 >
-                    Use this quick calculator to get a rough guide price for your project
-                    in London based on type, size, and finish level.
+                    Add one or more projects to get individual guide prices and a combined
+                    estimated total for your London project.
                 </p>
 
                 <div
@@ -184,119 +341,201 @@ export default function ExtensionCalculator() {
                         <div style={{ marginBottom: "24px" }}>
                             <div
                                 style={{
-                                    fontWeight: "700",
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    gap: "12px",
+                                    flexWrap: "wrap",
                                     marginBottom: "12px",
-                                    fontSize: "15px",
-                                }}
-                            >
-                                1. Choose project type
-                            </div>
-
-                            <div
-                                style={{
-                                    display: "grid",
-                                    gridTemplateColumns: isMobile
-                                        ? "1fr"
-                                        : "repeat(auto-fit, minmax(160px, 1fr))",
-                                    gap: "10px",
-                                }}
-                            >
-                                {Object.entries(typeLabels).map(([key, label]) => (
-                                    <button
-                                        key={key}
-                                        type="button"
-                                        onClick={() => setType(key)}
-                                        style={pillButton(type === key)}
-                                    >
-                                        {label}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div style={{ marginBottom: "24px" }}>
-                            <div
-                                style={{
-                                    fontWeight: "700",
-                                    marginBottom: "12px",
-                                    fontSize: "15px",
-                                }}
-                            >
-                                2. Select approximate size
-                            </div>
-
-                            <div
-                                style={{
-                                    background: "#f7f5f2",
-                                    border: "1px solid #e7e5e4",
-                                    borderRadius: "18px",
-                                    padding: isMobile ? "16px" : "18px",
                                 }}
                             >
                                 <div
                                     style={{
-                                        fontSize: isMobile ? "24px" : "28px",
                                         fontWeight: "700",
-                                        marginBottom: "8px",
+                                        fontSize: "15px",
                                     }}
                                 >
-                                    {size} m²
+                                    1. Add your project types
                                 </div>
 
-                                <input
-                                    type="range"
-                                    min="5"
-                                    max="80"
-                                    step="1"
-                                    value={size}
-                                    onChange={(e) => setSize(Number(e.target.value))}
-                                    style={{ width: "100%" }}
-                                />
-
-                                <div
+                                <button
+                                    type="button"
+                                    onClick={addProject}
                                     style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        fontSize: "13px",
-                                        color: "#78716c",
-                                        marginTop: "6px",
+                                        background: "#fff",
+                                        color: "#1c1917",
+                                        border: "1px solid #d6d3d1",
+                                        padding: "10px 14px",
+                                        borderRadius: "12px",
+                                        fontWeight: "700",
+                                        cursor: "pointer",
                                     }}
                                 >
-                                    <span>5 m²</span>
-                                    <span>80 m²</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style={{ marginBottom: "28px" }}>
-                            <div
-                                style={{
-                                    fontWeight: "700",
-                                    marginBottom: "12px",
-                                    fontSize: "15px",
-                                }}
-                            >
-                                3. Choose finish level
+                                    + Add another project
+                                </button>
                             </div>
 
-                            <div
-                                style={{
-                                    display: "grid",
-                                    gridTemplateColumns: isMobile
-                                        ? "1fr"
-                                        : "repeat(auto-fit, minmax(140px, 1fr))",
-                                    gap: "10px",
-                                }}
-                            >
-                                {Object.entries(specLabels).map(([key, label]) => (
-                                    <button
-                                        key={key}
-                                        type="button"
-                                        onClick={() => setSpec(key)}
-                                        style={pillButton(spec === key)}
+                            <div style={{ display: "grid", gap: "16px" }}>
+                                {projects.map((project, index) => (
+                                    <div
+                                        key={project.id}
+                                        style={{
+                                            border: "1px solid #e7e5e4",
+                                            borderRadius: "18px",
+                                            padding: isMobile ? "16px" : "18px",
+                                            background: "#fafaf9",
+                                        }}
                                     >
-                                        {label}
-                                    </button>
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                justifyContent: "space-between",
+                                                alignItems: "center",
+                                                gap: "12px",
+                                                flexWrap: "wrap",
+                                                marginBottom: "14px",
+                                            }}
+                                        >
+                                            <strong style={{ fontSize: "15px" }}>
+                                                Project {index + 1}
+                                            </strong>
+
+                                            {projects.length > 1 && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeProject(project.id)}
+                                                    style={{
+                                                        border: "none",
+                                                        background: "transparent",
+                                                        color: "#b42318",
+                                                        fontWeight: "700",
+                                                        cursor: "pointer",
+                                                        padding: 0,
+                                                    }}
+                                                >
+                                                    Remove
+                                                </button>
+                                            )}
+                                        </div>
+
+                                        <div
+                                            style={{
+                                                display: "grid",
+                                                gridTemplateColumns: isMobile
+                                                    ? "1fr"
+                                                    : "repeat(auto-fit, minmax(160px, 1fr))",
+                                                gap: "10px",
+                                            }}
+                                        >
+                                            {Object.entries(typeLabels).map(([key, label]) => (
+                                                <button
+                                                    key={key}
+                                                    type="button"
+                                                    onClick={() =>
+                                                        updateProject(project.id, "type", key)
+                                                    }
+                                                    style={pillButton(project.type === key)}
+                                                >
+                                                    {label}
+                                                </button>
+                                            ))}
+                                        </div>
+
+                                        <div style={{ marginTop: "18px" }}>
+                                            <div
+                                                style={{
+                                                    fontWeight: "700",
+                                                    marginBottom: "12px",
+                                                    fontSize: "14px",
+                                                }}
+                                            >
+                                                Approximate size
+                                            </div>
+
+                                            <div
+                                                style={{
+                                                    background: "#fff",
+                                                    border: "1px solid #e7e5e4",
+                                                    borderRadius: "16px",
+                                                    padding: isMobile ? "16px" : "18px",
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        fontSize: isMobile ? "24px" : "28px",
+                                                        fontWeight: "700",
+                                                        marginBottom: "8px",
+                                                    }}
+                                                >
+                                                    {project.size} m²
+                                                </div>
+
+                                                <input
+                                                    type="range"
+                                                    min="5"
+                                                    max="80"
+                                                    step="1"
+                                                    value={project.size}
+                                                    onChange={(e) =>
+                                                        updateProject(
+                                                            project.id,
+                                                            "size",
+                                                            Number(e.target.value)
+                                                        )
+                                                    }
+                                                    style={{ width: "100%" }}
+                                                />
+
+                                                <div
+                                                    style={{
+                                                        display: "flex",
+                                                        justifyContent: "space-between",
+                                                        fontSize: "13px",
+                                                        color: "#78716c",
+                                                        marginTop: "6px",
+                                                    }}
+                                                >
+                                                    <span>5 m²</span>
+                                                    <span>80 m²</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div style={{ marginTop: "18px" }}>
+                                            <div
+                                                style={{
+                                                    fontWeight: "700",
+                                                    marginBottom: "12px",
+                                                    fontSize: "14px",
+                                                }}
+                                            >
+                                                Finish level
+                                            </div>
+
+                                            <div
+                                                style={{
+                                                    display: "grid",
+                                                    gridTemplateColumns: isMobile
+                                                        ? "1fr"
+                                                        : "repeat(auto-fit, minmax(140px, 1fr))",
+                                                    gap: "10px",
+                                                }}
+                                            >
+                                                {Object.entries(specLabels).map(([key, label]) => (
+                                                    <button
+                                                        key={key}
+                                                        type="button"
+                                                        onClick={() =>
+                                                            updateProject(project.id, "spec", key)
+                                                        }
+                                                        style={pillButton(project.spec === key)}
+                                                    >
+                                                        {label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
                                 ))}
                             </div>
                         </div>
@@ -309,7 +548,7 @@ export default function ExtensionCalculator() {
                                     fontSize: "15px",
                                 }}
                             >
-                                4. Enter your details to view your estimate
+                                2. Enter your details to view your estimate
                             </div>
 
                             <div
@@ -356,8 +595,31 @@ export default function ExtensionCalculator() {
                                     </div>
                                 ) : null}
 
+                                {submitStatus.error ? (
+                                    <div
+                                        style={{
+                                            color: "#b42318",
+                                            fontSize: "14px",
+                                        }}
+                                    >
+                                        {submitStatus.error}
+                                    </div>
+                                ) : null}
+
+                                {submitStatus.success ? (
+                                    <div
+                                        style={{
+                                            color: "#166534",
+                                            fontSize: "14px",
+                                        }}
+                                    >
+                                        Your details and full pricing breakdown were sent successfully.
+                                    </div>
+                                ) : null}
+
                                 <button
                                     type="submit"
+                                    disabled={submitStatus.loading}
                                     style={{
                                         background: "#1c1917",
                                         color: "#fff",
@@ -365,12 +627,13 @@ export default function ExtensionCalculator() {
                                         border: "none",
                                         borderRadius: "12px",
                                         fontWeight: "700",
-                                        cursor: "pointer",
+                                        cursor: submitStatus.loading ? "not-allowed" : "pointer",
                                         fontSize: "15px",
                                         width: "100%",
+                                        opacity: submitStatus.loading ? 0.7 : 1,
                                     }}
                                 >
-                                    Show my estimate
+                                    {submitStatus.loading ? "Sending..." : "Show my estimate"}
                                 </button>
                             </div>
                         </form>
@@ -412,30 +675,61 @@ export default function ExtensionCalculator() {
                                             wordBreak: "break-word",
                                         }}
                                     >
-                                        £{Math.round(low).toLocaleString()} – £
-                                        {Math.round(high).toLocaleString()}
+                                        £{Math.round(totals.low).toLocaleString()} – £
+                                        {Math.round(totals.high).toLocaleString()}
+                                    </div>
+
+                                    <div
+                                        style={{
+                                            marginTop: "8px",
+                                            color: "#d6d3d1",
+                                            fontSize: "14px",
+                                        }}
+                                    >
+                                        Combined guide price for {projects.length}{" "}
+                                        {projects.length === 1 ? "project" : "projects"}
                                     </div>
 
                                     <div
                                         style={{
                                             marginTop: "20px",
-                                            padding: "16px",
-                                            borderRadius: "16px",
-                                            background: "rgba(255,255,255,0.08)",
-                                            color: "#f5f5f4",
-                                            lineHeight: "1.8",
-                                            fontSize: "14px",
+                                            display: "grid",
+                                            gap: "12px",
                                         }}
                                     >
-                                        <div>
-                                            <strong>Project:</strong> {typeLabels[type]}
-                                        </div>
-                                        <div>
-                                            <strong>Size:</strong> {size} m²
-                                        </div>
-                                        <div>
-                                            <strong>Finish:</strong> {specLabels[spec]}
-                                        </div>
+                                        {projectResults.map((project, index) => (
+                                            <div
+                                                key={project.id}
+                                                style={{
+                                                    padding: "16px",
+                                                    borderRadius: "16px",
+                                                    background: "rgba(255,255,255,0.08)",
+                                                    color: "#f5f5f4",
+                                                    lineHeight: "1.8",
+                                                    fontSize: "14px",
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        fontWeight: "700",
+                                                        marginBottom: "6px",
+                                                    }}
+                                                >
+                                                    Project {index + 1}: {project.label}
+                                                </div>
+                                                <div>
+                                                    <strong>Size:</strong> {project.size} m²
+                                                </div>
+                                                <div>
+                                                    <strong>Finish:</strong> {project.specLabel}
+                                                </div>
+                                                <div>
+                                                    <strong>Estimate:</strong> £
+                                                    {Math.round(project.low).toLocaleString()} – £
+                                                    {Math.round(project.high).toLocaleString()}
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
 
                                     <p
@@ -479,29 +773,44 @@ export default function ExtensionCalculator() {
                                             lineHeight: 1.4,
                                         }}
                                     >
-                                        Enter your details to unlock your guide price
+                                        Enter your details to unlock your combined guide price
                                     </div>
 
                                     <div
                                         style={{
                                             marginTop: "20px",
-                                            padding: "16px",
-                                            borderRadius: "16px",
-                                            background: "rgba(255,255,255,0.08)",
-                                            color: "#f5f5f4",
-                                            lineHeight: "1.8",
-                                            fontSize: "14px",
+                                            display: "grid",
+                                            gap: "12px",
                                         }}
                                     >
-                                        <div>
-                                            <strong>Project:</strong> {typeLabels[type]}
-                                        </div>
-                                        <div>
-                                            <strong>Size:</strong> {size} m²
-                                        </div>
-                                        <div>
-                                            <strong>Finish:</strong> {specLabels[spec]}
-                                        </div>
+                                        {projectResults.map((project, index) => (
+                                            <div
+                                                key={project.id}
+                                                style={{
+                                                    padding: "16px",
+                                                    borderRadius: "16px",
+                                                    background: "rgba(255,255,255,0.08)",
+                                                    color: "#f5f5f4",
+                                                    lineHeight: "1.8",
+                                                    fontSize: "14px",
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        fontWeight: "700",
+                                                        marginBottom: "6px",
+                                                    }}
+                                                >
+                                                    Project {index + 1}: {project.label}
+                                                </div>
+                                                <div>
+                                                    <strong>Size:</strong> {project.size} m²
+                                                </div>
+                                                <div>
+                                                    <strong>Finish:</strong> {project.specLabel}
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
 
                                     <p
@@ -512,8 +821,8 @@ export default function ExtensionCalculator() {
                                             lineHeight: "1.7",
                                         }}
                                     >
-                                        We’ll use your details to follow up with a more tailored
-                                        estimate if needed.
+                                        We’ll send your lead details, specs, and full pricing
+                                        breakdown to Formspree.
                                     </p>
                                 </>
                             )}

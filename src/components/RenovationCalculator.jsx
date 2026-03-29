@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 
+const FORM_ENDPOINT = "https://formspree.io/f/xnjopzqe";
+
 export default function RenovationCalculator() {
     const [projectType, setProjectType] = useState("light");
     const [size, setSize] = useState(60);
@@ -27,15 +29,24 @@ export default function RenovationCalculator() {
 
     const [showResult, setShowResult] = useState(false);
     const [error, setError] = useState("");
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    const [submitStatus, setSubmitStatus] = useState({
+        loading: false,
+        success: false,
+        error: "",
+    });
+    const [screenWidth, setScreenWidth] = useState(
+        typeof window !== "undefined" ? window.innerWidth : 1200
+    );
 
     useEffect(() => {
         function handleResize() {
             setScreenWidth(window.innerWidth);
         }
 
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
+        if (typeof window !== "undefined") {
+            window.addEventListener("resize", handleResize);
+            return () => window.removeEventListener("resize", handleResize);
+        }
     }, []);
 
     const isMobile = screenWidth < 768;
@@ -112,9 +123,28 @@ export default function RenovationCalculator() {
         let baseHigh = 0;
         let isPOA = false;
 
+        let breakdown = {
+            renovationRate: null,
+            renovationBase: null,
+            kitchenInstallationBase: null,
+            extras: {
+                electrics: 0,
+                plumbing: 0,
+                splashback: 0,
+                boilerLabourAndFit: 0,
+                boilerUnit: 0,
+                surfaceLabour: 0,
+                tileSupply: 0,
+            },
+        };
+
         if (projectType === "light" || projectType === "backToBrick") {
             const rate = renovationRates[projectType][spec];
             const base = rate * size;
+
+            breakdown.renovationRate = rate;
+            breakdown.renovationBase = base;
+
             baseLow = base * 0.9;
             baseHigh = base * 1.15;
         }
@@ -133,24 +163,49 @@ export default function RenovationCalculator() {
 
         if (projectType === "kitchen") {
             const installationCost = Math.min(kitchenLength, 20) * 550;
+            breakdown.kitchenInstallationBase = installationCost;
 
             baseLow = installationCost * 0.9;
             baseHigh = installationCost * 1.15;
 
             let extras = 0;
 
-            if (addElectrics) extras += 1200;
-            if (addPlumbing) extras += 900;
-            if (addSplashback) extras += 650;
-            if (addBoiler) extras += 1400 + BOILER_COSTS[boilerType];
+            if (addElectrics) {
+                extras += 1200;
+                breakdown.extras.electrics = 1200;
+            }
+
+            if (addPlumbing) {
+                extras += 900;
+                breakdown.extras.plumbing = 900;
+            }
+
+            if (addSplashback) {
+                extras += 650;
+                breakdown.extras.splashback = 650;
+            }
+
+            if (addBoiler) {
+                extras += 1400 + BOILER_COSTS[boilerType];
+                breakdown.extras.boilerLabourAndFit = 1400;
+                breakdown.extras.boilerUnit = BOILER_COSTS[boilerType];
+            }
 
             if (surfaceType === "flooring") {
-                extras += surfaceSqm * 80;
+                const flooringCost = surfaceSqm * 80;
+                extras += flooringCost;
+                breakdown.extras.surfaceLabour = flooringCost;
             }
 
             if (surfaceType === "tiling") {
-                extras += surfaceSqm * 80;
-                extras += surfaceSqm * TILE_SUPPLY_COSTS_PER_SQM[tileSpec];
+                const tilingLabour = surfaceSqm * 80;
+                const tileSupply = surfaceSqm * TILE_SUPPLY_COSTS_PER_SQM[tileSpec];
+
+                extras += tilingLabour;
+                extras += tileSupply;
+
+                breakdown.extras.surfaceLabour = tilingLabour;
+                breakdown.extras.tileSupply = tileSupply;
             }
 
             baseLow += extras;
@@ -161,6 +216,7 @@ export default function RenovationCalculator() {
             low: Math.round(baseLow),
             high: Math.round(baseHigh),
             isPOA,
+            breakdown,
         };
     }, [
         projectType,
@@ -184,9 +240,17 @@ export default function RenovationCalculator() {
             ...prev,
             [name]: value,
         }));
+
+        if (error) setError("");
+        if (submitStatus.error) {
+            setSubmitStatus((prev) => ({
+                ...prev,
+                error: "",
+            }));
+        }
     }
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
 
         if (!lead.name.trim() || !lead.email.trim() || !lead.phone.trim()) {
@@ -195,28 +259,145 @@ export default function RenovationCalculator() {
         }
 
         setError("");
-        setShowResult(true);
-
-        console.log("Renovation lead:", {
-            ...lead,
-            projectType,
-            spec,
-            size,
-            bathroomSpec,
-            kitchenLength,
-            kitchenDesign,
-            addElectrics,
-            addPlumbing,
-            addBoiler,
-            boilerType,
-            addSplashback,
-            surfaceType,
-            surfaceSqm,
-            tileSpec,
-            estimateLow: result.low,
-            estimateHigh: result.high,
-            isPOA: result.isPOA,
+        setSubmitStatus({
+            loading: true,
+            success: false,
+            error: "",
         });
+
+        const payload = {
+            name: lead.name,
+            email: lead.email,
+            phone: lead.phone,
+
+            projectType: projectType,
+            projectLabel: projectLabels[projectType],
+            projectDescription: projectDescriptions[projectType],
+
+            size: projectType === "light" || projectType === "backToBrick" ? size : "",
+            sizeUnit:
+                projectType === "light" || projectType === "backToBrick" ? "m²" : "",
+
+            spec: projectType === "light" || projectType === "backToBrick" ? spec : "",
+            specLabel:
+                projectType === "light" || projectType === "backToBrick"
+                    ? specLabels[spec]
+                    : "",
+
+            bathroomSpec: projectType === "bathroom" ? bathroomSpec : "",
+            bathroomSpecLabel:
+                projectType === "bathroom" ? bathroomLabels[bathroomSpec] : "",
+
+            kitchenLength: projectType === "kitchen" ? kitchenLength : "",
+            kitchenLengthUnit: projectType === "kitchen" ? "m" : "",
+            kitchenDesign: projectType === "kitchen" ? kitchenDesign : "",
+            kitchenDesignLabel:
+                projectType === "kitchen" ? kitchenDesignLabels[kitchenDesign] : "",
+
+            addElectrics: projectType === "kitchen" ? addElectrics : false,
+            addPlumbing: projectType === "kitchen" ? addPlumbing : false,
+            addBoiler: projectType === "kitchen" ? addBoiler : false,
+            boilerType: projectType === "kitchen" && addBoiler ? boilerType : "",
+            boilerTypeLabel:
+                projectType === "kitchen" && addBoiler
+                    ? boilerType === "standard"
+                        ? "Standard Boiler"
+                        : "Premium Boiler"
+                    : "",
+            addSplashback: projectType === "kitchen" ? addSplashback : false,
+            surfaceType: projectType === "kitchen" ? surfaceType : "",
+            surfaceTypeLabel:
+                projectType === "kitchen"
+                    ? surfaceType === "none"
+                        ? "None"
+                        : surfaceType === "flooring"
+                            ? "Flooring"
+                            : "Tiling"
+                    : "",
+            surfaceSqm:
+                projectType === "kitchen" && surfaceType !== "none" ? surfaceSqm : "",
+            tileSpec:
+                projectType === "kitchen" && surfaceType === "tiling" ? tileSpec : "",
+            tileSpecLabel:
+                projectType === "kitchen" && surfaceType === "tiling"
+                    ? tileSpecLabels[tileSpec]
+                    : "",
+
+            estimateLow: result.isPOA ? "POA" : result.low,
+            estimateHigh: result.isPOA ? "POA" : result.high,
+            estimateDisplay: result.isPOA
+                ? "POA"
+                : `£${result.low.toLocaleString()} - £${result.high.toLocaleString()}`,
+            isPOA: result.isPOA,
+
+            renovationRatePerSqm:
+                projectType === "light" || projectType === "backToBrick"
+                    ? result.breakdown.renovationRate
+                    : "",
+            renovationBasePrice:
+                projectType === "light" || projectType === "backToBrick"
+                    ? result.breakdown.renovationBase
+                    : "",
+
+            kitchenInstallationBase:
+                projectType === "kitchen"
+                    ? result.breakdown.kitchenInstallationBase
+                    : "",
+            extraElectrics:
+                projectType === "kitchen" ? result.breakdown.extras.electrics : "",
+            extraPlumbing:
+                projectType === "kitchen" ? result.breakdown.extras.plumbing : "",
+            extraSplashback:
+                projectType === "kitchen" ? result.breakdown.extras.splashback : "",
+            extraBoilerLabourAndFit:
+                projectType === "kitchen"
+                    ? result.breakdown.extras.boilerLabourAndFit
+                    : "",
+            extraBoilerUnit:
+                projectType === "kitchen" ? result.breakdown.extras.boilerUnit : "",
+            extraSurfaceLabour:
+                projectType === "kitchen" ? result.breakdown.extras.surfaceLabour : "",
+            extraTileSupply:
+                projectType === "kitchen" ? result.breakdown.extras.tileSupply : "",
+
+            submittedAt: new Date().toISOString(),
+            source: "Renovation Calculator",
+        };
+
+        try {
+            const response = await fetch(FORM_ENDPOINT, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+
+            const responseData = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    responseData?.errors?.[0]?.message ||
+                    "Something went wrong. Please try again."
+                );
+            }
+
+            setShowResult(true);
+            setSubmitStatus({
+                loading: false,
+                success: true,
+                error: "",
+            });
+
+            console.log("Renovation lead:", payload);
+        } catch (err) {
+            setSubmitStatus({
+                loading: false,
+                success: false,
+                error: err.message || "Something went wrong. Please try again.",
+            });
+        }
     }
 
     const pillButton = (active) => ({
@@ -346,6 +527,11 @@ export default function RenovationCalculator() {
                                         onClick={() => {
                                             setProjectType(key);
                                             setShowResult(false);
+                                            setSubmitStatus({
+                                                loading: false,
+                                                success: false,
+                                                error: "",
+                                            });
                                         }}
                                         style={pillButton(projectType === key)}
                                     >
@@ -526,7 +712,9 @@ export default function RenovationCalculator() {
                                             min="2"
                                             max="20"
                                             value={kitchenLength}
-                                            onChange={(e) => setKitchenLength(Number(e.target.value))}
+                                            onChange={(e) =>
+                                                setKitchenLength(Number(e.target.value))
+                                            }
                                             style={{ width: "100%" }}
                                         />
 
@@ -594,7 +782,9 @@ export default function RenovationCalculator() {
                                             <input
                                                 type="checkbox"
                                                 checked={addElectrics}
-                                                onChange={(e) => setAddElectrics(e.target.checked)}
+                                                onChange={(e) =>
+                                                    setAddElectrics(e.target.checked)
+                                                }
                                             />
                                             Add electrics
                                         </label>
@@ -603,7 +793,9 @@ export default function RenovationCalculator() {
                                             <input
                                                 type="checkbox"
                                                 checked={addPlumbing}
-                                                onChange={(e) => setAddPlumbing(e.target.checked)}
+                                                onChange={(e) =>
+                                                    setAddPlumbing(e.target.checked)
+                                                }
                                             />
                                             Add plumbing
                                         </label>
@@ -612,7 +804,9 @@ export default function RenovationCalculator() {
                                             <input
                                                 type="checkbox"
                                                 checked={addSplashback}
-                                                onChange={(e) => setAddSplashback(e.target.checked)}
+                                                onChange={(e) =>
+                                                    setAddSplashback(e.target.checked)
+                                                }
                                             />
                                             Add splashback tiling
                                         </label>
@@ -634,7 +828,9 @@ export default function RenovationCalculator() {
                                                 <input
                                                     type="checkbox"
                                                     checked={addBoiler}
-                                                    onChange={(e) => setAddBoiler(e.target.checked)}
+                                                    onChange={(e) =>
+                                                        setAddBoiler(e.target.checked)
+                                                    }
                                                 />
                                                 Add boiler change
                                             </label>
@@ -649,15 +845,23 @@ export default function RenovationCalculator() {
                                                 >
                                                     <button
                                                         type="button"
-                                                        onClick={() => setBoilerType("standard")}
-                                                        style={pillButton(boilerType === "standard")}
+                                                        onClick={() =>
+                                                            setBoilerType("standard")
+                                                        }
+                                                        style={pillButton(
+                                                            boilerType === "standard"
+                                                        )}
                                                     >
                                                         Standard Boiler
                                                     </button>
                                                     <button
                                                         type="button"
-                                                        onClick={() => setBoilerType("premium")}
-                                                        style={pillButton(boilerType === "premium")}
+                                                        onClick={() =>
+                                                            setBoilerType("premium")
+                                                        }
+                                                        style={pillButton(
+                                                            boilerType === "premium"
+                                                        )}
                                                     >
                                                         Premium Boiler
                                                     </button>
@@ -711,7 +915,13 @@ export default function RenovationCalculator() {
                                     </div>
 
                                     {surfaceType !== "none" && (
-                                        <div style={{ marginTop: "14px", display: "grid", gap: "12px" }}>
+                                        <div
+                                            style={{
+                                                marginTop: "14px",
+                                                display: "grid",
+                                                gap: "12px",
+                                            }}
+                                        >
                                             <div
                                                 style={{
                                                     background: "#f7f5f2",
@@ -735,7 +945,9 @@ export default function RenovationCalculator() {
                                                     min="5"
                                                     max="100"
                                                     value={surfaceSqm}
-                                                    onChange={(e) => setSurfaceSqm(Number(e.target.value))}
+                                                    onChange={(e) =>
+                                                        setSurfaceSqm(Number(e.target.value))
+                                                    }
                                                     style={{ width: "100%" }}
                                                 />
 
@@ -763,16 +975,22 @@ export default function RenovationCalculator() {
                                                         gap: "10px",
                                                     }}
                                                 >
-                                                    {Object.entries(tileSpecLabels).map(([key, label]) => (
-                                                        <button
-                                                            key={key}
-                                                            type="button"
-                                                            onClick={() => setTileSpec(key)}
-                                                            style={pillButton(tileSpec === key)}
-                                                        >
-                                                            {label}
-                                                        </button>
-                                                    ))}
+                                                    {Object.entries(tileSpecLabels).map(
+                                                        ([key, label]) => (
+                                                            <button
+                                                                key={key}
+                                                                type="button"
+                                                                onClick={() =>
+                                                                    setTileSpec(key)
+                                                                }
+                                                                style={pillButton(
+                                                                    tileSpec === key
+                                                                )}
+                                                            >
+                                                                {label}
+                                                            </button>
+                                                        )
+                                                    )}
                                                 </div>
                                             )}
                                         </div>
@@ -821,11 +1039,26 @@ export default function RenovationCalculator() {
                                 />
 
                                 {error ? (
-                                    <div style={{ color: "#b42318", fontSize: "14px" }}>{error}</div>
+                                    <div style={{ color: "#b42318", fontSize: "14px" }}>
+                                        {error}
+                                    </div>
+                                ) : null}
+
+                                {submitStatus.error ? (
+                                    <div style={{ color: "#b42318", fontSize: "14px" }}>
+                                        {submitStatus.error}
+                                    </div>
+                                ) : null}
+
+                                {submitStatus.success ? (
+                                    <div style={{ color: "#166534", fontSize: "14px" }}>
+                                        Your details and estimate were sent successfully.
+                                    </div>
                                 ) : null}
 
                                 <button
                                     type="submit"
+                                    disabled={submitStatus.loading}
                                     style={{
                                         background: "#1c1917",
                                         color: "#fff",
@@ -833,12 +1066,17 @@ export default function RenovationCalculator() {
                                         border: "none",
                                         borderRadius: "12px",
                                         fontWeight: "700",
-                                        cursor: "pointer",
+                                        cursor: submitStatus.loading
+                                            ? "not-allowed"
+                                            : "pointer",
                                         fontSize: "15px",
                                         width: "100%",
+                                        opacity: submitStatus.loading ? 0.7 : 1,
                                     }}
                                 >
-                                    Show Estimate
+                                    {submitStatus.loading
+                                        ? "Sending..."
+                                        : "Show Estimate"}
                                 </button>
                             </div>
                         </form>
@@ -900,36 +1138,43 @@ export default function RenovationCalculator() {
                                             <strong>Project:</strong> {projectLabels[projectType]}
                                         </div>
 
-                                        {(projectType === "light" || projectType === "backToBrick") && (
-                                            <>
-                                                <div>
-                                                    <strong>Finish:</strong> {specLabels[spec]}
-                                                </div>
-                                                <div>
-                                                    <strong>Size:</strong> {size} m²
-                                                </div>
-                                            </>
-                                        )}
+                                        {(projectType === "light" ||
+                                            projectType === "backToBrick") && (
+                                                <>
+                                                    <div>
+                                                        <strong>Finish:</strong>{" "}
+                                                        {specLabels[spec]}
+                                                    </div>
+                                                    <div>
+                                                        <strong>Size:</strong> {size} m²
+                                                    </div>
+                                                </>
+                                            )}
 
                                         {projectType === "bathroom" && (
                                             <div>
-                                                <strong>Bathroom finish:</strong> {bathroomLabels[bathroomSpec]}
+                                                <strong>Bathroom finish:</strong>{" "}
+                                                {bathroomLabels[bathroomSpec]}
                                             </div>
                                         )}
 
                                         {projectType === "kitchen" && (
                                             <>
                                                 <div>
-                                                    <strong>Kitchen length:</strong> {kitchenLength} m
+                                                    <strong>Kitchen length:</strong>{" "}
+                                                    {kitchenLength} m
                                                 </div>
                                                 <div>
-                                                    <strong>Kitchen design:</strong> {kitchenDesignLabels[kitchenDesign]}
+                                                    <strong>Kitchen design:</strong>{" "}
+                                                    {kitchenDesignLabels[kitchenDesign]}
                                                 </div>
                                                 {surfaceType !== "none" && (
                                                     <div>
                                                         <strong>Surface:</strong>{" "}
-                                                        {surfaceType === "flooring" ? "Flooring" : "Tiling"} (
-                                                        {surfaceSqm} m²)
+                                                        {surfaceType === "flooring"
+                                                            ? "Flooring"
+                                                            : "Tiling"}{" "}
+                                                        ({surfaceSqm} m²)
                                                     </div>
                                                 )}
                                             </>
