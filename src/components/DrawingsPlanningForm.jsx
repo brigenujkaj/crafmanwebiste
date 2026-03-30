@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { siteStyles } from "./Layout.jsx";
 
@@ -111,9 +111,24 @@ export default function DrawingsPlanningForm({
         success: false,
         error: "",
     });
+    const [isMobile, setIsMobile] = useState(false);
 
     const packageRefs = useRef({});
+    const formTopRef = useRef(null);
+    const isFirstRender = useRef(true);
+
     const totalSteps = 5;
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
 
     useEffect(() => {
         if (!selectedPackage || submitStatus.success) return;
@@ -137,6 +152,30 @@ export default function DrawingsPlanningForm({
             }
         });
     }, [selectedPackage, submitStatus.success]);
+
+    useLayoutEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+
+        const timeout = setTimeout(() => {
+            if (formTopRef.current) {
+                const HEADER_OFFSET = isMobile ? 90 : 110;
+                const y =
+                    formTopRef.current.getBoundingClientRect().top +
+                    window.pageYOffset -
+                    HEADER_OFFSET;
+
+                window.scrollTo({
+                    top: y,
+                    behavior: "smooth",
+                });
+            }
+        }, 60);
+
+        return () => clearTimeout(timeout);
+    }, [step, isMobile]);
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -382,11 +421,13 @@ export default function DrawingsPlanningForm({
         boxSizing: "border-box",
         background: "#fff",
         outline: "none",
+        maxWidth: "100%",
     };
 
     const labelStyle = {
         display: "grid",
         gap: "8px",
+        minWidth: 0,
     };
 
     const optionCardStyle = (active) => ({
@@ -402,6 +443,10 @@ export default function DrawingsPlanningForm({
         transition: "all 0.22s ease",
         transform: active ? "translateY(-2px)" : "translateY(0)",
         boxShadow: active ? "0 14px 30px rgba(28,25,23,0.08)" : "0 1px 2px rgba(0,0,0,0.03)",
+        width: "100%",
+        minWidth: 0,
+        boxSizing: "border-box",
+        overflowWrap: "break-word",
     });
 
     const packageCardStyle = (pkg) => {
@@ -414,7 +459,7 @@ export default function DrawingsPlanningForm({
             background: active ? "#1f1f1f" : "#fff",
             color: active ? "#fff" : "#1f1f1f",
             border: active ? "1px solid #1f1f1f" : "1px solid #ddd",
-            transform: active || hovered ? "translateY(-6px)" : "translateY(0)",
+            transform: !isMobile && (active || hovered) ? "translateY(-6px)" : "translateY(0)",
             boxShadow:
                 active || hovered
                     ? "0 20px 40px rgba(28,25,23,0.12)"
@@ -424,17 +469,20 @@ export default function DrawingsPlanningForm({
             position: "relative",
             overflow: "hidden",
             textAlign: "left",
+            width: "100%",
+            minWidth: 0,
+            boxSizing: "border-box",
         };
     };
 
     const stepButtonStyle = (active, current) => ({
-        width: "36px",
-        height: "36px",
+        width: isMobile ? "30px" : "36px",
+        height: isMobile ? "30px" : "36px",
         borderRadius: "999px",
         display: "grid",
         placeItems: "center",
         fontWeight: "700",
-        fontSize: "14px",
+        fontSize: isMobile ? "12px" : "14px",
         border: active ? "1px solid #1c1917" : "1px solid #d6d3d1",
         background: current ? "#1c1917" : active ? "#292524" : "#fff",
         color: active ? "#fff" : "#57534e",
@@ -447,6 +495,8 @@ export default function DrawingsPlanningForm({
         borderBottom: "1px solid #e7e5e4",
         display: "grid",
         gap: "4px",
+        minWidth: 0,
+        overflowWrap: "break-word",
     };
 
     const trustPillStyle = {
@@ -458,6 +508,7 @@ export default function DrawingsPlanningForm({
         fontWeight: "600",
         color: "#44403c",
         textAlign: "center",
+        minWidth: 0,
     };
 
     const summaryBoxStyle = {
@@ -468,6 +519,8 @@ export default function DrawingsPlanningForm({
         color: "#44403c",
         lineHeight: "1.7",
         fontSize: "14px",
+        minWidth: 0,
+        overflowWrap: "break-word",
     };
 
     const progress = (step / totalSteps) * 100;
@@ -476,9 +529,18 @@ export default function DrawingsPlanningForm({
     const renderStepContent = () => {
         if (step === 1) {
             return (
-                <div style={{ display: "grid", gap: "22px" }}>
-                    <div>
-                        <p style={{ margin: "0 0 6px", color: "#78716c", fontSize: "13px", fontWeight: "700", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+                <div style={{ display: "grid", gap: "22px", minWidth: 0 }}>
+                    <div style={{ minWidth: 0 }}>
+                        <p
+                            style={{
+                                margin: "0 0 6px",
+                                color: "#78716c",
+                                fontSize: "13px",
+                                fontWeight: "700",
+                                letterSpacing: "0.04em",
+                                textTransform: "uppercase",
+                            }}
+                        >
                             Step 1
                         </p>
                         <h3 style={{ margin: "0 0 8px", fontSize: "24px" }}>
@@ -497,6 +559,7 @@ export default function DrawingsPlanningForm({
                             border: "1px solid #e7e5e4",
                             display: "grid",
                             gap: "10px",
+                            minWidth: 0,
                         }}
                     >
                         <strong style={{ fontSize: "16px" }}>
@@ -510,8 +573,11 @@ export default function DrawingsPlanningForm({
                     <div
                         style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+                            gridTemplateColumns: isMobile
+                                ? "1fr"
+                                : "repeat(auto-fit, minmax(260px, 1fr))",
                             gap: "18px",
+                            minWidth: 0,
                         }}
                     >
                         {packageOptions.map((pkg) => {
@@ -543,6 +609,7 @@ export default function DrawingsPlanningForm({
                                                 textTransform: "uppercase",
                                                 background: active ? "#fff" : "#1f1f1f",
                                                 color: active ? "#1f1f1f" : "#fff",
+                                                maxWidth: "calc(100% - 28px)",
                                             }}
                                         >
                                             Popular
@@ -566,18 +633,19 @@ export default function DrawingsPlanningForm({
                                             marginTop: "12px",
                                             marginBottom: active ? "10px" : "0",
                                             fontSize: "22px",
+                                            overflowWrap: "break-word",
                                         }}
                                     >
                                         {pkg.name}
                                     </h4>
 
                                     {active && (
-                                        <div style={{ display: "grid", gap: "14px", marginTop: "6px" }}>
+                                        <div style={{ display: "grid", gap: "14px", marginTop: "6px", minWidth: 0 }}>
                                             <p style={{ margin: 0, color: "#f5f5f4", lineHeight: "1.8" }}>
                                                 {pkg.intro}
                                             </p>
 
-                                            <div style={{ display: "grid", gap: "10px" }}>
+                                            <div style={{ display: "grid", gap: "10px", minWidth: 0 }}>
                                                 {pkg.includes.map((item) => (
                                                     <div
                                                         key={item}
@@ -585,6 +653,7 @@ export default function DrawingsPlanningForm({
                                                             color: "#f5f5f4",
                                                             lineHeight: "1.7",
                                                             fontSize: "14px",
+                                                            overflowWrap: "break-word",
                                                         }}
                                                     >
                                                         • {item}
@@ -626,9 +695,18 @@ export default function DrawingsPlanningForm({
 
         if (step === 2) {
             return (
-                <div style={{ display: "grid", gap: "18px" }}>
-                    <div>
-                        <p style={{ margin: "0 0 6px", color: "#78716c", fontSize: "13px", fontWeight: "700", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+                <div style={{ display: "grid", gap: "18px", minWidth: 0 }}>
+                    <div style={{ minWidth: 0 }}>
+                        <p
+                            style={{
+                                margin: "0 0 6px",
+                                color: "#78716c",
+                                fontSize: "13px",
+                                fontWeight: "700",
+                                letterSpacing: "0.04em",
+                                textTransform: "uppercase",
+                            }}
+                        >
                             Step 2
                         </p>
                         <h3 style={{ margin: "0 0 8px", fontSize: "24px" }}>
@@ -647,6 +725,7 @@ export default function DrawingsPlanningForm({
                             border: "1px solid #e7e5e4",
                             display: "grid",
                             gap: "10px",
+                            minWidth: 0,
                         }}
                     >
                         <strong style={{ fontSize: "16px" }}>
@@ -663,8 +742,11 @@ export default function DrawingsPlanningForm({
                         <div
                             style={{
                                 display: "grid",
-                                gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+                                gridTemplateColumns: isMobile
+                                    ? "1fr"
+                                    : "repeat(auto-fit, minmax(180px, 1fr))",
                                 gap: "12px",
+                                minWidth: 0,
                             }}
                         >
                             {projectTypeOptions.map((item) => (
@@ -695,8 +777,11 @@ export default function DrawingsPlanningForm({
                             <div
                                 style={{
                                     display: "grid",
-                                    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                                    gridTemplateColumns: isMobile
+                                        ? "1fr"
+                                        : "repeat(auto-fit, minmax(220px, 1fr))",
                                     gap: "12px",
+                                    minWidth: 0,
                                 }}
                             >
                                 {extensionTypeOptions.map((item) => (
@@ -728,8 +813,11 @@ export default function DrawingsPlanningForm({
                             <div
                                 style={{
                                     display: "grid",
-                                    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                                    gridTemplateColumns: isMobile
+                                        ? "1fr"
+                                        : "repeat(auto-fit, minmax(220px, 1fr))",
                                     gap: "12px",
+                                    minWidth: 0,
                                 }}
                             >
                                 {loftTypeOptions.map((item) => (
@@ -786,9 +874,18 @@ export default function DrawingsPlanningForm({
 
         if (step === 3) {
             return (
-                <div style={{ display: "grid", gap: "18px" }}>
-                    <div>
-                        <p style={{ margin: "0 0 6px", color: "#78716c", fontSize: "13px", fontWeight: "700", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+                <div style={{ display: "grid", gap: "18px", minWidth: 0 }}>
+                    <div style={{ minWidth: 0 }}>
+                        <p
+                            style={{
+                                margin: "0 0 6px",
+                                color: "#78716c",
+                                fontSize: "13px",
+                                fontWeight: "700",
+                                letterSpacing: "0.04em",
+                                textTransform: "uppercase",
+                            }}
+                        >
                             Step 3
                         </p>
                         <h3 style={{ margin: "0 0 8px", fontSize: "24px" }}>
@@ -802,8 +899,11 @@ export default function DrawingsPlanningForm({
                     <div
                         style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+                            gridTemplateColumns: isMobile
+                                ? "1fr 1fr"
+                                : "repeat(auto-fit, minmax(140px, 1fr))",
                             gap: "10px",
+                            minWidth: 0,
                         }}
                     >
                         <div style={trustPillStyle}>Clear next-step advice</div>
@@ -820,6 +920,7 @@ export default function DrawingsPlanningForm({
                             border: "1px solid #e7e5e4",
                             color: "#57534e",
                             lineHeight: "1.7",
+                            minWidth: 0,
                         }}
                     >
                         Leave your details and we’ll review your project and respond with the most suitable next step.
@@ -856,9 +957,18 @@ export default function DrawingsPlanningForm({
         }
 
         return (
-            <div style={{ display: "grid", gap: "18px" }}>
-                <div>
-                    <p style={{ margin: "0 0 6px", color: "#78716c", fontSize: "13px", fontWeight: "700", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+            <div style={{ display: "grid", gap: "18px", minWidth: 0 }}>
+                <div style={{ minWidth: 0 }}>
+                    <p
+                        style={{
+                            margin: "0 0 6px",
+                            color: "#78716c",
+                            fontSize: "13px",
+                            fontWeight: "700",
+                            letterSpacing: "0.04em",
+                            textTransform: "uppercase",
+                        }}
+                    >
                         Step 4
                     </p>
                     <h3 style={{ margin: "0 0 8px", fontSize: "24px" }}>
@@ -875,6 +985,7 @@ export default function DrawingsPlanningForm({
                         borderRadius: "16px",
                         background: "#f5f5f4",
                         border: "1px solid #e7e5e4",
+                        minWidth: 0,
                     }}
                 >
                     <strong style={{ display: "block", marginBottom: "6px" }}>
@@ -891,6 +1002,7 @@ export default function DrawingsPlanningForm({
                         borderRadius: "16px",
                         padding: "6px 18px",
                         background: "#fafaf9",
+                        minWidth: 0,
                     }}
                 >
                     <div style={reviewItemStyle}>
@@ -937,9 +1049,9 @@ export default function DrawingsPlanningForm({
                         <span>{form.phone || "—"}</span>
                     </div>
 
-                    <div style={{ padding: "14px 0", display: "grid", gap: "4px" }}>
+                    <div style={{ padding: "14px 0", display: "grid", gap: "4px", minWidth: 0 }}>
                         <strong>Project details</strong>
-                        <span>{form.message || "—"}</span>
+                        <span style={{ overflowWrap: "break-word" }}>{form.message || "—"}</span>
                     </div>
                 </div>
             </div>
@@ -949,6 +1061,7 @@ export default function DrawingsPlanningForm({
     if (step === 5 && submitStatus.success && submittedSummary) {
         return (
             <div
+                ref={formTopRef}
                 style={{
                     ...card,
                     background: "#fff",
@@ -957,6 +1070,9 @@ export default function DrawingsPlanningForm({
                     display: "grid",
                     gap: "24px",
                     overflow: "hidden",
+                    width: "100%",
+                    maxWidth: "100%",
+                    boxSizing: "border-box",
                 }}
             >
                 <div
@@ -967,6 +1083,7 @@ export default function DrawingsPlanningForm({
                         border: "1px solid #bbf7d0",
                         display: "grid",
                         gap: "18px",
+                        minWidth: 0,
                     }}
                 >
                     <div
@@ -985,7 +1102,7 @@ export default function DrawingsPlanningForm({
                         ✓
                     </div>
 
-                    <div>
+                    <div style={{ minWidth: 0 }}>
                         <p
                             style={{
                                 margin: "0 0 6px",
@@ -1016,18 +1133,14 @@ export default function DrawingsPlanningForm({
                     </div>
                 </div>
 
-                <div
-                    style={{
-                        display: "grid",
-                        gap: "16px",
-                    }}
-                >
+                <div style={{ display: "grid", gap: "16px", minWidth: 0 }}>
                     <div
                         style={{
                             padding: "18px",
                             borderRadius: "16px",
                             background: "#fafaf9",
                             border: "1px solid #e7e5e4",
+                            minWidth: 0,
                         }}
                     >
                         <strong style={{ display: "block", marginBottom: "6px" }}>
@@ -1044,6 +1157,7 @@ export default function DrawingsPlanningForm({
                             borderRadius: "16px",
                             padding: "6px 18px",
                             background: "#fafaf9",
+                            minWidth: 0,
                         }}
                     >
                         <div style={reviewItemStyle}>
@@ -1102,9 +1216,11 @@ export default function DrawingsPlanningForm({
                             <span>{submittedSummary.phone || "—"}</span>
                         </div>
 
-                        <div style={{ padding: "14px 0", display: "grid", gap: "4px" }}>
+                        <div style={{ padding: "14px 0", display: "grid", gap: "4px", minWidth: 0 }}>
                             <strong>Project details</strong>
-                            <span>{submittedSummary.message || "—"}</span>
+                            <span style={{ overflowWrap: "break-word" }}>
+                                {submittedSummary.message || "—"}
+                            </span>
                         </div>
                     </div>
 
@@ -1122,6 +1238,7 @@ export default function DrawingsPlanningForm({
                             style={{
                                 ...buttonSecondary,
                                 cursor: "pointer",
+                                maxWidth: "100%",
                             }}
                         >
                             Start another request
@@ -1132,6 +1249,7 @@ export default function DrawingsPlanningForm({
                                 display: "flex",
                                 gap: "12px",
                                 flexWrap: "wrap",
+                                maxWidth: "100%",
                             }}
                         >
                             <button
@@ -1142,12 +1260,12 @@ export default function DrawingsPlanningForm({
                                     background: "#fff",
                                     border: "1px solid #d6d3d1",
                                     cursor: "pointer",
+                                    maxWidth: "100%",
                                 }}
                             >
                                 Try our extension cost calculator
                             </button>
 
-                              
                             <button
                                 type="button"
                                 onClick={goHome}
@@ -1156,6 +1274,7 @@ export default function DrawingsPlanningForm({
                                     border: "none",
                                     cursor: "pointer",
                                     boxShadow: "0 16px 35px rgba(28,25,23,0.15)",
+                                    maxWidth: "100%",
                                 }}
                             >
                                 Return to homepage
@@ -1169,6 +1288,7 @@ export default function DrawingsPlanningForm({
 
     return (
         <form
+            ref={formTopRef}
             onSubmit={handleSubmit}
             style={{
                 ...card,
@@ -1179,6 +1299,10 @@ export default function DrawingsPlanningForm({
                 gap: "20px",
                 position: "relative",
                 overflow: "hidden",
+                width: "100%",
+                maxWidth: "100%",
+                boxSizing: "border-box",
+                minWidth: 0,
             }}
         >
             <style>
@@ -1207,8 +1331,14 @@ export default function DrawingsPlanningForm({
         `}
             </style>
 
-            <div>
-                <h2 style={{ fontSize: "42px", marginTop: 0, marginBottom: "12px" }}>
+            <div style={{ minWidth: 0 }}>
+                <h2
+                    style={{
+                        fontSize: isMobile ? "32px" : "42px",
+                        marginTop: 0,
+                        marginBottom: "12px",
+                    }}
+                >
                     {title}
                 </h2>
 
@@ -1224,7 +1354,7 @@ export default function DrawingsPlanningForm({
                 </p>
             </div>
 
-            <div style={{ display: "grid", gap: "14px" }}>
+            <div style={{ display: "grid", gap: "14px", minWidth: 0 }}>
                 <div
                     style={{
                         display: "flex",
@@ -1243,8 +1373,9 @@ export default function DrawingsPlanningForm({
                     style={{
                         display: "grid",
                         gridTemplateColumns: "repeat(5, 1fr)",
-                        gap: "10px",
+                        gap: isMobile ? "6px" : "10px",
                         alignItems: "center",
+                        minWidth: 0,
                     }}
                 >
                     {[1, 2, 3, 4, 5].map((item) => (
@@ -1253,7 +1384,7 @@ export default function DrawingsPlanningForm({
                             style={{
                                 display: "flex",
                                 alignItems: "center",
-                                gap: "10px",
+                                gap: isMobile ? "6px" : "10px",
                                 minWidth: 0,
                             }}
                         >
@@ -1266,6 +1397,7 @@ export default function DrawingsPlanningForm({
                                         borderRadius: "999px",
                                         flex: 1,
                                         transition: "background 0.2s ease",
+                                        minWidth: 0,
                                     }}
                                 />
                             )}
@@ -1295,11 +1427,12 @@ export default function DrawingsPlanningForm({
                 <div
                     style={{
                         display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))",
+                        gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
                         gap: "8px",
                         color: "#78716c",
-                        fontSize: "13px",
+                        fontSize: isMobile ? "11px" : "13px",
                         fontWeight: "600",
+                        minWidth: 0,
                     }}
                 >
                     <span>Package</span>
@@ -1315,6 +1448,7 @@ export default function DrawingsPlanningForm({
                 style={{
                     animation: `${animationName} 0.35s cubic-bezier(0.22, 1, 0.36, 1)`,
                     willChange: "transform, opacity",
+                    minWidth: 0,
                 }}
             >
                 {renderStepContent()}
@@ -1347,6 +1481,7 @@ export default function DrawingsPlanningForm({
                         cursor: step === 1 ? "not-allowed" : "pointer",
                         opacity: step === 1 ? 0.5 : 1,
                         fontWeight: "600",
+                        maxWidth: "100%",
                     }}
                 >
                     Back
@@ -1363,6 +1498,7 @@ export default function DrawingsPlanningForm({
                             cursor: !stepIsValid ? "not-allowed" : "pointer",
                             opacity: !stepIsValid ? 0.6 : 1,
                             boxShadow: !stepIsValid ? "none" : "0 16px 35px rgba(28,25,23,0.15)",
+                            maxWidth: "100%",
                         }}
                     >
                         {step === 1 && "Next: Project details"}
@@ -1379,6 +1515,7 @@ export default function DrawingsPlanningForm({
                             cursor: submitStatus.loading ? "not-allowed" : "pointer",
                             opacity: submitStatus.loading ? 0.7 : 1,
                             boxShadow: "0 16px 35px rgba(28,25,23,0.15)",
+                            maxWidth: "100%",
                         }}
                     >
                         {submitStatus.loading ? "Sending..." : buttonText}
