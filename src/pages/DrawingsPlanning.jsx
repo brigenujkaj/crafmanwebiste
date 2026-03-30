@@ -873,7 +873,7 @@ export default function DrawingsPlanning() {
                         >
                             {[
                                 "/images/fmb.jpeg",
-                                "/images/trsutmark.jpeg",
+                                "/images/trustmark.jpeg",
                                 "/images/google5Star.jpeg",
                             ].map((src, i) => (
                                 <div
