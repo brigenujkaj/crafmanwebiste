@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Layout, { siteStyles } from "../components/Layout.jsx";
 import DrawingsPlanningForm from "../components/DrawingsPlanningForm.jsx";
 
-
 export default function DrawingsPlanning() {
     const { section, card, buttonPrimary, buttonSecondary, tag } = siteStyles;
 
@@ -23,6 +22,8 @@ export default function DrawingsPlanning() {
     const [drawingIndex, setDrawingIndex] = useState(0);
 
     useEffect(() => {
+        if (window.innerWidth < 768) return;
+
         const interval = setInterval(() => {
             setDrawingIndex((prev) => (prev + 1) % drawingImages.length);
         }, 3500);
@@ -329,6 +330,7 @@ export default function DrawingsPlanning() {
                             border: "1px solid #e7e5e4",
                             background: "#f8f7f5",
                             boxShadow: "0 10px 24px rgba(0,0,0,0.05)",
+                            overflowAnchor: "none",
                         }}
                     >
                         <div
@@ -336,11 +338,13 @@ export default function DrawingsPlanning() {
                                 position: "relative",
                                 width: "100%",
                                 background: "#f8f7f5",
+                                height: "clamp(240px, 55vw, 520px)",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
                                 padding: "16px",
                                 boxSizing: "border-box",
+                                overflow: "hidden",
                             }}
                         >
                             <img
@@ -348,11 +352,9 @@ export default function DrawingsPlanning() {
                                 alt={drawingImages[drawingIndex].label}
                                 style={{
                                     width: "100%",
-                                    maxWidth: "100%",
-                                    maxHeight: "70vh",
+                                    height: "100%",
                                     objectFit: "contain",
                                     display: "block",
-                                    transition: "opacity 0.4s ease",
                                 }}
                             />
                         </div>
@@ -400,205 +402,6 @@ export default function DrawingsPlanning() {
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
-
-            <section
-                style={{
-                    borderTop: "1px solid #e7e5e4",
-                    borderBottom: "1px solid #e7e5e4",
-                    background: "#fff",
-                }}
-            >
-                <div
-                    style={{
-                        ...section,
-                        padding: "60px 16px",
-                    }}
-                >
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-                            gap: "24px",
-                            alignItems: "stretch",
-                        }}
-                    >
-                        {/* LEFT */}
-                        <div
-                            style={{
-                                ...card,
-                                background: "#1f1f1f",
-                                color: "#fff",
-                                border: "1px solid #1f1f1f",
-                                padding: "20px",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    fontSize: "12px",
-                                    letterSpacing: "2px",
-                                    textTransform: "uppercase",
-                                    color: "#d6d3d1",
-                                    fontWeight: "700",
-                                }}
-                            >
-                                Why clients choose us
-                            </div>
-
-                            <h2
-                                style={{
-                                    fontSize: "clamp(28px, 5vw, 40px)",
-                                    marginTop: "12px",
-                                    marginBottom: "14px",
-                                    lineHeight: "1.1",
-                                }}
-                            >
-                                We are a building company first — not just drawings.
-                            </h2>
-
-                            <p
-                                style={{
-                                    color: "#f5f5f4",
-                                    lineHeight: "1.8",
-                                    margin: 0,
-                                }}
-                            >
-                                Our drawings come with practical advice on cost, buildability,
-                                and where smarter decisions can save thousands.
-                            </p>
-                        </div>
-
-                        {/* RIGHT */}
-                        <div style={{ display: "grid", gap: "14px" }}>
-                            {[
-                                {
-                                    title: "Practical building-led advice",
-                                    text: "We design with real construction decisions in mind.",
-                                },
-                                {
-                                    title: "Cost-effective thinking",
-                                    text: "We help avoid unnecessary cost in layout and structure.",
-                                },
-                                {
-                                    title: "Better decisions earlier",
-                                    text: "Good early decisions prevent expensive changes later.",
-                                },
-                            ].map((item, i) => (
-                                <div
-                                    key={item.title}
-                                    style={{
-                                        ...card,
-                                        display: "grid",
-                                        gridTemplateColumns: "48px 1fr",
-                                        gap: "14px",
-                                        alignItems: "start",
-                                        background: "#fcfbf8",
-                                        border: "1px solid #e7e5e4",
-                                        padding: "18px",
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            height: "48px",
-                                            width: "48px",
-                                            borderRadius: "14px",
-                                            background: i === 1 ? "#A67C00" : "#1f1f1f",
-                                            color: "#fff",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            fontWeight: "800",
-                                        }}
-                                    >
-                                        {i + 1}
-                                    </div>
-
-                                    <div>
-                                        <h3 style={{ margin: 0, fontSize: "18px" }}>
-                                            {item.title}
-                                        </h3>
-                                        <p
-                                            style={{
-                                                margin: 0,
-                                                color: "#57534e",
-                                                fontSize: "14px",
-                                                lineHeight: "1.7",
-                                            }}
-                                        >
-                                            {item.text}
-                                        </p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* SCROLLING LOGOS */}
-                    <div style={{ marginTop: "40px", overflow: "hidden" }}>
-                        <div
-                            style={{
-                                display: "flex",
-                                gap: "40px",
-                                width: "max-content",
-                                animation: "scrollLogos 18s linear infinite",
-                                alignItems: "center",
-                            }}
-                        >
-                            {[
-                                "/images/fmb.jpeg",
-                                "/images/trustmark.jpeg",
-                                "/images/google5Star.jpeg",
-                                "/images/fmb.jpeg",
-                                "/images/trustmark.jpeg",
-                                "/images/google5Star.jpeg",
-                                "/images/fmb.jpeg",
-                                "/images/trustmark.jpeg",
-                                "/images/google5Star.jpeg",
-                                "/images/fmb.jpeg",
-                                "/images/trustmark.jpeg",
-                                "/images/google5Star.jpeg",
-                                "/images/fmb.jpeg",
-                                "/images/trustmark.jpeg",
-                                "/images/google5Star.jpeg",
-                            ].map((src, i) => (
-                                <div
-                                    key={i}
-                                    style={{
-                                        minWidth: "120px",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    <img
-                                        src={src}
-                                        alt="accreditation"
-                                        style={{
-                                            maxWidth: "100px",
-                                            maxHeight: "60px",
-                                            objectFit: "contain",
-                                            opacity: 0.9,
-                                            filter: "grayscale(100%)",
-                                        }}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    <style>
-                        {`
-            @keyframes scrollLogos {
-                0% {
-                    transform: translateX(0);
-                }
-                100% {
-                    transform: translateX(-50%);
-                }
-            }
-        `}
-                    </style>
                 </div>
             </section>
 
@@ -703,76 +506,6 @@ export default function DrawingsPlanning() {
                 </div>
             </section>
 
-            <section
-                id="contact-form"
-                style={{
-                    borderTop: "1px solid #e7e5e4",
-                    background: "#efebe6",
-                }}
-            >
-                <div
-                    style={{
-                        maxWidth: "1200px",
-                        margin: "0 auto",
-                        padding: "70px 24px",
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-                        gap: "30px",
-                    }}
-                >
-                    <div>
-                        <div
-                            style={{
-                                fontSize: "12px",
-                                letterSpacing: "2px",
-                                textTransform: "uppercase",
-                                color: "#78716c",
-                                fontWeight: "700",
-                            }}
-                        >
-                            Enquiry Form
-                        </div>
-
-                        <h2 style={{ fontSize: "42px", marginTop: "12px", marginBottom: "12px" }}>
-                            Request your drawings quote
-                        </h2>
-
-                        <p style={{ color: "#57534e", lineHeight: "1.8", maxWidth: "560px" }}>
-                            Tell us what type of project you have and which package you are
-                            interested in. We’ll use that to guide the next step.
-                        </p>
-
-                        {selectedPackage && (
-                            <div
-                                style={{
-                                    marginTop: "20px",
-                                    display: "inline-block",
-                                    padding: "10px 14px",
-                                    borderRadius: "999px",
-                                    background: "#1f1f1f",
-                                    color: "#fff",
-                                    fontWeight: "600",
-                                }}
-                            >
-                                Selected: {selectedPackage}
-                            </div>
-                        )}
-
-                        <div style={{ marginTop: "22px", color: "#44403c", lineHeight: "1.9" }}>
-                            <p><strong>Phone:</strong> 02036335634</p>
-                            <p><strong>Email:</strong> info@crafman.co.uk</p>
-                            <p><strong>Location:</strong> London, United Kingdom</p>
-                        </div>
-                    </div>
-
-                    <DrawingsPlanningForm
-                        endpoint="https://formspree.io/f/maqlqgzz"
-                        selectedPackage={selectedPackage}
-                        title="Request your drawings quote"
-                        intro="Tell us what type of project you have and which package you are interested in. We’ll use that to guide the next step."
-                    />
-                </div>
-            </section>
             <section
                 style={{
                     borderTop: "1px solid #e7e5e4",
@@ -965,6 +698,264 @@ export default function DrawingsPlanning() {
                             </div>
                         </div>
                     </div>
+                </div>
+            </section>
+
+            <section
+                style={{
+                    borderTop: "1px solid #e7e5e4",
+                    borderBottom: "1px solid #e7e5e4",
+                    background: "#fff",
+                }}
+            >
+                <div
+                    style={{
+                        ...section,
+                        padding: "60px 16px",
+                    }}
+                >
+                    <div
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+                            gap: "24px",
+                            alignItems: "stretch",
+                        }}
+                    >
+                        <div
+                            style={{
+                                ...card,
+                                background: "#1f1f1f",
+                                color: "#fff",
+                                border: "1px solid #1f1f1f",
+                                padding: "20px",
+                            }}
+                        >
+                            <div
+                                style={{
+                                    fontSize: "12px",
+                                    letterSpacing: "2px",
+                                    textTransform: "uppercase",
+                                    color: "#d6d3d1",
+                                    fontWeight: "700",
+                                }}
+                            >
+                                Why clients choose us
+                            </div>
+
+                            <h2
+                                style={{
+                                    fontSize: "clamp(28px, 5vw, 40px)",
+                                    marginTop: "12px",
+                                    marginBottom: "14px",
+                                    lineHeight: "1.1",
+                                }}
+                            >
+                                We are a building company first — not just drawings.
+                            </h2>
+
+                            <p
+                                style={{
+                                    color: "#f5f5f4",
+                                    lineHeight: "1.8",
+                                    margin: 0,
+                                }}
+                            >
+                                Our drawings come with practical advice on cost, buildability,
+                                and where smarter decisions can save thousands.
+                            </p>
+                        </div>
+
+                        <div style={{ display: "grid", gap: "14px" }}>
+                            {[
+                                {
+                                    title: "Practical building-led advice",
+                                    text: "We design with real construction decisions in mind.",
+                                },
+                                {
+                                    title: "Cost-effective thinking",
+                                    text: "We help avoid unnecessary cost in layout and structure.",
+                                },
+                                {
+                                    title: "Better decisions earlier",
+                                    text: "Good early decisions prevent expensive changes later.",
+                                },
+                            ].map((item, i) => (
+                                <div
+                                    key={item.title}
+                                    style={{
+                                        ...card,
+                                        display: "grid",
+                                        gridTemplateColumns: "48px 1fr",
+                                        gap: "14px",
+                                        alignItems: "start",
+                                        background: "#fcfbf8",
+                                        border: "1px solid #e7e5e4",
+                                        padding: "18px",
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            height: "48px",
+                                            width: "48px",
+                                            borderRadius: "14px",
+                                            background: i === 1 ? "#A67C00" : "#1f1f1f",
+                                            color: "#fff",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            fontWeight: "800",
+                                        }}
+                                    >
+                                        {i + 1}
+                                    </div>
+
+                                    <div>
+                                        <h3 style={{ margin: 0, fontSize: "18px" }}>
+                                            {item.title}
+                                        </h3>
+                                        <p
+                                            style={{
+                                                margin: 0,
+                                                color: "#57534e",
+                                                fontSize: "14px",
+                                                lineHeight: "1.7",
+                                            }}
+                                        >
+                                            {item.text}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div style={{ marginTop: "40px", overflow: "hidden" }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                gap: "40px",
+                                width: "max-content",
+                                animation: "scrollLogos 18s linear infinite",
+                                alignItems: "center",
+                            }}
+                        >
+                            {[
+                                "/images/fmb.jpeg",
+                                "/images/trsutmark.jpeg",
+                                "/images/google5Star.jpeg",
+                                "/images/fmb.jpeg",
+                                "/images/trsutmark.jpeg",
+                                "/images/google5Star.jpeg",
+                            ].map((src, i) => (
+                                <div
+                                    key={i}
+                                    style={{
+                                        minWidth: "120px",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    <img
+                                        src={src}
+                                        alt="accreditation"
+                                        style={{
+                                            maxWidth: "100px",
+                                            maxHeight: "60px",
+                                            objectFit: "contain",
+                                            opacity: 0.9,
+                                            filter: "grayscale(100%)",
+                                        }}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <style>
+                        {`
+                        @keyframes scrollLogos {
+                            0% {
+                                transform: translateX(0);
+                            }
+                            100% {
+                                transform: translateX(-50%);
+                            }
+                        }
+                    `}
+                    </style>
+                </div>
+            </section>
+
+            <section
+                id="contact-form"
+                style={{
+                    borderTop: "1px solid #e7e5e4",
+                    background: "#efebe6",
+                }}
+            >
+                <div
+                    style={{
+                        maxWidth: "1200px",
+                        margin: "0 auto",
+                        padding: "70px 24px",
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+                        gap: "30px",
+                    }}
+                >
+                    <div>
+                        <div
+                            style={{
+                                fontSize: "12px",
+                                letterSpacing: "2px",
+                                textTransform: "uppercase",
+                                color: "#78716c",
+                                fontWeight: "700",
+                            }}
+                        >
+                            Enquiry Form
+                        </div>
+
+                        <h2 style={{ fontSize: "42px", marginTop: "12px", marginBottom: "12px" }}>
+                            Request your drawings quote
+                        </h2>
+
+                        <p style={{ color: "#57534e", lineHeight: "1.8", maxWidth: "560px" }}>
+                            Tell us what type of project you have and which package you are
+                            interested in. We’ll use that to guide the next step.
+                        </p>
+
+                        {selectedPackage && (
+                            <div
+                                style={{
+                                    marginTop: "20px",
+                                    display: "inline-block",
+                                    padding: "10px 14px",
+                                    borderRadius: "999px",
+                                    background: "#1f1f1f",
+                                    color: "#fff",
+                                    fontWeight: "600",
+                                }}
+                            >
+                                Selected: {selectedPackage}
+                            </div>
+                        )}
+
+                        <div style={{ marginTop: "22px", color: "#44403c", lineHeight: "1.9" }}>
+                            <p><strong>Phone:</strong> 02036335634</p>
+                            <p><strong>Email:</strong> info@crafman.co.uk</p>
+                            <p><strong>Location:</strong> London, United Kingdom</p>
+                        </div>
+                    </div>
+
+                    <DrawingsPlanningForm
+                        endpoint="https://formspree.io/f/maqlqgzz"
+                        selectedPackage={selectedPackage}
+                        title="Request your drawings quote"
+                        intro="Tell us what type of project you have and which package you are interested in. We’ll use that to guide the next step."
+                    />
                 </div>
             </section>
 
@@ -1391,17 +1382,17 @@ export default function DrawingsPlanning() {
 
                     <style>
                         {`
-                @keyframes faqFadeDown {
-                    0% {
-                        opacity: 0;
-                        transform: translateY(-6px);
-                    }
-                    100% {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-            `}
+                            @keyframes faqFadeDown {
+                                0% {
+                                    opacity: 0;
+                                    transform: translateY(-6px);
+                                }
+                                100% {
+                                    opacity: 1;
+                                    transform: translateY(0);
+                                }
+                            }
+                        `}
                     </style>
                 </div>
             </section>
