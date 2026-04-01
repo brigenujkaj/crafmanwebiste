@@ -396,6 +396,14 @@ export default function DrawingsPlanningForm({
                 error: "",
             });
 
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: "drawings_planning_form_submit",
+                form_name: "drawings_planning_quote",
+                package_interest: form.packageInterest,
+                project_types: form.projectTypes.join(", "),
+            });
+
             setDirection(1);
             setStep(5);
 

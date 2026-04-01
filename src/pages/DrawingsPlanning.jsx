@@ -9,6 +9,19 @@ export default function DrawingsPlanning() {
     const [testimonialIndex, setTestimonialIndex] = useState(0);
     const [openFaq, setOpenFaq] = useState(0);
     const [isMobile, setIsMobile] = useState(false);
+    const [drawingIndex, setDrawingIndex] = useState(0);
+
+    useEffect(() => {
+        if ("scrollRestoration" in window.history) {
+            window.history.scrollRestoration = "manual";
+        }
+
+        if (window.location.hash) {
+            window.history.replaceState(null, "", window.location.pathname);
+        }
+
+        window.scrollTo(0, 0);
+    }, []);
 
     useEffect(() => {
         const checkScreen = () => setIsMobile(window.innerWidth <= 768);
@@ -28,8 +41,6 @@ export default function DrawingsPlanning() {
         { src: "/images/drawingsex8.jpeg", label: "Roof Plan" },
         { src: "/images/drawingsex9.jpeg", label: "Block Plan" },
     ];
-
-    const [drawingIndex, setDrawingIndex] = useState(0);
 
     const packageButtonStyle = (active) => ({
         display: "inline-block",
@@ -90,11 +101,6 @@ export default function DrawingsPlanning() {
 
     function handlePackageSelect(packageName) {
         setSelectedPackage(packageName);
-
-        const formSection = document.getElementById("contact-form");
-        if (formSection) {
-            formSection.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
     }
 
     function showPrevDrawing() {
@@ -449,7 +455,7 @@ export default function DrawingsPlanning() {
                             </h2>
                             <p style={{ color: "#57534e", lineHeight: "1.8" }}>
                                 Prices start from <strong>£650</strong>. Select a package below and
-                                jump straight to the enquiry form.
+                                choose it for the enquiry form.
                             </p>
                         </div>
 
@@ -863,14 +869,13 @@ export default function DrawingsPlanning() {
 
                         <div
                             style={{
-                                marginTop: "40px",
+                                marginTop: "50px",
                                 display: "grid",
                                 gridTemplateColumns: isMobile
-                                    ? "repeat(2, minmax(0, 1fr))"
-                                    : "repeat(3, minmax(0, 120px))",
+                                    ? "repeat(2, 1fr)"
+                                    : "repeat(3, 180px)",
                                 justifyContent: "center",
-                                gap: "20px",
-                                overflow: "hidden",
+                                gap: "24px",
                             }}
                         >
                             {[
@@ -881,23 +886,29 @@ export default function DrawingsPlanning() {
                                 <div
                                     key={i}
                                     style={{
+                                        background: "#fff",
+                                        border: "1px solid #e7e5e4",
+                                        borderRadius: "20px",
+                                        padding: isMobile ? "18px 14px" : "22px 18px",
                                         display: "flex",
                                         justifyContent: "center",
                                         alignItems: "center",
-                                        minWidth: 0,
+                                        minHeight: isMobile ? "110px" : "125px",
+                                        boxShadow: "0 14px 30px rgba(28,25,23,0.06)",
+                                        transition: "transform 0.22s ease, box-shadow 0.22s ease",
                                     }}
                                 >
                                     <img
                                         src={src}
                                         alt="accreditation"
                                         style={{
-                                            maxWidth: "100px",
                                             width: "100%",
-                                            maxHeight: "60px",
+                                            maxWidth: "140px",
+                                            maxHeight: "80px",
                                             objectFit: "contain",
-                                            opacity: 0.9,
-                                            filter: "grayscale(100%)",
                                             display: "block",
+                                            filter: "none",
+                                            opacity: 1,
                                         }}
                                     />
                                 </div>
