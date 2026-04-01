@@ -523,6 +523,30 @@ export default function DrawingsPlanningForm({
         overflowWrap: "break-word",
     };
 
+    const backButtonStyle = {
+        padding: isMobile ? "14px 18px" : "14px 20px",
+        borderRadius: "12px",
+        border: "1px solid #d6d3d1",
+        background: "#fff",
+        fontWeight: "600",
+        maxWidth: "100%",
+        minHeight: isMobile ? "52px" : "48px",
+        width: isMobile ? "100%" : "auto",
+    };
+
+    const primaryNavButtonStyle = (disabled = false) => ({
+        ...buttonPrimary,
+        border: "none",
+        cursor: disabled ? "not-allowed" : "pointer",
+        opacity: disabled ? 0.65 : 1,
+        boxShadow: disabled ? "none" : "0 18px 40px rgba(28,25,23,0.22)",
+        maxWidth: "100%",
+        minHeight: isMobile ? "56px" : "50px",
+        width: isMobile ? "100%" : "auto",
+        fontSize: isMobile ? "16px" : "15px",
+        fontWeight: "700",
+    });
+
     const progress = (step / totalSteps) * 100;
     const animationName = direction === 1 ? "slideInFromRight" : "slideInFromLeft";
 
@@ -1463,10 +1487,19 @@ export default function DrawingsPlanningForm({
             <div
                 style={{
                     display: "flex",
+                    flexDirection: isMobile ? "column-reverse" : "row",
                     justifyContent: "space-between",
+                    alignItems: "stretch",
                     gap: "12px",
-                    flexWrap: "wrap",
-                    marginTop: "6px",
+                    marginTop: "10px",
+                    position: isMobile ? "sticky" : "static",
+                    bottom: isMobile ? "12px" : "auto",
+                    background: isMobile ? "rgba(255,255,255,0.96)" : "transparent",
+                    padding: isMobile ? "12px" : "0",
+                    borderRadius: isMobile ? "16px" : "0",
+                    boxShadow: isMobile ? "0 -8px 30px rgba(0,0,0,0.06)" : "none",
+                    backdropFilter: isMobile ? "blur(8px)" : "none",
+                    zIndex: 5,
                 }}
             >
                 <button
@@ -1474,14 +1507,9 @@ export default function DrawingsPlanningForm({
                     onClick={prevStep}
                     disabled={step === 1 || submitStatus.loading}
                     style={{
-                        padding: "14px 20px",
-                        borderRadius: "12px",
-                        border: "1px solid #d6d3d1",
-                        background: "#fff",
-                        cursor: step === 1 ? "not-allowed" : "pointer",
-                        opacity: step === 1 ? 0.5 : 1,
-                        fontWeight: "600",
-                        maxWidth: "100%",
+                        ...backButtonStyle,
+                        cursor: step === 1 || submitStatus.loading ? "not-allowed" : "pointer",
+                        opacity: step === 1 || submitStatus.loading ? 0.5 : 1,
                     }}
                 >
                     Back
@@ -1492,14 +1520,7 @@ export default function DrawingsPlanningForm({
                         type="button"
                         onClick={nextStep}
                         disabled={!stepIsValid}
-                        style={{
-                            ...buttonPrimary,
-                            border: "none",
-                            cursor: !stepIsValid ? "not-allowed" : "pointer",
-                            opacity: !stepIsValid ? 0.6 : 1,
-                            boxShadow: !stepIsValid ? "none" : "0 16px 35px rgba(28,25,23,0.15)",
-                            maxWidth: "100%",
-                        }}
+                        style={primaryNavButtonStyle(!stepIsValid)}
                     >
                         {step === 1 && "Next: Project details"}
                         {step === 2 && "Next: Your details"}
@@ -1509,14 +1530,7 @@ export default function DrawingsPlanningForm({
                     <button
                         type="submit"
                         disabled={submitStatus.loading}
-                        style={{
-                            ...buttonPrimary,
-                            border: "none",
-                            cursor: submitStatus.loading ? "not-allowed" : "pointer",
-                            opacity: submitStatus.loading ? 0.7 : 1,
-                            boxShadow: "0 16px 35px rgba(28,25,23,0.15)",
-                            maxWidth: "100%",
-                        }}
+                        style={primaryNavButtonStyle(submitStatus.loading)}
                     >
                         {submitStatus.loading ? "Sending..." : buttonText}
                     </button>
