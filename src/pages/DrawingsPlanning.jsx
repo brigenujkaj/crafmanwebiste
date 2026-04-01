@@ -18,13 +18,15 @@ export default function DrawingsPlanning() {
     }, []);
 
     const drawingImages = [
-        { src: "/images/drawingex1.jpeg", label: "Extension Layout" },
-        { src: "/images/drawingsex2.jpeg", label: "Loft Conversion Plan" },
-        { src: "/images/drawingex3.jpeg", label: "Proposed Elevation" },
-        { src: "/images/drawingsex4.jpeg", label: "Technical Drawing Detail" },
-        { src: "/images/drawingsex5.jpeg", label: "Extension Layout" },
-        { src: "/images/drawingsex6.jpeg", label: "Loft Conversion Plan" },
-        { src: "/images/drawingsex7.jpeg", label: "Proposed Elevation" },
+        { src: "/images/drawingex1.jpeg", label: "Elevations" },
+        { src: "/images/drawingsex2.jpeg", label: "Elevations" },
+        { src: "/images/drawingex3.jpeg", label: "Drainage" },
+        { src: "/images/drawingsex4.jpeg", label: "Layouts" },
+        { src: "/images/drawingsex5.jpeg", label: "Detailed Elevations" },
+        { src: "/images/drawingsex6.jpeg", label: "Floor Plans" },
+        { src: "/images/drawingsex7.jpeg", label: "Detailed Elevations" },
+        { src: "/images/drawingsex8.jpeg", label: "Roof Plan" },
+        { src: "/images/drawingsex9.jpeg", label: "Block Plan" },
     ];
 
     const [drawingIndex, setDrawingIndex] = useState(0);
