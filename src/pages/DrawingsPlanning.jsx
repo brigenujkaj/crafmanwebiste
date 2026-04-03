@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Layout, { siteStyles } from "../components/Layout.jsx";
 import DrawingsPlanningForm from "../components/DrawingsPlanningForm.jsx";
 
@@ -11,24 +11,97 @@ export default function DrawingsPlanning() {
     const [isMobile, setIsMobile] = useState(false);
     const [drawingIndex, setDrawingIndex] = useState(0);
 
-    useEffect(() => {
+    const hasForcedTopRef = useRef(false);
+
+    useLayoutEffect(() => {
+        const cleanUrl = () => {
+            const cleanPath = window.location.pathname + window.location.search;
+
+            if (window.location.hash) {
+                window.history.replaceState(null, "", cleanPath);
+            }
+        };
+
+        const forceTop = () => {
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+        };
+
         if ("scrollRestoration" in window.history) {
             window.history.scrollRestoration = "manual";
         }
 
-        if (window.location.hash) {
-            window.history.replaceState(
-                null,
-                "",
-                window.location.pathname + window.location.search
-            );
-        }
+        cleanUrl();
+        forceTop();
 
-        window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "auto",
+        requestAnimationFrame(() => {
+            cleanUrl();
+            forceTop();
+
+            requestAnimationFrame(() => {
+                cleanUrl();
+                forceTop();
+            });
         });
+    }, []);
+
+    useEffect(() => {
+        if (hasForcedTopRef.current) return;
+        hasForcedTopRef.current = true;
+
+        const cleanUrl = () => {
+            const cleanPath = window.location.pathname + window.location.search;
+
+            if (window.location.hash) {
+                window.history.replaceState(null, "", cleanPath);
+            }
+        };
+
+        const forceTop = () => {
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: "auto",
+            });
+
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+        };
+
+        cleanUrl();
+        forceTop();
+
+        const timers = [
+            setTimeout(() => {
+                cleanUrl();
+                forceTop();
+            }, 50),
+            setTimeout(() => {
+                cleanUrl();
+                forceTop();
+            }, 150),
+            setTimeout(() => {
+                cleanUrl();
+                forceTop();
+            }, 350),
+            setTimeout(() => {
+                cleanUrl();
+                forceTop();
+            }, 700),
+        ];
+
+        const handlePageShow = () => {
+            cleanUrl();
+            forceTop();
+        };
+
+        window.addEventListener("pageshow", handlePageShow);
+
+        return () => {
+            timers.forEach(clearTimeout);
+            window.removeEventListener("pageshow", handlePageShow);
+        };
     }, []);
 
     useEffect(() => {
@@ -995,7 +1068,6 @@ export default function DrawingsPlanning() {
                                 selectedPackage={selectedPackage}
                                 title="Request your drawings quote"
                                 intro="Tell us what type of project you have and which package you are interested in. We’ll use that to guide the next step."
-                                buttonText="Get my quote"
                             />
                         </div>
                     </div>
