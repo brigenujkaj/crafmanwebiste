@@ -12,15 +12,24 @@ export default function DrawingsPlanning() {
     const [drawingIndex, setDrawingIndex] = useState(0);
 
     useEffect(() => {
+        // Force scroll to top immediately
+        window.scrollTo(0, 0);
+
+        // Disable browser restoring previous scroll
         if ("scrollRestoration" in window.history) {
             window.history.scrollRestoration = "manual";
         }
 
+        // Remove any hash (like #contact-form)
         if (window.location.hash) {
             window.history.replaceState(null, "", window.location.pathname);
         }
 
-        window.scrollTo(0, 0);
+        // Force again after render (this is the key fix)
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 50);
+
     }, []);
 
     useEffect(() => {
