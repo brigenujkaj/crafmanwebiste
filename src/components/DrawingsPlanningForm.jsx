@@ -18,7 +18,7 @@ const packageOptions = [
     {
         name: "Starter Package",
         price: "From £450",
-        intro: "A simple, practical package to get your project moving.",
+        intro: "A simple package for straightforward drawing requirements.",
         includes: [
             "Measured survey",
             "Current scaled drawings",
@@ -28,30 +28,29 @@ const packageOptions = [
     },
     {
         name: "Planning Package",
-        price: "From £550",
-        intro: "A stronger option for projects that need planning support.",
+        price: "From £650",
+        intro: "Ideal for projects that need planning drawings and submission support.",
         includes: [
             "Measured survey",
             "Current scaled drawings",
             "Proposed scaled drawings",
             "Elevations",
-            "Submission to council",
-            "Building Control Drawings",
+            "Planning submission support",
         ],
         featured: true,
     },
     {
         name: "Technical Package",
         price: "From £1150",
-        intro: "A fuller package for projects moving into technical delivery.",
+        intro: "A fuller package for projects moving beyond planning into technical delivery.",
         includes: [
             "Measured survey",
             "Current scaled drawings",
             "Proposed scaled drawings",
             "Elevations",
-            "Submission to council",
+            "Planning submission support",
             "Building control drawings",
-            "Structural Calculations",
+            "Structural calculations",
         ],
     },
 ];
@@ -504,15 +503,17 @@ export default function DrawingsPlanningForm({
 
         return {
             ...card,
-            padding: "22px",
+            padding: isMobile ? "20px" : "24px",
             background: active ? "#1f1f1f" : "#fff",
             color: active ? "#fff" : "#1f1f1f",
-            border: active ? "1px solid #1f1f1f" : "1px solid #ddd",
-            transform: !isMobile && (active || hovered) ? "translateY(-6px)" : "translateY(0)",
+            border: active ? "1px solid #1f1f1f" : "1px solid #e7e5e4",
+            borderRadius: "22px",
+            transform:
+                !isMobile && (active || hovered) ? "translateY(-6px)" : "translateY(0)",
             boxShadow:
                 active || hovered
                     ? "0 20px 40px rgba(28,25,23,0.12)"
-                    : "0 8px 20px rgba(0,0,0,0.05)",
+                    : "0 10px 24px rgba(0,0,0,0.05)",
             transition: "all 0.25s ease",
             cursor: "pointer",
             position: "relative",
@@ -521,6 +522,9 @@ export default function DrawingsPlanningForm({
             width: "100%",
             minWidth: 0,
             boxSizing: "border-box",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
         };
     };
 
@@ -636,7 +640,8 @@ export default function DrawingsPlanningForm({
                             Choose your package
                         </h3>
                         <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
-                            Start by selecting the level of support that best fits your project.
+                            Select the level of drawings and planning support that best matches your
+                            project.
                         </p>
                     </div>
 
@@ -652,10 +657,11 @@ export default function DrawingsPlanningForm({
                         }}
                     >
                         <strong style={{ fontSize: "16px" }}>
-                            Select a package to begin your quote request.
+                            Choose a package to begin your quote request.
                         </strong>
                         <span style={{ color: "#57534e", lineHeight: "1.7" }}>
-                            Tap the <strong>i</strong> button for more detail without leaving the form.
+                            Tap the <strong>i</strong> button for more detail without leaving the
+                            form.
                         </span>
                     </div>
 
@@ -671,6 +677,10 @@ export default function DrawingsPlanningForm({
                     >
                         {packageOptions.map((pkg) => {
                             const active = form.packageInterest === pkg.name;
+                            const displayPrice = pkg.price.replace("From ", "");
+                            const priceLabel = pkg.featured
+                                ? "Recommended package"
+                                : "Starting price";
 
                             return (
                                 <button
@@ -696,105 +706,223 @@ export default function DrawingsPlanningForm({
                                                 position: "absolute",
                                                 top: "14px",
                                                 right: "14px",
-                                                padding: "6px 10px",
+                                                padding: "7px 12px",
                                                 borderRadius: "999px",
                                                 fontSize: "11px",
-                                                fontWeight: "700",
+                                                fontWeight: "800",
                                                 letterSpacing: "0.04em",
                                                 textTransform: "uppercase",
                                                 background: active ? "#fff" : "#1f1f1f",
                                                 color: active ? "#1f1f1f" : "#fff",
                                                 maxWidth: "calc(100% - 28px)",
+                                                boxShadow: active
+                                                    ? "0 10px 24px rgba(0,0,0,0.12)"
+                                                    : "none",
                                             }}
                                         >
-                                            Popular
+                                            Most Popular
                                         </div>
                                     )}
 
                                     <div
                                         style={{
-                                            fontSize: "12px",
-                                            letterSpacing: "2px",
-                                            textTransform: "uppercase",
-                                            color: active ? "#d6d3d1" : "#78716c",
-                                            fontWeight: "700",
-                                        }}
-                                    >
-                                        {pkg.price}
-                                    </div>
-
-                                    <div
-                                        style={{
-                                            marginTop: "12px",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "space-between",
-                                            gap: "10px",
+                                            display: "grid",
+                                            gap: "18px",
                                             minWidth: 0,
                                         }}
                                     >
-                                        <h4
-                                            style={{
-                                                margin: 0,
-                                                fontSize: "22px",
-                                                overflowWrap: "break-word",
-                                            }}
-                                        >
-                                            {pkg.name}
-                                        </h4>
+                                        <div style={{ display: "grid", gap: "12px", minWidth: 0 }}>
+                                            <div
+                                                style={{
+                                                    fontSize: "12px",
+                                                    letterSpacing: "0.08em",
+                                                    textTransform: "uppercase",
+                                                    color: active ? "#d6d3d1" : "#78716c",
+                                                    fontWeight: "700",
+                                                }}
+                                            >
+                                                {priceLabel}
+                                            </div>
 
-                                        <button
-                                            type="button"
-                                            aria-label={`More information about ${pkg.name}`}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setInfoPackage(pkg);
-                                            }}
-                                            style={inlineInfoButtonStyle(active)}
-                                        >
-                                            i
-                                        </button>
-                                    </div>
+                                            <div
+                                                style={{
+                                                    display: "flex",
+                                                    alignItems: "flex-start",
+                                                    justifyContent: "space-between",
+                                                    gap: "12px",
+                                                    minWidth: 0,
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        display: "grid",
+                                                        gap: "2px",
+                                                        minWidth: 0,
+                                                        flex: 1,
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{
+                                                            display: "flex",
+                                                            alignItems: "baseline",
+                                                            gap: "8px",
+                                                            flexWrap: "wrap",
+                                                            minWidth: 0,
+                                                        }}
+                                                    >
+                                                        <span
+                                                            style={{
+                                                                fontSize: isMobile ? "34px" : "40px",
+                                                                lineHeight: 1,
+                                                                fontWeight: "800",
+                                                                letterSpacing: "-0.04em",
+                                                                color: active ? "#fff" : "#1c1917",
+                                                            }}
+                                                        >
+                                                            {displayPrice}
+                                                        </span>
+                                                        <span
+                                                            style={{
+                                                                fontSize: "13px",
+                                                                color: active ? "#d6d3d1" : "#78716c",
+                                                                fontWeight: "600",
+                                                            }}
+                                                        >
+                                                            starting from
+                                                        </span>
+                                                    </div>
 
-                                    {active && (
-                                        <div style={{ display: "grid", gap: "14px", marginTop: "10px", minWidth: 0 }}>
-                                            <p style={{ margin: 0, color: "#f5f5f4", lineHeight: "1.8" }}>
+                                                    <h4
+                                                        style={{
+                                                            margin: 0,
+                                                            fontSize: isMobile ? "22px" : "24px",
+                                                            lineHeight: "1.15",
+                                                            overflowWrap: "break-word",
+                                                        }}
+                                                    >
+                                                        {pkg.name}
+                                                    </h4>
+                                                </div>
+
+                                                <button
+                                                    type="button"
+                                                    aria-label={`More information about ${pkg.name}`}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setInfoPackage(pkg);
+                                                    }}
+                                                    style={inlineInfoButtonStyle(active)}
+                                                >
+                                                    i
+                                                </button>
+                                            </div>
+
+                                            <p
+                                                style={{
+                                                    margin: 0,
+                                                    color: active ? "#f5f5f4" : "#57534e",
+                                                    lineHeight: "1.7",
+                                                }}
+                                            >
                                                 {pkg.intro}
                                             </p>
+                                        </div>
 
-                                            <div style={{ display: "grid", gap: "10px", minWidth: 0 }}>
-                                                {pkg.includes.map((item) => (
-                                                    <div
-                                                        key={item}
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                flexWrap: "wrap",
+                                                gap: "10px",
+                                                minWidth: 0,
+                                            }}
+                                        >
+                                            <div
+                                                style={{
+                                                    padding: "9px 12px",
+                                                    borderRadius: "999px",
+                                                    border: active
+                                                        ? "1px solid rgba(255,255,255,0.16)"
+                                                        : "1px solid #e7e5e4",
+                                                    background: active
+                                                        ? "rgba(255,255,255,0.08)"
+                                                        : "#fafaf9",
+                                                    color: active ? "#fff" : "#44403c",
+                                                    fontSize: "13px",
+                                                    fontWeight: "700",
+                                                    lineHeight: 1.2,
+                                                }}
+                                            >
+                                                Typical turnaround • 7–10 working days
+                                            </div>
+                                        </div>
+
+                                        <div style={{ display: "grid", gap: "10px", minWidth: 0 }}>
+                                            {pkg.includes.slice(0, 4).map((item) => (
+                                                <div
+                                                    key={item}
+                                                    style={{
+                                                        display: "flex",
+                                                        alignItems: "flex-start",
+                                                        gap: "10px",
+                                                        minWidth: 0,
+                                                    }}
+                                                >
+                                                    <span
+                                                        aria-hidden="true"
                                                         style={{
-                                                            color: "#f5f5f4",
-                                                            lineHeight: "1.7",
+                                                            width: "22px",
+                                                            height: "22px",
+                                                            borderRadius: "999px",
+                                                            display: "grid",
+                                                            placeItems: "center",
+                                                            flexShrink: 0,
+                                                            fontSize: "12px",
+                                                            fontWeight: "800",
+                                                            border: active
+                                                                ? "1px solid rgba(255,255,255,0.16)"
+                                                                : "1px solid #e7e5e4",
+                                                            background: active
+                                                                ? "rgba(255,255,255,0.08)"
+                                                                : "#fafaf9",
+                                                            color: active ? "#fff" : "#1c1917",
+                                                        }}
+                                                    >
+                                                        ✓
+                                                    </span>
+
+                                                    <span
+                                                        style={{
+                                                            color: active ? "#f5f5f4" : "#44403c",
+                                                            lineHeight: "1.6",
                                                             fontSize: "14px",
                                                             overflowWrap: "break-word",
                                                         }}
                                                     >
-                                                        • {item}
-                                                    </div>
-                                                ))}
-                                            </div>
+                                                        {item}
+                                                    </span>
+                                                </div>
+                                            ))}
                                         </div>
-                                    )}
+                                    </div>
 
                                     <div
                                         style={{
                                             marginTop: "20px",
-                                            padding: "12px 14px",
-                                            borderRadius: "12px",
+                                            padding: "14px 16px",
+                                            borderRadius: "14px",
                                             border: active
                                                 ? "1px solid rgba(255,255,255,0.18)"
                                                 : "1px solid #d6d3d1",
                                             background: active ? "#2b2926" : "#fafaf9",
                                             color: active ? "#fff" : "#1c1917",
-                                            fontWeight: "700",
+                                            fontWeight: "800",
                                             textAlign: "center",
+                                            boxShadow: active
+                                                ? "inset 0 1px 0 rgba(255,255,255,0.06)"
+                                                : "none",
                                         }}
                                     >
-                                        {active ? "Selected — moving on..." : "Choose package"}
+                                        {active ? "Selected — moving to project details..." : "Choose this package"}
                                     </div>
                                 </button>
                             );
@@ -849,7 +977,8 @@ export default function DrawingsPlanningForm({
                             Select your project type.
                         </strong>
                         <span style={{ color: "#57534e", lineHeight: "1.7" }}>
-                            Once your project selections are complete, we’ll move you straight to your details.
+                            Once your project selections are complete, we’ll move you straight to
+                            your details.
                         </span>
                     </div>
 
@@ -1011,7 +1140,8 @@ export default function DrawingsPlanningForm({
                             minWidth: 0,
                         }}
                     >
-                        Name and email are the only required fields here. Everything else is optional.
+                        Name and email are the only required fields here. Everything else is
+                        optional.
                     </div>
 
                     <input
@@ -1105,7 +1235,8 @@ export default function DrawingsPlanningForm({
                         Ready to send your request?
                     </strong>
                     <span style={{ color: "#57534e", lineHeight: "1.7" }}>
-                        Send this form and we’ll review the project and come back to you with the most suitable next step and quote guidance.
+                        Send this form and we’ll review the project and come back to you with the
+                        most suitable next step and quote guidance.
                     </span>
                 </div>
 
@@ -1516,7 +1647,7 @@ export default function DrawingsPlanningForm({
                                             lineHeight: "1.7",
                                         }}
                                     >
-                                        • {item}
+                                        ✓ {item}
                                     </div>
                                 ))}
                             </div>

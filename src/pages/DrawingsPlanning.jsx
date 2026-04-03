@@ -166,7 +166,7 @@ export default function DrawingsPlanning() {
         },
         {
             name: "Technical Package",
-            price: "From £1550",
+            price: "From £1650",
             intro: "A fuller package for projects moving into technical delivery.",
             includes: [
                 "Measured survey",
@@ -1499,13 +1499,143 @@ export default function DrawingsPlanning() {
                 </section>
 
                 <section
+                    id="contact-form"
+                    style={{
+                        borderTop: "1px solid #e7e5e4",
+                        background: "#efebe6",
+                    }}
+                >
+                    <div
+                        style={{
+                            maxWidth: "1200px",
+                            margin: "0 auto",
+                            padding: isMobile ? "48px 16px" : "70px 24px",
+                            display: "grid",
+                            gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(320px, 1fr))",
+                            gap: isMobile ? "24px" : "30px",
+                            boxSizing: "border-box",
+                            alignItems: "start",
+                        }}
+                    >
+                        <div style={{ minWidth: 0 }}>
+                            <div
+                                style={{
+                                    fontSize: "12px",
+                                    letterSpacing: "2px",
+                                    textTransform: "uppercase",
+                                    color: "#78716c",
+                                    fontWeight: "700",
+                                }}
+                            >
+                                Enquiry Form
+                            </div>
+
+                            <h2
+                                style={{
+                                    fontSize: isMobile ? "30px" : "42px",
+                                    marginTop: "12px",
+                                    marginBottom: "12px",
+                                    lineHeight: "1.08",
+                                    color: "#1f1f1f",
+                                }}
+                            >
+                                Request your drawings quote
+                            </h2>
+
+                            <p
+                                style={{
+                                    color: "#57534e",
+                                    lineHeight: "1.8",
+                                    maxWidth: "560px",
+                                    margin: 0,
+                                    fontSize: isMobile ? "15px" : "16px",
+                                }}
+                            >
+                                Tell us about your project and the package you’re interested in.
+                                Drawing packages start from <strong>£450</strong>, and we’ll guide
+                                you on the most suitable next step.
+                            </p>
+
+                            {selectedPackage && (
+                                <div
+                                    style={{
+                                        marginTop: "20px",
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: "8px",
+                                        padding: "10px 14px",
+                                        borderRadius: "999px",
+                                        background: "#1f1f1f",
+                                        color: "#fff",
+                                        fontWeight: "700",
+                                        maxWidth: "100%",
+                                        flexWrap: "wrap",
+                                        lineHeight: "1.5",
+                                    }}
+                                >
+                                    <span>Selected: {selectedPackage}</span>
+                                    <span style={{ opacity: 0.7 }}>•</span>
+                                    <span>
+                                        {packages.find((p) => p.name === selectedPackage)?.price}
+                                    </span>
+                                </div>
+                            )}
+
+                            <div
+                                style={{
+                                    marginTop: "22px",
+                                    display: "grid",
+                                    gap: "12px",
+                                    maxWidth: "520px",
+                                }}
+                            >
+                                {[
+                                    { label: "Phone", value: "02036335634" },
+                                    { label: "Email", value: "info@crafman.co.uk" },
+                                    { label: "Location", value: "London, United Kingdom" },
+                                ].map((item) => (
+                                    <div
+                                        key={item.label}
+                                        style={{
+                                            padding: "14px 16px",
+                                            borderRadius: "16px",
+                                            background: "rgba(255,255,255,0.58)",
+                                            border: "1px solid #ddd6ce",
+                                            color: "#44403c",
+                                            lineHeight: "1.7",
+                                        }}
+                                    >
+                                        <strong style={{ color: "#1f1f1f" }}>{item.label}:</strong>{" "}
+                                        {item.value}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div style={{ minWidth: 0 }}>
+                            <DrawingsPlanningForm
+                                endpoint="https://formspree.io/f/maqlqgzz"
+                                selectedPackage={selectedPackage}
+                                title="Request your drawings quote"
+                                intro="Tell us about your project and the package you’re interested in. Drawing packages start from £450, and we’ll guide you on the most suitable next step."
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                <section
                     style={{
                         borderTop: "1px solid #e7e5e4",
                         borderBottom: "1px solid #e7e5e4",
                         background: "#fff",
                     }}
                 >
-                    <div style={section}>
+                    <div
+                        style={{
+                            ...section,
+                            padding: isMobile ? "48px 16px" : undefined,
+                        }}
+                    >
                         <div
                             style={{
                                 display: "flex",
@@ -1527,19 +1657,29 @@ export default function DrawingsPlanning() {
                                 >
                                     Testimonials
                                 </div>
+
                                 <h2
                                     style={{
-                                        fontSize: "40px",
+                                        fontSize: isMobile ? "30px" : "40px",
                                         marginTop: "12px",
                                         marginBottom: "12px",
                                         color: "#A67C00",
+                                        lineHeight: "1.08",
                                     }}
                                 >
                                     What clients say about working with us
                                 </h2>
-                                <p style={{ color: "#57534e", lineHeight: "1.8" }}>
-                                    We focus on clear communication, practical design, and quality delivery
-                                    from start to finish.
+
+                                <p
+                                    style={{
+                                        color: "#57534e",
+                                        lineHeight: "1.8",
+                                        margin: 0,
+                                        fontSize: isMobile ? "15px" : "16px",
+                                    }}
+                                >
+                                    Clear communication, practical advice, and drawing packages
+                                    designed to help projects move forward with confidence.
                                 </p>
                             </div>
 
@@ -1547,6 +1687,7 @@ export default function DrawingsPlanning() {
                                 <button
                                     type="button"
                                     onClick={showPrevTestimonials}
+                                    aria-label="Previous testimonials"
                                     style={{
                                         height: "44px",
                                         width: "44px",
@@ -1559,9 +1700,11 @@ export default function DrawingsPlanning() {
                                 >
                                     ←
                                 </button>
+
                                 <button
                                     type="button"
                                     onClick={showNextTestimonials}
+                                    aria-label="Next testimonials"
                                     style={{
                                         height: "44px",
                                         width: "44px",
@@ -1589,16 +1732,40 @@ export default function DrawingsPlanning() {
                             }}
                         >
                             {visibleTestimonials.map((item, index) => (
-                                <div key={`${item.name}-${index}`} style={{ ...card, minWidth: 0 }}>
-                                    <div style={{ marginBottom: "10px", color: "#f59e0b", fontSize: "18px" }}>
+                                <div
+                                    key={`${item.name}-${index}`}
+                                    style={{
+                                        ...card,
+                                        minWidth: 0,
+                                        borderRadius: "22px",
+                                        border: "1px solid #e7e5e4",
+                                        boxShadow: "0 12px 26px rgba(28,25,23,0.05)",
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            marginBottom: "10px",
+                                            color: "#f59e0b",
+                                            fontSize: "18px",
+                                            letterSpacing: "1px",
+                                        }}
+                                    >
                                         ★★★★★
                                     </div>
 
-                                    <p style={{ color: "#57534e", lineHeight: "1.8", marginTop: 0 }}>
+                                    <p
+                                        style={{
+                                            color: "#57534e",
+                                            lineHeight: "1.8",
+                                            marginTop: 0,
+                                            marginBottom: "16px",
+                                            fontSize: isMobile ? "15px" : "16px",
+                                        }}
+                                    >
                                         “{item.text}”
                                     </p>
 
-                                    <div style={{ fontWeight: "700", marginTop: "16px" }}>
+                                    <div style={{ fontWeight: "700", color: "#1f1f1f" }}>
                                         {item.name}
                                     </div>
                                     <div style={{ color: "#78716c", fontSize: "14px" }}>
@@ -1622,14 +1789,16 @@ export default function DrawingsPlanning() {
                                     key={i}
                                     type="button"
                                     onClick={() => setTestimonialIndex(i)}
+                                    aria-label={`Go to testimonial ${i + 1}`}
                                     style={{
-                                        width: "10px",
+                                        width: i === testimonialIndex ? "24px" : "10px",
                                         height: "10px",
                                         borderRadius: "999px",
                                         border: "none",
                                         cursor: "pointer",
                                         background: i === testimonialIndex ? "#1c1917" : "#d6d3d1",
                                         padding: 0,
+                                        transition: "all 0.22s ease",
                                     }}
                                 />
                             ))}
