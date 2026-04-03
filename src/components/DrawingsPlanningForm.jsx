@@ -17,7 +17,7 @@ const initialFormState = {
 const packageOptions = [
     {
         name: "Starter Package",
-        price: "From £650",
+        price: "From £450",
         intro: "A simple, practical package to get your project moving.",
         includes: [
             "Measured survey",
@@ -28,7 +28,7 @@ const packageOptions = [
     },
     {
         name: "Planning Package",
-        price: "From £950",
+        price: "From £550",
         intro: "A stronger option for projects that need planning support.",
         includes: [
             "Measured survey",
@@ -42,7 +42,7 @@ const packageOptions = [
     },
     {
         name: "Technical Package",
-        price: "From £1550",
+        price: "From £1150",
         intro: "A fuller package for projects moving into technical delivery.",
         includes: [
             "Measured survey",
@@ -90,7 +90,7 @@ const loftTypeOptions = [
 export default function DrawingsPlanningForm({
     endpoint = "https://formspree.io/f/mojpjokd",
     selectedPackage = "",
-    buttonText = "Send to confirm quote & package",
+    buttonText = "Get my quote",
     title = "Request your drawings quote",
     intro = "Answer a few quick questions and we’ll review your project and guide the next step.",
 }) {
@@ -112,10 +112,12 @@ export default function DrawingsPlanningForm({
         error: "",
     });
     const [isMobile, setIsMobile] = useState(false);
+    const [infoPackage, setInfoPackage] = useState(null);
 
     const packageRefs = useRef({});
     const formTopRef = useRef(null);
     const isFirstRender = useRef(true);
+    const autoAdvanceRef = useRef(null);
 
     const totalSteps = 5;
 
@@ -176,6 +178,45 @@ export default function DrawingsPlanningForm({
 
         return () => clearTimeout(timeout);
     }, [step, isMobile]);
+
+    useEffect(() => {
+        if (autoAdvanceRef.current) {
+            clearTimeout(autoAdvanceRef.current);
+        }
+
+        if (step === 2) {
+            const validProjectSelection =
+                form.projectTypes.length > 0 &&
+                (!form.projectTypes.includes("Extension") || form.extensionTypes.length > 0) &&
+                (!form.projectTypes.includes("Loft Conversion") || form.loftTypes.length > 0);
+
+            if (validProjectSelection) {
+                autoAdvanceRef.current = setTimeout(() => {
+                    setDirection(1);
+                    setStep(3);
+                }, 350);
+            }
+        }
+
+        return () => {
+            if (autoAdvanceRef.current) {
+                clearTimeout(autoAdvanceRef.current);
+            }
+        };
+    }, [step, form.projectTypes, form.extensionTypes, form.loftTypes]);
+
+    useEffect(() => {
+        if (!infoPackage) return;
+
+        const onKeyDown = (e) => {
+            if (e.key === "Escape") {
+                setInfoPackage(null);
+            }
+        };
+
+        document.addEventListener("keydown", onKeyDown);
+        return () => document.removeEventListener("keydown", onKeyDown);
+    }, [infoPackage]);
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -327,7 +368,7 @@ export default function DrawingsPlanningForm({
             ) {
                 return false;
             }
-            return !!form.message.trim();
+            return true;
         }
 
         if (step === 3) {
@@ -483,6 +524,22 @@ export default function DrawingsPlanningForm({
         };
     };
 
+    const inlineInfoButtonStyle = (active) => ({
+        width: "32px",
+        height: "32px",
+        borderRadius: "999px",
+        border: active ? "1px solid rgba(255,255,255,0.22)" : "1px solid #d6d3d1",
+        background: active ? "#2b2926" : "#fafaf9",
+        color: active ? "#fff" : "#1c1917",
+        display: "grid",
+        placeItems: "center",
+        fontSize: "14px",
+        fontWeight: "800",
+        cursor: "pointer",
+        padding: 0,
+        flexShrink: 0,
+    });
+
     const stepButtonStyle = (active, current) => ({
         width: isMobile ? "30px" : "36px",
         height: isMobile ? "30px" : "36px",
@@ -598,7 +655,7 @@ export default function DrawingsPlanningForm({
                             Select a package to begin your quote request.
                         </strong>
                         <span style={{ color: "#57534e", lineHeight: "1.7" }}>
-                            Click a package to reveal what’s included.
+                            Tap the <strong>i</strong> button for more detail without leaving the form.
                         </span>
                     </div>
 
@@ -622,7 +679,13 @@ export default function DrawingsPlanningForm({
                                         packageRefs.current[pkg.name] = el;
                                     }}
                                     type="button"
-                                    onClick={() => setField("packageInterest", pkg.name)}
+                                    onClick={() => {
+                                        setField("packageInterest", pkg.name);
+                                        setDirection(1);
+                                        setTimeout(() => {
+                                            setStep(2);
+                                        }, 220);
+                                    }}
                                     onMouseEnter={() => setHoveredPackage(pkg.name)}
                                     onMouseLeave={() => setHoveredPackage("")}
                                     style={packageCardStyle(pkg)}
@@ -660,19 +723,41 @@ export default function DrawingsPlanningForm({
                                         {pkg.price}
                                     </div>
 
-                                    <h4
+                                    <div
                                         style={{
                                             marginTop: "12px",
-                                            marginBottom: active ? "10px" : "0",
-                                            fontSize: "22px",
-                                            overflowWrap: "break-word",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "space-between",
+                                            gap: "10px",
+                                            minWidth: 0,
                                         }}
                                     >
-                                        {pkg.name}
-                                    </h4>
+                                        <h4
+                                            style={{
+                                                margin: 0,
+                                                fontSize: "22px",
+                                                overflowWrap: "break-word",
+                                            }}
+                                        >
+                                            {pkg.name}
+                                        </h4>
+
+                                        <button
+                                            type="button"
+                                            aria-label={`More information about ${pkg.name}`}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setInfoPackage(pkg);
+                                            }}
+                                            style={inlineInfoButtonStyle(active)}
+                                        >
+                                            i
+                                        </button>
+                                    </div>
 
                                     {active && (
-                                        <div style={{ display: "grid", gap: "14px", marginTop: "6px", minWidth: 0 }}>
+                                        <div style={{ display: "grid", gap: "14px", marginTop: "10px", minWidth: 0 }}>
                                             <p style={{ margin: 0, color: "#f5f5f4", lineHeight: "1.8" }}>
                                                 {pkg.intro}
                                             </p>
@@ -709,7 +794,7 @@ export default function DrawingsPlanningForm({
                                             textAlign: "center",
                                         }}
                                     >
-                                        {active ? "Selected package" : "View package"}
+                                        {active ? "Selected — moving on..." : "Choose package"}
                                     </div>
                                 </button>
                             );
@@ -745,7 +830,7 @@ export default function DrawingsPlanningForm({
                             Your project
                         </h3>
                         <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
-                            Tell us what type of project you’re planning so we can review the right next step.
+                            Tell us what type of project you’re planning.
                         </p>
                     </div>
 
@@ -761,10 +846,10 @@ export default function DrawingsPlanningForm({
                         }}
                     >
                         <strong style={{ fontSize: "16px" }}>
-                            Tell us about your project.
+                            Select your project type.
                         </strong>
                         <span style={{ color: "#57534e", lineHeight: "1.7" }}>
-                            Your package already defines the drawings. We just need a bit of context to review it properly.
+                            Once your project selections are complete, we’ll move you straight to your details.
                         </span>
                     </div>
 
@@ -871,35 +956,6 @@ export default function DrawingsPlanningForm({
                             )}
                         </div>
                     )}
-
-                    <label style={labelStyle}>
-                        <span style={{ color: "#44403c", fontWeight: "600" }}>Postcode</span>
-                        <input
-                            name="postcode"
-                            value={form.postcode}
-                            onChange={handleChange}
-                            placeholder="Your postcode"
-                            style={inputStyle}
-                        />
-                    </label>
-
-                    <label style={labelStyle}>
-                        <span style={{ color: "#44403c", fontWeight: "600" }}>
-                            Tell us a little about the project
-                        </span>
-                        <textarea
-                            name="message"
-                            value={form.message}
-                            onChange={handleChange}
-                            placeholder="What are you planning, what stage are you at, and what help do you need?"
-                            rows="6"
-                            style={{
-                                ...inputStyle,
-                                resize: "vertical",
-                            }}
-                            required
-                        />
-                    </label>
                 </div>
             );
         }
@@ -924,7 +980,7 @@ export default function DrawingsPlanningForm({
                             Your details
                         </h3>
                         <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
-                            Leave your details and we’ll review your project properly.
+                            Leave your details and any extra project notes you want us to review.
                         </p>
                     </div>
 
@@ -955,7 +1011,7 @@ export default function DrawingsPlanningForm({
                             minWidth: 0,
                         }}
                     >
-                        Leave your details and we’ll review your project and respond with the most suitable next step.
+                        Name and email are the only required fields here. Everything else is optional.
                     </div>
 
                     <input
@@ -981,9 +1037,34 @@ export default function DrawingsPlanningForm({
                         name="phone"
                         value={form.phone}
                         onChange={handleChange}
-                        placeholder="Phone number"
+                        placeholder="Phone number (optional)"
                         style={inputStyle}
                     />
+
+                    <input
+                        name="postcode"
+                        value={form.postcode}
+                        onChange={handleChange}
+                        placeholder="Postcode (optional)"
+                        style={inputStyle}
+                    />
+
+                    <label style={labelStyle}>
+                        <span style={{ color: "#44403c", fontWeight: "600" }}>
+                            Project details (optional)
+                        </span>
+                        <textarea
+                            name="message"
+                            value={form.message}
+                            onChange={handleChange}
+                            placeholder="Anything helpful to know about the project, timing, or what support you need"
+                            rows="5"
+                            style={{
+                                ...inputStyle,
+                                resize: "vertical",
+                            }}
+                        />
+                    </label>
                 </div>
             );
         }
@@ -1004,10 +1085,10 @@ export default function DrawingsPlanningForm({
                         Step 4
                     </p>
                     <h3 style={{ margin: "0 0 8px", fontSize: "24px" }}>
-                        Confirm quote & package
+                        Review & send
                     </h3>
                     <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
-                        Review everything before sending your request to confirm the package and quote guidance.
+                        Review everything before sending your request.
                     </p>
                 </div>
 
@@ -1024,7 +1105,7 @@ export default function DrawingsPlanningForm({
                         Ready to send your request?
                     </strong>
                     <span style={{ color: "#57534e", lineHeight: "1.7" }}>
-                        Send this form to confirm the package you’re interested in and let us review the project for quote guidance.
+                        Send this form and we’ll review the project and come back to you with the most suitable next step and quote guidance.
                     </span>
                 </div>
 
@@ -1319,231 +1400,396 @@ export default function DrawingsPlanningForm({
     }
 
     return (
-        <form
-            ref={formTopRef}
-            onSubmit={handleSubmit}
-            style={{
-                ...card,
-                background: "#fff",
-                border: "1px solid #ddd",
-                boxShadow: "0 10px 28px rgba(0,0,0,0.05)",
-                display: "grid",
-                gap: "20px",
-                position: "relative",
-                overflow: "hidden",
-                width: "100%",
-                maxWidth: "100%",
-                boxSizing: "border-box",
-                minWidth: 0,
-            }}
-        >
-            <style>
-                {`
-          @keyframes slideInFromRight {
-            0% {
-              opacity: 0;
-              transform: translateX(34px);
-            }
-            100% {
-              opacity: 1;
-              transform: translateX(0);
-            }
-          }
-
-          @keyframes slideInFromLeft {
-            0% {
-              opacity: 0;
-              transform: translateX(-34px);
-            }
-            100% {
-              opacity: 1;
-              transform: translateX(0);
-            }
-          }
-        `}
-            </style>
-
-            <div style={{ minWidth: 0 }}>
-                <h2
-                    style={{
-                        fontSize: isMobile ? "32px" : "42px",
-                        marginTop: 0,
-                        marginBottom: "12px",
-                    }}
-                >
-                    {title}
-                </h2>
-
-                <p
-                    style={{
-                        color: "#57534e",
-                        lineHeight: "1.8",
-                        maxWidth: "560px",
-                        margin: 0,
-                    }}
-                >
-                    {intro}
-                </p>
-            </div>
-
-            <div style={{ display: "grid", gap: "14px", minWidth: 0 }}>
+        <>
+            {infoPackage && (
                 <div
+                    onClick={() => setInfoPackage(null)}
                     style={{
+                        position: "fixed",
+                        inset: 0,
+                        background: "rgba(28,25,23,0.45)",
+                        zIndex: 1000,
                         display: "flex",
-                        justifyContent: "space-between",
-                        gap: "10px",
                         alignItems: "center",
-                        flexWrap: "wrap",
-                    }}
-                >
-                    <p style={{ margin: 0, color: "#57534e", fontWeight: "600" }}>
-                        Step {step} of {totalSteps}
-                    </p>
-                </div>
-
-                <div
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(5, 1fr)",
-                        gap: isMobile ? "6px" : "10px",
-                        alignItems: "center",
-                        minWidth: 0,
-                    }}
-                >
-                    {[1, 2, 3, 4, 5].map((item) => (
-                        <div
-                            key={item}
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: isMobile ? "6px" : "10px",
-                                minWidth: 0,
-                            }}
-                        >
-                            <div style={stepButtonStyle(step >= item, step === item)}>{item}</div>
-                            {item < 5 && (
-                                <div
-                                    style={{
-                                        height: "4px",
-                                        background: step > item ? "#1c1917" : "#e7e5e4",
-                                        borderRadius: "999px",
-                                        flex: 1,
-                                        transition: "background 0.2s ease",
-                                        minWidth: 0,
-                                    }}
-                                />
-                            )}
-                        </div>
-                    ))}
-                </div>
-
-                <div
-                    style={{
-                        width: "100%",
-                        height: "8px",
-                        background: "#e7e5e4",
-                        borderRadius: "999px",
-                        overflow: "hidden",
+                        justifyContent: "center",
+                        padding: isMobile ? "16px" : "24px",
                     }}
                 >
                     <div
+                        onClick={(e) => e.stopPropagation()}
                         style={{
-                            width: `${progress}%`,
-                            height: "100%",
-                            background: "#1c1917",
-                            transition: "width 0.3s ease",
+                            width: "100%",
+                            maxWidth: "560px",
+                            maxHeight: "85vh",
+                            overflowY: "auto",
+                            background: "#fff",
+                            borderRadius: "22px",
+                            border: "1px solid #e7e5e4",
+                            boxShadow: "0 24px 60px rgba(0,0,0,0.22)",
+                            padding: isMobile ? "20px" : "26px",
+                            display: "grid",
+                            gap: "16px",
                         }}
-                    />
-                </div>
+                    >
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "start",
+                                gap: "16px",
+                            }}
+                        >
+                            <div>
+                                <div
+                                    style={{
+                                        fontSize: "12px",
+                                        letterSpacing: "2px",
+                                        textTransform: "uppercase",
+                                        color: "#78716c",
+                                        fontWeight: "700",
+                                        marginBottom: "8px",
+                                    }}
+                                >
+                                    Package details
+                                </div>
+                                <h3 style={{ margin: 0, fontSize: "28px", color: "#1f1f1f" }}>
+                                    {infoPackage.name}
+                                </h3>
+                                <p
+                                    style={{
+                                        margin: "8px 0 0",
+                                        color: "#57534e",
+                                        fontWeight: "700",
+                                    }}
+                                >
+                                    {infoPackage.price}
+                                </p>
+                            </div>
 
-                <div
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
-                        gap: "8px",
-                        color: "#78716c",
-                        fontSize: isMobile ? "11px" : "13px",
-                        fontWeight: "600",
-                        minWidth: 0,
-                    }}
-                >
-                    <span>Package</span>
-                    <span>Project</span>
-                    <span>Contact</span>
-                    <span>Confirm</span>
-                    <span>Success</span>
-                </div>
-            </div>
+                            <button
+                                type="button"
+                                onClick={() => setInfoPackage(null)}
+                                style={{
+                                    width: "40px",
+                                    height: "40px",
+                                    borderRadius: "999px",
+                                    border: "1px solid #d6d3d1",
+                                    background: "#fff",
+                                    cursor: "pointer",
+                                    fontSize: "20px",
+                                    lineHeight: 1,
+                                    flexShrink: 0,
+                                }}
+                            >
+                                ×
+                            </button>
+                        </div>
 
-            <div
-                key={step}
+                        <div
+                            style={{
+                                padding: "16px",
+                                borderRadius: "16px",
+                                background: "#fafaf9",
+                                border: "1px solid #e7e5e4",
+                                color: "#57534e",
+                                lineHeight: "1.8",
+                            }}
+                        >
+                            {infoPackage.intro}
+                        </div>
+
+                        <div style={{ display: "grid", gap: "10px" }}>
+                            <strong style={{ fontSize: "16px", color: "#1f1f1f" }}>
+                                What’s included
+                            </strong>
+
+                            <div style={{ display: "grid", gap: "10px" }}>
+                                {infoPackage.includes.map((item) => (
+                                    <div
+                                        key={item}
+                                        style={{
+                                            padding: "12px 14px",
+                                            borderRadius: "12px",
+                                            background: "#fff",
+                                            border: "1px solid #e7e5e4",
+                                            color: "#44403c",
+                                            lineHeight: "1.7",
+                                        }}
+                                    >
+                                        • {item}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                gap: "12px",
+                                flexWrap: "wrap",
+                            }}
+                        >
+                            <button
+                                type="button"
+                                onClick={() => setInfoPackage(null)}
+                                style={{
+                                    ...buttonSecondary,
+                                    cursor: "pointer",
+                                }}
+                            >
+                                Close
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setField("packageInterest", infoPackage.name);
+                                    setInfoPackage(null);
+                                    setDirection(1);
+                                    setTimeout(() => {
+                                        setStep(2);
+                                    }, 180);
+                                }}
+                                style={{
+                                    ...buttonPrimary,
+                                    border: "none",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                Choose this package
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <form
+                ref={formTopRef}
+                onSubmit={handleSubmit}
                 style={{
-                    animation: `${animationName} 0.35s cubic-bezier(0.22, 1, 0.36, 1)`,
-                    willChange: "transform, opacity",
+                    ...card,
+                    background: "#fff",
+                    border: "1px solid #ddd",
+                    boxShadow: "0 10px 28px rgba(0,0,0,0.05)",
+                    display: "grid",
+                    gap: "20px",
+                    position: "relative",
+                    overflow: "hidden",
+                    width: "100%",
+                    maxWidth: "100%",
+                    boxSizing: "border-box",
                     minWidth: 0,
                 }}
             >
-                {renderStepContent()}
-            </div>
+                <style>
+                    {`
+              @keyframes slideInFromRight {
+                0% {
+                  opacity: 0;
+                  transform: translateX(34px);
+                }
+                100% {
+                  opacity: 1;
+                  transform: translateX(0);
+                }
+              }
 
-            {submitStatus.error && (
-                <p style={{ margin: 0, color: "#b91c1c", fontWeight: "600" }}>
-                    {submitStatus.error}
-                </p>
-            )}
+              @keyframes slideInFromLeft {
+                0% {
+                  opacity: 0;
+                  transform: translateX(-34px);
+                }
+                100% {
+                  opacity: 1;
+                  transform: translateX(0);
+                }
+              }
+            `}
+                </style>
 
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: isMobile ? "column-reverse" : "row",
-                    justifyContent: "space-between",
-                    alignItems: "stretch",
-                    gap: "12px",
-                    marginTop: "10px",
-                    position: isMobile ? "sticky" : "static",
-                    bottom: isMobile ? "12px" : "auto",
-                    background: isMobile ? "rgba(255,255,255,0.96)" : "transparent",
-                    padding: isMobile ? "12px" : "0",
-                    borderRadius: isMobile ? "16px" : "0",
-                    boxShadow: isMobile ? "0 -8px 30px rgba(0,0,0,0.06)" : "none",
-                    backdropFilter: isMobile ? "blur(8px)" : "none",
-                    zIndex: 5,
-                }}
-            >
-                <button
-                    type="button"
-                    onClick={prevStep}
-                    disabled={step === 1 || submitStatus.loading}
+                <div style={{ minWidth: 0 }}>
+                    <h2
+                        style={{
+                            fontSize: isMobile ? "32px" : "42px",
+                            marginTop: 0,
+                            marginBottom: "12px",
+                        }}
+                    >
+                        {title}
+                    </h2>
+
+                    <p
+                        style={{
+                            color: "#57534e",
+                            lineHeight: "1.8",
+                            maxWidth: "560px",
+                            margin: 0,
+                        }}
+                    >
+                        {intro}
+                    </p>
+                </div>
+
+                <div style={{ display: "grid", gap: "14px", minWidth: 0 }}>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            gap: "10px",
+                            alignItems: "center",
+                            flexWrap: "wrap",
+                        }}
+                    >
+                        <p style={{ margin: 0, color: "#57534e", fontWeight: "600" }}>
+                            Step {step} of {totalSteps}
+                        </p>
+                    </div>
+
+                    <div
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(5, 1fr)",
+                            gap: isMobile ? "6px" : "10px",
+                            alignItems: "center",
+                            minWidth: 0,
+                        }}
+                    >
+                        {[1, 2, 3, 4, 5].map((item) => (
+                            <div
+                                key={item}
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: isMobile ? "6px" : "10px",
+                                    minWidth: 0,
+                                }}
+                            >
+                                <div style={stepButtonStyle(step >= item, step === item)}>{item}</div>
+                                {item < 5 && (
+                                    <div
+                                        style={{
+                                            height: "4px",
+                                            background: step > item ? "#1c1917" : "#e7e5e4",
+                                            borderRadius: "999px",
+                                            flex: 1,
+                                            transition: "background 0.2s ease",
+                                            minWidth: 0,
+                                        }}
+                                    />
+                                )}
+                            </div>
+                        ))}
+                    </div>
+
+                    <div
+                        style={{
+                            width: "100%",
+                            height: "8px",
+                            background: "#e7e5e4",
+                            borderRadius: "999px",
+                            overflow: "hidden",
+                        }}
+                    >
+                        <div
+                            style={{
+                                width: `${progress}%`,
+                                height: "100%",
+                                background: "#1c1917",
+                                transition: "width 0.3s ease",
+                            }}
+                        />
+                    </div>
+
+                    <div
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
+                            gap: "8px",
+                            color: "#78716c",
+                            fontSize: isMobile ? "11px" : "13px",
+                            fontWeight: "600",
+                            minWidth: 0,
+                        }}
+                    >
+                        <span>Package</span>
+                        <span>Project</span>
+                        <span>Details</span>
+                        <span>Review</span>
+                        <span>Success</span>
+                    </div>
+                </div>
+
+                <div
+                    key={step}
                     style={{
-                        ...backButtonStyle,
-                        cursor: step === 1 || submitStatus.loading ? "not-allowed" : "pointer",
-                        opacity: step === 1 || submitStatus.loading ? 0.5 : 1,
+                        animation: `${animationName} 0.35s cubic-bezier(0.22, 1, 0.36, 1)`,
+                        willChange: "transform, opacity",
+                        minWidth: 0,
                     }}
                 >
-                    Back
-                </button>
+                    {renderStepContent()}
+                </div>
 
-                {step < 4 ? (
+                {submitStatus.error && (
+                    <p style={{ margin: 0, color: "#b91c1c", fontWeight: "600" }}>
+                        {submitStatus.error}
+                    </p>
+                )}
+
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: isMobile ? "column-reverse" : "row",
+                        justifyContent: "space-between",
+                        alignItems: "stretch",
+                        gap: "12px",
+                        marginTop: "10px",
+                        position: isMobile ? "sticky" : "static",
+                        bottom: isMobile ? "12px" : "auto",
+                        background: isMobile ? "rgba(255,255,255,0.96)" : "transparent",
+                        padding: isMobile ? "12px" : "0",
+                        borderRadius: isMobile ? "16px" : "0",
+                        boxShadow: isMobile ? "0 -8px 30px rgba(0,0,0,0.06)" : "none",
+                        backdropFilter: isMobile ? "blur(8px)" : "none",
+                        zIndex: 5,
+                    }}
+                >
                     <button
                         type="button"
-                        onClick={nextStep}
-                        disabled={!stepIsValid}
-                        style={primaryNavButtonStyle(!stepIsValid)}
+                        onClick={prevStep}
+                        disabled={step === 1 || submitStatus.loading}
+                        style={{
+                            ...backButtonStyle,
+                            cursor: step === 1 || submitStatus.loading ? "not-allowed" : "pointer",
+                            opacity: step === 1 || submitStatus.loading ? 0.5 : 1,
+                        }}
                     >
-                        {step === 1 && "Next: Project details"}
-                        {step === 2 && "Next: Your details"}
-                        {step === 3 && "Review & confirm"}
+                        Back
                     </button>
-                ) : (
-                    <button
-                        type="submit"
-                        disabled={submitStatus.loading}
-                        style={primaryNavButtonStyle(submitStatus.loading)}
-                    >
-                        {submitStatus.loading ? "Sending..." : buttonText}
-                    </button>
-                )}
-            </div>
-        </form>
+
+                    {step < 4 ? (
+                        step === 3 && (
+                            <button
+                                type="button"
+                                onClick={nextStep}
+                                disabled={!stepIsValid}
+                                style={primaryNavButtonStyle(!stepIsValid)}
+                            >
+                                Review & send
+                            </button>
+                        )
+                    ) : (
+                        <button
+                            type="submit"
+                            disabled={submitStatus.loading}
+                            style={primaryNavButtonStyle(submitStatus.loading)}
+                        >
+                            {submitStatus.loading ? "Sending..." : buttonText}
+                        </button>
+                    )}
+                </div>
+            </form>
+        </>
     );
 }
