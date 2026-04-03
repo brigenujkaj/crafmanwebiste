@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import Layout, { siteStyles } from "../components/Layout.jsx";
 import DrawingsPlanningForm from "../components/DrawingsPlanningForm.jsx";
 
@@ -11,25 +11,39 @@ export default function DrawingsPlanning() {
     const [isMobile, setIsMobile] = useState(false);
     const [drawingIndex, setDrawingIndex] = useState(0);
 
-    useEffect(() => {
-        // Force scroll to top immediately
-        window.scrollTo(0, 0);
-
-        // Disable browser restoring previous scroll
+    useLayoutEffect(() => {
         if ("scrollRestoration" in window.history) {
             window.history.scrollRestoration = "manual";
         }
 
-        // Remove any hash (like #contact-form)
         if (window.location.hash) {
-            window.history.replaceState(null, "", window.location.pathname);
+            window.history.replaceState(
+                null,
+                "",
+                window.location.pathname + window.location.search
+            );
         }
 
-        // Force again after render (this is the key fix)
-        setTimeout(() => {
-            window.scrollTo(0, 0);
-        }, 50);
+        const scrollToTop = () => {
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: "auto",
+            });
 
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+        };
+
+        scrollToTop();
+
+        requestAnimationFrame(() => {
+            scrollToTop();
+
+            requestAnimationFrame(() => {
+                scrollToTop();
+            });
+        });
     }, []);
 
     useEffect(() => {
