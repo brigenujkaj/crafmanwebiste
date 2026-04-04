@@ -123,21 +123,6 @@ export default function DrawingsPlanning() {
         { src: "/images/drawingsex9.jpeg", label: "Block Plan" },
     ];
 
-    const packageButtonStyle = (active) => ({
-        display: "inline-block",
-        width: "100%",
-        textAlign: "center",
-        background: active ? "#1c1917" : "#fff",
-        color: active ? "#fff" : "#1c1917",
-        padding: "14px 18px",
-        borderRadius: "12px",
-        textDecoration: "none",
-        fontWeight: "600",
-        border: active ? "1px solid #1c1917" : "1px solid #d6d3d1",
-        cursor: "pointer",
-        boxSizing: "border-box",
-    });
-
     const packages = [
         {
             name: "Starter Package",
@@ -178,6 +163,13 @@ export default function DrawingsPlanning() {
                 "Structural Calculations",
             ],
         },
+    ];
+
+    const trustStats = [
+        { value: "500+", label: "Drawings Prepared" },
+        { value: "40+", label: "Different Councils" },
+        { value: "300+", label: "Customers" },
+        { value: "4.9*", label: "Avg. Client Rating" },
     ];
 
     function handlePackageSelect(packageName) {
@@ -281,7 +273,6 @@ export default function DrawingsPlanning() {
                             Drawings for extensions, loft conversions, and internal reconfiguration.
                         </h1>
 
-
                         <div
                             style={{
                                 marginTop: "30px",
@@ -296,6 +287,30 @@ export default function DrawingsPlanning() {
                             <a href="#contact-form" style={buttonSecondary}>
                                 Request a Quote
                             </a>
+                        </div>
+
+                        <div
+                            style={{
+                                marginTop: "22px",
+                                display: "inline-flex",
+                                flexWrap: "wrap",
+                                gap: "8px",
+                                alignItems: "center",
+                                padding: isMobile ? "12px 14px" : "14px 18px",
+                                borderRadius: "999px",
+                                background: "rgba(255,255,255,0.78)",
+                                border: "1px solid #e7e5e4",
+                                color: "#1f1f1f",
+                                fontWeight: "700",
+                                lineHeight: "1.6",
+                                boxShadow: "0 10px 24px rgba(28,25,23,0.05)",
+                            }}
+                        >
+                            <span style={{ color: "#A67C00" }}>500+</span> drawings prepared
+                            <span style={{ opacity: 0.45 }}>•</span>
+                            <span style={{ color: "#A67C00" }}>40+</span> different councils
+                            <span style={{ opacity: 0.45 }}>•</span>
+                            <span style={{ color: "#A67C00" }}>300+</span> customers
                         </div>
                     </div>
                 </section>
@@ -1424,76 +1439,194 @@ export default function DrawingsPlanning() {
                 </section>
 
                 <section
-                    id="contact-form"
                     style={{
                         borderTop: "1px solid #e7e5e4",
-                        background: "#efebe6",
+                        borderBottom: "1px solid #e7e5e4",
+                        background: "#f5f3ef",
                     }}
                 >
                     <div
                         style={{
-                            maxWidth: "1200px",
-                            margin: "0 auto",
-                            padding: "70px 24px",
-                            display: "grid",
-                            gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(320px, 1fr))",
-                            gap: "30px",
-                            boxSizing: "border-box",
+                            ...section,
+                            padding: isMobile ? "48px 16px" : "72px 20px",
                         }}
                     >
-                        <div style={{ minWidth: 0 }}>
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: isMobile
+                                    ? "1fr"
+                                    : "minmax(320px, 0.95fr) minmax(320px, 1.05fr)",
+                                gap: isMobile ? "28px" : "44px",
+                                alignItems: "center",
+                            }}
+                        >
                             <div
                                 style={{
-                                    fontSize: "12px",
-                                    letterSpacing: "2px",
-                                    textTransform: "uppercase",
-                                    color: "#78716c",
-                                    fontWeight: "700",
+                                    ...card,
+                                    background: "linear-gradient(180deg, #fcfbf8 0%, #f1ede7 100%)",
+                                    border: "1px solid #e7e5e4",
+                                    minHeight: isMobile ? "240px" : "420px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    padding: isMobile ? "24px" : "36px",
+                                    boxShadow: "0 18px 36px rgba(28,25,23,0.05)",
                                 }}
                             >
-                                Enquiry Form
-                            </div>
-
-                            <h2 style={{ fontSize: "42px", marginTop: "12px", marginBottom: "12px" }}>
-                                Request your drawings quote
-                            </h2>
-
-                            <p style={{ color: "#57534e", lineHeight: "1.8", maxWidth: "560px" }}>
-                                Tell us what type of project you have and which package you are
-                                interested in. We’ll use that to guide the next step.
-                            </p>
-
-                            {selectedPackage && (
                                 <div
                                     style={{
-                                        marginTop: "20px",
-                                        display: "inline-block",
-                                        padding: "10px 14px",
-                                        borderRadius: "999px",
-                                        background: "#1f1f1f",
-                                        color: "#fff",
-                                        fontWeight: "600",
-                                        maxWidth: "100%",
+                                        textAlign: "center",
+                                        maxWidth: "420px",
                                     }}
                                 >
-                                    Selected: {selectedPackage}
+                                    <div
+                                        style={{
+                                            width: isMobile ? "74px" : "88px",
+                                            height: isMobile ? "74px" : "88px",
+                                            margin: "0 auto 18px",
+                                            borderRadius: "22px",
+                                            background: "#1f1f1f",
+                                            color: "#fff",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            fontSize: isMobile ? "30px" : "36px",
+                                            fontWeight: "800",
+                                            boxShadow: "0 16px 28px rgba(28,25,23,0.12)",
+                                        }}
+                                    >
+                                        ✓
+                                    </div>
+
+                                    <h3
+                                        style={{
+                                            margin: 0,
+                                            fontSize: isMobile ? "26px" : "34px",
+                                            lineHeight: "1.12",
+                                            color: "#1f1f1f",
+                                        }}
+                                    >
+                                        Trusted planning drawing support for homeowners
+                                    </h3>
+
+                                    <p
+                                        style={{
+                                            marginTop: "14px",
+                                            marginBottom: 0,
+                                            color: "#57534e",
+                                            lineHeight: "1.8",
+                                            fontSize: isMobile ? "15px" : "16px",
+                                        }}
+                                    >
+                                        Clear drawings, practical advice, and a straightforward process
+                                        designed to help projects move forward with confidence.
+                                    </p>
                                 </div>
-                            )}
-
-                            <div style={{ marginTop: "22px", color: "#44403c", lineHeight: "1.9" }}>
-                                <p><strong>Phone:</strong> 02036335634</p>
-                                <p><strong>Email:</strong> planning@crafman.co.uk</p>
-                                <p><strong>Location:</strong> London, United Kingdom</p>
                             </div>
-                        </div>
 
-                        <div style={{ minWidth: 0 }}>
-                            <DrawingsPlanningForm
-                                endpoint="https://formspree.io/f/maqlqgzz"
-                                selectedPackage={selectedPackage}
-                                title="Request your drawings quote"
-                                intro="Tell us what type of project you have and which package you are interested in. We’ll use that to guide the next step."
-                            />
+                            <div style={{ minWidth: 0 }}>
+                                <div
+                                    style={{
+                                        fontSize: "12px",
+                                        letterSpacing: "2px",
+                                        textTransform: "uppercase",
+                                        color: "#A67C00",
+                                        fontWeight: "800",
+                                    }}
+                                >
+                                    Our Track Record
+                                </div>
+
+                                <h2
+                                    style={{
+                                        fontSize: isMobile ? "34px" : "52px",
+                                        lineHeight: "1.05",
+                                        marginTop: "12px",
+                                        marginBottom: "14px",
+                                        color: "#1f1f1f",
+                                    }}
+                                >
+                                    Building trust through results
+                                </h2>
+
+                                <p
+                                    style={{
+                                        color: "#57534e",
+                                        lineHeight: "1.85",
+                                        margin: 0,
+                                        fontSize: isMobile ? "15px" : "16px",
+                                        maxWidth: "640px",
+                                    }}
+                                >
+                                    We’ve supported homeowners across London with planning drawings,
+                                    layout proposals, and practical design guidance. Our experience
+                                    across different project types helps clients move ahead with more
+                                    clarity and confidence.
+                                </p>
+
+                                <div
+                                    style={{
+                                        display: "grid",
+                                        gridTemplateColumns: isMobile
+                                            ? "1fr 1fr"
+                                            : "repeat(2, minmax(180px, 1fr))",
+                                        gap: isMobile ? "18px" : "26px 34px",
+                                        marginTop: "34px",
+                                        maxWidth: "640px",
+                                    }}
+                                >
+                                    {trustStats.map((item) => (
+                                        <div key={item.label}>
+                                            <div
+                                                style={{
+                                                    fontSize: isMobile ? "38px" : "52px",
+                                                    lineHeight: "1",
+                                                    fontWeight: "800",
+                                                    color: "#1f1f1f",
+                                                    letterSpacing: "-1.5px",
+                                                }}
+                                            >
+                                                {item.value}
+                                                <span style={{ color: "#1f5cff" }}>+</span>
+                                            </div>
+                                            <div
+                                                style={{
+                                                    marginTop: "8px",
+                                                    fontSize: isMobile ? "15px" : "17px",
+                                                    lineHeight: "1.45",
+                                                    fontWeight: "700",
+                                                    color: "#1f1f1f",
+                                                }}
+                                            >
+                                                {item.label}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div style={{ marginTop: "30px" }}>
+                                    <a
+                                        href="#contact-form"
+                                        style={{
+                                            display: "inline-flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            minHeight: "52px",
+                                            padding: "0 26px",
+                                            borderRadius: "14px",
+                                            textDecoration: "none",
+                                            background: "#1f5cff",
+                                            color: "#fff",
+                                            fontWeight: "800",
+                                            fontSize: "15px",
+                                            boxShadow: "0 14px 28px rgba(31,92,255,0.18)",
+                                        }}
+                                    >
+                                        Request a Quote
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
