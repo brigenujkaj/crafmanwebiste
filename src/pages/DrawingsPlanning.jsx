@@ -1482,7 +1482,7 @@ export default function DrawingsPlanning() {
 
                             <div style={{ marginTop: "22px", color: "#44403c", lineHeight: "1.9" }}>
                                 <p><strong>Phone:</strong> 02036335634</p>
-                                <p><strong>Email:</strong> info@crafman.co.uk</p>
+                                <p><strong>Email:</strong> planning@crafman.co.uk</p>
                                 <p><strong>Location:</strong> London, United Kingdom</p>
                             </div>
                         </div>
@@ -1591,7 +1591,7 @@ export default function DrawingsPlanning() {
                             >
                                 {[
                                     { label: "Phone", value: "02036335634" },
-                                    { label: "Email", value: "info@crafman.co.uk" },
+                                    { label: "Email", value: "planning@crafman.co.uk" },
                                     { label: "Location", value: "London, United Kingdom" },
                                 ].map((item) => (
                                     <div
