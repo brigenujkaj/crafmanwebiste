@@ -4,6 +4,7 @@ import ExtensionCalculator from "../components/ExtensionCalculator";
 import { useState } from "react";
 import ContactForm from "../components/ContactForm.jsx";
 
+import { Helmet } from "react-helmet-async";
 export default function HouseExtensions() {
   const { section, card, buttonPrimary, buttonSecondary, tag } = siteStyles;
 
@@ -160,7 +161,15 @@ const pillStyle = (active) => ({
 });
 
   return (
-    <Layout>
+      <Layout>
+          <Helmet>
+              <title>House Extensions & Loft Conversions London | Crafman</title>
+              <meta
+                  name="description"
+                  content="House extensions and loft conversions in London by Crafman Design and Build. One team managing design, planning and build from start to finish."
+              />
+              <link rel="canonical" href="https://crafman.co.uk/house-extensions" />
+          </Helmet>
       <section
         style={{
           borderBottom: "1px solid #e7e5e4",
@@ -868,7 +877,7 @@ const pillStyle = (active) => ({
             </div>
           </div>
         </div>
-      </section>
+          </section>
     </Layout>
   );
 }

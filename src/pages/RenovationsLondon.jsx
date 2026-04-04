@@ -3,6 +3,8 @@ import Layout, { siteStyles } from "../components/Layout.jsx";
 import RenovationCalculator from "../components/RenovationCalculator";
 import { useState } from "react";
 import ContactForm from "../components/ContactForm.jsx";
+import { Helmet } from "react-helmet-async";
+
 
 export default function RenovationsLondon() {
   const { section, card, buttonPrimary, buttonSecondary, tag } = siteStyles;
@@ -161,8 +163,19 @@ const pillStyle = (active) => ({
 });
 
 
-  return (
-    <Layout>
+    return (
+
+        <Layout>
+
+            <Helmet>
+                <title>Home Renovations London | Crafman Design and Build</title>
+                <meta
+                    name="description"
+                    content="Home renovations in London including full property refurbishments, layout improvements and modern upgrades delivered by one experienced team."
+                />
+                <link rel="canonical" href="https://crafman.co.uk/renovations" />
+            </Helmet>
+
       <section
         style={{
           borderBottom: "1px solid #e7e5e4",

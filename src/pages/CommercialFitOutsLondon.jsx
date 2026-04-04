@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Layout, { siteStyles } from "../components/Layout.jsx";
 import { useState } from "react";
 import ContactForm from "../components/ContactForm.jsx";
+import { Helmet } from "react-helmet-async";
 
 export default function CommercialFitOutsLondon() {
   const { section, card, buttonPrimary, buttonSecondary, tag } = siteStyles;
@@ -235,7 +236,16 @@ const pillStyle = (active) => ({
 });
 
   return (
-    <Layout>
+      <Layout>
+          <Helmet>
+              <title>Commercial Fit Outs London | Crafman Design and Build</title>
+              <meta
+                  name="description"
+                  content="Commercial fit outs in London for offices, retail and business spaces. Practical design and high-quality build delivered by one experienced team."
+              />
+              <link rel="canonical" href="https://crafman.co.uk/commercial-fit-outs-london" />
+          </Helmet>
+
       <section
         style={{
           borderBottom: "1px solid #e7e5e4",

@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Layout, { siteStyles } from "../components/DrawingsLayout.jsx";
 import DrawingsPlanningForm from "../components/DrawingsPlanningForm.jsx";
+import { Helmet } from "react-helmet-async";
 
 export default function DrawingsPlanning() {
     const { section, card, buttonPrimary, buttonSecondary, tag } = siteStyles;
@@ -285,6 +286,15 @@ export default function DrawingsPlanning() {
 
     return (
         <Layout>
+
+            <Helmet>
+                <title>Planning Drawings & Permission London | Crafman</title>
+                <meta
+                    name="description"
+                    content="Planning drawings and permission support in London. We help manage design, documentation and approvals for extensions, conversions and renovations."
+                />
+                <link rel="canonical" href="https://crafman.co.uk/drawings-planning" />
+            </Helmet>
             <div
                 style={{
                     width: "100%",

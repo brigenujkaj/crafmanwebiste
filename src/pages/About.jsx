@@ -1,5 +1,6 @@
 import Layout, { siteStyles } from "../components/Layout.jsx";
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 
 export default function About() {
   const { section, card, buttonPrimary, buttonSecondary, tag } = siteStyles;

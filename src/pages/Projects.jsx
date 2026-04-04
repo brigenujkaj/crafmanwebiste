@@ -1,10 +1,19 @@
 import Layout, { siteStyles } from "../components/Layout.jsx";
+import { Helmet } from "react-helmet-async";
 
 export default function Projects() {
     const { section, tag } = siteStyles;
 
     return (
         <Layout>
+            <Helmet>
+                <title>Our Projects | Crafman Design and Build London</title>
+                <meta
+                    name="description"
+                    content="View recent house extensions, loft conversions and renovation projects completed by Crafman Design and Build across London."
+                />
+                <link rel="canonical" href="https://crafman.co.uk/projects" />
+            </Helmet>
             <section
                 style={{
                     borderBottom: "1px solid #e7e5e4",

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Layout, { siteStyles } from "../components/Layout.jsx";
 import { useState } from "react";
 import ContactForm from "../components/ContactForm.jsx";
-
+import { Helmet } from "react-helmet-async";
 export default function Home() {
   const { section, card, buttonPrimary, buttonSecondary, tag } = siteStyles;
 
@@ -199,7 +199,16 @@ const pillStyle = (active) => ({
 
 
   return (
-    <Layout>
+      <Layout>
+
+          <Helmet>
+              <title>Crafman Design and Build | Extensions & Renovations London</title>
+              <meta
+                  name="description"
+                  content="Crafman Design and Build provides house extensions, loft conversions and renovations in London. One experienced team from design to completion."
+              />
+              <link rel="canonical" href="https://crafman.co.uk/" />
+          </Helmet>
       <section
         style={{
           borderBottom: "1px solid #e7e5e4",

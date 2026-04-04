@@ -1,11 +1,20 @@
 import Layout, { siteStyles } from "../components/Layout.jsx";
 import ContactForm from "../components/ContactForm.jsx";
-
+import { Helmet } from "react-helmet-async";
 export default function Contact() {
     const { section, card, tag } = siteStyles;
 
     return (
         <Layout>
+
+            <Helmet>
+                <title>Contact Crafman Design and Build | London</title>
+                <meta
+                    name="description"
+                    content="Contact Crafman Design and Build to discuss your house extension, loft conversion or renovation project in London. Request a quote today."
+                />
+                <link rel="canonical" href="https://crafman.co.uk/contact" />
+            </Helmet>
             <section
                 style={{
                     borderBottom: "1px solid #e7e5e4",
