@@ -2,15 +2,39 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 	<url>
-		<loc>https://yourdomain.com/</loc>
+		<loc>https://crafman.co.uk/</loc>
 	</url>
 
 	<url>
-		<loc>https://yourdomain.com/house-extensions</loc>
+		<loc>https://crafman.co.uk/house-extensions</loc>
 	</url>
 
 	<url>
-		<loc>https://yourdomain.com/loft-conversions</loc>
+		<loc>https://crafman.co.uk/loft-conversions</loc>
+	</url>
+
+	<url>
+		<loc>https://crafman.co.uk/renovations</loc>
+	</url>
+
+	<url>
+		<loc>https://crafman.co.uk/refurbishments-london</loc>
+	</url>
+
+	<url>
+		<loc>https://crafman.co.uk/commercial-fit-outs-london</loc>
+	</url>
+
+	<url>
+		<loc>https://crafman.co.uk/drawings-planning</loc>
+	</url>
+
+	<url>
+		<loc>https://crafman.co.uk/projects</loc>
+	</url>
+
+	<url>
+		<loc>https://crafman.co.uk/contact</loc>
 	</url>
 
 </urlset>
