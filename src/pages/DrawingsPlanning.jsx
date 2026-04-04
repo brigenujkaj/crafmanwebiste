@@ -330,29 +330,7 @@ export default function DrawingsPlanning() {
                             </a>
                         </div>
 
-                        <div
-                            style={{
-                                marginTop: "22px",
-                                display: "inline-flex",
-                                flexWrap: "wrap",
-                                gap: "8px",
-                                alignItems: "center",
-                                padding: isMobile ? "12px 14px" : "14px 18px",
-                                borderRadius: "999px",
-                                background: "rgba(255,255,255,0.78)",
-                                border: "1px solid #e7e5e4",
-                                color: "#1f1f1f",
-                                fontWeight: "700",
-                                lineHeight: "1.6",
-                                boxShadow: "0 10px 24px rgba(28,25,23,0.05)",
-                            }}
-                        >
-                            <span style={{ color: "#A67C00" }}>500+</span> drawings prepared
-                            <span style={{ opacity: 0.45 }}>•</span>
-                            <span style={{ color: "#A67C00" }}>40+</span> different councils
-                            <span style={{ opacity: 0.45 }}>•</span>
-                            <span style={{ color: "#A67C00" }}>300+</span> customers
-                        </div>
+                    
                     </div>
                 </section>
 
