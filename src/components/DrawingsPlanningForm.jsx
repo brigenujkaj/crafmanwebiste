@@ -639,31 +639,10 @@ export default function DrawingsPlanningForm({
                         <h3 style={{ margin: "0 0 8px", fontSize: "24px" }}>
                             Choose your package
                         </h3>
-                        <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
-                            Select the level of drawings and planning support that best matches your
-                            project.
-                        </p>
+                     
                     </div>
 
-                    <div
-                        style={{
-                            padding: "18px",
-                            borderRadius: "16px",
-                            background: "#fafaf9",
-                            border: "1px solid #e7e5e4",
-                            display: "grid",
-                            gap: "10px",
-                            minWidth: 0,
-                        }}
-                    >
-                        <strong style={{ fontSize: "16px" }}>
-                            Choose a package to begin your quote request.
-                        </strong>
-                        <span style={{ color: "#57534e", lineHeight: "1.7" }}>
-                            Tap the <strong>i</strong> button for more detail without leaving the
-                            form.
-                        </span>
-                    </div>
+       
 
                     <div
                         style={{

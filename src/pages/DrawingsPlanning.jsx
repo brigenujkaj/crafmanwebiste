@@ -344,205 +344,139 @@ export default function DrawingsPlanning() {
                     </div>
                 </section>
 
-                <section
-                    style={{
-                        borderTop: "1px solid #e7e5e4",
-                        borderBottom: "1px solid #e7e5e4",
-                        background: "#f5f3ef",
-                    }}
-                >
-                    <div
-                        style={{
-                            ...section,
-                            padding: isMobile ? "48px 16px" : "72px 20px",
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns: isMobile
-                                    ? "1fr"
-                                    : "minmax(320px, 0.95fr) minmax(320px, 1.05fr)",
-                                gap: isMobile ? "28px" : "44px",
-                                alignItems: "center",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    ...card,
-                                    background: "linear-gradient(180deg, #fcfbf8 0%, #f1ede7 100%)",
-                                    border: "1px solid #e7e5e4",
-                                    minHeight: isMobile ? "240px" : "420px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    padding: isMobile ? "24px" : "36px",
-                                    boxShadow: "0 18px 36px rgba(28,25,23,0.05)",
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        textAlign: "center",
-                                        maxWidth: "420px",
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            width: isMobile ? "74px" : "88px",
-                                            height: isMobile ? "74px" : "88px",
-                                            margin: "0 auto 18px",
-                                            borderRadius: "22px",
-                                            background: "#1f1f1f",
-                                            color: "#fff",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            fontSize: isMobile ? "30px" : "36px",
-                                            fontWeight: "800",
-                                            boxShadow: "0 16px 28px rgba(28,25,23,0.12)",
-                                        }}
-                                    >
-                                        ✓
-                                    </div>
-
-                                    <h3
-                                        style={{
-                                            margin: 0,
-                                            fontSize: isMobile ? "26px" : "34px",
-                                            lineHeight: "1.12",
-                                            color: "#1f1f1f",
-                                        }}
-                                    >
-                                        Trusted planning drawing support for homeowners
-                                    </h3>
-
-                            
-                                </div>
-                            </div>
-
-                            <div style={{ minWidth: 0 }}>
-                                <div
-                                    style={{
-                                        fontSize: "12px",
-                                        letterSpacing: "2px",
-                                        textTransform: "uppercase",
-                                        color: "#A67C00",
-                                        fontWeight: "800",
-                                    }}
-                                >
-                                    Our Track Record
-                                </div>
-
-                                <h2
-                                    style={{
-                                        fontSize: isMobile ? "34px" : "52px",
-                                        lineHeight: "1.05",
-                                        marginTop: "12px",
-                                        marginBottom: "14px",
-                                        color: "#1f1f1f",
-                                    }}
-                                >
-                                    Building trust through results
-                                </h2>
-
-                         
-
-                                <div
-                                    style={{
-                                        display: "grid",
-                                        gridTemplateColumns: isMobile
-                                            ? "1fr 1fr"
-                                            : "repeat(2, minmax(180px, 1fr))",
-                                        gap: isMobile ? "18px" : "26px 34px",
-                                        marginTop: "34px",
-                                        maxWidth: "640px",
-                                    }}
-                                >
-                                    {trustStats.map((item) => (
-                                        <div key={item.label}>
-                                            <div
-                                                style={{
-                                                    fontSize: isMobile ? "38px" : "52px",
-                                                    lineHeight: "1",
-                                                    fontWeight: "800",
-                                                    color: "#1f1f1f",
-                                                    letterSpacing: "-1.5px",
-                                                }}
-                                            >
-                                                {item.value}
-                                                <span style={{ color: "#A67C00" }}>+</span>
-                                            </div>
-                                            <div
-                                                style={{
-                                                    marginTop: "8px",
-                                                    fontSize: isMobile ? "15px" : "17px",
-                                                    lineHeight: "1.45",
-                                                    fontWeight: "700",
-                                                    color: "#1f1f1f",
-                                                }}
-                                            >
-                                                {item.label}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div style={{ marginTop: "30px" }}>
-                                    <a
-                                        href="#contact-form"
-                                        style={{
-                                            display: "inline-flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            minHeight: "52px",
-                                            padding: "0 26px",
-                                            borderRadius: "14px",
-                                            textDecoration: "none",
-                                            background: "#A67C00",
-                                            color: "#fff",
-                                            fontWeight: "800",
-                                            fontSize: "15px",
-                                            boxShadow: "0 14px 28px rgba(31,92,255,0.18)",
-                                        }}
-                                    >
-                                        Request a Quote
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
 
                 <section style={section}>
                     <div
                         style={{
                             display: "grid",
-                            gridTemplateColumns: isMobile
-                                ? "1fr"
-                                : "repeat(auto-fit, minmax(240px, 1fr))",
-                            gap: "20px",
+                            gridTemplateColumns: isMobile ? "1fr" : "repeat(2, minmax(0, 1fr))",
+                            gap: "18px",
+                            maxWidth: "820px",
                         }}
                     >
-                        <div style={{ ...card, minWidth: 0 }}>
-                            <h3 style={{ marginTop: 0 }}>Extension Drawings</h3>
-                            <p style={{ color: "#57534e", lineHeight: "1.8", marginBottom: 0 }}>
-                                Rear extensions, side returns, wraparounds, and more.
-                            </p>
-                        </div>
+                        {[
+                            {
+                                title: "Extensions",
+                                text: "Rear, side return and wraparound layouts.",
+                                icon: (
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
+                                        <path d="M3 21h18" />
+                                        <path d="M6 21V8l6-4 6 4v13" />
+                                        <path d="M9 21v-6h6v6" />
+                                    </svg>
+                                ),
+                            },
+                            {
+                                title: "Loft Conversions",
+                                text: "Dormer, hip-to-gable and mansard schemes.",
+                                icon: (
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
+                                        <path d="M3 11.5 12 4l9 7.5" />
+                                        <path d="M5 10.5V20h14v-9.5" />
+                                        <path d="M9 20v-5h6v5" />
+                                    </svg>
+                                ),
+                            },
+                            {
+                                title: "Garage Conversions",
+                                text: "Turn underused garages into practical living space.",
+                                icon: (
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
+                                        <path d="M3 11l9-7 9 7" />
+                                        <path d="M5 10.5V20h14v-9.5" />
+                                        <path d="M8 20v-6h8v6" />
+                                    </svg>
+                                ),
+                            },
+                            {
+                                title: "Internal Reconfiguration",
+                                text: "Improve flow, light and everyday usability.",
+                                icon: (
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
+                                        <rect x="4" y="4" width="16" height="16" rx="2" />
+                                        <path d="M10 4v16" />
+                                        <path d="M10 10h6" />
+                                    </svg>
+                                ),
+                            },
+                        ].map((item, i) => (
+                            <div
+                                key={i}
+                                style={{
+                                    position: "relative",
+                                    overflow: "hidden",
+                                    border: "1px solid #e7e5e4",
+                                    borderRadius: "22px",
+                                    padding: isMobile ? "18px" : "22px",
+                                    background:
+                                        "linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,245,240,0.92))",
+                                    boxShadow:
+                                        "0 10px 30px rgba(28, 25, 23, 0.05)",
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        position: "absolute",
+                                        top: "-40px",
+                                        right: "-40px",
+                                        width: "120px",
+                                        height: "120px",
+                                        borderRadius: "50%",
+                                        background: "rgba(166, 124, 0, 0.06)",
+                                    }}
+                                />
 
-                        <div style={{ ...card, minWidth: 0 }}>
-                            <h3 style={{ marginTop: 0 }}>Loft Conversion Drawings</h3>
-                            <p style={{ color: "#57534e", lineHeight: "1.8", marginBottom: 0 }}>
-                                Drawings prepared to help shape layout, form, and approvals.
-                            </p>
-                        </div>
+                                <div
+                                    style={{
+                                        position: "relative",
+                                        display: "flex",
+                                        alignItems: "flex-start",
+                                        gap: "14px",
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            width: "46px",
+                                            height: "46px",
+                                            minWidth: "46px",
+                                            borderRadius: "14px",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            background:
+                                                "linear-gradient(135deg, #A67C00, #C6A243)",
+                                            color: "#fff",
+                                            boxShadow: "0 8px 18px rgba(166, 124, 0, 0.22)",
+                                        }}
+                                    >
+                                        {item.icon}
+                                    </div>
 
-                        <div style={{ ...card, minWidth: 0 }}>
-                            <h3 style={{ marginTop: 0 }}>Internal Reconfiguration</h3>
-                            <p style={{ color: "#57534e", lineHeight: "1.8", marginBottom: 0 }}>
-                                Layout changes and internal planning to improve how the home works.
-                            </p>
-                        </div>
+                                    <div>
+                                        <h3
+                                            style={{
+                                                margin: "2px 0 6px",
+                                                fontSize: "18px",
+                                                lineHeight: "1.2",
+                                                color: "#1c1917",
+                                            }}
+                                        >
+                                            {item.title}
+                                        </h3>
+                                        <p
+                                            style={{
+                                                margin: 0,
+                                                color: "#57534e",
+                                                fontSize: "14px",
+                                                lineHeight: "1.65",
+                                            }}
+                                        >
+                                            {item.text}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </section>
 
@@ -573,7 +507,7 @@ export default function DrawingsPlanning() {
                             <div style={{ maxWidth: "760px", minWidth: 0 }}>
                                 <div
                                     style={{
-                                        fontSize: "12px",
+                                        fontSize: "17px",
                                         letterSpacing: "2px",
                                         textTransform: "uppercase",
                                         color: "#78716c",
@@ -583,31 +517,7 @@ export default function DrawingsPlanning() {
                                     Example Drawings
                                 </div>
 
-                                <h2
-                                    style={{
-                                        fontSize: isMobile ? "30px" : "42px",
-                                        marginTop: "12px",
-                                        marginBottom: "12px",
-                                        lineHeight: "1.08",
-                                        color: "#1f1f1f",
-                                    }}
-                                >
-                                    See the standard of drawing work you can expect
-                                </h2>
-
-                                <p
-                                    style={{
-                                        color: "#57534e",
-                                        lineHeight: "1.8",
-                                        margin: 0,
-                                        fontSize: isMobile ? "15px" : "16px",
-                                        maxWidth: "680px",
-                                    }}
-                                >
-                                    Examples from extension, loft conversion, and internal layout projects.
-                                    Clear, practical drawings prepared to support planning, pricing, and
-                                    confident decision-making.
-                                </p>
+                            
                             </div>
 
                             <div
@@ -771,24 +681,7 @@ export default function DrawingsPlanning() {
                             </div>
                         </div>
 
-                        <div
-                            style={{
-                                marginTop: isMobile ? "18px" : "20px",
-                                padding: isMobile ? "16px" : "18px 20px",
-                                borderRadius: "18px",
-                                background: "#fcfbf8",
-                                border: "1px solid #e7e5e4",
-                                color: "#57534e",
-                                lineHeight: "1.75",
-                                fontSize: isMobile ? "14px" : "15px",
-                            }}
-                        >
-                            <strong style={{ color: "#1f1f1f" }}>
-                                Every project is different.
-                            </strong>{" "}
-                            Your package is tailored to the level of support you need, whether that is
-                            a straightforward planning set or a fuller technical drawing package.
-                        </div>
+                     
                     </div>
                 </section>
 
@@ -821,29 +714,8 @@ export default function DrawingsPlanning() {
                                 Packages
                             </div>
 
-                            <h2
-                                style={{
-                                    fontSize: isMobile ? "30px" : "42px",
-                                    marginTop: "12px",
-                                    marginBottom: "12px",
-                                    lineHeight: "1.08",
-                                    color: "#1f1f1f",
-                                }}
-                            >
-                                Choose the level of support you need
-                            </h2>
+                          
 
-                            <p
-                                style={{
-                                    color: "#57534e",
-                                    lineHeight: "1.8",
-                                    margin: 0,
-                                    fontSize: isMobile ? "15px" : "16px",
-                                }}
-                            >
-                                Prices start from <strong>£450</strong>. Select a package below and
-                                it will be added to your enquiry form.
-                            </p>
                         </div>
 
                         <div
@@ -1244,7 +1116,10 @@ export default function DrawingsPlanning() {
                                         }}
                                     >
                                         7–10 working days
+                                  
+
                                     </div>
+
                                 </div>
                             </div>
 
@@ -1682,19 +1557,7 @@ export default function DrawingsPlanning() {
                                 Request your drawings quote
                             </h2>
 
-                            <p
-                                style={{
-                                    color: "#57534e",
-                                    lineHeight: "1.8",
-                                    maxWidth: "560px",
-                                    margin: 0,
-                                    fontSize: isMobile ? "15px" : "16px",
-                                }}
-                            >
-                                Tell us about your project and the package you’re interested in.
-                                Drawing packages start from <strong>£450</strong>, and we’ll guide
-                                you on the most suitable next step.
-                            </p>
+                        
 
                             {selectedPackage && (
                                 <div
@@ -1720,33 +1583,96 @@ export default function DrawingsPlanning() {
                                     </span>
                                 </div>
                             )}
-
                             <div
                                 style={{
                                     marginTop: "22px",
                                     display: "grid",
-                                    gap: "12px",
+                                    gap: "14px",
                                     maxWidth: "520px",
                                 }}
                             >
                                 {[
-                                    { label: "Phone", value: "02036335634" },
-                                    { label: "Email", value: "planning@crafman.co.uk" },
-                                    { label: "Location", value: "London, United Kingdom" },
+                                    {
+                                        label: "Phone",
+                                        value: "02036335634",
+                                        icon: (
+                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8">
+                                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.9.32 1.77.59 2.6a2 2 0 0 1-.45 2.11L8.1 9.9a16 16 0 0 0 6 6l1.47-1.1a2 2 0 0 1 2.11-.45c.83.27 1.7.47 2.6.59A2 2 0 0 1 22 16.92z" />
+                                            </svg>
+                                        ),
+                                    },
+                                    {
+                                        label: "Email",
+                                        value: "planning@crafman.co.uk",
+                                        icon: (
+                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8">
+                                                <rect x="3" y="5" width="18" height="14" rx="2" />
+                                                <path d="M3 7l9 6 9-6" />
+                                            </svg>
+                                        ),
+                                    },
+                                    {
+                                        label: "Location",
+                                        value: "London, United Kingdom",
+                                        icon: (
+                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8">
+                                                <path d="M12 21s7-5.33 7-11a7 7 0 1 0-14 0c0 5.67 7 11 7 11z" />
+                                                <circle cx="12" cy="10" r="2.5" />
+                                            </svg>
+                                        ),
+                                    },
                                 ].map((item) => (
                                     <div
                                         key={item.label}
                                         style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: "14px",
                                             padding: "14px 16px",
-                                            borderRadius: "16px",
-                                            background: "rgba(255,255,255,0.58)",
+                                            borderRadius: "18px",
+                                            background: "rgba(255,255,255,0.6)",
                                             border: "1px solid #ddd6ce",
-                                            color: "#44403c",
-                                            lineHeight: "1.7",
+                                            boxShadow: "0 8px 20px rgba(28,25,23,0.04)",
                                         }}
                                     >
-                                        <strong style={{ color: "#1f1f1f" }}>{item.label}:</strong>{" "}
-                                        {item.value}
+                                        <div
+                                            style={{
+                                                width: "38px",
+                                                height: "38px",
+                                                minWidth: "38px",
+                                                borderRadius: "12px",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                background: "linear-gradient(135deg, #A67C00, #C6A243)",
+                                                color: "#fff",
+                                                boxShadow: "0 6px 14px rgba(166,124,0,0.25)",
+                                            }}
+                                        >
+                                            {item.icon}
+                                        </div>
+
+                                        <div style={{ lineHeight: "1.4" }}>
+                                            <div
+                                                style={{
+                                                    fontSize: "12px",
+                                                    color: "#78716c",
+                                                    marginBottom: "2px",
+                                                    letterSpacing: "0.04em",
+                                                }}
+                                            >
+                                                {item.label}
+                                            </div>
+                                            <div
+                                                style={{
+                                                    fontSize: "15px",
+                                                    color: "#1c1917",
+                                                    fontWeight: 500,
+                                                }}
+                                            >
+                                                {item.value}
+                                            </div>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
@@ -1756,9 +1682,178 @@ export default function DrawingsPlanning() {
                             <DrawingsPlanningForm
                                 endpoint="https://formspree.io/f/maqlqgzz"
                                 selectedPackage={selectedPackage}
-                                title="Request your drawings quote"
-                                intro="Tell us about your project and the package you’re interested in. Drawing packages start from £450, and we’ll guide you on the most suitable next step."
+                               
                             />
+                        </div>
+                    </div>
+                </section>
+
+
+                <section
+                    style={{
+                        borderTop: "1px solid #e7e5e4",
+                        borderBottom: "1px solid #e7e5e4",
+                        background: "#f5f3ef",
+                    }}
+                >
+                    <div
+                        style={{
+                            ...section,
+                            padding: isMobile ? "48px 16px" : "72px 20px",
+                        }}
+                    >
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: isMobile
+                                    ? "1fr"
+                                    : "minmax(320px, 0.95fr) minmax(320px, 1.05fr)",
+                                gap: isMobile ? "28px" : "44px",
+                                alignItems: "center",
+                            }}
+                        >
+                            <div
+                                style={{
+                                    ...card,
+                                    background: "linear-gradient(180deg, #fcfbf8 0%, #f1ede7 100%)",
+                                    border: "1px solid #e7e5e4",
+                                    minHeight: isMobile ? "240px" : "420px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    padding: isMobile ? "24px" : "36px",
+                                    boxShadow: "0 18px 36px rgba(28,25,23,0.05)",
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        textAlign: "center",
+                                        maxWidth: "420px",
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            width: isMobile ? "74px" : "88px",
+                                            height: isMobile ? "74px" : "88px",
+                                            margin: "0 auto 18px",
+                                            borderRadius: "22px",
+                                            background: "#1f1f1f",
+                                            color: "#fff",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            fontSize: isMobile ? "30px" : "36px",
+                                            fontWeight: "800",
+                                            boxShadow: "0 16px 28px rgba(28,25,23,0.12)",
+                                        }}
+                                    >
+                                        ✓
+                                    </div>
+
+                                    <h3
+                                        style={{
+                                            margin: 0,
+                                            fontSize: isMobile ? "26px" : "34px",
+                                            lineHeight: "1.12",
+                                            color: "#1f1f1f",
+                                        }}
+                                    >
+                                        Trusted planning drawing support for homeowners
+                                    </h3>
+
+
+                                </div>
+                            </div>
+
+                            <div style={{ minWidth: 0 }}>
+                                <div
+                                    style={{
+                                        fontSize: "12px",
+                                        letterSpacing: "2px",
+                                        textTransform: "uppercase",
+                                        color: "#A67C00",
+                                        fontWeight: "800",
+                                    }}
+                                >
+                                    Our Track Record
+                                </div>
+
+                                <h2
+                                    style={{
+                                        fontSize: isMobile ? "34px" : "52px",
+                                        lineHeight: "1.05",
+                                        marginTop: "12px",
+                                        marginBottom: "14px",
+                                        color: "#1f1f1f",
+                                    }}
+                                >
+                                    Building trust through results
+                                </h2>
+
+
+
+                                <div
+                                    style={{
+                                        display: "grid",
+                                        gridTemplateColumns: isMobile
+                                            ? "1fr 1fr"
+                                            : "repeat(2, minmax(180px, 1fr))",
+                                        gap: isMobile ? "18px" : "26px 34px",
+                                        marginTop: "34px",
+                                        maxWidth: "640px",
+                                    }}
+                                >
+                                    {trustStats.map((item) => (
+                                        <div key={item.label}>
+                                            <div
+                                                style={{
+                                                    fontSize: isMobile ? "38px" : "52px",
+                                                    lineHeight: "1",
+                                                    fontWeight: "800",
+                                                    color: "#1f1f1f",
+                                                    letterSpacing: "-1.5px",
+                                                }}
+                                            >
+                                                {item.value}
+                                                <span style={{ color: "#A67C00" }}>+</span>
+                                            </div>
+                                            <div
+                                                style={{
+                                                    marginTop: "8px",
+                                                    fontSize: isMobile ? "15px" : "17px",
+                                                    lineHeight: "1.45",
+                                                    fontWeight: "700",
+                                                    color: "#1f1f1f",
+                                                }}
+                                            >
+                                                {item.label}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div style={{ marginTop: "30px" }}>
+                                    <a
+                                        href="#contact-form"
+                                        style={{
+                                            display: "inline-flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            minHeight: "52px",
+                                            padding: "0 26px",
+                                            borderRadius: "14px",
+                                            textDecoration: "none",
+                                            background: "#A67C00",
+                                            color: "#fff",
+                                            fontWeight: "800",
+                                            fontSize: "15px",
+                                            boxShadow: "0 14px 28px rgba(31,92,255,0.18)",
+                                        }}
+                                    >
+                                        Request a Quote
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
