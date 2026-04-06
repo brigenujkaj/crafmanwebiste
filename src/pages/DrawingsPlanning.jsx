@@ -127,7 +127,7 @@ export default function DrawingsPlanning() {
     const packages = [
         {
             name: "Starter Package",
-            price: "From £450",
+            price: "From £650",
             intro: "A simple, practical package to get your project moving.",
             includes: [
                 "Measured survey",
@@ -138,7 +138,7 @@ export default function DrawingsPlanning() {
         },
         {
             name: "Planning Package",
-            price: "From £650",
+            price: "From £850",
             intro: "A stronger option for projects that need planning support.",
             includes: [
                 "Measured survey",
@@ -152,7 +152,7 @@ export default function DrawingsPlanning() {
         },
         {
             name: "Technical Package",
-            price: "From £1650",
+            price: "From £1050",
             intro: "A fuller package for projects moving into technical delivery.",
             includes: [
                 "Measured survey",

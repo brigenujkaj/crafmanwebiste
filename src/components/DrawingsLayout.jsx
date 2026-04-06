@@ -233,47 +233,7 @@ export default function Layout({ children }) {
                             flex: 1,
                         }}
                     >
-                        <Link to="/" style={navLinkStyle("/")}>
-                            Home
-                        </Link>
-
-                        <div
-                            style={{ position: "relative" }}
-                            onMouseEnter={() => setServicesOpen(true)}
-                            onMouseLeave={() => setServicesOpen(false)}
-                        >
-                            <button
-                                type="button"
-                                onClick={() => setServicesOpen((prev) => !prev)}
-                                style={dropdownButtonStyle}
-                            >
-                                Services
-                                <span style={{ fontSize: "12px" }}>{servicesOpen ? "▲" : "▼"}</span>
-                            </button>
-
-                            {servicesOpen && (
-                                <div style={dropdownMenuStyle}>
-                                    {services.map((service) => (
-                                        <button
-                                            key={service.to}
-                                            type="button"
-                                            onClick={() => goToService(service.to)}
-                                            style={dropdownItemStyle(service.to)}
-                                        >
-                                            {service.label}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-
-                        <Link to="/projects" style={navLinkStyle("/projects")}>
-                            Projects
-                        </Link>
-
-                        <Link to="/about" style={navLinkStyle("/about")}>
-                            About
-                        </Link>
+                       
 
                         <a href="tel:02036335634" style={callLinkStyle}>
                             Call Now
