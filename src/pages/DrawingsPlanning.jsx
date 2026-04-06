@@ -312,7 +312,19 @@ export default function DrawingsPlanning() {
                                 color: "#A67C00",
                             }}
                         >
-                            Drawings for extensions, loft conversions, and internal reconfiguration.
+                            Planning drawings designed for approval
+                        </h1>
+
+                        <h1
+                            style={{
+                                fontSize: "clamp(10px, 3vw, 20px)",
+                                lineHeight: "1.05",
+                                margin: 0,
+                                maxWidth: "820px",
+                                color: "",
+                            }}
+                        >
+                            Clear guidance on what’s needed and the next steps for your project
                         </h1>
 
                         <div
@@ -327,12 +339,67 @@ export default function DrawingsPlanning() {
                                 View Packages
                             </a>
                             <a href="#contact-form" style={buttonSecondary}>
-                                Request a Quote
+                                Get Free Project Advice
                             </a>
+
                         </div>
 
                     
                     </div>
+
+                    <div
+                        style={{
+                            marginTop: "0px",
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: isMobile ? "10px" : "12px",
+                            justifyContent: "center", // 👈 ADD THIS
+                        }}
+                    >
+                        {[
+                            "Planning-ready drawings",
+                            "Guidance included",
+                            "Clear next steps",
+                        ].map((item) => (
+                            <div
+                                key={item}
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    padding: "8px 12px",
+                                    borderRadius: "999px",
+                                    background: "rgba(255,255,255,0.55)",
+                                    border: "1px solid #d6d3d1",
+                                    color: "#44403c",
+                                    fontSize: isMobile ? "13px" : "14px",
+                                    fontWeight: "600",
+                                    lineHeight: 1.2,
+                                }}
+                            >
+                                <span
+                                    style={{
+                                        width: "18px",
+                                        height: "18px",
+                                        minWidth: "18px",
+                                        borderRadius: "999px",
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        background: "#A67C00",
+                                        color: "#fff",
+                                        fontSize: "11px",
+                                        fontWeight: "800",
+                                        boxShadow: "0 4px 10px rgba(166,124,0,0.18)",
+                                    }}
+                                >
+                                    ✓
+                                </span>
+                                <span>{item}</span>
+                            </div>
+                        ))}
+                    </div>
+
                 </section>
 
 

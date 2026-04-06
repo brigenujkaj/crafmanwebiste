@@ -59,7 +59,7 @@ const projectTypeOptions = [
     "Extension",
     "Loft Conversion",
     "Internal Reconfiguration",
-    'Other'
+    "Other",
 ];
 
 const extensionTypeOptions = [
@@ -463,9 +463,9 @@ export default function DrawingsPlanningForm({
 
     const inputStyle = {
         width: "100%",
-        padding: "14px",
-        borderRadius: "12px",
-        border: "1px solid #d6d3d1",
+        padding: "14px 16px",
+        borderRadius: "14px",
+        border: "1px solid #ddd6ce",
         fontSize: "15px",
         boxSizing: "border-box",
         background: "#fff",
@@ -481,8 +481,8 @@ export default function DrawingsPlanningForm({
 
     const optionCardStyle = (active) => ({
         padding: "16px",
-        borderRadius: "14px",
-        border: active ? "1px solid #1c1917" : "1px solid #d6d3d1",
+        borderRadius: "16px",
+        border: active ? "1px solid #1c1917" : "1px solid #ddd6ce",
         background: active ? "#f5f5f4" : "#fff",
         color: "#1f1f1f",
         cursor: "pointer",
@@ -545,21 +545,6 @@ export default function DrawingsPlanningForm({
         flexShrink: 0,
     });
 
-    const stepButtonStyle = (active, current) => ({
-        width: isMobile ? "30px" : "36px",
-        height: isMobile ? "30px" : "36px",
-        borderRadius: "999px",
-        display: "grid",
-        placeItems: "center",
-        fontWeight: "700",
-        fontSize: isMobile ? "12px" : "14px",
-        border: active ? "1px solid #1c1917" : "1px solid #d6d3d1",
-        background: current ? "#1c1917" : active ? "#292524" : "#fff",
-        color: active ? "#fff" : "#57534e",
-        transition: "all 0.2s ease",
-        flexShrink: 0,
-    });
-
     const reviewItemStyle = {
         padding: "14px 0",
         borderBottom: "1px solid #e7e5e4",
@@ -569,23 +554,11 @@ export default function DrawingsPlanningForm({
         overflowWrap: "break-word",
     };
 
-    const trustPillStyle = {
-        padding: "10px 12px",
-        borderRadius: "999px",
-        background: "#f5f5f4",
-        border: "1px solid #e7e5e4",
-        fontSize: "13px",
-        fontWeight: "600",
-        color: "#44403c",
-        textAlign: "center",
-        minWidth: 0,
-    };
-
     const summaryBoxStyle = {
         padding: "12px 14px",
-        borderRadius: "12px",
-        background: "#f5f5f4",
-        border: "1px solid #e7e5e4",
+        borderRadius: "14px",
+        background: "#f8f5ef",
+        border: "1px solid #eadfcb",
         color: "#44403c",
         lineHeight: "1.7",
         fontSize: "14px",
@@ -595,7 +568,7 @@ export default function DrawingsPlanningForm({
 
     const backButtonStyle = {
         padding: isMobile ? "14px 18px" : "14px 20px",
-        borderRadius: "12px",
+        borderRadius: "14px",
         border: "1px solid #d6d3d1",
         background: "#fff",
         fontWeight: "600",
@@ -617,8 +590,109 @@ export default function DrawingsPlanningForm({
         fontWeight: "700",
     });
 
-    const progress = (step / totalSteps) * 100;
     const animationName = direction === 1 ? "slideInFromRight" : "slideInFromLeft";
+
+    const renderProgressHeader = () => {
+        const visibleStep = step >= 5 ? 4 : step;
+        const progress = step >= 5 ? 100 : (visibleStep / 4) * 100;
+        const labels = ["Package", "Project", "Details", "Review"];
+
+        return (
+            <div
+                style={{
+                    display: "grid",
+                    gap: "12px",
+                    padding: isMobile ? "14px" : "16px 18px",
+                    borderRadius: "16px",
+                    background: "#fafaf9",
+                    border: "1px solid #ece7df",
+                    minWidth: 0,
+                }}
+            >
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: "12px",
+                        flexWrap: "wrap",
+                    }}
+                >
+                    <div
+                        style={{
+                            fontSize: "14px",
+                            fontWeight: "700",
+                            color: "#1f1f1f",
+                        }}
+                    >
+                        Quick 1-minute form
+                    </div>
+
+                    <div
+                        style={{
+                            fontSize: "13px",
+                            color: "#78716c",
+                            fontWeight: "600",
+                        }}
+                    >
+                        {step < 5 ? `Step ${visibleStep} of 4` : "Complete"}
+                    </div>
+                </div>
+
+                <div
+                    style={{
+                        width: "100%",
+                        height: "6px",
+                        background: "#e7e5e4",
+                        borderRadius: "999px",
+                        overflow: "hidden",
+                    }}
+                >
+                    <div
+                        style={{
+                            width: `${progress}%`,
+                            height: "100%",
+                            background: "#1c1917",
+                            transition: "width 0.3s ease",
+                        }}
+                    />
+                </div>
+
+                <div
+                    style={{
+                        display: "flex",
+                        gap: "8px",
+                        flexWrap: "wrap",
+                    }}
+                >
+                    {labels.map((label, index) => {
+                        const currentStep = index + 1;
+                        const active = visibleStep >= currentStep;
+                        const current = visibleStep === currentStep;
+
+                        return (
+                            <div
+                                key={label}
+                                style={{
+                                    padding: "8px 12px",
+                                    borderRadius: "999px",
+                                    border: active ? "1px solid #1c1917" : "1px solid #ddd6ce",
+                                    background: current ? "#1c1917" : active ? "#f5f5f4" : "#fff",
+                                    color: current ? "#fff" : active ? "#1c1917" : "#78716c",
+                                    fontSize: "12px",
+                                    fontWeight: "700",
+                                    letterSpacing: "0.02em",
+                                    lineHeight: 1.2,
+                                }}
+                            >
+                                {label}
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        );
+    };
 
     const renderStepContent = () => {
         if (step === 1) {
@@ -638,12 +712,12 @@ export default function DrawingsPlanningForm({
                             Step 1
                         </p>
                         <h3 style={{ margin: "0 0 8px", fontSize: "24px" }}>
-                            Choose your package
+                            Select an option
                         </h3>
-                     
+                        <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
+                            Choose the package that feels closest. We can advise if you’re unsure.
+                        </p>
                     </div>
-
-       
 
                     <div
                         style={{
@@ -942,8 +1016,6 @@ export default function DrawingsPlanningForm({
                         </p>
                     </div>
 
-                    
-
                     <div style={labelStyle}>
                         <span style={{ color: "#44403c", fontWeight: "600" }}>Project type</span>
 
@@ -1070,11 +1142,10 @@ export default function DrawingsPlanningForm({
                         <h3 style={{ margin: "0 0 8px", fontSize: "24px" }}>
                             Your details
                         </h3>
-                     
+                        <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
+                            A few details so we can review the project and come back to you.
+                        </p>
                     </div>
-
-              
-                 
 
                     <input
                         name="name"
@@ -1108,14 +1179,14 @@ export default function DrawingsPlanningForm({
                         name="postcode"
                         value={form.postcode}
                         onChange={handleChange}
-                        placeholder="Postcode "
+                        placeholder="Postcode"
                         style={inputStyle}
                         required
                     />
 
                     <label style={labelStyle}>
                         <span style={{ color: "#44403c", fontWeight: "600" }}>
-                            Project details 
+                            Project details
                         </span>
                         <textarea
                             name="message"
@@ -1126,7 +1197,7 @@ export default function DrawingsPlanningForm({
                             style={{
                                 ...inputStyle,
                                 resize: "vertical",
-
+                                minHeight: "140px",
                             }}
                             required
                         />
@@ -1162,8 +1233,8 @@ export default function DrawingsPlanningForm({
                     style={{
                         padding: "16px",
                         borderRadius: "16px",
-                        background: "#f5f5f4",
-                        border: "1px solid #e7e5e4",
+                        background: "#f8f5ef",
+                        border: "1px solid #eadfcb",
                         minWidth: 0,
                     }}
                 >
@@ -1179,7 +1250,7 @@ export default function DrawingsPlanningForm({
                 <div
                     style={{
                         border: "1px solid #e7e5e4",
-                        borderRadius: "16px",
+                        borderRadius: "18px",
                         padding: "6px 18px",
                         background: "#fafaf9",
                         minWidth: 0,
@@ -1698,94 +1769,7 @@ export default function DrawingsPlanningForm({
                     </p>
                 </div>
 
-                <div style={{ display: "grid", gap: "14px", minWidth: 0 }}>
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            gap: "10px",
-                            alignItems: "center",
-                            flexWrap: "wrap",
-                        }}
-                    >
-                        <p style={{ margin: 0, color: "#57534e", fontWeight: "600" }}>
-                            Step {step} of {totalSteps}
-                        </p>
-                    </div>
-
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(5, 1fr)",
-                            gap: isMobile ? "6px" : "10px",
-                            alignItems: "center",
-                            minWidth: 0,
-                        }}
-                    >
-                        {[1, 2, 3, 4, 5].map((item) => (
-                            <div
-                                key={item}
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: isMobile ? "6px" : "10px",
-                                    minWidth: 0,
-                                }}
-                            >
-                                <div style={stepButtonStyle(step >= item, step === item)}>{item}</div>
-                                {item < 5 && (
-                                    <div
-                                        style={{
-                                            height: "4px",
-                                            background: step > item ? "#1c1917" : "#e7e5e4",
-                                            borderRadius: "999px",
-                                            flex: 1,
-                                            transition: "background 0.2s ease",
-                                            minWidth: 0,
-                                        }}
-                                    />
-                                )}
-                            </div>
-                        ))}
-                    </div>
-
-                    <div
-                        style={{
-                            width: "100%",
-                            height: "8px",
-                            background: "#e7e5e4",
-                            borderRadius: "999px",
-                            overflow: "hidden",
-                        }}
-                    >
-                        <div
-                            style={{
-                                width: `${progress}%`,
-                                height: "100%",
-                                background: "#1c1917",
-                                transition: "width 0.3s ease",
-                            }}
-                        />
-                    </div>
-
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
-                            gap: "8px",
-                            color: "#78716c",
-                            fontSize: isMobile ? "11px" : "13px",
-                            fontWeight: "600",
-                            minWidth: 0,
-                        }}
-                    >
-                        <span>Package</span>
-                        <span>Project</span>
-                        <span>Details</span>
-                        <span>Review</span>
-                        <span>Success</span>
-                    </div>
-                </div>
+                {renderProgressHeader()}
 
                 <div
                     key={step}
