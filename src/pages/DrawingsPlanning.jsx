@@ -229,39 +229,29 @@ export default function DrawingsPlanning() {
 
     const testimonials = [
         {
-            name: "James Turner",
-            role: "Homeowner, London",
-            text: "Really happy with the service from start to finish. The team was organised, easy to deal with, and the final result came out exactly how we wanted.",
+            name: "James R.",
+            role: "Rear Extension Planning Drawings",
+            text: "Crafman made the whole process straightforward. The drawings were clear, professional, and exactly what we needed to move ahead with our extension plans.",
         },
         {
-            name: "Sarah Whitmore",
-            role: "Property Client, London",
-            text: "The communication was clear throughout and the project felt properly managed. We appreciated having one team handling both the design and build side.",
+            name: "Sophie M.",
+            role: "Loft Conversion Drawings",
+            text: "Really impressed with the communication and speed. They explained each step clearly and delivered a drawing package that gave us confidence to proceed.",
         },
         {
-            name: "Daniel Hughes",
-            role: "Commercial Client, London",
-            text: "Professional, practical, and detail-focused. The finish quality was strong and the whole process felt much smoother than expected.",
+            name: "Daniel T.",
+            role: "Planning Application Support",
+            text: "We wanted a reliable service for our home project and Crafman delivered. The drawings looked great and the advice throughout the process was very helpful.",
         },
         {
-            name: "Charlotte Bennett",
-            role: "Homeowner, Surrey",
-            text: "From the early design stage through to completion, everything felt well organised. The team understood exactly what we were trying to achieve.",
+            name: "Aisha K.",
+            role: "Single Storey Extension Plans",
+            text: "Professional, responsive, and easy to work with. Everything was laid out clearly and the drawings captured exactly what we discussed.",
         },
         {
-            name: "Oliver Reynolds",
-            role: "Landlord, London",
-            text: "Very good experience overall. Straightforward communication, sensible advice, and a high standard of work across the project.",
-        },
-        {
-            name: "Emily Carter",
-            role: "Homeowner, Hertfordshire",
-            text: "The process felt clear from the start and the finished space has completely changed how we use our home. Very pleased with the result.",
-        },
-        {
-            name: "William Foster",
-            role: "Business Owner, London",
-            text: "We wanted a space that felt polished and practical, and that is exactly what was delivered. Helpful team and strong attention to detail.",
+            name: "Michael B.",
+            role: "House Extension Drawings",
+            text: "From the survey to the final plans, everything felt organised and well handled. It made a stressful part of the project much easier.",
         },
     ];
 
