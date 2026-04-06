@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Layout, { siteStyles } from "../components/DrawingsLayout.jsx";
 import DrawingsPlanningForm from "../components/DrawingsPlanningForm.jsx";
 import { Helmet } from "react-helmet-async";
+import { Ruler, PencilRuler, FileCheck, PoundSterling, Zap, ShieldCheck } from "lucide-react";
 
 export default function DrawingsPlanning() {
     const { section, card, buttonPrimary, buttonSecondary, tag } = siteStyles;
@@ -956,7 +957,7 @@ export default function DrawingsPlanning() {
                                                         "transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease",
                                                 }}
                                             >
-                                                {isSelected ? `Selected: ${pkg.name}` : `Choose ${pkg.name}`}
+                                                {isSelected ? `Selected: ${pkg.name}` : `Ask About ${pkg.name}`}
                                             </button>
 
                                             <div
@@ -978,6 +979,8 @@ export default function DrawingsPlanning() {
                     </div>
                 </section>
 
+              
+
                 <section
                     style={{
                         borderTop: "1px solid #e7e5e4",
@@ -985,14 +988,19 @@ export default function DrawingsPlanning() {
                         background: "linear-gradient(180deg, #f8f5ef 0%, #ffffff 100%)",
                     }}
                 >
-                    <div style={section}>
+                    <div
+                        style={{
+                            ...section,
+                            padding: isMobile ? "48px 16px" : "72px 24px",
+                        }}
+                    >
                         <div
                             style={{
                                 display: "grid",
                                 gridTemplateColumns: isMobile
                                     ? "1fr"
-                                    : "minmax(300px, 0.95fr) minmax(320px, 1.05fr)",
-                                gap: isMobile ? "22px" : "34px",
+                                    : "minmax(300px, 0.9fr) minmax(320px, 1.1fr)",
+                                gap: isMobile ? "22px" : "30px",
                                 alignItems: "stretch",
                             }}
                         >
@@ -1008,6 +1016,7 @@ export default function DrawingsPlanning() {
                                     display: "flex",
                                     flexDirection: "column",
                                     justifyContent: "space-between",
+                                    borderRadius: "24px",
                                 }}
                             >
                                 <div>
@@ -1027,60 +1036,79 @@ export default function DrawingsPlanning() {
                                         style={{
                                             fontSize: isMobile ? "30px" : "42px",
                                             marginTop: "12px",
-                                            marginBottom: "14px",
+                                            marginBottom: "12px",
                                             lineHeight: "1.08",
                                         }}
                                     >
-                                        Get your drawings in 3 simple steps
+                                        Drawings in 3 clear steps
                                     </h2>
 
                                     <p
                                         style={{
-                                            color: "#f5f5f4",
-                                            lineHeight: "1.8",
-                                            marginBottom: "22px",
+                                            color: "#e7e5e4",
+                                            lineHeight: "1.7",
+                                            margin: 0,
                                             fontSize: isMobile ? "15px" : "16px",
+                                            maxWidth: "480px",
                                         }}
                                     >
-                                        From measured survey to proposed plans, we keep the process
-                                        straightforward, fast, and easy to follow.
+                                        Simple process. Clear pricing. Fast turnaround.
                                     </p>
                                 </div>
 
                                 <div
                                     style={{
-                                        display: "grid",
+                                        display: "flex",
+                                        flexWrap: "wrap",
                                         gap: "10px",
+                                        marginTop: "24px",
                                     }}
                                 >
                                     {[
-                                        "Fixed price packages",
-                                        "Fast turnaround",
-                                        "Planning & building regs support",
-                                    ].map((item) => (
-                                        <div
-                                            key={item}
-                                            style={{
-                                                padding: "11px 14px",
-                                                borderRadius: "999px",
-                                                border: "1px solid rgba(255,255,255,0.12)",
-                                                background: "rgba(255,255,255,0.06)",
-                                                color: "#fff",
-                                                fontSize: "14px",
-                                                fontWeight: "600",
-                                                width: "fit-content",
-                                                maxWidth: "100%",
-                                            }}
-                                        >
-                                            {item}
-                                        </div>
-                                    ))}
+                                        { icon: PoundSterling, label: "Fixed price" },
+                                        { icon: Zap, label: "Fast turnaround" },
+                                        { icon: ShieldCheck, label: "Planning support" },
+                                    ].map((item) => {
+                                        const Icon = item.icon;
+                                        return (
+                                            <div
+                                                key={item.label}
+                                                style={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    gap: "8px",
+                                                    padding: "10px 14px",
+                                                    borderRadius: "999px",
+                                                    border: "1px solid rgba(255,255,255,0.12)",
+                                                    background: "rgba(255,255,255,0.06)",
+                                                    color: "#fff",
+                                                    fontSize: "14px",
+                                                    fontWeight: "600",
+                                                }}
+                                            >
+                                                <span
+                                                    style={{
+                                                        width: "22px",
+                                                        height: "22px",
+                                                        borderRadius: "999px",
+                                                        background: "rgba(255,255,255,0.12)",
+                                                        display: "inline-flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                    }}
+                                                >
+                                                    <Icon size={13} strokeWidth={2.4} />
+                                                </span>
+                                                {item.label}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
 
                                 <div
                                     style={{
-                                        marginTop: "22px",
-                                        padding: "16px 18px",
+                                        marginTop: "24px",
+                                        padding: "18px 20px",
                                         borderRadius: "18px",
                                         background: "rgba(255,255,255,0.06)",
                                         border: "1px solid rgba(255,255,255,0.10)",
@@ -1088,7 +1116,7 @@ export default function DrawingsPlanning() {
                                 >
                                     <div
                                         style={{
-                                            fontSize: "13px",
+                                            fontSize: "12px",
                                             textTransform: "uppercase",
                                             letterSpacing: "1.5px",
                                             color: "#d6d3d1",
@@ -1100,16 +1128,13 @@ export default function DrawingsPlanning() {
                                     </div>
                                     <div
                                         style={{
-                                            fontSize: isMobile ? "24px" : "28px",
+                                            fontSize: isMobile ? "24px" : "30px",
                                             fontWeight: "800",
                                             lineHeight: "1.1",
                                         }}
                                     >
                                         7–10 working days
-                                  
-
                                     </div>
-
                                 </div>
                             </div>
 
@@ -1123,385 +1148,202 @@ export default function DrawingsPlanning() {
                                 {[
                                     {
                                         number: "1",
+                                        icon: Ruler,
                                         title: "Survey",
-                                        text: "We measure the property accurately to create a reliable base for the drawings.",
+                                        text: "We measure up your property.",
                                     },
                                     {
                                         number: "2",
+                                        icon: PencilRuler,
                                         title: "Drawings",
-                                        text: "We prepare clear existing and proposed plans for your extension, loft, or renovation.",
+                                        text: "We prepare existing and proposed plans.",
                                     },
                                     {
                                         number: "3",
-                                        title: "Submission",
-                                        text: "If needed, we help with planning submission or develop technical drawings for building control.",
+                                        icon: FileCheck,
+                                        title: "Planning Support",
+                                        text: "We help you move to planning or technical drawings.",
                                     },
-                                ].map((item, i) => (
-                                    <div
-                                        key={item.title}
-                                        style={{
-                                            ...card,
-                                            display: "grid",
-                                            gridTemplateColumns: isMobile ? "1fr" : "64px 1fr",
-                                            gap: isMobile ? "14px" : "16px",
-                                            alignItems: "start",
-                                            background: "#fff",
-                                            border: "1px solid #e7e5e4",
-                                            padding: isMobile ? "20px" : "22px",
-                                            minWidth: 0,
-                                            boxShadow: "0 10px 28px rgba(0,0,0,0.04)",
-                                        }}
-                                    >
+                                ].map((item, i) => {
+                                    const Icon = item.icon;
+                                    return (
                                         <div
+                                            key={item.title}
                                             style={{
-                                                display: "flex",
+                                                ...card,
+                                                display: "grid",
+                                                gridTemplateColumns: isMobile ? "1fr" : "72px 1fr",
+                                                gap: isMobile ? "14px" : "18px",
                                                 alignItems: "center",
-                                                gap: "12px",
+                                                background: "#fff",
+                                                border: "1px solid #e7e5e4",
+                                                padding: isMobile ? "18px" : "22px",
+                                                minWidth: 0,
+                                                boxShadow: "0 10px 28px rgba(0,0,0,0.04)",
+                                                borderRadius: "22px",
                                             }}
                                         >
                                             <div
                                                 style={{
-                                                    height: "56px",
-                                                    width: "56px",
-                                                    minWidth: "56px",
-                                                    borderRadius: "18px",
-                                                    background: i === 1 ? "#A67C00" : "#1f1f1f",
-                                                    color: "#fff",
                                                     display: "flex",
                                                     alignItems: "center",
-                                                    justifyContent: "center",
-                                                    fontWeight: "800",
-                                                    fontSize: "18px",
-                                                    boxShadow: "0 10px 22px rgba(0,0,0,0.08)",
+                                                    gap: "12px",
                                                 }}
                                             >
-                                                {item.number}
+                                                <div
+                                                    style={{
+                                                        height: "58px",
+                                                        width: "58px",
+                                                        minWidth: "58px",
+                                                        borderRadius: "18px",
+                                                        background: i === 1 ? "#A67C00" : "#1f1f1f",
+                                                        color: "#fff",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                        boxShadow: "0 10px 22px rgba(0,0,0,0.08)",
+                                                    }}
+                                                >
+                                                    <Icon size={22} strokeWidth={2.2} />
+                                                </div>
+
+                                                {isMobile && (
+                                                    <div>
+                                                        <h3
+                                                            style={{
+                                                                margin: 0,
+                                                                fontSize: "19px",
+                                                                color: "#1f1f1f",
+                                                                lineHeight: "1.2",
+                                                            }}
+                                                        >
+                                                            {item.title}
+                                                        </h3>
+                                                        <div
+                                                            style={{
+                                                                fontSize: "13px",
+                                                                color: "#78716c",
+                                                                marginTop: "4px",
+                                                                fontWeight: "600",
+                                                            }}
+                                                        >
+                                                            Step {item.number}
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
 
-                                            {isMobile && (
-                                                <h3
+                                            <div style={{ minWidth: 0 }}>
+                                                {!isMobile && (
+                                                    <>
+                                                        <div
+                                                            style={{
+                                                                fontSize: "13px",
+                                                                color: "#78716c",
+                                                                marginBottom: "6px",
+                                                                fontWeight: "700",
+                                                                textTransform: "uppercase",
+                                                                letterSpacing: "1px",
+                                                            }}
+                                                        >
+                                                            Step {item.number}
+                                                        </div>
+
+                                                        <h3
+                                                            style={{
+                                                                marginTop: 0,
+                                                                marginBottom: "6px",
+                                                                fontSize: "20px",
+                                                                color: "#1f1f1f",
+                                                            }}
+                                                        >
+                                                            {item.title}
+                                                        </h3>
+                                                    </>
+                                                )}
+
+                                                <p
                                                     style={{
                                                         margin: 0,
-                                                        fontSize: "20px",
-                                                        color: "#1f1f1f",
-                                                        lineHeight: "1.2",
+                                                        color: "#57534e",
+                                                        lineHeight: "1.65",
+                                                        fontSize: isMobile ? "15px" : "15px",
                                                     }}
                                                 >
-                                                    {item.title}
-                                                </h3>
-                                            )}
+                                                    {item.text}
+                                                </p>
+                                            </div>
                                         </div>
-
-                                        <div style={{ minWidth: 0 }}>
-                                            {!isMobile && (
-                                                <h3
-                                                    style={{
-                                                        marginTop: 0,
-                                                        marginBottom: "8px",
-                                                        fontSize: "20px",
-                                                        color: "#1f1f1f",
-                                                    }}
-                                                >
-                                                    {item.title}
-                                                </h3>
-                                            )}
-
-                                            <p
-                                                style={{
-                                                    margin: 0,
-                                                    color: "#57534e",
-                                                    lineHeight: "1.75",
-                                                    fontSize: isMobile ? "15px" : "16px",
-                                                }}
-                                            >
-                                                {item.text}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
 
                                 <div
                                     style={{
                                         padding: isMobile ? "18px" : "20px 22px",
-                                        borderRadius: "18px",
+                                        borderRadius: "20px",
                                         background: "#f8f5ef",
                                         border: "1px solid #eadfcb",
-                                        color: "#44403c",
-                                        lineHeight: "1.75",
-                                        fontSize: isMobile ? "15px" : "16px",
-                                    }}
-                                >
-                                    <strong style={{ color: "#1f1f1f" }}>
-                                        Simple, clear, and tailored to your project.
-                                    </strong>{" "}
-                                    Whether you only need planning drawings or a fuller technical package,
-                                    we help you move forward with confidence.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section
-                    style={{
-                        borderTop: "1px solid #e7e5e4",
-                        borderBottom: "1px solid #e7e5e4",
-                        background: "#fff",
-                        overflowX: "hidden",
-                    }}
-                >
-                    <div
-                        style={{
-                            ...section,
-                            padding: isMobile ? "48px 16px" : "64px 20px",
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns: isMobile
-                                    ? "1fr"
-                                    : "minmax(280px, 0.95fr) minmax(320px, 1.05fr)",
-                                gap: isMobile ? "22px" : "28px",
-                                alignItems: "stretch",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    ...card,
-                                    background: "#1f1f1f",
-                                    color: "#fff",
-                                    border: "1px solid #1f1f1f",
-                                    padding: isMobile ? "24px" : "30px",
-                                    minWidth: 0,
-                                    boxShadow: "0 18px 40px rgba(0,0,0,0.08)",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    justifyContent: "space-between",
-                                }}
-                            >
-                                <div>
-                                    <div
-                                        style={{
-                                            fontSize: "12px",
-                                            letterSpacing: "2px",
-                                            textTransform: "uppercase",
-                                            color: "#d6d3d1",
-                                            fontWeight: "700",
-                                        }}
-                                    >
-                                        Why clients choose us
-                                    </div>
-
-                                    <h2
-                                        style={{
-                                            fontSize: isMobile ? "30px" : "40px",
-                                            marginTop: "12px",
-                                            marginBottom: "14px",
-                                            lineHeight: "1.08",
-                                        }}
-                                    >
-                                        Drawings backed by real building knowledge
-                                    </h2>
-
-                                    <p
-                                        style={{
-                                            color: "#f5f5f4",
-                                            lineHeight: "1.8",
-                                            margin: 0,
-                                            fontSize: isMobile ? "15px" : "16px",
-                                        }}
-                                    >
-                                        Our plans are shaped by practical construction experience,
-                                        helping you make better decisions on layout, cost, and what
-                                        will work best on site.
-                                    </p>
-                                </div>
-
-                                <div
-                                    style={{
-                                        display: "grid",
-                                        gap: "10px",
-                                        marginTop: "22px",
-                                    }}
-                                >
-                                    {[
-                                        "Buildable, practical layouts",
-                                        "Cost-aware design advice",
-                                        "Smarter decisions from the start",
-                                    ].map((item) => (
-                                        <div
-                                            key={item}
-                                            style={{
-                                                padding: "11px 14px",
-                                                borderRadius: "999px",
-                                                border: "1px solid rgba(255,255,255,0.12)",
-                                                background: "rgba(255,255,255,0.06)",
-                                                color: "#fff",
-                                                fontSize: "14px",
-                                                fontWeight: "600",
-                                                width: "fit-content",
-                                                maxWidth: "100%",
-                                            }}
-                                        >
-                                            {item}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div
-                                style={{
-                                    display: "grid",
-                                    gap: "14px",
-                                    minWidth: 0,
-                                }}
-                            >
-                                {[
-                                    {
-                                        title: "Practical advice",
-                                        text: "We approach drawings with real construction decisions in mind, not just how they look on paper.",
-                                    },
-                                    {
-                                        title: "Cost-conscious planning",
-                                        text: "We help spot opportunities to simplify layouts and avoid unnecessary structural cost early on.",
-                                    },
-                                    {
-                                        title: "Fewer surprises later",
-                                        text: "Clearer decisions at the drawing stage can prevent delays, changes, and extra spend during the build.",
-                                    },
-                                ].map((item, i) => (
-                                    <div
-                                        key={item.title}
-                                        style={{
-                                            ...card,
-                                            display: "grid",
-                                            gridTemplateColumns: isMobile ? "1fr" : "52px 1fr",
-                                            gap: isMobile ? "12px" : "14px",
-                                            alignItems: "start",
-                                            background: "#fcfbf8",
-                                            border: "1px solid #e7e5e4",
-                                            padding: isMobile ? "18px" : "20px",
-                                            minWidth: 0,
-                                            boxShadow: "0 10px 24px rgba(28,25,23,0.04)",
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: "12px",
-                                            }}
-                                        >
-                                            <div
-                                                style={{
-                                                    height: "48px",
-                                                    width: "48px",
-                                                    minWidth: "48px",
-                                                    borderRadius: "14px",
-                                                    background: i === 1 ? "#A67C00" : "#1f1f1f",
-                                                    color: "#fff",
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    justifyContent: "center",
-                                                    fontWeight: "800",
-                                                    flexShrink: 0,
-                                                    boxShadow: "0 10px 22px rgba(0,0,0,0.08)",
-                                                }}
-                                            >
-                                                {i + 1}
-                                            </div>
-
-                                            {isMobile && (
-                                                <h3
-                                                    style={{
-                                                        margin: 0,
-                                                        fontSize: "19px",
-                                                        color: "#1f1f1f",
-                                                        lineHeight: "1.2",
-                                                    }}
-                                                >
-                                                    {item.title}
-                                                </h3>
-                                            )}
-                                        </div>
-
-                                        <div style={{ minWidth: 0 }}>
-                                            {!isMobile && (
-                                                <h3
-                                                    style={{
-                                                        margin: 0,
-                                                        fontSize: "18px",
-                                                        color: "#1f1f1f",
-                                                    }}
-                                                >
-                                                    {item.title}
-                                                </h3>
-                                            )}
-
-                                            <p
-                                                style={{
-                                                    marginTop: "6px",
-                                                    marginBottom: 0,
-                                                    color: "#57534e",
-                                                    fontSize: isMobile ? "14px" : "15px",
-                                                    lineHeight: "1.75",
-                                                }}
-                                            >
-                                                {item.text}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div
-                            style={{
-                                marginTop: isMobile ? "32px" : "42px",
-                                display: "grid",
-                                gridTemplateColumns: isMobile
-                                    ? "repeat(2, minmax(0, 1fr))"
-                                    : "repeat(3, minmax(160px, 180px))",
-                                justifyContent: "center",
-                                gap: isMobile ? "14px" : "20px",
-                            }}
-                        >
-                            {[
-                                "/images/fmb.jpeg",
-                                "/images/trustmark.jpeg",
-                                "/images/google5Star.jpeg",
-                            ].map((src, i) => (
-                                <div
-                                    key={i}
-                                    style={{
-                                        background: "#fff",
-                                        border: "1px solid #e7e5e4",
-                                        borderRadius: "18px",
-                                        padding: isMobile ? "16px 12px" : "20px 16px",
                                         display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        minHeight: isMobile ? "96px" : "112px",
-                                        boxShadow: "0 14px 30px rgba(28,25,23,0.05)",
+                                        alignItems: isMobile ? "flex-start" : "center",
+                                        justifyContent: "space-between",
+                                        gap: "16px",
+                                        flexDirection: isMobile ? "column" : "row",
                                     }}
                                 >
-                                    <img
-                                        src={src}
-                                        alt="accreditation"
-                                        style={{
-                                            width: "100%",
-                                            maxWidth: isMobile ? "115px" : "135px",
-                                            maxHeight: isMobile ? "62px" : "74px",
-                                            objectFit: "contain",
-                                            display: "block",
+                                    <div>
+                                        <div
+                                            style={{
+                                                fontWeight: "800",
+                                                color: "#1f1f1f",
+                                                fontSize: "18px",
+                                                marginBottom: "4px",
+                                            }}
+                                        >
+                                            Ready to get started?
+                                        </div>
+                                        <div
+                                            style={{
+                                                color: "#57534e",
+                                                lineHeight: "1.6",
+                                                fontSize: isMobile ? "15px" : "15px",
+                                            }}
+                                        >
+                                            Send your project details and we’ll guide you from there.
+                                        </div>
+                                    </div>
+
+                                    <a
+                                        href="#contact-form"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            document
+                                                .getElementById("contact-form")
+                                                ?.scrollIntoView({ behavior: "smooth" });
                                         }}
-                                    />
+                                        style={{
+                                            display: "inline-flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            padding: "12px 16px",
+                                            borderRadius: "999px",
+                                            background: "#1f1f1f",
+                                            color: "#fff",
+                                            fontWeight: "700",
+                                            fontSize: "14px",
+                                            whiteSpace: "nowrap",
+                                            textDecoration: "none",
+                                            cursor: "pointer",
+                                        }}
+                                    >
+                                        Free drawings assessment
+                                    </a>
                                 </div>
-                            ))}
+                            </div>
                         </div>
                     </div>
                 </section>
+
+               
 
                 <section
                     id="contact-form"

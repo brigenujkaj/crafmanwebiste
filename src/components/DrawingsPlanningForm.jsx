@@ -59,6 +59,7 @@ const projectTypeOptions = [
     "Extension",
     "Loft Conversion",
     "Internal Reconfiguration",
+    'Other'
 ];
 
 const extensionTypeOptions = [
@@ -91,7 +92,7 @@ export default function DrawingsPlanningForm({
     selectedPackage = "",
     buttonText = "Get my quote",
     title = "Request your drawings quote",
-    intro = "Answer a few quick questions and we’ll review your project and guide the next step.",
+    intro = "",
 }) {
     const { buttonPrimary, buttonSecondary, card } = siteStyles;
     const navigate = useNavigate();
@@ -901,7 +902,7 @@ export default function DrawingsPlanningForm({
                                                 : "none",
                                         }}
                                     >
-                                        {active ? "Selected — moving to project details..." : "Choose this package"}
+                                        {active ? "Selected — moving to project details..." : "Ask About This Package"}
                                     </div>
                                 </button>
                             );
@@ -941,25 +942,7 @@ export default function DrawingsPlanningForm({
                         </p>
                     </div>
 
-                    <div
-                        style={{
-                            padding: "18px",
-                            borderRadius: "16px",
-                            background: "#fafaf9",
-                            border: "1px solid #e7e5e4",
-                            display: "grid",
-                            gap: "10px",
-                            minWidth: 0,
-                        }}
-                    >
-                        <strong style={{ fontSize: "16px" }}>
-                            Select your project type.
-                        </strong>
-                        <span style={{ color: "#57534e", lineHeight: "1.7" }}>
-                            Once your project selections are complete, we’ll move you straight to
-                            your details.
-                        </span>
-                    </div>
+                    
 
                     <div style={labelStyle}>
                         <span style={{ color: "#44403c", fontWeight: "600" }}>Project type</span>
@@ -1087,41 +1070,11 @@ export default function DrawingsPlanningForm({
                         <h3 style={{ margin: "0 0 8px", fontSize: "24px" }}>
                             Your details
                         </h3>
-                        <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
-                            Leave your details and any extra project notes you want us to review.
-                        </p>
+                     
                     </div>
 
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: isMobile
-                                ? "1fr 1fr"
-                                : "repeat(auto-fit, minmax(140px, 1fr))",
-                            gap: "10px",
-                            minWidth: 0,
-                        }}
-                    >
-                        <div style={trustPillStyle}>Clear next-step advice</div>
-                        <div style={trustPillStyle}>Planning-focused support</div>
-                        <div style={trustPillStyle}>Tailored package guidance</div>
-                        <div style={trustPillStyle}>No pressure</div>
-                    </div>
-
-                    <div
-                        style={{
-                            padding: "16px",
-                            borderRadius: "16px",
-                            background: "#fafaf9",
-                            border: "1px solid #e7e5e4",
-                            color: "#57534e",
-                            lineHeight: "1.7",
-                            minWidth: 0,
-                        }}
-                    >
-                        Name and email are the only required fields here. Everything else is
-                        optional.
-                    </div>
+              
+                 
 
                     <input
                         name="name"
@@ -1146,21 +1099,23 @@ export default function DrawingsPlanningForm({
                         name="phone"
                         value={form.phone}
                         onChange={handleChange}
-                        placeholder="Phone number (optional)"
+                        placeholder="Phone number"
                         style={inputStyle}
+                        required
                     />
 
                     <input
                         name="postcode"
                         value={form.postcode}
                         onChange={handleChange}
-                        placeholder="Postcode (optional)"
+                        placeholder="Postcode "
                         style={inputStyle}
+                        required
                     />
 
                     <label style={labelStyle}>
                         <span style={{ color: "#44403c", fontWeight: "600" }}>
-                            Project details (optional)
+                            Project details 
                         </span>
                         <textarea
                             name="message"
@@ -1171,7 +1126,9 @@ export default function DrawingsPlanningForm({
                             style={{
                                 ...inputStyle,
                                 resize: "vertical",
+
                             }}
+                            required
                         />
                     </label>
                 </div>
@@ -1667,7 +1624,7 @@ export default function DrawingsPlanningForm({
                                     cursor: "pointer",
                                 }}
                             >
-                                Choose this package
+                                Ask About This Package
                             </button>
                         </div>
                     </div>
