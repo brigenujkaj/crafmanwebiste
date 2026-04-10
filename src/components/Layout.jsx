@@ -282,6 +282,16 @@ export default function Layout({ children }) {
                         <Link to="/contact" style={contactLinkStyle}>
                             Contact
                         </Link>
+
+                        {/* -----------------------------------------REMOV COMMENT SIGNS WHEN CASE STUDIES ADDED ---------------------------------
+
+
+                        <Link to="/case-studies" style={callLinkStyle}>
+                            View All Case Studies
+                        </Link>
+
+                        */}
+
                     </nav>
                 </div>
             </header>
