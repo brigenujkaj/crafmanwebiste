@@ -359,7 +359,7 @@ export default function DrawingsPlanning() {
                                     View Packages
                                 </a>
                                 <a href="#contact-form" style={buttonSecondary}>
-                                    Get Free Permission Strategyq
+                                    Get Free Permission Strategy
                                 </a>
                             </div>
                         </div>
