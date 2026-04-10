@@ -169,93 +169,84 @@ const pillStyle = (active) => ({
                   content="House extensions and loft conversions in London by Crafman Design and Build. One team managing design, planning and build from start to finish."
               />
               <link rel="canonical" href="https://crafman.co.uk/house-extensions" />
+
           </Helmet>
-      <section
-        style={{
-          borderBottom: "1px solid #e7e5e4",
-          background: "linear-gradient(135deg, #f1ede7, #ffffff, #eae5dd)",
-        }}
-      >
-        <div style={{ ...section, paddingTop: "80px", paddingBottom: "80px" }}>
-          <div style={tag}>House Extensions London</div>
 
-          <h1
-            style={{
-              fontSize: "clamp(38px, 6vw, 60px)",
-              lineHeight: "1.05",
-              margin: 0,
-              maxWidth: "760px",
-              color: "#A67C00"
-            }}
+          <section
+              style={{
+                  position: "relative",
+                  borderBottom: "1px solid #e7e5e4",
+                  backgroundImage: "url('/images/extensionBackground.jpeg')",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  overflow: "hidden",
+              }}
           >
-            House extensions in London delivered by one experienced design and build team.
-          </h1>
+              {/* 🔥 Subtle blur + overlay */}
+              <div
+                  style={{
+                      position: "absolute",
+                      inset: 0,
+                      backdropFilter: "blur(3px)",
+                      WebkitBackdropFilter: "blur(3px)",
+                      background:
+                          "linear-gradient(135deg, rgba(241,237,231,0.85), rgba(255,255,255,0.82), rgba(234,229,221,0.85))",
+                      zIndex: 1,
+                  }}
+              />
 
-          <p
-            style={{
-              marginTop: "24px",
-              fontSize: "19px",
-              lineHeight: "1.8",
-              color: "#57534e",
-              maxWidth: "760px",
-            }}
-          >
-            Crafman Design and Build provides house extensions in London for
-            homeowners looking to create more space, improve layout, and add
-            long-term value to their property. From rear extensions and side
-            returns to wraparound layouts and internal reconfiguration, we
-            manage extension projects from early planning through completion.
-          </p>
+              {/* 🔥 Content */}
+              <div style={{ position: "relative", zIndex: 2 }}>
+                  <div style={{ ...section, paddingTop: "80px", paddingBottom: "80px" }}>
+                      <div style={tag}>House Extensions London</div>
 
-          <div
-            style={{
-              marginTop: "28px",
-              display: "flex",
-              gap: "14px",
-              flexWrap: "wrap",
-            }}
-          >
-            <Link to="/contact" style={buttonPrimary}>
-              Request a Quote
-            </Link>
-            <a href="#services" style={buttonSecondary}>
-              View Extension Services
-            </a>
-          </div>
-        </div>
-      </section>
+                      <h1
+                          style={{
+                              fontSize: "clamp(38px, 6vw, 60px)",
+                              lineHeight: "1.05",
+                              margin: 0,
+                              maxWidth: "760px",
+                              color: "#A67C00",
+                          }}
+                      >
+                          House extensions in London delivered by one experienced design and build team.
+                      </h1>
 
-      <section style={section}>
-        <div style={{ maxWidth: "820px" }}>
-          <div
-            style={{
-              fontSize: "12px",
-              letterSpacing: "2px",
-              textTransform: "uppercase",
-              color: "#A67C00",
-              fontWeight: "700",
-            }}
-          >
-            Extension Specialists
-          </div>
-          <h2 style={{ fontSize: "40px", marginTop: "12px", marginBottom: "12px" }}>
-            Extension projects designed to improve how your home works
-          </h2>
-          <p style={{ color: "#57534e", lineHeight: "1.8" }}>
-            A successful house extension is about more than just extra square
-            footage. It is about improving the way a property feels, functions,
-            and flows from one space to another. We help homeowners across
-            London create better kitchens, family spaces, dining areas, home
-            offices, and more flexible layouts through carefully planned
-            extension projects.
-          </p>
-          <p style={{ color: "#57534e", lineHeight: "1.8" }}>
-            Whether you are extending a terraced house, semi-detached home, or
-            larger property, our focus is on practical design, quality
-            workmanship, and a clear project process from start to finish.
-          </p>
-        </div>
-      </section>
+                      <p
+                          style={{
+                              marginTop: "24px",
+                              fontSize: "19px",
+                              lineHeight: "1.8",
+                              color: "#57534e",
+                              maxWidth: "760px",
+                          }}
+                      >
+                          Crafman Design and Build provides house extensions in London for
+                          homeowners looking to create more space, improve layout, and add
+                          long-term value to their property. From rear extensions and side
+                          returns to wraparound layouts and internal reconfiguration, we
+                          manage extension projects from early planning through completion.
+                      </p>
+
+                      <div
+                          style={{
+                              marginTop: "28px",
+                              display: "flex",
+                              gap: "14px",
+                              flexWrap: "wrap",
+                          }}
+                      >
+                          <Link to="/contact" style={buttonPrimary}>
+                              Request a Quote
+                          </Link>
+                          <a href="#services" style={buttonSecondary}>
+                              View Extension Services
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </section>
 
       <section
         id="services"
