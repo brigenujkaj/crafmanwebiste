@@ -128,8 +128,8 @@ export default function DrawingsPlanning() {
     const packages = [
         {
             name: "Starter Package",
-            price: "From £650",
-            intro: "A simple, practical package to get your project moving.",
+            price: "From £950",
+            intro: "A practical starting point for simple projects and early-stage ideas.",
             includes: [
                 "Measured survey",
                 "Current scaled drawings",
@@ -139,22 +139,22 @@ export default function DrawingsPlanning() {
         },
         {
             name: "Planning Package",
-            price: "From £850",
-            intro: "A stronger option for projects that need planning support.",
+            price: "From £1250",
+            intro: "Our most popular option for projects that need planning drawings and guidance.",
             includes: [
                 "Measured survey",
                 "Current scaled drawings",
                 "Proposed scaled drawings",
                 "Elevations",
                 "Submission to council",
-                "Building Control Drawings",
+                "Planning guidance",
             ],
             featured: true,
         },
         {
             name: "Technical Package",
-            price: "From £1050",
-            intro: "A fuller package for projects moving into technical delivery.",
+            price: "From £2150",
+            intro: "A fuller package for projects moving into technical design and build preparation.",
             includes: [
                 "Measured survey",
                 "Current scaled drawings",
@@ -162,7 +162,7 @@ export default function DrawingsPlanning() {
                 "Elevations",
                 "Submission to council",
                 "Building control drawings",
-                "Structural Calculations",
+                "Structural calculations",
             ],
         },
     ];
@@ -296,110 +296,129 @@ export default function DrawingsPlanning() {
             >
                 <section
                     style={{
+                        position: "relative",
                         borderBottom: "1px solid #e7e5e4",
-                        background: "linear-gradient(135deg, #f1ede7, #ffffff, #eae5dd)",
+                        backgroundImage: "url('/images/backgroundDrawings.png')",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                        overflow: "hidden",
                     }}
                 >
-                    <div style={{ ...section, paddingTop: "90px", paddingBottom: "90px" }}>
-                        <div style={tag}>Drawings & Planning</div>
+                    {/* 🔥 Blur / gradient overlay */}
+                    <div
+                        style={{
+                            position: "absolute",
+                            inset: 0,
+                            background:
+                                "linear-gradient(135deg, rgba(241,237,231,0.88), rgba(255,255,255,0.85), rgba(234,229,221,0.88))",
+                            zIndex: 1,
+                        }}
+                    />
 
-                        <h1
-                            style={{
-                                fontSize: "clamp(38px, 6vw, 62px)",
-                                lineHeight: "1.05",
-                                margin: 0,
-                                maxWidth: "820px",
-                                color: "#A67C00",
-                            }}
-                        >
-                            Planning drawings designed for approval
-                        </h1>
+                    {/* 🔥 Content (above blur) */}
+                    <div style={{ position: "relative", zIndex: 2 }}>
+                        <div style={{ ...section, paddingTop: "90px", paddingBottom: "90px" }}>
+                            <div style={tag}>Drawings & Planning</div>
 
-                        <h1
-                            style={{
-                                fontSize: "clamp(10px, 3vw, 20px)",
-                                lineHeight: "1.05",
-                                margin: 0,
-                                maxWidth: "820px",
-                                color: "",
-                            }}
-                        >
-                            Clear guidance on what’s needed and the next steps for your project
-                        </h1>
+                            <h1
+                                style={{
+                                    fontSize: "clamp(38px, 6vw, 62px)",
+                                    lineHeight: "1.05",
+                                    margin: 0,
+                                    maxWidth: "820px",
+                                    color: "#A67C00",
+                                }}
+                            >
+                                Planning drawings designed for approval
+                            </h1>
+
+                            <h1
+                                style={{
+                                    fontSize: "clamp(10px, 3vw, 20px)",
+                                    lineHeight: "1.2",
+                                    marginTop: "12px",
+                                    maxWidth: "820px",
+                                    color: "#44403c",
+                                    fontWeight: "500",
+                                }}
+                            >
+                                Clear guidance on what’s needed and the next steps for your
+                                project
+                            </h1>
+
+                            <div
+                                style={{
+                                    marginTop: "30px",
+                                    display: "flex",
+                                    gap: "14px",
+                                    flexWrap: "wrap",
+                                }}
+                            >
+                                <a href="#packages" style={buttonPrimary}>
+                                    View Packages
+                                </a>
+                                <a href="#contact-form" style={buttonSecondary}>
+                                    Get Free Permission Strategyq
+                                </a>
+                            </div>
+                        </div>
 
                         <div
                             style={{
-                                marginTop: "30px",
+                                marginTop: "0px",
                                 display: "flex",
-                                gap: "14px",
                                 flexWrap: "wrap",
+                                gap: isMobile ? "10px" : "12px",
+                                justifyContent: "center",
+                                paddingBottom: "40px",
                             }}
                         >
-                            <a href="#packages" style={buttonPrimary}>
-                                View Packages
-                            </a>
-                            <a href="#contact-form" style={buttonSecondary}>
-                                Get Free Project Advice
-                            </a>
-
-                        </div>
-
-                    
-                    </div>
-
-                    <div
-                        style={{
-                            marginTop: "0px",
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: isMobile ? "10px" : "12px",
-                            justifyContent: "center", // 👈 ADD THIS
-                        }}
-                    >
-                        {[
-                            "Planning-ready drawings",
-                            "Guidance included",
-                            "Clear next steps",
-                        ].map((item) => (
-                            <div
-                                key={item}
-                                style={{
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: "8px",
-                                    padding: "8px 12px",
-                                    borderRadius: "999px",
-                                    background: "rgba(255,255,255,0.55)",
-                                    border: "1px solid #d6d3d1",
-                                    color: "#44403c",
-                                    fontSize: isMobile ? "13px" : "14px",
-                                    fontWeight: "600",
-                                    lineHeight: 1.2,
-                                }}
-                            >
-                                <span
+                            {[
+                                "Planning-ready drawings",
+                                "Guidance included",
+                                "Clear next steps",
+                            ].map((item) => (
+                                <div
+                                    key={item}
                                     style={{
-                                        width: "18px",
-                                        height: "18px",
-                                        minWidth: "18px",
-                                        borderRadius: "999px",
                                         display: "inline-flex",
                                         alignItems: "center",
-                                        justifyContent: "center",
-                                        background: "#A67C00",
-                                        color: "#fff",
-                                        fontSize: "11px",
-                                        fontWeight: "800",
-                                        boxShadow: "0 4px 10px rgba(166,124,0,0.18)",
+                                        gap: "8px",
+                                        padding: "8px 12px",
+                                        borderRadius: "999px",
+                                        background: "rgba(255,255,255,0.55)",
+                                        border: "1px solid #d6d3d1",
+                                        color: "#44403c",
+                                        fontSize: isMobile ? "13px" : "14px",
+                                        fontWeight: "600",
+                                        lineHeight: 1.2,
                                     }}
                                 >
-                                    ✓
-                                </span>
-                                <span>{item}</span>
-                            </div>
-                        ))}
+                                    <span
+                                        style={{
+                                            width: "18px",
+                                            height: "18px",
+                                            minWidth: "18px",
+                                            borderRadius: "999px",
+                                            display: "inline-flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            background: "#A67C00",
+                                            color: "#fff",
+                                            fontSize: "11px",
+                                            fontWeight: "800",
+                                            boxShadow:
+                                                "0 4px 10px rgba(166,124,0,0.18)",
+                                        }}
+                                    >
+                                        ✓
+                                    </span>
+                                    <span>{item}</span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-
                 </section>
 
 
@@ -772,8 +791,31 @@ export default function DrawingsPlanning() {
                                 Packages
                             </div>
 
-                          
+                            <h2
+                                style={{
+                                    margin: "14px 0 10px",
+                                    fontSize: isMobile ? "30px" : "42px",
+                                    lineHeight: "1.08",
+                                    color: "#1f1f1f",
+                                    letterSpacing: "-1px",
+                                }}
+                            >
+                                Choose the right package for your project
+                            </h2>
 
+                            <p
+                                style={{
+                                    margin: 0,
+                                    color: "#57534e",
+                                    lineHeight: "1.75",
+                                    fontSize: isMobile ? "15px" : "17px",
+                                    maxWidth: "720px",
+                                }}
+                            >
+                                Clear, fixed-price drawing packages designed to help you move from
+                                early ideas to planning approval and technical delivery with
+                                confidence.
+                            </p>
                         </div>
 
                         <div
@@ -1024,7 +1066,9 @@ export default function DrawingsPlanning() {
                                                         "transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease",
                                                 }}
                                             >
-                                                {isSelected ? `Selected: ${pkg.name}` : `Ask About ${pkg.name}`}
+                                                {isSelected
+                                                    ? `Selected: ${pkg.name}`
+                                                    : `Check If ${pkg.name} Fits My Project`}
                                             </button>
 
                                             <div
@@ -1036,7 +1080,8 @@ export default function DrawingsPlanning() {
                                                     lineHeight: "1.6",
                                                 }}
                                             >
-                                                Select this package and it will be added to your enquiry form
+                                                No obligation advice — if selected, this package will
+                                                be added to your enquiry form
                                             </div>
                                         </div>
                                     </div>

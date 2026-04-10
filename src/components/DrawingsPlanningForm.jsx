@@ -17,7 +17,7 @@ const initialFormState = {
 const packageOptions = [
     {
         name: "Starter Package",
-        price: "From £650",
+        price: "From £850",
         intro: "A simple package for straightforward drawing requirements.",
         includes: [
             "Measured survey",
@@ -28,7 +28,7 @@ const packageOptions = [
     },
     {
         name: "Planning Package",
-        price: "From £850",
+        price: "From £1150",
         intro: "Ideal for projects that need planning drawings and submission support.",
         includes: [
             "Measured survey",
@@ -41,7 +41,7 @@ const packageOptions = [
     },
     {
         name: "Technical Package",
-        price: "From £1050",
+        price: "From £1750",
         intro: "A fuller package for projects moving beyond planning into technical delivery.",
         includes: [
             "Measured survey",
