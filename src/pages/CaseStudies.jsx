@@ -63,9 +63,7 @@ export default function CaseStudies() {
                                 maxWidth: "760px",
                             }}
                         >
-                            Browse placeholder case studies for extensions, loft conversions,
-                            renovations, and interior projects. Each project page is driven by
-                            reusable data so you can add more without building new pages.
+                            Browse a selection of recent projects, including extensions, loft conversions, renovations, and interior transformations. Each case study provides insight into our design thinking, build process, and the results achieved.
                         </p>
                     </div>
                 </div>
@@ -92,13 +90,11 @@ export default function CaseStudies() {
                             marginBottom: "12px",
                         }}
                     >
-                        Placeholder case studies ready to expand
+                        Real projects, real results
                     </h2>
 
                     <p style={{ color: "#57534e", lineHeight: "1.8" }}>
-                        Replace the text, images, and project details later. The layout stays
-                        the same, which keeps your site consistent and makes new project
-                        pages easy to add.
+                        Each project showcases our approach from initial challenges through to final delivery, giving you a clear understanding of how we design and build high-quality spaces.
                     </p>
                 </div>
 
