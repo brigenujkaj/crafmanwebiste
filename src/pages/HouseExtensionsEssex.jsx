@@ -450,7 +450,7 @@ export default function HouseExtensionsEssex() {
 
                             <div style={{ color: "#57534e", lineHeight: "1.9" }}>
                                 <p><strong>Phone:</strong> 02036335634</p>
-                                <p><strong>Email:</strong> info@crafman.co.uk</p>
+                                <p><strong>Email:</strong> sales@crafman.co.uk</p>
                                 <p><strong>Location:</strong> Essex, United Kingdom</p>
                             </div>
                         </div>
