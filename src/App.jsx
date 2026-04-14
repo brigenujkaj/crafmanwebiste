@@ -3,6 +3,7 @@ import { Routes, Route, Link } from "react-router-dom";
 // REAL PAGES
 import Home from "./pages/Home.jsx";
 import HouseExtensions from "./pages/HouseExtensions.jsx";
+import HouseExtensionsEssex from "./pages/HouseExtensionsEssex.jsx";
 import RenovationsLondon from "./pages/RenovationsLondon.jsx";
 import Abotu from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
@@ -49,7 +50,11 @@ export default function App() {
       <Route path="/" element={<Home />} />
 
       {/* ✅ WORKING PAGES */}
-      <Route path="/house-extensions-london" element={<HouseExtensions />} />
+          <Route path="/house-extensions-london" element={<HouseExtensions />} />
+
+          <Route path="/house-extensions-essex" element={<HouseExtensionsEssex />} />
+
+
       <Route path="/renovations-london" element={<RenovationsLondon />} />
       <Route path="/about" element={<Abotu />} />
       <Route path="/contact" element={<Contact />} />
@@ -64,6 +69,7 @@ export default function App() {
 
           <Route path="/case-studies" element={<CaseStudies />} />
           <Route path="/case-studies/:slug" element={<CaseStudyDetail />} />
+      
          
     </Routes>
   );

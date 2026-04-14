@@ -764,6 +764,29 @@ export default function ExtensionCalculator() {
                                     >
                                         Request a tailored quote
                                     </a>
+
+
+                                    <a
+                                        href="/contact"
+                                        style={{
+                                            display: "inline-block",
+                                            marginTop: "12px",
+                                            background: "#fff",
+                                            color: "#1c1917",
+                                            padding: "12px 18px",
+                                            borderRadius: "12px",
+                                            textDecoration: "none",
+                                            fontWeight: "700",
+                                            width: isMobile ? "100%" : "auto",
+                                            textAlign: "center",
+                                            boxSizing: "border-box",
+                                        }}
+                                    >
+                                        Book Consultation
+                                    </a>
+
+                                   
+
                                 </>
                             ) : (
                                 <>
