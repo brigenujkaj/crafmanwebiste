@@ -838,17 +838,8 @@ export default function ExtensionCalculator() {
                                         ))}
                                     </div>
 
-                                    <p
-                                        style={{
-                                            marginTop: "18px",
-                                            fontSize: "13px",
-                                            color: "#d6d3d1",
-                                            lineHeight: "1.7",
-                                        }}
-                                    >
-                                        We’ll send your lead details, specs, and full pricing
-                                        breakdown to Formspree.
-                                    </p>
+
+
                                 </>
                             )}
                         </div>
