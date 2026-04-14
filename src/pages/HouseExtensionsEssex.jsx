@@ -172,6 +172,51 @@ export default function HouseExtensionsEssex() {
 
             </Helmet>
 
+            {/* Accreditation Section - Slightly Bigger Row */}
+            <section
+                style={{
+                    background: "#fff",
+                    borderTop: "1px solid #e7e5e4",
+                    borderBottom: "1px solid #e7e5e4",
+                    paddingTop: "20px", // Slightly more vertical padding for the bigger logos
+                    paddingBottom: "20px",
+                }}
+            >
+                <div style={{ ...section, paddingTop: 0, paddingBottom: 0 }}>
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "space-evenly",
+                            alignItems: "center",
+                            gap: "28px",
+                            maxWidth: "100%",
+                            margin: "0 auto",
+                            padding: "0 10px",
+                            overflow: "hidden"
+                        }}
+                    >
+                        {[
+                            { src: "/images/fmb.jpeg", alt: "FMB", height: "58px" },
+                            { src: "/images/trustmark.jpeg", alt: "Trustmark", height: "58px" },
+                            { src: "/images/google5Star.jpeg", alt: "Google Reviews", height: "68px" },
+                        ].map((logo, index) => (
+                            <img
+                                key={index}
+                                src={logo.src}
+                                alt={logo.alt}
+                                style={{
+                                    height: logo.height, // Increased for better visibility
+                                    width: "auto",
+                                    objectFit: "contain",
+                                    flexShrink: 0
+                                }}
+                            />
+                        ))}
+                    </div>
+                </div>
+            </section>
+
             <section
                 style={{
                     position: "relative",
@@ -527,83 +572,50 @@ export default function HouseExtensionsEssex() {
                 </div>
             </section>
 
-            <section id="process" style={section}>
-                <div style={{ maxWidth: "760px" }}>
-                    <div
-                        style={{
-                            fontSize: "12px",
-                            letterSpacing: "2px",
-                            textTransform: "uppercase",
-                            color: "#78716c",
-                            fontWeight: "700",
-                        }}
-                    >
-                        Our Process
-                    </div>
-                    <h2 style={{ fontSize: "40px", marginTop: "12px", marginBottom: "20px" }}>
-                        A clear extension process from start to finish
-                    </h2>
-                </div>
+            <section id="process" style={{ ...section, backgroundColor: "#ffffff" }}> 
+    <div style={{ maxWidth: "760px", marginBottom: "40px", padding: "0 20px" }}>
+        <div
+            style={{
+                fontSize: "12px",
+                letterSpacing: "2px",
+                textTransform: "uppercase",
+                color: "#78716c",
+                fontWeight: "700",
+            }}
+        >
+            Our Process
+        </div>
+        <h2 style={{ fontSize: "40px", marginTop: "12px", marginBottom: "20px", color: "#1c1917" }}>
+            A clear extension process from start to finish
+        </h2>
+    </div>
 
-                <div style={{ display: "grid", gap: "16px" }}>
-                    {[
-                        {
-                            title: "1. Initial Consultation",
-                            text: "We discuss the property, your goals, your budget, and the type of extension likely to work best.",
-                        },
-                        {
-                            title: "2. Design and Scope Development",
-                            text: "We shape the layout, define the extension works, and create a practical project route.",
-                        },
-                        {
-                            title: "3. Costing and Programme",
-                            text: "We clarify likely timings, scope, and delivery expectations so the project starts with better alignment.",
-                        },
-                        {
-                            title: "4. Build and Delivery",
-                            text: "Our team manages the extension works carefully, focusing on progress, quality, and communication throughout.",
-                        },
-                    ].map((item, i) => (
-                        <div
-                            key={item.title}
-                            style={{
-                                ...card,
-                                display: "flex",
-                                gap: "16px",
-                                alignItems: "flex-start",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    height: "40px",
-                                    width: "40px",
-                                    borderRadius: "999px",
-                                    background: "#1f1f1f",
-                                    color: "#fff",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    fontWeight: "700",
-                                    flexShrink: 0,
-                                }}
-                            >
-                                {i + 1}
-                            </div>
-                            <div>
-                                <h3 style={{ marginTop: 0, marginBottom: "10px" }}>{item.title}</h3>
-                                <p style={{ color: "#57534e", lineHeight: "1.8", marginBottom: 0 }}>
-                                    {item.text}
-                                </p>
-                            </div>
+    <div style={{
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        marginBottom: "40px"
+    }}>
+        <img
+            src="/images/extensionProcess.png" 
+            alt="Crafman Design and Build Process"
+            style={{
+                width: "100%",
+                maxWidth: "1100px", 
+                height: "auto",
+                display: "block",
+                // Removing the shadow and border to let the white background blend in
+                backgroundColor: "#ffffff"
+            }}
+        />
+    </div>
 
-
-                        </div>
-                    ))}
-                    <Link to="/contact" style={buttonPrimary}>
-                        Start Consultation
-                    </Link>
-                </div>
-            </section>
+    <div style={{ display: "flex", justifyContent: "center" }}>
+        <Link to="/contact" style={buttonPrimary}>
+            Start Consultation
+        </Link>
+    </div>
+</section>
 
             <section
                 style={{
