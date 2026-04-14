@@ -248,7 +248,7 @@ export default function HouseExtensionsEssex() {
                     background: "#fff",
                 }}
             >
-                <div style={section}>
+                <div style={section}>hou
                     <div style={{ maxWidth: "760px" }}>
                         <div
                             style={{
@@ -321,8 +321,19 @@ export default function HouseExtensionsEssex() {
                                 circulation, function, and day-to-day usability.
                             </p>
                         </div>
+
+                        <Link to="/contact" style={buttonPrimary}>
+                            Start Consultation
+                        </Link>
+
                     </div>
+
+                    
+
                 </div>
+
+
+
             </section>
             
 
@@ -421,6 +432,8 @@ export default function HouseExtensionsEssex() {
                                 <div>2. We contact you on your preferred days and times</div>
                                 <div>3. We discuss scope, goals, and the best route forward</div>
                             </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -504,7 +517,13 @@ export default function HouseExtensionsEssex() {
                         <div style={card}>Permitted development guidance</div>
                         <div style={card}>Technical drawings and documentation</div>
                         <div style={card}>Building control and project coordination</div>
+
+                        <Link to="/contact" style={buttonPrimary}>
+                            Start Consultation
+                        </Link>
                     </div>
+
+
                 </div>
             </section>
 
@@ -576,8 +595,13 @@ export default function HouseExtensionsEssex() {
                                     {item.text}
                                 </p>
                             </div>
+
+
                         </div>
                     ))}
+                    <Link to="/contact" style={buttonPrimary}>
+                        Start Consultation
+                    </Link>
                 </div>
             </section>
 
@@ -618,6 +642,10 @@ export default function HouseExtensionsEssex() {
                         <div style={card}>Practical experience with Essex properties</div>
                         <div style={card}>Clear communication and project oversight</div>
                         <div style={card}>Focus on quality finish and everyday usability</div>
+
+                        <Link to="/contact" style={buttonPrimary}>
+                            Start Consultation
+                        </Link>
                     </div>
                 </div>
             </section>
@@ -854,7 +882,7 @@ export default function HouseExtensionsEssex() {
 
                         <div style={{ marginTop: "20px", color: "#44403c", lineHeight: "1.9" }}>
                             <p><strong>Phone:</strong> 02036335634</p>
-                            <p><strong>Email:</strong> info@crafman.co.uk</p>
+                            <p><strong>Email:</strong> sales@crafman.co.uk</p>
                             <p><strong>Location:</strong> Essex, UK</p>
                         </div>
                     </div>
