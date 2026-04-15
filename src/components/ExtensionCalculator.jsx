@@ -6,7 +6,9 @@ function createProject(id = Date.now()) {
     return {
         id,
         type: "rear",
-        size: 20,
+        width: 6,
+        depth: 3,
+        size: 18,
         spec: "standard",
     };
 }
@@ -20,17 +22,13 @@ export default function ExtensionCalculator() {
         email: "",
         phone: "",
         postcode: "",
+        houseType: "semidetached",
         addKitchen: false,
         addBathroom: false
     });
 
     const [showResult, setShowResult] = useState(false);
-    const [error, setError] = useState("");
-    const [submitStatus, setSubmitStatus] = useState({
-        loading: false,
-        success: false,
-        error: "",
-    });
+    const [submitStatus, setSubmitStatus] = useState({ loading: false, success: false });
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -43,203 +41,192 @@ export default function ExtensionCalculator() {
 
     const isMobile = screenWidth < 768;
 
-    // Pricing Logic
+    // Fixed pricing logic for London/Essex
     const baseRates = {
-        rear: 1700, side: 1700, wrap: 1700, double: 1700, loft: 1500,
-        kitchenBase: 3200, bathroomBase: 5700
+        rear: 1700,
+        side: 1700,
+        wrap: 1700,
+        double: 1700,
+        loft: 1400,
+        kitchenBase: 3200,
+        bathroomBase: 5700
     };
 
     const typeLabels = {
-        rear: "Rear Extension", side: "Side Return", wrap: "Wraparound",
-        double: "Double Storey", loft: "Loft Conversion"
+        rear: "Rear Extension",
+        side: "Side Return",
+        wrap: "Wraparound",
+        double: "Double Storey",
+        loft: "Loft Conversion"
     };
 
     const totals = useMemo(() => {
         const extTotal = projects.reduce((acc, p) => acc + (baseRates[p.type] * p.size), 0);
         const kitchenCost = lead.addKitchen ? baseRates.kitchenBase : 0;
         const bathroomCost = lead.addBathroom ? baseRates.bathroomBase : 0;
-        const grandTotal = extTotal + kitchenCost + bathroomCost;
-
-        const drawingsFee = 750;
-        const structuralFee = 500;
-        const totalFees = drawingsFee + structuralFee + 1000; // 1000 for other fees
+        const drawingsFee = 1250;
+        const grandTotal = extTotal + kitchenCost + bathroomCost + drawingsFee;
 
         return {
-            low: grandTotal * 0.9,
-            high: grandTotal * 1.1,
-            construction: extTotal > totalFees ? extTotal - totalFees : extTotal,
+            construction: extTotal,
             kitchenCost,
             bathroomCost,
+            fees: drawingsFee,
             grandTotal
         };
     }, [projects, lead.addKitchen, lead.addBathroom]);
 
     function updateProject(projectId, field, value) {
         setProjects((prev) =>
-            prev.map((project) =>
-                project.id === projectId ? { ...project, [field]: value } : project
-            )
+            prev.map((p) => {
+                if (p.id === projectId) {
+                    const val = (field === "width" || field === "depth" || field === "size") ? Number(value) : value;
+                    const updated = { ...p, [field]: val };
+                    return updated;
+                }
+                return p;
+            })
         );
     }
 
     const inputStyle = {
         width: "100%", padding: "14px", borderRadius: "12px", border: "1px solid #d6d3d1",
-        fontSize: "15px", boxSizing: "border-box", backgroundColor: "#ffffff", marginBottom: "12px"
+        fontSize: "16px", boxSizing: "border-box", backgroundColor: "#ffffff", marginBottom: "12px",
+        outline: "none"
     };
-
-    const checkboxStyle = (active) => ({
-        display: "flex", alignItems: "center", gap: "10px", padding: "14px",
-        borderRadius: "12px", border: active ? "2px solid #1c1917" : "1px solid #e7e5e4",
-        background: active ? "#fafaf9" : "#fff",
-        cursor: "pointer", transition: "0.2s"
-    });
 
     async function handleSubmit(e) {
         e.preventDefault();
-        if (!lead.name || !lead.email || !lead.phone) {
-            setError("Please fill in your contact details.");
-            return;
-        }
-        setSubmitStatus({ loading: true, success: false, error: "" });
+        setSubmitStatus({ loading: true, success: false });
         try {
-            const response = await fetch(FORM_ENDPOINT, {
+            const res = await fetch(FORM_ENDPOINT, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", Accept: "application/json" },
-                body: JSON.stringify({ ...lead, totals }),
+                body: JSON.stringify({ ...lead, totals, projects }),
             });
-            if (response.ok) {
+            if (res.ok) {
                 setShowResult(true);
-                setSubmitStatus({ loading: false, success: true, error: "" });
+                setSubmitStatus({ loading: false, success: true });
             }
         } catch (err) {
-            setSubmitStatus({ loading: false, success: false, error: "Submission failed." });
+            setSubmitStatus({ loading: false, success: false });
         }
     }
 
     return (
-        <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "20px", fontFamily: "sans-serif" }}>
-            <div style={{ background: "#ffffff", border: "1px solid #ddd", borderRadius: "24px", padding: isMobile ? "20px" : "32px", boxShadow: "0 10px 30px rgba(0,0,0,0.05)" }}>
-                <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.1fr 0.9fr", gap: "28px" }}>
+        <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "20px", fontFamily: "sans-serif", color: "#1c1917" }}>
+            <div style={{ background: "#ffffff", border: "1px solid #e7e5e4", borderRadius: "24px", padding: isMobile ? "20px" : "32px", boxShadow: "0 10px 30px rgba(0,0,0,0.05)" }}>
+                <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.1fr 0.9fr", gap: "32px" }}>
 
-                    {/* CONFIGURATION */}
+                    {/* CONFIGURATION COLUMN */}
                     <div>
-                        <div style={{ fontWeight: "700", marginBottom: "16px", fontSize: "18px" }}>1. Structural Design</div>
+                        <h3 style={{ fontSize: "18px", fontWeight: "700", marginBottom: "20px" }}>1. Build Dimensions</h3>
                         {projects.map((project) => (
                             <div key={project.id} style={{ border: "1px solid #e7e5e4", borderRadius: "18px", padding: "20px", background: "#fafaf9", marginBottom: "20px" }}>
-                                <label style={{ fontSize: "13px", fontWeight: "700", display: "block", marginBottom: "8px" }}>Extension Type</label>
+                                <label style={{ fontSize: "12px", fontWeight: "700", display: "block", marginBottom: "8px", color: "#78716c" }}>EXTENSION TYPE</label>
                                 <select value={project.type} onChange={(e) => updateProject(project.id, "type", e.target.value)} style={inputStyle}>
                                     {Object.entries(typeLabels).map(([key, label]) => (<option key={key} value={key}>{label}</option>))}
                                 </select>
-                             
-                                <label style={{ fontSize: "14px", fontWeight: "700", display: "block", marginBottom: "8px" }}>
-                                    Approx Sizze: {project.size}m²
-                                </label>
-                                <input
-                                    type="range"
-                                    min="5"
-                                    max="80"
-                                    step="1"
-                                    value={project.size}
-                                    onChange={(e) => updateProject(project.id, "size", Number(e.target.value))}
-                                    className="calculator-slider" // Optional: add a class if you want to be specific
-                                    style={{
-                                        width: "100%",
-                                        cursor: "pointer",
-                                        touchAction: "manipulation"
-                                    }}
-                                />
+
+                                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                                    <div style={{ flex: 1 }}>
+                                        <label style={{ fontSize: "11px", fontWeight: "700", color: "#a8a29e", marginBottom: "4px", display: "block" }}>WIDTH (M)</label>
+                                        <input type="number" value={project.width} onChange={(e) => updateProject(project.id, "width", e.target.value)} style={{ ...inputStyle, marginBottom: 0 }} />
+                                    </div>
+                                    <div style={{ fontSize: "20px", marginTop: "18px", color: "#d6d3d1" }}>×</div>
+                                    <div style={{ flex: 1 }}>
+                                        <label style={{ fontSize: "11px", fontWeight: "700", color: "#a8a29e", marginBottom: "4px", display: "block" }}>DEPTH (M)</label>
+                                        <input type="number" value={project.depth} onChange={(e) => updateProject(project.id, "depth", e.target.value)} style={{ ...inputStyle, marginBottom: 0 }} />
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={() => updateProject(project.id, "size", project.width * project.depth)}
+                                    style={{ width: "100%", marginTop: "15px", padding: "12px", background: "#e7e5e4", border: "none", borderRadius: "8px", fontSize: "13px", fontWeight: "700", cursor: "pointer", color: "#444" }}
+                                >
+                                    Calculate Area: {project.width * project.depth}m²
+                                </button>
                             </div>
                         ))}
 
-                        <div style={{ fontWeight: "700", marginBottom: "12px", fontSize: "18px" }}>2. Optional Add-ons</div>
+                        <h3 style={{ fontSize: "18px", fontWeight: "700", marginBottom: "15px" }}>2. Property & Fit-out</h3>
+                        <select value={lead.houseType} onChange={(e) => setLead({ ...lead, houseType: e.target.value })} style={inputStyle}>
+                            <option value="terraced">Terraced</option>
+                            <option value="semidetached">Semi-Detached</option>
+                            <option value="detached">Detached</option>
+                            <option value="bungalow">Bungalow</option>
+                        </select>
+
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "30px" }}>
-                            <label style={checkboxStyle(lead.addKitchen)}>
-                                <input type="checkbox" checked={lead.addKitchen} onChange={(e) => setLead({ ...lead, addKitchen: e.target.checked })} />
-                                <span style={{ fontSize: "14px", fontWeight: "600" }}>Add Kitchen</span>
-                            </label>
-                            <label style={checkboxStyle(lead.addBathroom)}>
-                                <input type="checkbox" checked={lead.addBathroom} onChange={(e) => setLead({ ...lead, addBathroom: e.target.checked })} />
-                                <span style={{ fontSize: "14px", fontWeight: "600" }}>Add Bathroom</span>
-                            </label>
+                            <button type="button" onClick={() => setLead({ ...lead, addKitchen: !lead.addKitchen })} style={{ padding: "14px", borderRadius: "12px", border: lead.addKitchen ? "2px solid #1c1917" : "1px solid #d6d3d1", background: lead.addKitchen ? "#f5f5f4" : "#fff", fontWeight: "700", cursor: "pointer" }}>{lead.addKitchen ? "✓ Kitchen" : "+ Kitchen"}</button>
+                            <button type="button" onClick={() => setLead({ ...lead, addBathroom: !lead.addBathroom })} style={{ padding: "14px", borderRadius: "12px", border: lead.addBathroom ? "2px solid #1c1917" : "1px solid #d6d3d1", background: lead.addBathroom ? "#f5f5f4" : "#fff", fontWeight: "700", cursor: "pointer" }}>{lead.addBathroom ? "✓ Bathroom" : "+ Bathroom"}</button>
                         </div>
 
                         <form onSubmit={handleSubmit} style={{ borderTop: "1px solid #e7e5e4", paddingTop: "24px" }}>
-                            <div style={{ fontWeight: "700", marginBottom: "15px" }}>3. Receive Your Breakdown</div>
-                            <input placeholder="Name" onChange={(e) => setLead({ ...lead, name: e.target.value })} style={inputStyle} required />
-                            <input placeholder="Email" type="email" onChange={(e) => setLead({ ...lead, email: e.target.value })} style={inputStyle} required />
+                            <h3 style={{ fontSize: "18px", fontWeight: "700", marginBottom: "15px" }}>3. Contact Information</h3>
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                                <input placeholder="Name" onChange={(e) => setLead({ ...lead, name: e.target.value })} style={inputStyle} required />
+                                <input placeholder="Postcode" onChange={(e) => setLead({ ...lead, postcode: e.target.value })} style={inputStyle} required />
+                            </div>
+                            <input placeholder="Email Address" type="email" onChange={(e) => setLead({ ...lead, email: e.target.value })} style={inputStyle} required />
                             <input placeholder="Phone" type="tel" onChange={(e) => setLead({ ...lead, phone: e.target.value })} style={inputStyle} required />
-                            <button type="submit" style={{ width: "100%", background: "#1c1917", color: "#fff", padding: "16px", borderRadius: "12px", fontWeight: "700", border: "none", cursor: "pointer" }}>
-                                {submitStatus.loading ? "Processing..." : "View Detailed Estimates"}
+                            <button type="submit" style={{ width: "100%", background: "#1c1917", color: "#fff", padding: "18px", borderRadius: "12px", fontWeight: "800", border: "none", cursor: "pointer", fontSize: "16px" }}>
+                                {submitStatus.loading ? "Processing..." : "Reveal My Estimate"}
                             </button>
                         </form>
                     </div>
 
                     {/* RESULTS COLUMN */}
                     <div style={{ minWidth: 0 }}>
-                        <div style={{ background: "#1c1917", color: "#fff", borderRadius: "24px", padding: "32px", height: "100%", position: isMobile ? "static" : "sticky", top: "24px" }}>
-                            <div style={{ fontSize: "12px", textTransform: "uppercase", color: "#d6d3d1", letterSpacing: "1px" }}>Total Estimated Range</div>
-                            <div style={{ fontSize: "36px", fontWeight: "700", marginTop: "12px", filter: showResult ? "none" : "blur(7px)", transition: "0.3s" }}>
-                                £{Math.round(totals.low).toLocaleString()} – £{Math.round(totals.high).toLocaleString()}
+                        <div style={{ background: "#1c1917", color: "#fff", borderRadius: "24px", padding: "35px", height: "100%", position: isMobile ? "static" : "sticky", top: "24px" }}>
+                            <div style={{ fontSize: "12px", textTransform: "uppercase", color: "#a8a29e", letterSpacing: "1px" }}>Estimated Investment</div>
+                            <div style={{ fontSize: "42px", fontWeight: "800", marginTop: "12px", filter: showResult ? "none" : "blur(8px)", transition: "0.4s" }}>
+                                £{Math.round(totals.grandTotal).toLocaleString()}*
                             </div>
 
                             <div style={{ marginTop: "30px", paddingTop: "24px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
-                                <div style={{ fontWeight: "700", marginBottom: "20px", color: "#fbbf24" }}>Itemized Breakdown:</div>
+                                <div style={{ fontWeight: "700", marginBottom: "20px", color: "#fbbf24", fontSize: "13px" }}>ITEMIZED BREAKDOWN:</div>
 
                                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px", fontSize: "14px" }}>
-                                    <span>Completed Shell:</span>
+                                    <span>Build Shell ({projects[0].size}m²):</span>
                                     <span style={{ filter: showResult ? "none" : "blur(5px)" }}>£{Math.round(totals.construction).toLocaleString()}</span>
                                 </div>
 
                                 {lead.addKitchen && (
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px", fontSize: "14px", color: "#e7e5e4" }}>
                                         <span>Kitchen Fit-out:</span>
-                                        <span style={{ filter: showResult ? "none" : "blur(5px)" }}>from £{baseRates.kitchenBase.toLocaleString()}</span>
+                                        <span style={{ filter: showResult ? "none" : "blur(5px)" }}>£{baseRates.kitchenBase.toLocaleString()}</span>
                                     </div>
                                 )}
 
                                 {lead.addBathroom && (
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px", fontSize: "14px", color: "#e7e5e4" }}>
                                         <span>Bathroom Fit-out:</span>
-                                        <span style={{ filter: showResult ? "none" : "blur(5px)" }}>from £{baseRates.bathroomBase.toLocaleString()}</span>
+                                        <span style={{ filter: showResult ? "none" : "blur(5px)" }}>£{baseRates.bathroomBase.toLocaleString()}</span>
                                     </div>
                                 )}
 
-                                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px", fontSize: "14px", color: "#a8a29e" }}>
-                                    <span>Drawings & Structural:</span>
-                                    <span style={{ filter: showResult ? "none" : "blur(5px)" }}>£1,250</span>
+                                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px", fontSize: "14px", color: "#a8a29e" }}>
+                                    <span>Planning & Structural:</span>
+                                    <span style={{ filter: showResult ? "none" : "blur(5px)" }}>£{totals.fees.toLocaleString()}</span>
                                 </div>
 
-                                <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid rgba(255,255,255,0.2)", paddingTop: "18px", marginTop: "18px", fontWeight: "700", fontSize: "18px", color: "#fbbf24" }}>
-                                    <span>Estimated Total:</span>
-                                    <span style={{ filter: showResult ? "none" : "blur(6px)" }}>£{Math.round(totals.grandTotal).toLocaleString()}*</span>
+                                {/* TURNKEY NOTE */}
+                                <div style={{ background: "rgba(255, 255, 255, 0.05)", padding: "15px", borderRadius: "12px", fontSize: "12px", lineHeight: "1.6", color: "#d6d3d1", borderLeft: "3px solid #fbbf24", marginBottom: "25px" }}>
+                                    <strong>Turnkey Service Included:</strong> Covers all Planning, Architecture,
+                                    external/internal finishes, flooring, electrical, plumbing, skirting and painting.
                                 </div>
-                            </div>
 
-                            {showResult && (
-                                <div style={{ marginTop: "24px" }}>
-                                    <div style={{ fontSize: "16px", color: "#d6d3d1", marginBottom: "20px", lineHeight: "1.5" }}>
-                                        *Includes electrical, internal finishes, and flooring as standard.
+                                {showResult && (
+                                    <div style={{ animation: "fadeIn 0.5s" }}>
+                                        <div style={{ fontSize: "12px", color: "#fbbf24", marginBottom: "20px" }}>
+                                            Project: {lead.houseType} | {lead.postcode.toUpperCase()}
+                                        </div>
+                                        <a href="https://calendar.app.google/NBBKg6BiESkgfsJ5A" target="_blank" rel="noopener noreferrer" style={{ display: "block", background: "#fbbf24", color: "#1c1917", padding: "18px", borderRadius: "14px", textAlign: "center", textDecoration: "none", fontWeight: "800", boxShadow: "0 4px 15px rgba(251, 191, 36, 0.3)" }}>📞 Book a Call</a>
                                     </div>
-                                    <a
-                                        href="https://calendar.app.google/NBBKg6BiESkgfsJ5A"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{
-                                            display: "block",
-                                            background: "#fbbf24",
-                                            color: "#1c1917",
-                                            padding: "16px",
-                                            borderRadius: "12px",
-                                            textAlign: "center",
-                                            textDecoration: "none",
-                                            fontWeight: "800",
-                                            boxShadow: "0 4px 15px rgba(251, 191, 36, 0.3)"
-                                        }}
-                                    >
-                                        📞 Book a Call
-                                    </a>
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
