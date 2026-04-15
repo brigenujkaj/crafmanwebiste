@@ -572,50 +572,89 @@ export default function HouseExtensionsEssex() {
                 </div>
             </section>
 
-            <section id="process" style={{ ...section, backgroundColor: "#ffffff" }}> 
-    <div style={{ maxWidth: "760px", marginBottom: "40px", padding: "0 20px" }}>
-        <div
-            style={{
-                fontSize: "12px",
-                letterSpacing: "2px",
-                textTransform: "uppercase",
-                color: "#78716c",
-                fontWeight: "700",
-            }}
-        >
-            Our Process
-        </div>
-        <h2 style={{ fontSize: "40px", marginTop: "12px", marginBottom: "20px", color: "#1c1917" }}>
-            A clear extension process from start to finish
-        </h2>
-    </div>
+            <section id="process" style={{ ...section, backgroundColor: "#ffffff" }}>
+                <div style={{ maxWidth: "760px", marginBottom: "40px", padding: "0 20px" }}>
+                    <div
+                        style={{
+                            fontSize: "12px",
+                            letterSpacing: "2px",
+                            textTransform: "uppercase",
+                            color: "#78716c",
+                            fontWeight: "700",
+                        }}
+                    >
+                        The Crafman Way
+                    </div>
+                    <h2 style={{ fontSize: "40px", marginTop: "12px", marginBottom: "20px", color: "#1c1917" }}>
+                        A seamless journey from initial sketch to final build
+                    </h2>
+                </div>
 
-    <div style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        marginBottom: "40px"
-    }}>
-        <img
-            src="/images/extensionProcess.png" 
-            alt="Crafman Design and Build Process"
-            style={{
-                width: "100%",
-                maxWidth: "1100px", 
-                height: "auto",
-                display: "block",
-                // Removing the shadow and border to let the white background blend in
-                backgroundColor: "#ffffff"
-            }}
-        />
-    </div>
+                {/* Process Cards Container */}
+                <div style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                    gap: "24px",
+                    padding: "0 20px",
+                    marginBottom: "40px",
+                    width: "100%",
+                    maxWidth: "1200px"
+                }}>
+                    {[
+                        {
+                            step: "1. Expert On-Site Consultation",
+                            desc: "We visit your property to evaluate the space and discuss your vision, providing technical insights from the very first meeting.",
+                            icon: (
+                                <div style={{ backgroundColor: "#FF3B00", padding: "8px", borderRadius: "4px", width: "fit-content" }}>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" /></svg>
+                                </div>
+                            )
+                        },
+                        {
+                            step: "2. Precision Design & Planning",
+                            desc: "Our team develops detailed architectural drawings and manages the entire planning application process on your behalf.",
+                            icon: (
+                                <div style={{ backgroundColor: "#FF3B00", padding: "8px", borderRadius: "4px", width: "fit-content" }}>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z" /></svg>
+                                </div>
+                            )
+                        },
+                        {
+                            step: "3. Masterful Construction",
+                            desc: "We transition from paper to project, managing the full build with precision and delivering a high-end, move-in ready space.",
+                            icon: (
+                                <div style={{ backgroundColor: "#FF3B00", padding: "8px", borderRadius: "4px", width: "fit-content" }}>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
+                                </div>
+                            )
+                        }
+                    ].map((item, index) => (
+                        <div key={index} style={{
+                            flex: "1 1 300px",
+                            maxWidth: "380px",
+                            backgroundColor: "#ffffff",
+                            border: "1px solid #e7e5e4",
+                            borderRadius: "12px",
+                            padding: "40px 30px",
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "20px",
+                            boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)" // Added a very subtle shadow for depth
+                        }}>
+                            {item.icon}
+                            <h3 style={{ fontSize: "18px", fontWeight: "700", margin: 0, color: "#1c1917" }}>{item.step}</h3>
+                            <p style={{ fontSize: "16px", color: "#44403c", margin: 0, lineHeight: "1.6" }}>{item.desc}</p>
+                        </div>
+                    ))}
+                </div>
 
-    <div style={{ display: "flex", justifyContent: "center" }}>
-        <Link to="/contact" style={buttonPrimary}>
-            Start Consultation
-        </Link>
-    </div>
-</section>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                    <Link to="/contact" style={buttonPrimary}>
+                        Book Your Consultation
+                    </Link>
+                </div>
+            </section>
 
             <section
                 style={{
