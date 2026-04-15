@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Layout, { siteStyles } from "../components/DrawingsLayout.jsx";
+import Layout, { siteStyles } from "../components/EssexExtensionLayout.jsx";
 import ExtensionCalculator from "../components/ExtensionCalculator";
 import { useState } from "react";
 import ContactForm from "../components/ContactForm.jsx";

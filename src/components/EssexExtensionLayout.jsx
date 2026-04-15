@@ -207,7 +207,7 @@ export default function Layout({ children }) {
                             }}
                         >
                             <span style={{ color: "#0F0F0F" }}>Crafman</span>{" "}
-                            <span style={{ color: "#A67C00" }}>Planning & Drawings</span>
+                            <span style={{ color: "#A67C00" }}>Design & Build</span>
                         </Link>
 
                         <div
@@ -219,7 +219,7 @@ export default function Layout({ children }) {
                                 fontWeight: "700",
                             }}
                         >
-                            Extension & Planning Drawings Made Simple
+                            Extensions & Planning Drawings Made Simple
                         </div>
                     </div>
 
@@ -233,7 +233,7 @@ export default function Layout({ children }) {
                             flex: 1,
                         }}
                     >
-
+                       
 
                         <a href="tel:02036335634" style={callLinkStyle}>
                             Call Now
@@ -249,5 +249,4 @@ export default function Layout({ children }) {
             <main>{children}</main>
         </div>
     );
-}
 }
