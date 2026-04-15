@@ -130,8 +130,24 @@ export default function ExtensionCalculator() {
                                 <select value={project.type} onChange={(e) => updateProject(project.id, "type", e.target.value)} style={inputStyle}>
                                     {Object.entries(typeLabels).map(([key, label]) => (<option key={key} value={key}>{label}</option>))}
                                 </select>
-                                <label style={{ fontSize: "13px", fontWeight: "700", display: "block", marginBottom: "8px" }}>Approx Size: {project.size}m²</label>
-                                <input type="range" min="5" max="80" value={project.size} onChange={(e) => updateProject(project.id, "size", Number(e.target.value))} style={{ width: "100%" }} />
+                             
+                                <label style={{ fontSize: "14px", fontWeight: "700", display: "block", marginBottom: "8px" }}>
+                                    Approx Sizze: {project.size}m²
+                                </label>
+                                <input
+                                    type="range"
+                                    min="5"
+                                    max="80"
+                                    step="1"
+                                    value={project.size}
+                                    onChange={(e) => updateProject(project.id, "size", Number(e.target.value))}
+                                    className="calculator-slider" // Optional: add a class if you want to be specific
+                                    style={{
+                                        width: "100%",
+                                        cursor: "pointer",
+                                        touchAction: "manipulation"
+                                    }}
+                                />
                             </div>
                         ))}
 
