@@ -14,6 +14,12 @@ import { useLocation } from "react-router-dom";
 import Projects from "./pages/Projects.jsx";
 import CaseStudies from "./pages/CaseStudies.jsx";
 import CaseStudyDetail from "./pages/CaseStudyDetail.jsx";
+import { clarity } from '@microsoft/clarity';
+
+// Best to wrap this in a useEffect so it only runs on the client
+useEffect(() => {
+    clarity.init("YOUR_PROJECT_ID");
+}, []);
 
 // TEMP (until you build it)
 function TestPage({ title }) {
