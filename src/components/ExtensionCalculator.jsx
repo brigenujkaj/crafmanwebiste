@@ -176,6 +176,7 @@ export default function ExtensionCalculator() {
                         <h3> Your Details (No Pressure Sales Calls)</h3>
                             <input placeholder="Your Name" onChange={(e) => setLead({ ...lead, name: e.target.value })} style={inputStyle} required />
                             <input placeholder="Email Address" type="email" onChange={(e) => setLead({ ...lead, email: e.target.value })} style={inputStyle} required />
+                            <input placeholder="Post Code" type="postcode" onChange={(e) => setLead({ ...lead, email: e.target.value })} style={inputStyle} required />
                             <input placeholder="Phone Number" type="tel" onChange={(e) => setLead({ ...lead, phone: e.target.value })} style={inputStyle} required />
                             <button type="submit" style={{ width: "100%", background: "#1c1917", color: "#fff", padding: "20px", borderRadius: "14px", fontWeight: "800", border: "none", cursor: "pointer", fontSize: "17px" }}>
                                 {submitStatus.loading ? "Calculating..." : "Reveal My Full Estimate"}
