@@ -162,15 +162,20 @@ export default function HouseExtensionsEssex() {
 
     return (
         <Layout>
-            <Helmet>
+          <Helmet>
                 <title>House Extensions & Loft Conversions Essex | Crafman</title>
-                <meta
-                    name="description"
-                    content="House extensions and loft conversions in Essex by Crafman Design and Build. One team managing design, planning and build from start to finish."
-                />
-                <link rel="canonical" href="https://crafman.co.uk/house-extensions-essex" />
+                 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PSQRZ8RM81"></script>
+                 <script>
+                     {`
+                          window.dataLayer = window.dataLayer || [];
+                             function gtag(){dataLayer.push(arguments);}
+                            gtag('js', new Date());
 
-            </Helmet>
+                             gtag('config', 'G-PSQRZ8RM81');
+                              gtag('config', 'AW-16534080284');
+                          `}
+    </script>
+</Helmet>
 
             {/* Accreditation Section - Slightly Bigger Row */}
             <section
@@ -271,9 +276,7 @@ export default function HouseExtensionsEssex() {
                             <Link to="/contact" style={buttonPrimary}>
                                 Start Consultation
                             </Link>
-                            <Link to="/contact" style={buttonPrimary}>
-                                Request Brochure
-                            </Link>
+                            
                             <a href="#services" style={buttonSecondary}>
                                 View Extension Services
                             </a>
@@ -393,9 +396,20 @@ export default function HouseExtensionsEssex() {
                     }}
                 >
 
-                    <div style={{ display: "grid", gap: "20px" }}>
-                        <ContactForm endpoint="https://formspree.io/f/mnjlqwgn" />
-                    </div>
+                   <div style={{ display: "grid", gap: "20px" }}>
+                       <ContactForm 
+                            endpoint="https://formspree.io/f/mnjlqwgn" 
+                             onSuccess={() => {
+                             if (typeof window.gtag !== 'undefined') {
+                              window.gtag('event', 'conversion', {
+                               'send_to': 'AW-16534080284/ooPfCN2175McEJyWiMw9',
+                               'value': 1.0,
+                               'currency': 'GBP'
+                         });
+                            }
+                 }} 
+    />
+</div>
 
                     <div style={{ display: "grid", gap: "20px" }}>
                         <div

@@ -70,6 +70,25 @@ export default function CaseStudies() {
             </section>
 
             <section style={section}>
+                {/* PORTFOLIO UPDATE ALERT */}
+                <div 
+                    style={{ 
+                        background: "#fef3c7", // Light amber/sand alert background
+                        borderLeft: "4px solid #A67C00", 
+                        padding: "20px", 
+                        borderRadius: "8px", 
+                        marginBottom: "40px",
+                        maxWidth: "800px" 
+                    }}
+                >
+                    <h4 style={{ margin: "0 0 8px 0", color: "#92400e", fontSize: "16px", fontWeight: "800" }}>
+                        🚧 Portfolio Update in Progress
+                    </h4>
+                    <p style={{ margin: 0, color: "#92400e", fontSize: "15px", lineHeight: "1.5" }}>
+                        We are currently migrating our full project history to this new website. The list below is a partial selection; our <strong>complete portfolio is due to be live in approximately 4 weeks.</strong>
+                    </p>
+                </div>
+
                 <div style={{ maxWidth: "760px" }}>
                     <div
                         style={{
@@ -80,7 +99,7 @@ export default function CaseStudies() {
                             fontWeight: "700",
                         }}
                     >
-                        Selected Work
+                        Project Preview
                     </div>
 
                     <h2
@@ -94,7 +113,7 @@ export default function CaseStudies() {
                     </h2>
 
                     <p style={{ color: "#57534e", lineHeight: "1.8" }}>
-                        Each project showcases our approach from initial challenges through to final delivery, giving you a clear understanding of how we design and build high-quality spaces.
+                        Explore our featured projects below to understand how we design and build high-quality spaces. Check back soon to see our expanded gallery.
                     </p>
                 </div>
 
