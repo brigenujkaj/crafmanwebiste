@@ -115,7 +115,7 @@ export default function ExtensionCalculator() {
 
     return (
         <section style={{ maxWidth: "1100px", margin: "0 auto", padding: isMobile ? "10px" : "20px", color: "#1c1917", fontFamily: "sans-serif" }}>
-            
+            <h1>COST ESTIMATOR</h1>
             {/* VALUATION POPUP */}
             {showValuationModal && (
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
@@ -166,7 +166,7 @@ export default function ExtensionCalculator() {
                             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                                 {["standard", "standard_window", "bifold"].map((type) => (
                                     <button key={type} type="button" onClick={() => setLead({...lead, doorType: type})} style={{ padding: "12px", borderRadius: "10px", border: lead.doorType === type ? "2px solid #1c1917" : "1px solid #d6d3d1", background: lead.doorType === type ? "#1c1917" : "#fff", color: lead.doorType === type ? "#fff" : "#1c1917", fontWeight: "600", cursor: "pointer", textAlign: "left" }}>
-                                        {type === "standard" ? "Standard Doors" : type === "standard_window" ? "Standard Door + Window" : "Bifolds / Sliders"}
+                                        {type === "standard" ? "Standard Doors" : type === "standard_window" ? "Standard Door + Window" : "Bifolds GIT/ Sliders"}
                                     </button>
                                 ))}
                             </div>
