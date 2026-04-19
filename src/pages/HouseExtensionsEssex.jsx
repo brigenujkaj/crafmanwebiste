@@ -396,20 +396,7 @@ export default function HouseExtensionsEssex() {
                     }}
                 >
 
-                   <div style={{ display: "grid", gap: "20px" }}>
-                       <ContactForm 
-                            endpoint="https://formspree.io/f/mnjlqwgn" 
-                             onSuccess={() => {
-                             if (typeof window.gtag !== 'undefined') {
-                              window.gtag('event', 'conversion', {
-                               'send_to': 'AW-16534080284/ooPfCN2175McEJyWiMw9',
-                               'value': 1.0,
-                               'currency': 'GBP'
-                         });
-                            }
-                 }} 
-    />
-</div>
+                  
 
                     <div style={{ display: "grid", gap: "20px" }}>
                         <div
