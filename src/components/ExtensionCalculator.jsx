@@ -200,7 +200,7 @@ export default function ExtensionCalculator() {
 
                             <div style={{ fontSize: "12px", textTransform: "uppercase", color: "#a8a29e", letterSpacing: "1px" }}>Turnkey Investment</div>
                             <div style={{ fontSize: isMobile ? "40px" : "52px", fontWeight: "900", marginTop: "12px", filter: showResult ? "none" : "blur(16px)", transition: "0.6s" }}>
-                                £{Math.round(totals.grandTotal).toLocaleString()}
+                               FROM £{Math.round(totals.grandTotal).toLocaleString()}
                             </div>
 
                             <div style={{ marginTop: "30px", paddingTop: "24px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
