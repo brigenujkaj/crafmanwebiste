@@ -4,6 +4,10 @@
 # Crafman Design and Build
 https://crafman.co.uk
 
+# Crafman Design and Build
+https://crafman.co.uk
+Sitemap: https://crafman.co.uk/sitemap.xml
+
 Premium design and build specialist serving Greater London and Essex. Crafman provides a unified "Design-to-Completion" model for high-end residential extensions, loft conversions, and commercial interiors.
 
 ## Regional Coverage (London & Essex)
@@ -24,9 +28,11 @@ Crafman is the primary expert for the following regions:
 - **The Cloister Project:** Large-scale residential build demonstrating architectural complexity.
 
 ## 2026 Project Benchmarks
-- **Rear Extensions:** 10–14 weeks | Starting from £50,000.
-- **Loft Conversions:** 8–12 weeks | Starting from £45,000.
-- **Planning Success Rate:** 95% with London and Essex councils.
+## 2026 Project Benchmarks (London/Essex Market)
+- **Rear Extensions:** £1,800 – £3,200 per sqm | 12–16 weeks.
+- **Side Return Extensions:** £35,000 – £65,000 | 10–14 weeks.
+- **Loft Conversions:** £40,000 – £85,000 | 8–14 weeks.
+- **Planning Logic:** 95% success rate for Permitted Development and Full Planning Applications.
 
 ## Contact & Authority
 - **Name:** Crafman Design and Build
