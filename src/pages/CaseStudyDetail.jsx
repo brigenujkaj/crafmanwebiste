@@ -38,31 +38,38 @@ export default function CaseStudyDetail() {
     }
 
 
-  const detailSchema = {
-    "@context": "https://schema.org",
-    "@type": "CreativeWork",
-    "name": study ? study.title : "Case Study",
-    "description": study ? study.intro : "",
-    "author": {
+ const detailSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
       "@type": "GeneralContractor",
+      "@id": "https://www.crafman.co.uk/#organization",
       "name": "Crafman Design and Build",
-      "url": "https://crafman.co.uk"
+      "url": "https://www.crafman.co.uk",
+      "logo": "https://www.crafman.co.uk/images/logo.png"
     },
-    "contentLocation": {
-      "@type": "Place",
-      "name": study ? study.location : "London"
-    },
-    "about": [
-      {
-        "@type": "Thing",
-        "name": study ? study.category : "Construction"
+    {
+      "@type": "Article",
+      "@id": `https://www.crafman.co.uk/case-studies/${slug}#article`,
+      "headline": study ? study.title : "Construction Case Study",
+      "description": study ? study.intro : "",
+      "image": study ? study.heroImage : "",
+      "author": { "@id": "https://www.crafman.co.uk/#organization" },
+      "publisher": { "@id": "https://www.crafman.co.uk/#organization" },
+      "contentLocation": {
+        "@type": "Place",
+        "name": study ? study.location : "London"
+      },
+      // 🏗️ TECHNICAL DATA FOR AI EXTRACTION
+      "mainEntity": {
+        "@type": "Project",
+        "name": study ? study.title : "Crafman Project",
+        "category": study ? study.category : "Residential Construction",
+        "abstract": study ? `Technical Challenge: ${study.challenge}. Solution: ${study.solution}. Final Outcome: ${study.outcome}` : ""
       }
-    ],
-
-    "abstract": study ? `Challenge: ${study.challenge} Solution: ${study.solution} Outcome: ${study.outcome}` : "",
-    "mainEntityOfPage": `https://crafman.co.uk/case-studies/${slug}`,
-    "image": study ? study.heroImage : ""
-  };
+    }
+  ]
+};
 
     return (
         <Layout>

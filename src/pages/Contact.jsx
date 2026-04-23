@@ -3,18 +3,23 @@ import ContactForm from "../components/ContactForm.jsx";
 import { Helmet } from "react-helmet-async";
 export default function Contact() {
     const { section, card, tag } = siteStyles;
-
-    const contactSchema = {
-    "@context": "https://schema.org",
-    "@type": "ContactPage",
-    "name": "Contact Crafman Design and Build",
-    "description": "Get in touch with Crafman for house extensions, loft conversions, and commercial fit-outs in London and Essex.",
-    "mainEntity": {
+const contactSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ContactPage",
+      "@id": "https://www.crafman.co.uk/contact#webpage",
+      "url": "https://www.crafman.co.uk/contact",
+      "name": "Contact Crafman Design and Build | London & Essex Office",
+      "description": "Contact our technical team for project consultations, planning advice, and quotes for extensions and renovations."
+    },
+    {
       "@type": "GeneralContractor",
+      "@id": "https://www.crafman.co.uk/#organization", // Links to your master ID
       "name": "Crafman Design and Build",
-      "image": "https://crafman.co.uk/wp-content/uploads/2022/10/Crafman-Logo.png",
-      "telePhone": "02036335634",
+      "telephone": "+442036335634", // International format is better for global AI models
       "email": "sales@crafman.co.uk",
+      "logo": "https://www.crafman.co.uk/images/logo.png",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "Marsh Wy",
@@ -23,10 +28,30 @@ export default function Contact() {
         "postalCode": "RM13 8EU",
         "addressCountry": "GB"
       },
-      "areaServed": ["London", "Essex"],
-      "openingHours": "Mo,Tu,We,Th,Fr,Sa 08:00-18:00"
+      // 📍 GEO-COORDINATES: Vital for "Builders Near Me" AI queries
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "51.5244", 
+        "longitude": "0.1985"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          "opens": "08:00",
+          "closes": "18:00"
+        }
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+442036335634",
+        "contactType": "sales",
+        "areaServed": ["GB"],
+        "availableLanguage": "en"
+      }
     }
-  };
+  ]
+};
 
     return (
         <Layout>

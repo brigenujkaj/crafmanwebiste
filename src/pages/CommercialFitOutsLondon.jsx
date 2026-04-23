@@ -236,43 +236,55 @@ const pillStyle = (active) => ({
 });
 
 const commercialSchema = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "name": "Commercial Fit-Outs London",
-    "description": "Professional office, retail, and studio fit-outs in London. Integrated design and build services for commercial interiors.",
-    "provider": {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
       "@type": "GeneralContractor",
+      "@id": "https://www.crafman.co.uk/#organization",
       "name": "Crafman Design and Build",
-      "telephone": "02036335634",
-      "email": "sales@crafman.co.uk",
-      "url": "https://crafman.co.uk"
+      "url": "https://www.crafman.co.uk",
+      "image": "https://www.crafman.co.uk/images/commercial-hero.jpg",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Marsh Wy",
+        "addressLocality": "London",
+        "postalCode": "RM13 8EU",
+        "addressCountry": "GB"
+      }
     },
-    "areaServed": [
-      { "@type": "AdministrativeArea", "name": "London" },
-      { "@type": "AdministrativeArea", "name": "Essex" }
-    ],
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Commercial Services",
-      "itemListElement": services.map(s => ({
-        "@type": "Offer",
-        "itemOffered": {
-          "@type": "Service",
-          "name": s.title,
-          "description": s.text
+    {
+      "@type": "Service",
+      "name": "Commercial Fit-Outs & Office Refurbishment London",
+      "description": "Professional turnkey office, retail, and studio fit-outs in London and Essex. Design-led commercial interiors by Crafman.",
+      "provider": { "@id": "https://www.crafman.co.uk/#organization" },
+      "areaServed": ["London", "Essex"],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Commercial Interior Services",
+        "itemListElement": services.map(s => ({
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": s.title,
+            "description": s.text
+          }
+        }))
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.crafman.co.uk/commercial-fit-outs-london#faq",
+      "mainEntity": faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.a
         }
       }))
-    },
-    // This helps AI answer user questions directly from your data
-    "mainEntity": faqs.map(faq => ({
-      "@type": "Question",
-      "name": faq.q,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.a
-      }
-    }))
-  };
+    }
+  ]
+};
 
   return (
       <Layout>

@@ -274,54 +274,71 @@ export default function DrawingsPlanning() {
         setTestimonialIndex((prev) => (prev + 1) % testimonials.length);
     }
 
-    const drawingsSchema = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "name": "Planning Drawings & Permission Support London",
-    "description": "Professional measured surveys, planning drawings, and building control packages for London and Essex homeowners.",
-    "provider": {
+   const drawingsSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
       "@type": "GeneralContractor",
+      "@id": "https://www.crafman.co.uk/#organization",
       "name": "Crafman Design and Build",
-      "url": "https://crafman.co.uk"
-    },
-    "areaServed": ["London", "Essex"],
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Drawing Packages",
-      "itemListElement": packages.map(pkg => ({
-        "@type": "Offer",
-        "itemOffered": {
-          "@type": "Service",
-          "name": pkg.name,
-          "description": pkg.intro
-        },
-        "priceSpecification": {
-          "@type": "PriceSpecification",
-          "price": pkg.price.replace(/[^0-9]/g, ''),
-          "priceCurrency": "GBP"
-        }
-      }))
-    },
-    // FAQ Schema to win Answer Engine results
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Do I need planning permission for an extension?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Some extensions need planning permission, while others fall under permitted development depending on size, design, and property type."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What is included in a planning drawing package?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Our packages typically include a measured survey, current scaled drawings, proposed scaled drawings, elevations, and council submission support."
-        }
+      "url": "https://www.crafman.co.uk",
+      "image": "https://www.crafman.co.uk/images/drawings-hero.jpg",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Marsh Wy",
+        "addressLocality": "London",
+        "postalCode": "RM13 8EU",
+        "addressCountry": "GB"
       }
-    ]
-  };
+    },
+    {
+      "@type": "Service",
+      "name": "Planning Drawings & Permission Support London & Essex",
+      "description": "Professional measured surveys, planning drawings, and building control packages for London and Essex homeowners.",
+      "provider": { "@id": "https://www.crafman.co.uk/#organization" },
+      "areaServed": ["London", "Essex"],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Architectural Drawing Packages",
+        "itemListElement": packages.map(pkg => ({
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": pkg.name,
+            "description": pkg.intro
+          },
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "price": pkg.price.replace(/[^0-9]/g, ''),
+            "priceCurrency": "GBP"
+          }
+        }))
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.crafman.co.uk/drawings-planning#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Do I need planning permission for an extension in London?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Many London extensions fall under Permitted Development, but larger projects require full planning permission. Crafman provides professional architectural drawings and handles the entire council submission process."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is included in a Crafman planning drawing package?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Crafman drawing packages include a comprehensive measured survey, existing and proposed scaled floor plans, elevations, sections, and full support for council planning submissions."
+          }
+        }
+      ]
+    }
+  ]
+};
 
 
     return (

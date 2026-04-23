@@ -8,25 +8,45 @@ export default function CaseStudies() {
 
 
     const caseStudySchema = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": "Crafman Design and Build Case Studies",
-    "description": "A collection of design and build projects including extensions and renovations in London and Essex.",
-    "itemListElement": caseStudies.map((study, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "item": {
-        "@type": "CreativeWork",
-        "name": study.title,
-        "url": `https://crafman.co.uk/case-studies/${study.slug}`,
-        "description": study.intro,
-        "contentLocation": {
-          "@type": "Place",
-          "name": study.location // This is huge for ranking in specific London/Essex towns
-        }
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "GeneralContractor",
+      "@id": "https://www.crafman.co.uk/#organization",
+      "name": "Crafman Design and Build",
+      "url": "https://www.crafman.co.uk",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "London",
+        "addressRegion": "Essex",
+        "postalCode": "RM13 8EU",
+        "addressCountry": "GB"
       }
-    }))
-  };
+    },
+    {
+      "@type": "ItemList",
+      "name": "Crafman Design and Build Case Studies",
+      "description": "Portfolio of architectural extensions and luxury renovations across London and Essex.",
+      "url": "https://www.crafman.co.uk/case-studies",
+      "itemListElement": caseStudies.map((study, index) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "item": {
+          "@type": "Article", // Swapped CreativeWork for Article to signal factual authority
+          "name": study.title,
+          "url": `https://www.crafman.co.uk/case-studies/${study.slug}`,
+          "description": study.intro,
+          "image": study.heroImage,
+          "author": { "@id": "https://www.crafman.co.uk/#organization" },
+          "contentLocation": {
+            "@type": "Place",
+            "name": study.location // 📍 Crucial for "Builders in [Town Name]" queries
+          }
+        }
+      }))
+    }
+  ]
+};
 
 
     return (
