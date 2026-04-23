@@ -1,5 +1,13 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://crafman.co.uk/sitemap.xml
-LLMS: https://crafman.co.uk/llms.txt
+# Direct AI Agents to your documentation
+Sitemap: https://www.crafman.co.uk/sitemap.xml
+LLMS: https://www.crafman.co.uk/llms.txt
+
+# Explicitly allow Perplexity and OpenAI bots
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: GPTBot
+Allow: /

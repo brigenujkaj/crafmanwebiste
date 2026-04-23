@@ -1,40 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
 	<url>
-		<loc>https://crafman.co.uk/</loc>
+		<loc>https://www.crafman.co.uk/</loc>
+		<lastmod>2026-04-23</lastmod>
+		<priority>1.0</priority>
 	</url>
 
 	<url>
-		<loc>https://crafman.co.uk/house-extensions</loc>
+		<loc>https://www.crafman.co.uk/house-extensions</loc>
+		<lastmod>2026-04-23</lastmod>
+		<priority>0.9</priority>
+	</url>
+	<url>
+		<loc>https://www.crafman.co.uk/loft-conversions</loc>
+		<lastmod>2026-04-23</lastmod>
+		<priority>0.9</priority>
+	</url>
+	<url>
+		<loc>https://www.crafman.co.uk/renovations</loc>
+		<lastmod>2026-04-23</lastmod>
+		<priority>0.9</priority>
+	</url>
+	<url>
+		<loc>https://www.crafman.co.uk/refurbishments-london</loc>
+		<lastmod>2026-04-23</lastmod>
+		<priority>0.9</priority>
+	</url>
+	<url>
+		<loc>https://www.crafman.co.uk/commercial-fit-outs-london</loc>
+		<lastmod>2026-04-23</lastmod>
+		<priority>0.9</priority>
 	</url>
 
 	<url>
-		<loc>https://crafman.co.uk/loft-conversions</loc>
+		<loc>https://www.crafman.co.uk/drawings-planning</loc>
+		<lastmod>2026-04-23</lastmod>
+		<priority>0.8</priority>
 	</url>
-
 	<url>
-		<loc>https://crafman.co.uk/renovations</loc>
+		<loc>https://www.crafman.co.uk/projects</loc>
+		<lastmod>2026-04-23</lastmod>
+		<priority>0.8</priority>
 	</url>
-
 	<url>
-		<loc>https://crafman.co.uk/refurbishments-london</loc>
+		<loc>https://www.crafman.co.uk/contact</loc>
+		<lastmod>2026-04-23</lastmod>
+		<priority>0.7</priority>
 	</url>
-
-	<url>
-		<loc>https://crafman.co.uk/commercial-fit-outs-london</loc>
-	</url>
-
-	<url>
-		<loc>https://crafman.co.uk/drawings-planning</loc>
-	</url>
-
-	<url>
-		<loc>https://crafman.co.uk/projects</loc>
-	</url>
-
-	<url>
-		<loc>https://crafman.co.uk/contact</loc>
-	</url>
-
 </urlset>
