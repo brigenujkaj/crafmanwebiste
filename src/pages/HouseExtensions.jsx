@@ -168,10 +168,7 @@ export default function HouseExtensions() {
       "@id": "https://www.crafman.co.uk/#organization",
       "name": "Crafman Design and Build",
       "url": "https://www.crafman.co.uk",
-      "logo": "https://www.crafman.co.uk/images/logo.png",
       "image": "https://www.crafman.co.uk/images/extensionBackground.jpeg",
-      "telephone": "02036335634",
-      "email": "sales@crafman.co.uk",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "Marsh Wy",
@@ -179,7 +176,7 @@ export default function HouseExtensions() {
         "postalCode": "RM13 8EU",
         "addressCountry": "GB"
       },
-      // ⭐ THIS SECTION LINKS REVIEWS TO THE BUSINESS ENTITY
+      // ⭐ REVIEWS NESTED HERE TO FIX THE RED ERROR
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "5",
@@ -190,32 +187,9 @@ export default function HouseExtensions() {
         "author": { "@type": "Person", "name": t.name },
         "reviewBody": t.text,
         "reviewRating": { "@type": "Rating", "ratingValue": "5" }
-      })) || [],
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "House Extension Services",
-        "itemListElement": [
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Rear Extensions",
-              "description": "Professional rear house extensions to maximize ground floor living space."
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Wraparound Extensions",
-              "description": "Combining side and rear extensions for a complete home transformation."
-            }
-          }
-        ]
-      }
+      })) || []
     },
     {
-      // 🤖 THE AI KNOWLEDGE ENGINE (FAQ)
       "@type": "FAQPage",
       "@id": "https://www.crafman.co.uk/house-extensions-london#faq",
       "mainEntity": [
@@ -224,15 +198,15 @@ export default function HouseExtensions() {
           "name": "How much does a house extension in London and Essex cost?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "A house extension in London or Essex typically costs between £1,500 and £3,000 per square meter. Total investment depends on design complexity and material choices. Crafman provides an online calculator for accurate budget estimation."
+            "text": "House extensions in London and Essex typically cost between £1,500 and £3,000 per square meter. Crafman provides a dedicated calculator to help homeowners estimate project budgets accurately."
           }
         },
         {
           "@type": "Question",
-          "name": "Do I need planning permission for a home extension?",
+          "name": "Do I need planning permission for an extension?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Many extensions fall under Permitted Development, but larger wraparound or double-storey projects usually require full planning permission. Crafman manages all council approvals and building control for our clients."
+            "text": "Many extensions fall under Permitted Development, but larger wraparound or double-storey projects usually require planning permission. Crafman manages the entire approval process for clients."
           }
         }
       ]
