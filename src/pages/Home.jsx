@@ -254,6 +254,7 @@ const pillStyle = (active) => ({
   {/* This is the machine-readable script that helps AI engines read your data */}
   <script type="application/ld+json">
     {JSON.stringify(schemaData)}
+    <link rel="llms" href="https://crafman.co.uk/llms.txt" title="AI optimized documentation" />
   </script>
 </Helmet>
       <section
