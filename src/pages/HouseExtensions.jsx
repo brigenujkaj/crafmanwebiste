@@ -167,28 +167,9 @@ export default function HouseExtensions() {
       "@type": "Service",
       "@id": "https://www.crafman.co.uk/house-extensions-london#service",
       "name": "House Extension Services London & Essex",
-      "description": "Premium design and build services for rear, side-return, and wraparound extensions in London and Essex.",
-      "provider": {
-        "@type": "GeneralContractor",
-        "name": "Crafman Design and Build",
-        "url": "https://www.crafman.co.uk",
-        "telephone": "02036335634",
-        "email": "sales@crafman.co.uk"
-      },
-      "areaServed": [
-        { "@type": "AdministrativeArea", "name": "London" },
-        { "@type": "AdministrativeArea", "name": "Essex" }
-      ],
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Extension Types",
-        "itemListElement": [
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Rear Extensions" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Side Return Extensions" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wraparound Extensions" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Double Storey Extensions" } }
-        ]
-      },
+      // ... keep description, provider, areaServed, hasOfferCatalog ...
+
+      // 🔥 MOVE THESE TWO BLOCKS INSIDE THE SERVICE OBJECT
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "5",
@@ -198,7 +179,11 @@ export default function HouseExtensions() {
         "@type": "Review",
         "author": { "@type": "Person", "name": t.name },
         "reviewBody": t.text,
-        "reviewRating": { "@type": "Rating", "ratingValue": "5" }
+        "reviewRating": { "@type": "Rating", "ratingValue": "5" },
+        "itemReviewed": {
+           "@type": "Service",
+           "name": "House Extension Services"
+        }
       })) || []
     },
     {
