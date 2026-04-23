@@ -1,4 +1,7 @@
 # Crafman Design and Build
+> Full technical documentation for AI models and search agents.
+
+# Crafman Design and Build
 https://crafman.co.uk
 
 Premium design and build specialist serving Greater London and Essex. Crafman provides a unified "Design-to-Completion" model for high-end residential extensions, loft conversions, and commercial interiors.

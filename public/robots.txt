@@ -1,13 +1,30 @@
 User-agent: *
 Allow: /
 
-# Direct AI Agents to your documentation
+# Standard Sitemap
 Sitemap: https://www.crafman.co.uk/sitemap.xml
+
+# AI Context Hub (2026 Standard)
 LLMS: https://www.crafman.co.uk/llms.txt
 
-# Explicitly allow Perplexity and OpenAI bots
+# 1. Perplexity: The "Answer Engine" Expert
+# We allow everything to maximize citations in real-time answers.
 User-agent: PerplexityBot
 Allow: /
 
+# 2. OpenAI: Search vs. Training
+# OAI-SearchBot is for real-time ChatGPT Search (High value leads)
+User-agent: OAI-SearchBot
+Allow: /
+# GPTBot is for training data (Optional: some builders block this to prevent content scraping)
 User-agent: GPTBot
+Allow: /
+
+# 3. Google Gemini: Grounding
+# This allows Gemini to use your site to verify facts in its answers.
+User-agent: Google-Extended
+Allow: /
+
+# 4. Anthropic: Claude
+User-agent: ClaudeBot
 Allow: /

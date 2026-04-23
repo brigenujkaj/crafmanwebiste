@@ -245,16 +245,26 @@ const pillStyle = (active) => ({
   return (
       <Layout>
       <Helmet>
-  <title>Crafman Design and Build | Extensions & Renovations London</title>
-  <meta
-    name="description"
-    content="Crafman Design and Build provides house extensions, loft conversions and renovations in London. One experienced team from design to completion."
-  />
-  <link rel="canonical" href="https://crafman.co.uk/" />
-  {/* This is the machine-readable script that helps AI engines read your data */}
+  <title>Crafman Design and Build | London & Essex Builders</title>
+  <meta name="description" content="Premium design and build specialist serving London and Essex. Expert kitchen extensions and loft conversions." />
+  <link rel="canonical" href="https://www.crafman.co.uk" />
+  
+  {/* The AI Discovery Link */}
+  <link rel="llms" href="https://www.crafman.co.uk/llms.txt" />
+
+  {/* Structured Data Fix */}
   <script type="application/ld+json">
     {JSON.stringify(schemaData)}
-    <link rel="llms" href="https://crafman.co.uk/llms.txt" title="AI optimized documentation" />
+  </script>
+
+  {/* Google Tracking Fix */}
+  <script>
+    {`
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-PSQRZ8RM81');
+    `}
   </script>
 </Helmet>
       <section
