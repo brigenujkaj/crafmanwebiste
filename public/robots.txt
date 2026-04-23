@@ -1,30 +1,33 @@
+# =========================================
+# CRAFMAN DESIGN AND BUILD - ROBOTS.TXT
+# Optimized for AI Search (AEO) & Google 2026
+# =========================================
+
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /config/
 
-# Standard Sitemap
-Sitemap: https://www.crafman.co.uk/sitemap.xml
+# 🤖 AI SEARCH & RETRIEVAL (Allows citations in Perplexity/ChatGPT)
+User-agent: OAI-SearchBot
+Allow: /
 
-# AI Context Hub (2026 Standard)
-LLMS: https://www.crafman.co.uk/llms.txt
+User-agent: ChatGPT-User
+Allow: /
 
-# 1. Perplexity: The "Answer Engine" Expert
-# We allow everything to maximize citations in real-time answers.
 User-agent: PerplexityBot
 Allow: /
 
-# 2. OpenAI: Search vs. Training
-# OAI-SearchBot is for real-time ChatGPT Search (High value leads)
-User-agent: OAI-SearchBot
-Allow: /
-# GPTBot is for training data (Optional: some builders block this to prevent content scraping)
-User-agent: GPTBot
+User-agent: Claude-SearchBot
 Allow: /
 
-# 3. Google Gemini: Grounding
-# This allows Gemini to use your site to verify facts in its answers.
+# 🤖 AI TRAINING (Allows Gemini to learn from your site)
 User-agent: Google-Extended
 Allow: /
 
-# 4. Anthropic: Claude
-User-agent: ClaudeBot
+# 🔎 GOOGLE INSPECTION (Vital for your recent GSC requests)
+User-agent: Google-InspectionTool
 Allow: /
+
+# 🗺️ SITEMAP (Points AI to your new map)
+Sitemap: https://www.crafman.co.uk/sitemap.xml
