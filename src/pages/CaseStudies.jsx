@@ -6,16 +6,43 @@ import { caseStudies } from "../data/caseStudies.js";
 export default function CaseStudies() {
     const { section, card, buttonPrimary, tag } = siteStyles;
 
+
+    const caseStudySchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Crafman Design and Build Case Studies",
+    "description": "A collection of design and build projects including extensions and renovations in London and Essex.",
+    "itemListElement": caseStudies.map((study, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "CreativeWork",
+        "name": study.title,
+        "url": `https://crafman.co.uk/case-studies/${study.slug}`,
+        "description": study.intro,
+        "contentLocation": {
+          "@type": "Place",
+          "name": study.location // This is huge for ranking in specific London/Essex towns
+        }
+      }
+    }))
+  };
+
+
     return (
         <Layout>
             <Helmet>
-                <title>Case Studies | Crafman Design and Build</title>
-                <meta
-                    name="description"
-                    content="Explore recent design and build case studies from Crafman Design and Build across London."
-                />
-                <link rel="canonical" href="https://crafman.co.uk/case-studies" />
-            </Helmet>
+    <title>Case Studies | Crafman Design and Build | London & Essex</title>
+    <meta
+        name="description"
+        content="Explore our portfolio of kitchen extensions, loft conversions, and home renovations in London and Essex."
+    />
+    <link rel="canonical" href="https://crafman.co.uk/case-studies" />
+    {/* AI Data Script */}
+    <script type="application/ld+json">
+        {JSON.stringify(caseStudySchema)}
+    </script>
+</Helmet>
 
             <section
                 style={{

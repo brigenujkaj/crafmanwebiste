@@ -162,19 +162,81 @@ const pillStyle = (active) => ({
   textAlign: "center",
 });
 
+const renovationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Home Renovation & Refurbishment London",
+    "description": "Professional house renovation services in London. Specializing in back-to-brick refurbishments, kitchen remodels, and layout reconfigurations.",
+    "provider": {
+      "@type": "GeneralContractor",
+      "name": "Crafman Design and Build",
+      "url": "https://crafman.co.uk",
+      "telephone": "02036335634",
+      "email": "sales@crafman.co.uk"
+    },
+    "areaServed": [
+      { "@type": "AdministrativeArea", "name": "London" },
+      { "@type": "AdministrativeArea", "name": "Essex" }
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Renovation Services",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Light Renovations" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Back-to-Brick Refurbishments" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Kitchen & Bathroom Remodelling" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Internal Structural Reconfiguration" } }
+      ]
+    },
+    // FAQ Schema to win "Position Zero" in AI Answer boxes
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the difference between light renovation and back-to-brick renovation?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Light renovation focuses on cosmetic upgrades like flooring and decorating. Back-to-brick renovation is a total internal transformation involving strip-outs, structural re-design, and complete rebuilds."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much does a full renovation in London cost?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Costs vary by property size and finish level. Crafman provides a Renovation Calculator to help homeowners get a realistic budget guide for London and Essex projects."
+        }
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "reviewCount": testimonials.length.toString()
+    },
+    "review": testimonials.map(t => ({
+      "@type": "Review",
+      "author": { "@type": "Person", "name": t.name },
+      "reviewBody": t.text,
+      "reviewRating": { "@type": "Rating", "ratingValue": "5" }
+    }))
+  };
 
     return (
 
         <Layout>
 
             <Helmet>
-                <title>Home Renovations London | Crafman Design and Build</title>
-                <meta
-                    name="description"
-                    content="Home renovations in London including full property refurbishments, layout improvements and modern upgrades delivered by one experienced team."
-                />
-                <link rel="canonical" href="https://crafman.co.uk/renovations" />
-            </Helmet>
+  <title>Home Renovations & Refurbishments London | Crafman Design and Build</title>
+  <meta
+    name="description"
+    content="Professional home renovations in London & Essex. Use our Renovation Calculator for instant estimates on full refurbishments and layout improvements."
+  />
+  <link rel="canonical" href="https://crafman.co.uk/renovations" />
+
+  {/* AI Knowledge & SEO Script */}
+  <script type="application/ld+json">
+    {JSON.stringify(renovationSchema)}
+  </script>
+</Helmet>
 
       <section
         style={{
@@ -300,7 +362,7 @@ const pillStyle = (active) => ({
 
                           <div style={{ color: "#57534e", lineHeight: "1.9" }}>
                               <p><strong>Phone:</strong> 02036335634</p>
-                              <p><strong>Email:</strong> info@crafman.co.uk</p>
+                              <p><strong>Email:</strong> sales@crafman.co.uk</p>
                               <p><strong>Location:</strong> London, United Kingdom</p>
                           </div>
                       </div>
@@ -987,7 +1049,7 @@ const pillStyle = (active) => ({
 
             <div style={{ marginTop: "20px", color: "#44403c", lineHeight: "1.9" }}>
               <p><strong>Phone:</strong> 02036335634</p>
-              <p><strong>Email:</strong> info@crafman.co.uk</p>
+              <p><strong>Email:</strong> sales@crafman.co.uk</p>
               <p><strong>Location:</strong> London, UK</p>
             </div>
           </div>

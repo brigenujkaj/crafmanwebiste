@@ -37,16 +37,47 @@ export default function CaseStudyDetail() {
         );
     }
 
+
+  const detailSchema = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": study ? study.title : "Case Study",
+    "description": study ? study.intro : "",
+    "author": {
+      "@type": "GeneralContractor",
+      "name": "Crafman Design and Build",
+      "url": "https://crafman.co.uk"
+    },
+    "contentLocation": {
+      "@type": "Place",
+      "name": study ? study.location : "London"
+    },
+    "about": [
+      {
+        "@type": "Thing",
+        "name": study ? study.category : "Construction"
+      }
+    ],
+
+    "abstract": study ? `Challenge: ${study.challenge} Solution: ${study.solution} Outcome: ${study.outcome}` : "",
+    "mainEntityOfPage": `https://crafman.co.uk/case-studies/${slug}`,
+    "image": study ? study.heroImage : ""
+  };
+
     return (
         <Layout>
             <Helmet>
-                <title>{study.title} | Crafman Design and Build</title>
-                <meta name="description" content={study.intro} />
-                <link
-                    rel="canonical"
-                    href={`https://crafman.co.uk/case-studies/${study.slug}`}
-                />
-            </Helmet>
+    <title>{study.title} | Crafman Design and Build</title>
+    <meta name="description" content={study.intro} />
+    <link
+        rel="canonical"
+        href={`https://crafman.co.uk/case-studies/${study.slug}`}
+    />
+    {/* The AI Authority Script */}
+    <script type="application/ld+json">
+        {JSON.stringify(detailSchema)}
+    </script>
+</Helmet>
 
             <section
                 style={{

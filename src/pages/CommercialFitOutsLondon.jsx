@@ -86,9 +86,19 @@ export default function CommercialFitOutsLondon() {
 
 const testimonials = [
   {
-    name: "James Turner",
-    role: "Homeowner, London",
-    text: "Really happy with the service from start to finish. The team was organised, easy to deal with, and the final result came out exactly how we wanted.",
+    name: "Daniel Hughes",
+    role: "Commercial Client, London",
+    text: "Professional, practical, and detail-focused office fit-out. The finish quality was strong and the whole process felt much smoother than expected for our business space.",
+  },
+  {
+    name: "William Foster",
+    role: "Business Owner, London",
+    text: "We wanted a boutique commercial space that felt polished and practical, and that is exactly what was delivered. Helpful team with strong attention to commercial detail.",
+  },
+  {
+    name: "Oliver Reynolds",
+    role: "Landlord, London",
+    text: "Very good experience with our property refurbishment. Straightforward communication, sensible advice, and a high standard of work across the commercial project.",
   },
   {
     name: "Sarah Whitmore",
@@ -96,9 +106,9 @@ const testimonials = [
     text: "The communication was clear throughout and the project felt properly managed. We appreciated having one team handling both the design and build side.",
   },
   {
-    name: "Daniel Hughes",
-    role: "Commercial Client, London",
-    text: "Professional, practical, and detail-focused. The finish quality was strong and the whole process felt much smoother than expected.",
+    name: "James Turner",
+    role: "Homeowner, London",
+    text: "Really happy with the service from start to finish. The team was organised, easy to deal with, and the final result came out exactly how we wanted.",
   },
   {
     name: "Charlotte Bennett",
@@ -106,19 +116,9 @@ const testimonials = [
     text: "From the early design stage through to completion, everything felt well organised. The team understood exactly what we were trying to achieve.",
   },
   {
-    name: "Oliver Reynolds",
-    role: "Landlord, London",
-    text: "Very good experience overall. Straightforward communication, sensible advice, and a high standard of work across the project.",
-  },
-  {
     name: "Emily Carter",
     role: "Homeowner, Hertfordshire",
     text: "The process felt clear from the start and the finished space has completely changed how we use our home. Very pleased with the result.",
-  },
-  {
-    name: "William Foster",
-    role: "Business Owner, London",
-    text: "We wanted a space that felt polished and practical, and that is exactly what was delivered. Helpful team and strong attention to detail.",
   },
 ];
 
@@ -235,16 +235,60 @@ const pillStyle = (active) => ({
   textAlign: "center",
 });
 
+const commercialSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Commercial Fit-Outs London",
+    "description": "Professional office, retail, and studio fit-outs in London. Integrated design and build services for commercial interiors.",
+    "provider": {
+      "@type": "GeneralContractor",
+      "name": "Crafman Design and Build",
+      "telephone": "02036335634",
+      "email": "sales@crafman.co.uk",
+      "url": "https://crafman.co.uk"
+    },
+    "areaServed": [
+      { "@type": "AdministrativeArea", "name": "London" },
+      { "@type": "AdministrativeArea", "name": "Essex" }
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Commercial Services",
+      "itemListElement": services.map(s => ({
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": s.title,
+          "description": s.text
+        }
+      }))
+    },
+    // This helps AI answer user questions directly from your data
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.a
+      }
+    }))
+  };
+
   return (
       <Layout>
           <Helmet>
-              <title>Commercial Fit Outs London | Crafman Design and Build</title>
-              <meta
-                  name="description"
-                  content="Commercial fit outs in London for offices, retail and business spaces. Practical design and high-quality build delivered by one experienced team."
-              />
-              <link rel="canonical" href="https://crafman.co.uk/commercial-fit-outs-london" />
-          </Helmet>
+  <title>Commercial Fit Outs London | Crafman Design and Build</title>
+  <meta
+    name="description"
+    content="Commercial fit outs in London for offices, retail and business spaces. Practical design and high-quality build delivered by one experienced team."
+  />
+  <link rel="canonical" href="https://crafman.co.uk/commercial-fit-outs-london" />
+  
+  {/* The AI Data Script */}
+  <script type="application/ld+json">
+    {JSON.stringify(commercialSchema)}
+  </script>
+</Helmet>
 
       <section
         style={{

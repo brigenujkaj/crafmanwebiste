@@ -4,17 +4,44 @@ import { Helmet } from "react-helmet-async";
 export default function Contact() {
     const { section, card, tag } = siteStyles;
 
+    const contactSchema = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Crafman Design and Build",
+    "description": "Get in touch with Crafman for house extensions, loft conversions, and commercial fit-outs in London and Essex.",
+    "mainEntity": {
+      "@type": "GeneralContractor",
+      "name": "Crafman Design and Build",
+      "image": "https://crafman.co.uk/wp-content/uploads/2022/10/Crafman-Logo.png",
+      "telePhone": "02036335634",
+      "email": "sales@crafman.co.uk",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Marsh Wy",
+        "addressLocality": "London",
+        "addressRegion": "Essex",
+        "postalCode": "RM13 8EU",
+        "addressCountry": "GB"
+      },
+      "areaServed": ["London", "Essex"],
+      "openingHours": "Mo,Tu,We,Th,Fr,Sa 08:00-18:00"
+    }
+  };
+
     return (
         <Layout>
 
             <Helmet>
-                <title>Contact Crafman Design and Build | London</title>
-                <meta
-                    name="description"
-                    content="Contact Crafman Design and Build to discuss your house extension, loft conversion or renovation project in London. Request a quote today."
-                />
-                <link rel="canonical" href="https://crafman.co.uk/contact" />
-            </Helmet>
+    <title>Contact Crafman Design and Build | London & Essex</title>
+    <meta
+        name="description"
+        content="Contact Crafman Design and Build to discuss your house extension, loft conversion or renovation project in London and Essex. Request a consultation today."
+    />
+    <link rel="canonical" href="https://crafman.co.uk/contact" />
+    <script type="application/ld+json">
+        {JSON.stringify(contactSchema)}
+    </script>
+</Helmet>
             <section
                 style={{
                     borderBottom: "1px solid #e7e5e4",
@@ -99,28 +126,18 @@ export default function Contact() {
                         </div>
 
                         <div style={card}>
-                            <div
-                                style={{
-                                    fontSize: "12px",
-                                    letterSpacing: "2px",
-                                    textTransform: "uppercase",
-                                    color: "#78716c",
-                                    fontWeight: "700",
-                                }}
-                            >
-                                Direct Contact
-                            </div>
-
-                            <h3 style={{ fontSize: "28px", marginTop: "12px", marginBottom: "12px" }}>
-                                Prefer to contact us directly?
-                            </h3>
-
-                            <div style={{ color: "#57534e", lineHeight: "1.9" }}>
-                                <p><strong>Phone:</strong> 02036335634</p>
-                                <p><strong>Email:</strong> info@crafman.co.uk</p>
-                                <p><strong>Location:</strong> London, United Kingdom</p>
-                            </div>
-                        </div>
+    <div style={{ fontSize: "12px", letterSpacing: "2px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>
+        Direct Contact
+    </div>
+    <h3 style={{ fontSize: "28px", marginTop: "12px", marginBottom: "12px" }}>
+        Prefer to contact us directly?
+    </h3>
+    <div style={{ color: "#57534e", lineHeight: "1.9" }}>
+        <p><strong>Phone:</strong> 02036335634</p>
+        <p><strong>Email:</strong> sales@crafman.co.uk</p> {/* Updated to sales@ */}
+        <p><strong>Location:</strong> London & Essex, United Kingdom</p>
+    </div>
+</div>
 
                         <div style={card}>
                             <div

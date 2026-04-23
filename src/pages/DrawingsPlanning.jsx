@@ -274,18 +274,72 @@ export default function DrawingsPlanning() {
         setTestimonialIndex((prev) => (prev + 1) % testimonials.length);
     }
 
+    const drawingsSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Planning Drawings & Permission Support London",
+    "description": "Professional measured surveys, planning drawings, and building control packages for London and Essex homeowners.",
+    "provider": {
+      "@type": "GeneralContractor",
+      "name": "Crafman Design and Build",
+      "url": "https://crafman.co.uk"
+    },
+    "areaServed": ["London", "Essex"],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Drawing Packages",
+      "itemListElement": packages.map(pkg => ({
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": pkg.name,
+          "description": pkg.intro
+        },
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "price": pkg.price.replace(/[^0-9]/g, ''),
+          "priceCurrency": "GBP"
+        }
+      }))
+    },
+    // FAQ Schema to win Answer Engine results
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Do I need planning permission for an extension?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Some extensions need planning permission, while others fall under permitted development depending on size, design, and property type."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is included in a planning drawing package?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our packages typically include a measured survey, current scaled drawings, proposed scaled drawings, elevations, and council submission support."
+        }
+      }
+    ]
+  };
+
 
     return (
         <Layout>
 
             <Helmet>
-                <title>Planning Drawings & Permission London | Crafman</title>
-                <meta
-                    name="description"
-                    content="Planning drawings and permission support in London. We help manage design, documentation and approvals for extensions, conversions and renovations."
-                />
-                <link rel="canonical" href="https://crafman.co.uk/drawings-planning" />
-            </Helmet>
+    <title>Planning Drawings & Permission London | Crafman | London & Essex</title>
+    <meta
+        name="description"
+        content="Professional planning drawings and permission support in London & Essex. Fixed-price packages for extensions, lofts, and renovations starting from £950."
+    />
+    <link rel="canonical" href="https://crafman.co.uk/drawings-planning" />
+    
+    {/* AI Data Inversion */}
+    <script type="application/ld+json">
+        {JSON.stringify(drawingsSchema)}
+    </script>
+</Helmet>
             <div
                 style={{
                     width: "100%",
