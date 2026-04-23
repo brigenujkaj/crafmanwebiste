@@ -160,34 +160,26 @@ export default function HouseExtensions() {
         textAlign: "center",
     });
 
-   const extensionSchema = {
+  const extensionSchema = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "Service",
-      "@id": "https://www.crafman.co.uk/house-extensions-london#service",
-      "name": "House Extension Services London & Essex",
-      "description": "Premium design and build services for rear, side-return, and wraparound extensions in London and Essex.",
-      "provider": {
-        "@type": "GeneralContractor",
-        "name": "Crafman Design and Build",
-        "url": "https://www.crafman.co.uk"
+      "@type": "GeneralContractor",
+      "@id": "https://www.crafman.co.uk/#organization",
+      "name": "Crafman Design and Build",
+      "url": "https://www.crafman.co.uk",
+      "logo": "https://www.crafman.co.uk/images/logo.png",
+      "image": "https://www.crafman.co.uk/images/extensionBackground.jpeg",
+      "telephone": "02036335634",
+      "email": "sales@crafman.co.uk",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Marsh Wy",
+        "addressLocality": "London",
+        "postalCode": "RM13 8EU",
+        "addressCountry": "GB"
       },
-      "areaServed": [
-        { "@type": "AdministrativeArea", "name": "London" },
-        { "@type": "AdministrativeArea", "name": "Essex" }
-      ],
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Extension Types",
-        "itemListElement": [
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Rear Extensions" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Side Return Extensions" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wraparound Extensions" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Double Storey Extensions" } }
-        ]
-      },
-      // 🔥 NESTING REVIEWS DIRECTLY IN THE SERVICE OBJECT
+      // ⭐ THIS SECTION LINKS REVIEWS TO THE BUSINESS ENTITY
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "5",
@@ -195,33 +187,52 @@ export default function HouseExtensions() {
       },
       "review": testimonials?.map(t => ({
         "@type": "Review",
-        "itemReviewed": {
-          "@type": "Service",
-          "name": "House Extension Services"
-        },
         "author": { "@type": "Person", "name": t.name },
         "reviewBody": t.text,
         "reviewRating": { "@type": "Rating", "ratingValue": "5" }
-      })) || []
+      })) || [],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "House Extension Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Rear Extensions",
+              "description": "Professional rear house extensions to maximize ground floor living space."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Wraparound Extensions",
+              "description": "Combining side and rear extensions for a complete home transformation."
+            }
+          }
+        ]
+      }
     },
     {
+      // 🤖 THE AI KNOWLEDGE ENGINE (FAQ)
       "@type": "FAQPage",
       "@id": "https://www.crafman.co.uk/house-extensions-london#faq",
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "How much does a house extension in London & Essex cost?",
+          "name": "How much does a house extension in London and Essex cost?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Extension costs vary based on size and design. Crafman provides a dedicated Extension Calculator to help London and Essex homeowners estimate budgets."
+            "text": "A house extension in London or Essex typically costs between £1,500 and £3,000 per square meter. Total investment depends on design complexity and material choices. Crafman provides an online calculator for accurate budget estimation."
           }
         },
         {
           "@type": "Question",
-          "name": "Do I need planning permission for an extension?",
+          "name": "Do I need planning permission for a home extension?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Some projects fall under Permitted Development, while others require full Planning Permission. Crafman manages the entire approval process for clients."
+            "text": "Many extensions fall under Permitted Development, but larger wraparound or double-storey projects usually require full planning permission. Crafman manages all council approvals and building control for our clients."
           }
         }
       ]
