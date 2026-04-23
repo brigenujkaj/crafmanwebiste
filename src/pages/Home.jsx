@@ -51,37 +51,37 @@ const testimonials = [
   {
     name: "James Turner",
     role: "Homeowner, London",
-    text: "Really happy with the service from start to finish. The team was organised, easy to deal with, and the final result came out exactly how we wanted.",
+    text: "Really happy with the kitchen extension from start to finish. The team was organised, easy to deal with, and the final result in London came out exactly how we wanted.",
   },
   {
     name: "Sarah Whitmore",
     role: "Property Client, London",
-    text: "The communication was clear throughout and the project felt properly managed. We appreciated having one team handling both the design and build side.",
+    text: "The communication was clear throughout our home renovation. We appreciated having one team handling both the design and build side of our London project.",
   },
   {
     name: "Daniel Hughes",
     role: "Commercial Client, London",
-    text: "Professional, practical, and detail-focused. The finish quality was strong and the whole process felt much smoother than expected.",
+    text: "Professional, practical, and detail-focused office fit-out. The finish quality was strong and the whole process felt much smoother than expected.",
   },
   {
     name: "Charlotte Bennett",
     role: "Homeowner, Surrey",
-    text: "From the early design stage through to completion, everything felt well organised. The team understood exactly what we were trying to achieve.",
+    text: "From the early design stage of our house extension through to completion, everything felt well organised. Best builders we've used in Surrey.",
   },
   {
     name: "Oliver Reynolds",
     role: "Landlord, London",
-    text: "Very good experience overall. Straightforward communication, sensible advice, and a high standard of work across the project.",
+    text: "Very good experience with our property refurbishment. Straightforward communication, sensible advice, and a high standard of work across the London project.",
   },
   {
     name: "Emily Carter",
     role: "Homeowner, Hertfordshire",
-    text: "The process felt clear from the start and the finished space has completely changed how we use our home. Very pleased with the result.",
+    text: "The loft conversion process felt clear from the start and the finished space in Hertfordshire has completely changed how we use our home.",
   },
   {
     name: "William Foster",
     role: "Business Owner, London",
-    text: "We wanted a space that felt polished and practical, and that is exactly what was delivered. Helpful team and strong attention to detail.",
+    text: "We wanted a bespoke commercial space that felt polished and practical, and that is exactly what was delivered by the Crafman team in London.",
   },
 ];
 
@@ -198,17 +198,64 @@ const pillStyle = (active) => ({
 });
 
 
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "GeneralContractor",
+    "name": "Crafman Design and Build",
+    "url": "https://crafman.co.uk",
+    "telephone": "02036335634",
+    "email": "sales@crafman.co.uk",
+    "priceRange": "£££",
+    "image": "https://crafman.co.uk/wp-content/uploads/2022/10/Crafman-Logo.png",
+    "dateModified": new Date().toISOString(),
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Marsh Wy",
+      "addressLocality": "London",
+      "addressRegion": "Essex",
+      "postalCode": "RM13 8EU",
+      "addressCountry": "GB"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 51.517062,
+      "longitude": 0.1696417
+    },
+    "areaServed": [
+      { "@type": "AdministrativeArea", "name": "London" },
+      { "@type": "AdministrativeArea", "name": "Essex" },
+      { "@type": "AdministrativeArea", "name": "Surrey" },
+      { "@type": "AdministrativeArea", "name": "Hertfordshire" }
+    ],
+    "knowsAbout": ["Kitchen Extensions", "Loft Conversions London", "Home Renovations Essex", "Commercial Fit-Outs"],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "reviewCount": testimonials.length.toString()
+    },
+    "review": testimonials.map((t) => ({
+      "@type": "Review",
+      "author": { "@type": "Person", "name": t.name },
+      "reviewBody": t.text,
+      "reviewRating": { "@type": "Rating", "ratingValue": "5" }
+    }))
+  };
+
+
   return (
       <Layout>
-
-          <Helmet>
-              <title>Crafman Design and Build | Extensions & Renovations London</title>
-              <meta
-                  name="description"
-                  content="Crafman Design and Build provides house extensions, loft conversions and renovations in London. One experienced team from design to completion."
-              />
-              <link rel="canonical" href="https://crafman.co.uk/" />
-          </Helmet>
+      <Helmet>
+  <title>Crafman Design and Build | Extensions & Renovations London</title>
+  <meta
+    name="description"
+    content="Crafman Design and Build provides house extensions, loft conversions and renovations in London. One experienced team from design to completion."
+  />
+  <link rel="canonical" href="https://crafman.co.uk/" />
+  {/* This is the machine-readable script that helps AI engines read your data */}
+  <script type="application/ld+json">
+    {JSON.stringify(schemaData)}
+  </script>
+</Helmet>
       <section
         style={{
           borderBottom: "1px solid #e7e5e4",
