@@ -203,7 +203,7 @@ export default function HouseExtensions() {
         },
         {
           "@type": "Question",
-          "name": "Do I need planning permission for an extension?",
+          "name": "Do I need planning permission for an extension??",
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Many extensions fall under Permitted Development, but larger wraparound or double-storey projects usually require planning permission. Crafman manages the entire approval process for clients."
