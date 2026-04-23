@@ -285,9 +285,11 @@ const commercialSchema = {
   <link rel="canonical" href="https://crafman.co.uk/commercial-fit-outs-london" />
   
   {/* The AI Data Script */}
-  <script type="application/ld+json">
-    {JSON.stringify(commercialSchema)}
-  </script>
+  {/* ✅ Change all script tags to this: */}
+<script 
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{ __html: JSON.stringify(commercialSchema) }}
+/>
 </Helmet>
 
       <section

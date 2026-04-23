@@ -336,9 +336,11 @@ export default function DrawingsPlanning() {
     <link rel="canonical" href="https://crafman.co.uk/drawings-planning" />
     
     {/* AI Data Inversion */}
-    <script type="application/ld+json">
-        {JSON.stringify(drawingsSchema)}
-    </script>
+    {/* ✅ Change all script tags to this: */}
+<script 
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{ __html: JSON.stringify(drawingsSchema) }}
+/>
 </Helmet>
             <div
                 style={{

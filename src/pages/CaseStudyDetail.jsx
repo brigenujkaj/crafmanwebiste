@@ -74,9 +74,11 @@ export default function CaseStudyDetail() {
         href={`https://crafman.co.uk/case-studies/${study.slug}`}
     />
     {/* The AI Authority Script */}
-    <script type="application/ld+json">
-        {JSON.stringify(detailSchema)}
-    </script>
+    {/* ✅ Change all script tags to this: */}
+<script 
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{ __html: JSON.stringify(detailSchema) }}
+/>
 </Helmet>
 
             <section

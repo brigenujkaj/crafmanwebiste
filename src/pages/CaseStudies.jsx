@@ -32,17 +32,19 @@ export default function CaseStudies() {
     return (
         <Layout>
             <Helmet>
-    <title>Case Studies | Crafman Design and Build | London & Essex</title>
-    <meta
-        name="description"
-        content="Explore our portfolio of kitchen extensions, loft conversions, and home renovations in London and Essex."
-    />
-    <link rel="canonical" href="https://crafman.co.uk/case-studies" />
-    {/* AI Data Script */}
-    <script type="application/ld+json">
-        {JSON.stringify(caseStudySchema)}
-    </script>
-</Helmet>
+                <title>Case Studies | Crafman Design and Build | London & Essex</title>
+                <meta
+                    name="description"
+                    content="Explore our portfolio of kitchen extensions, loft conversions, and home renovations in London and Essex."
+                />
+                <link rel="canonical" href="https://crafman.co.uk/case-studies" />
+                {/* AI Data Script */}
+                {/* ✅ Change all script tags to this: */}
+                <script 
+                     type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(caseStudySchema) }}
+                    />
+            </Helmet>
 
             <section
                 style={{

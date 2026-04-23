@@ -160,62 +160,71 @@ export default function HouseExtensions() {
         textAlign: "center",
     });
 
-    const extensionSchema = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "name": "House Extension Services London & Essex",
-    "description": "Premium design and build services for rear, side-return, and wraparound extensions in London and Essex.",
-    "provider": {
-      "@type": "GeneralContractor",
-      "name": "Crafman Design and Build",
-      "url": "https://crafman.co.uk",
-      "telephone": "02036335634",
-      "email": "sales@crafman.co.uk"
-    },
-    "areaServed": [
-      { "@type": "AdministrativeArea", "name": "London" },
-      { "@type": "AdministrativeArea", "name": "Essex" }
-    ],
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Extension Types",
-      "itemListElement": [
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Rear Extensions" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Side Return Extensions" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wraparound Extensions" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Double Storey Extensions" } }
-      ]
-    },
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How much does a house extension in London & Essex cost?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Extension costs vary based on size and design. Crafman provides a dedicated Extension Calculator to help London and Essex homeowners estimate budgets."
-        }
+   const extensionSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Service",
+      "@id": "https://www.crafman.co.uk/house-extensions-london#service",
+      "name": "House Extension Services London & Essex",
+      "description": "Premium design and build services for rear, side-return, and wraparound extensions in London and Essex.",
+      "provider": {
+        "@type": "GeneralContractor",
+        "name": "Crafman Design and Build",
+        "url": "https://www.crafman.co.uk",
+        "telephone": "02036335634",
+        "email": "sales@crafman.co.uk"
       },
-      {
-        "@type": "Question",
-        "name": "Do I need planning permission for an extension?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Some projects fall under Permitted Development, while others require full Planning Permission. Crafman manages the entire approval process for clients."
-        }
-      }
-    ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "5",
-      "reviewCount": testimonials.length.toString()
+      "areaServed": [
+        { "@type": "AdministrativeArea", "name": "London" },
+        { "@type": "AdministrativeArea", "name": "Essex" }
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Extension Types",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Rear Extensions" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Side Return Extensions" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wraparound Extensions" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Double Storey Extensions" } }
+        ]
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5",
+        "reviewCount": testimonials?.length?.toString() || "7"
+      },
+      "review": testimonials?.map(t => ({
+        "@type": "Review",
+        "author": { "@type": "Person", "name": t.name },
+        "reviewBody": t.text,
+        "reviewRating": { "@type": "Rating", "ratingValue": "5" }
+      })) || []
     },
-    "review": testimonials.map(t => ({
-      "@type": "Review",
-      "author": { "@type": "Person", "name": t.name },
-      "reviewBody": t.text,
-      "reviewRating": { "@type": "Rating", "ratingValue": "5" }
-    }))
-  };
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.crafman.co.uk/house-extensions-london#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How much does a house extension in London & Essex cost?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Extension costs vary based on size and design. Crafman provides a dedicated Extension Calculator to help London and Essex homeowners estimate budgets."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need planning permission for an extension?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Some projects fall under Permitted Development, while others require full Planning Permission. Crafman manages the entire approval process for clients."
+          }
+        }
+      ]
+    }
+  ]
+};
 
     return (
         <Layout>
@@ -228,9 +237,11 @@ export default function HouseExtensions() {
     <link rel="canonical" href="https://crafman.co.uk/house-extensions" />
     
     {/* AI Knowledge Script */}
-    <script type="application/ld+json">
-        {JSON.stringify(extensionSchema)}
-    </script>
+
+<script 
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{ __html: JSON.stringify(extensionSchema) }}
+/>
 
     {/* Tracking Scripts */}
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-PSQRZ8RM81"></script>
@@ -997,6 +1008,7 @@ export default function HouseExtensions() {
                     <div style={{ maxWidth: "760px" }}>
                         <div
                             style={{
+                            
                                 fontSize: "12px",
                                 letterSpacing: "2px",
                                 textTransform: "uppercase",

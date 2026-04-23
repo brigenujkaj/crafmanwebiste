@@ -233,9 +233,11 @@ const renovationSchema = {
   <link rel="canonical" href="https://crafman.co.uk/renovations" />
 
   {/* AI Knowledge & SEO Script */}
-  <script type="application/ld+json">
-    {JSON.stringify(renovationSchema)}
-  </script>
+  {/* ✅ Change all script tags to this: */}
+<script 
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{ __html: JSON.stringify(renovationSchema) }}
+/>
 </Helmet>
 
       <section

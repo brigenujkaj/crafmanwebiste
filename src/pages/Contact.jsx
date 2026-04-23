@@ -38,9 +38,11 @@ export default function Contact() {
         content="Contact Crafman Design and Build to discuss your house extension, loft conversion or renovation project in London and Essex. Request a consultation today."
     />
     <link rel="canonical" href="https://crafman.co.uk/contact" />
-    <script type="application/ld+json">
-        {JSON.stringify(contactSchema)}
-    </script>
+    {/* ✅ Change all script tags to this: */}
+<script 
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }}
+/>
 </Helmet>
             <section
                 style={{

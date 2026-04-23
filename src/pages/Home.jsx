@@ -253,9 +253,11 @@ const pillStyle = (active) => ({
   <link rel="llms" href="https://www.crafman.co.uk/llms.txt" />
 
   {/* Structured Data Fix */}
-  <script type="application/ld+json">
-    {JSON.stringify(schemaData)}
-  </script>
+  {/* ✅ Change all script tags to this: */}
+<script 
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+/>
 
   {/* Google Tracking Fix */}
   <script>
