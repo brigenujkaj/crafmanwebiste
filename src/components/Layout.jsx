@@ -267,8 +267,8 @@ export default function Layout({ children }) {
                             )}
                         </div>
 
-                        <Link to="/projects" style={navLinkStyle("/projects")}>
-                            Projects
+                        <Link to="/case-studies" style={navLinkStyle("/case-studies")}>
+                            Case Studies
                         </Link>
 
                         <Link to="/about" style={navLinkStyle("/about")}>
