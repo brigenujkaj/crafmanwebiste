@@ -14,6 +14,7 @@ export default function CaseStudies() {
       "@type": "GeneralContractor",
       "@id": "https://www.crafman.co.uk/#organization",
       "name": "Crafman Design and Build",
+      "legalName": "Crafman Building and Landscaping Ltd",
       "url": "https://www.crafman.co.uk",
       "address": {
         "@type": "PostalAddress",
@@ -26,6 +27,7 @@ export default function CaseStudies() {
     {
       "@type": "ItemList",
       "name": "Crafman Design and Build Case Studies",
+      "legalName": "Crafman Building and Landscaping Ltd",
       "description": "Portfolio of architectural extensions and luxury renovations across London and Essex.",
       "url": "https://www.crafman.co.uk/case-studies",
       "itemListElement": caseStudies.map((study, index) => ({

@@ -202,6 +202,7 @@ const pillStyle = (active) => ({
     "@context": "https://schema.org",
     "@type": "GeneralContractor",
     "name": "Crafman Design and Build",
+    "legalName": "Crafman Building and Landscaping Ltd",
     "url": "https://crafman.co.uk",
     "telephone": "02036335634",
     "email": "sales@crafman.co.uk",

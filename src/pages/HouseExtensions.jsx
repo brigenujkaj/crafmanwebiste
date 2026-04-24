@@ -166,6 +166,7 @@ export default function HouseExtensions() {
     {
       "@type": "GeneralContractor",
       "@id": "https://www.crafman.co.uk/#organization",
+      "legalName": "Crafman Building and Landscaping Ltd",
       "name": "Crafman Design and Build",
       "url": "https://www.crafman.co.uk",
       "image": "https://www.crafman.co.uk/images/extensionBackground.jpeg",

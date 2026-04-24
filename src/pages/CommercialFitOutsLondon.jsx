@@ -242,6 +242,7 @@ const commercialSchema = {
       "@type": "GeneralContractor",
       "@id": "https://www.crafman.co.uk/#organization",
       "name": "Crafman Design and Build",
+      "legalName": "Crafman Building and Landscaping Ltd",
       "url": "https://www.crafman.co.uk",
       "image": "https://www.crafman.co.uk/images/commercial-hero.jpg",
       "address": {

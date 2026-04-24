@@ -17,6 +17,7 @@ const contactSchema = {
       "@type": "GeneralContractor",
       "@id": "https://www.crafman.co.uk/#organization", // Links to your master ID
       "name": "Crafman Design and Build",
+      "legalName": "Crafman Building and Landscaping Ltd",
       "telephone": "+442036335634", // International format is better for global AI models
       "email": "sales@crafman.co.uk",
       "logo": "https://www.crafman.co.uk/images/logo.png",
