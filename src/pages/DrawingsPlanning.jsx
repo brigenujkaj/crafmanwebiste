@@ -123,10 +123,10 @@ export default function DrawingsPlanning() {
         { src: "/images/drawingsex7.jpeg", label: "Detailed Elevations" },
         { src: "/images/drawingsex8.jpeg", label: "Roof Plan" },
         { src: "/images/drawingsex9.jpeg", label: "Block Plan" },
-        { src: "/images/drawingsex10.jpeg", label: "Roof Plan" },
-        { src: "/images/drawingsex11.jpeg", label: "Elevation" },
-        { src: "/images/drawingsex12.jpeg", label: "Elevation" },
-        { src: "/images/drawingsex13.jpeg", label: "Floorplan" },
+        { src: "/images/drawingsex10.png", label: "Roof Plan" },
+        { src: "/images/drawingsex11.png", label: "Elevation" },
+        { src: "/images/drawingsex12.png", label: "Elevation" },
+        { src: "/images/drawingsex13.png", label: "Floorplan" },
 
     ];
 
