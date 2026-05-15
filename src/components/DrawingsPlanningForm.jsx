@@ -17,7 +17,7 @@ const initialFormState = {
 const packageOptions = [
     {
         name: "Starter Package",
-        price: "From £850",
+        price: "From £950",
         intro: "A simple package for straightforward drawing requirements.",
         includes: [
             "Measured survey",
