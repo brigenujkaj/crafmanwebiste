@@ -3,7 +3,6 @@ import Layout, { siteStyles } from "../components/DrawingsLayout.jsx";
 import DrawingsPlanningForm from "../components/DrawingsPlanningForm.jsx";
 import { Helmet } from "react-helmet-async";
 import { Ruler, PencilRuler, FileCheck, PoundSterling, Zap, ShieldCheck } from "lucide-react";
-import { useRef } from "react";
 
 export default function DrawingsPlanning() {
     const { section, card, buttonPrimary, buttonSecondary, tag } = siteStyles;
@@ -131,8 +130,6 @@ export default function DrawingsPlanning() {
 
     ];
 
-
-
     const packages = [
         {
             name: "Starter Package",
@@ -235,29 +232,6 @@ export default function DrawingsPlanning() {
     function showNextDrawing() {
         setDrawingIndex((prev) => (prev + 1) % drawingImages.length);
     }
-
-    const touchStartX = useRef(0);
-const touchEndX = useRef(0);
-
-const handleTouchStart = (e) => {
-    touchStartX.current = e.changedTouches[0].screenX;
-};
-
-const handleTouchEnd = (e) => {
-    touchEndX.current = e.changedTouches[0].screenX;
-
-    const distance = touchStartX.current - touchEndX.current;
-
-    if (distance > 50) {
-        showNextDrawing();
-    }
-
-    if (distance < -50) {
-        showPrevDrawing();
-    }
-};
-
-
 
     const testimonials = [
         {
@@ -377,7 +351,7 @@ const handleTouchEnd = (e) => {
         <Layout>
 
             <Helmet>
-    <title>Architectural Drawings & Permission London | Crafman | London & Essex</title>
+    <title>Planning Drawings & Permission London | Crafman | London & Essex</title>
     <meta
         name="description"
         content="Professional planning drawings and permission support in London & Essex. Fixed-price packages for extensions, lofts, and renovations starting from £950."
@@ -435,7 +409,7 @@ const handleTouchEnd = (e) => {
                                     color: "#A67C00",
                                 }}
                             >
-                                Architectural drawings designed for planning approval
+                                Planning drawings designed for approval
                             </h1>
 
                             <h1
@@ -662,236 +636,210 @@ const handleTouchEnd = (e) => {
                     </div>
                 </section>
 
-               const touchStartX = useRef(0);
-const touchEndX = useRef(0);
-
-const handleTouchStart = (e) => {
-    touchStartX.current = e.changedTouches[0].screenX;
-};
-
-const handleTouchEnd = (e) => {
-    touchEndX.current = e.changedTouches[0].screenX;
-
-    const distance = touchStartX.current - touchEndX.current;
-
-    if (distance > 50) {
-        showNextDrawing();
-    }
-
-    if (distance < -50) {
-        showPrevDrawing();
-    }
-};
-
-<section
-    style={{
-        borderTop: "1px solid #e7e5e4",
-        borderBottom: "1px solid #e7e5e4",
-        background: "#fff",
-        overflowX: "hidden",
-    }}
->
-    <div
-        style={{
-            ...section,
-            padding: isMobile ? "48px 16px" : "64px 20px",
-        }}
-    >
-        <div
-            style={{
-                display: "grid",
-                gridTemplateColumns: isMobile
-                    ? "1fr"
-                    : "minmax(0, 1fr) auto",
-                gap: isMobile ? "18px" : "24px",
-                alignItems: isMobile ? "start" : "end",
-            }}
-        >
-            <div style={{ maxWidth: "760px", minWidth: 0 }}>
-                <div
+                <section
                     style={{
-                        fontSize: "17px",
-                        letterSpacing: "2px",
-                        textTransform: "uppercase",
-                        color: "#78716c",
-                        fontWeight: "700",
-                    }}
-                >
-                    Example Drawings
-                </div>
-            </div>
-
-            <div
-                style={{
-                    display: "flex",
-                    gap: "10px",
-                    flexShrink: 0,
-                    alignItems: "center",
-                }}
-            >
-                <button
-                    type="button"
-                    onClick={showPrevDrawing}
-                    aria-label="Previous drawing"
-                    style={{
-                        height: isMobile ? "42px" : "46px",
-                        width: isMobile ? "42px" : "46px",
-                        borderRadius: "999px",
-                        border: "1px solid #d6d3d1",
+                        borderTop: "1px solid #e7e5e4",
+                        borderBottom: "1px solid #e7e5e4",
                         background: "#fff",
-                        cursor: "pointer",
-                        fontSize: "18px",
-                        color: "#1c1917",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        boxShadow: "0 8px 18px rgba(28,25,23,0.04)",
+                        overflowX: "hidden",
                     }}
                 >
-                    ←
-                </button>
-
-                <button
-                    type="button"
-                    onClick={showNextDrawing}
-                    aria-label="Next drawing"
-                    style={{
-                        height: isMobile ? "42px" : "46px",
-                        width: isMobile ? "42px" : "46px",
-                        borderRadius: "999px",
-                        border: "1px solid #1c1917",
-                        background: "#1c1917",
-                        color: "#fff",
-                        cursor: "pointer",
-                        fontSize: "18px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        boxShadow: "0 12px 22px rgba(28,25,23,0.12)",
-                    }}
-                >
-                    →
-                </button>
-            </div>
-        </div>
-
-        <div
-            style={{
-                marginTop: isMobile ? "24px" : "30px",
-                borderRadius: isMobile ? "20px" : "24px",
-                overflow: "hidden",
-                border: "1px solid #e7e5e4",
-                background: "#f8f7f5",
-                boxShadow: "0 14px 32px rgba(0,0,0,0.05)",
-                width: "100%",
-                maxWidth: "100%",
-            }}
-        >
-            <div
-                style={{
-                    position: "relative",
-                    width: "100%",
-                    maxWidth: "100%",
-                    background:
-                        "linear-gradient(180deg, #f8f7f5 0%, #f3f1ed 100%)",
-                    height: isMobile
-                        ? "240px"
-                        : "clamp(280px, 55vw, 540px)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: isMobile ? "14px" : "20px",
-                    boxSizing: "border-box",
-                    overflow: "hidden",
-                    touchAction: "pan-y",
-                }}
-                onTouchStart={isMobile ? handleTouchStart : undefined}
-                onTouchEnd={isMobile ? handleTouchEnd : undefined}
-            >
-                <img
-                    src={drawingImages[drawingIndex].src}
-                    alt={drawingImages[drawingIndex].label}
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "contain",
-                        display: "block",
-                        maxWidth: "100%",
-                        userSelect: "none",
-                        WebkitUserDrag: "none",
-                    }}
-                />
-            </div>
-
-            <div
-                style={{
-                    padding: isMobile ? "16px" : "18px 20px",
-                    borderTop: "1px solid #e7e5e4",
-                    display: "grid",
-                    gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
-                    gap: "14px",
-                    alignItems: "center",
-                    background: "#fff",
-                }}
-            >
-                <div style={{ minWidth: 0 }}>
                     <div
                         style={{
-                            fontWeight: "700",
-                            color: "#1f1f1f",
-                            fontSize: isMobile ? "15px" : "16px",
-                            lineHeight: "1.4",
+                            ...section,
+                            padding: isMobile ? "48px 16px" : "64px 20px",
                         }}
                     >
-                        {drawingImages[drawingIndex].label}
-                    </div>
-
-                    <div
-                        style={{
-                            marginTop: "4px",
-                            color: "#78716c",
-                            fontSize: "14px",
-                            lineHeight: "1.6",
-                        }}
-                    >
-                        Prepared as part of a clear, buildable drawing package.
-                    </div>
-                </div>
-
-                <div
-                    style={{
-                        display: "flex",
-                        gap: "8px",
-                        alignItems: "center",
-                        flexWrap: "wrap",
-                        justifyContent: isMobile ? "flex-start" : "flex-end",
-                    }}
-                >
-                    {drawingImages.map((_, i) => (
-                        <button
-                            key={i}
-                            type="button"
-                            onClick={() => setDrawingIndex(i)}
-                            aria-label={`Go to drawing ${i + 1}`}
+                        <div
                             style={{
-                                width: i === drawingIndex ? "24px" : "10px",
-                                height: "10px",
-                                borderRadius: "999px",
-                                border: "none",
-                                cursor: "pointer",
-                                background:
-                                    i === drawingIndex ? "#1c1917" : "#d6d3d1",
-                                padding: 0,
-                                flexShrink: 0,
-                                transition: "all 0.22s ease",
+                                display: "grid",
+                                gridTemplateColumns: isMobile
+                                    ? "1fr"
+                                    : "minmax(0, 1fr) auto",
+                                gap: isMobile ? "18px" : "24px",
+                                alignItems: isMobile ? "start" : "end",
                             }}
-                        />
-                    ))}
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+                        >
+                            <div style={{ maxWidth: "760px", minWidth: 0 }}>
+                                <div
+                                    style={{
+                                        fontSize: "17px",
+                                        letterSpacing: "2px",
+                                        textTransform: "uppercase",
+                                        color: "#78716c",
+                                        fontWeight: "700",
+                                    }}
+                                >
+                                    Example Drawings
+                                </div>
+
+                            
+                            </div>
+
+                            <div
+                                style={{
+                                    display: "flex",
+                                    gap: "10px",
+                                    flexShrink: 0,
+                                    alignItems: "center",
+                                }}
+                            >
+                                <button
+                                    type="button"
+                                    onClick={showPrevDrawing}
+                                    aria-label="Previous drawing"
+                                    style={{
+                                        height: isMobile ? "42px" : "46px",
+                                        width: isMobile ? "42px" : "46px",
+                                        borderRadius: "999px",
+                                        border: "1px solid #d6d3d1",
+                                        background: "#fff",
+                                        cursor: "pointer",
+                                        fontSize: "18px",
+                                        color: "#1c1917",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        boxShadow: "0 8px 18px rgba(28,25,23,0.04)",
+                                    }}
+                                >
+                                    ←
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={showNextDrawing}
+                                    aria-label="Next drawing"
+                                    style={{
+                                        height: isMobile ? "42px" : "46px",
+                                        width: isMobile ? "42px" : "46px",
+                                        borderRadius: "999px",
+                                        border: "1px solid #1c1917",
+                                        background: "#1c1917",
+                                        color: "#fff",
+                                        cursor: "pointer",
+                                        fontSize: "18px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        boxShadow: "0 12px 22px rgba(28,25,23,0.12)",
+                                    }}
+                                >
+                                    →
+                                </button>
+                            </div>
+                        </div>
+
+                        <div
+                            style={{
+                                marginTop: isMobile ? "24px" : "30px",
+                                borderRadius: isMobile ? "20px" : "24px",
+                                overflow: "hidden",
+                                border: "1px solid #e7e5e4",
+                                background: "#f8f7f5",
+                                boxShadow: "0 14px 32px rgba(0,0,0,0.05)",
+                                width: "100%",
+                                maxWidth: "100%",
+                            }}
+                        >
+                            <div
+                                style={{
+                                    position: "relative",
+                                    width: "100%",
+                                    maxWidth: "100%",
+                                    background: "linear-gradient(180deg, #f8f7f5 0%, #f3f1ed 100%)",
+                                    height: isMobile ? "240px" : "clamp(280px, 55vw, 540px)",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    padding: isMobile ? "14px" : "20px",
+                                    boxSizing: "border-box",
+                                    overflow: "hidden",
+                                }}
+                            >
+                                <img
+                                    src={drawingImages[drawingIndex].src}
+                                    alt={drawingImages[drawingIndex].label}
+                                    style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "contain",
+                                        display: "block",
+                                        maxWidth: "100%",
+                                    }}
+                                />
+                            </div>
+
+                            <div
+                                style={{
+                                    padding: isMobile ? "16px" : "18px 20px",
+                                    borderTop: "1px solid #e7e5e4",
+                                    display: "grid",
+                                    gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
+                                    gap: "14px",
+                                    alignItems: "center",
+                                    background: "#fff",
+                                }}
+                            >
+                                <div style={{ minWidth: 0 }}>
+                                    <div
+                                        style={{
+                                            fontWeight: "700",
+                                            color: "#1f1f1f",
+                                            fontSize: isMobile ? "15px" : "16px",
+                                            lineHeight: "1.4",
+                                        }}
+                                    >
+                                        {drawingImages[drawingIndex].label}
+                                    </div>
+
+                                    <div
+                                        style={{
+                                            marginTop: "4px",
+                                            color: "#78716c",
+                                            fontSize: "14px",
+                                            lineHeight: "1.6",
+                                        }}
+                                    >
+                                        Prepared as part of a clear, buildable drawing package.
+                                    </div>
+                                </div>
+
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        gap: "8px",
+                                        alignItems: "center",
+                                        flexWrap: "wrap",
+                                        justifyContent: isMobile ? "flex-start" : "flex-end",
+                                    }}
+                                >
+                                    {drawingImages.map((_, i) => (
+                                        <button
+                                            key={i}
+                                            type="button"
+                                            onClick={() => setDrawingIndex(i)}
+                                            aria-label={`Go to drawing ${i + 1}`}
+                                            style={{
+                                                width: i === drawingIndex ? "24px" : "10px",
+                                                height: "10px",
+                                                borderRadius: "999px",
+                                                border: "none",
+                                                cursor: "pointer",
+                                                background: i === drawingIndex ? "#1c1917" : "#d6d3d1",
+                                                padding: 0,
+                                                flexShrink: 0,
+                                                transition: "all 0.22s ease",
+                                            }}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                     
+                    </div>
+                </section>
 
 
 
