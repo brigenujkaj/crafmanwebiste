@@ -377,7 +377,7 @@ const handleTouchEnd = (e) => {
         <Layout>
 
             <Helmet>
-    <title>Planning Drawings & Permission London | Crafman | London & Essex</title>
+    <title>Architectural Drawings & Permission London | Crafman | London & Essex</title>
     <meta
         name="description"
         content="Professional planning drawings and permission support in London & Essex. Fixed-price packages for extensions, lofts, and renovations starting from £950."
@@ -435,7 +435,7 @@ const handleTouchEnd = (e) => {
                                     color: "#A67C00",
                                 }}
                             >
-                                Planning drawings designed for approval
+                                Architectural drawings designed for planning approval
                             </h1>
 
                             <h1
