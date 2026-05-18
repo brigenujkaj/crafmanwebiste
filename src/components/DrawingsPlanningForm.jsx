@@ -187,7 +187,7 @@ export default function DrawingsPlanningForm({
             setSubmitStatus({ loading: false, success: true, error: "" });
 
             // Fire completed form tracking
-            trackConversionEvent("drawings_callback_submitted", {
+            trackConversionEvent("drawings_planning_form_submit", {
                 contact_preference: form.contactPreference,
                 package_interest: form.packageInterest || "None Selected",
             });
