@@ -285,7 +285,7 @@ export default function DrawingsPlanning() {
                                     color: "#A67C00",
                                 }}
                             >
-                                Planning drawings designed for approval
+                                Architectural drawings designed for approval
                             </h1>
 
                             <p
@@ -425,137 +425,7 @@ export default function DrawingsPlanning() {
                     </div>
                 </section>
 
-                <section style={section}>
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: isMobile ? "1fr" : "repeat(2, minmax(0, 1fr))",
-                            gap: "18px",
-                            maxWidth: "820px",
-                        }}
-                    >
-                        {[
-                            {
-                                title: "Extensions",
-                                text: "Rear, side return and wraparound layouts.",
-                                icon: (
-                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
-                                        <path d="M3 21h18" />
-                                        <path d="M6 21V8l6-4 6 4v13" />
-                                        <path d="M9 21v-6h6v6" />
-                                    </svg>
-                                ),
-                            },
-                            {
-                                title: "Loft Conversions",
-                                text: "Dormer, hip-to-gable and mansard schemes.",
-                                icon: (
-                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
-                                        <path d="M3 11.5 12 4l9 7.5" />
-                                        <path d="M5 10.5V20h14v-9.5" />
-                                        <path d="M9 20v-5h6v5" />
-                                    </svg>
-                                ),
-                            },
-                            {
-                                title: "Garage Conversions",
-                                text: "Turn underused garages into practical living space.",
-                                icon: (
-                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
-                                        <path d="M3 11l9-7 9 7" />
-                                        <path d="M5 10.5V20h14v-9.5" />
-                                        <path d="M8 20v-6h8v6" />
-                                    </svg>
-                                ),
-                            },
-                            {
-                                title: "Internal Reconfiguration",
-                                text: "Improve flow, light and everyday usability.",
-                                icon: (
-                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
-                                        <rect x="4" y="4" width="16" height="16" rx="2" />
-                                        <path d="M10 4v16" />
-                                        <path d="M10 10h6" />
-                                    </svg>
-                                ),
-                            },
-                        ].map((item, i) => (
-                            <div
-                                key={i}
-                                style={{
-                                    position: "relative",
-                                    overflow: "hidden",
-                                    border: "1px solid #e7e5e4",
-                                    borderRadius: "22px",
-                                    padding: isMobile ? "18px" : "22px",
-                                    background: "linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,245,240,0.92))",
-                                    boxShadow: "0 10px 30px rgba(28, 25, 23, 0.05)",
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        position: "absolute",
-                                        top: "-40px",
-                                        right: "-40px",
-                                        width: "120px",
-                                        height: "120px",
-                                        borderRadius: "50%",
-                                        background: "rgba(166, 124, 0, 0.06)",
-                                    }}
-                                />
-
-                                <div
-                                    style={{
-                                        position: "relative",
-                                        display: "flex",
-                                        alignItems: "flex-start",
-                                        gap: "14px",
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            width: "46px",
-                                            height: "46px",
-                                            minWidth: "46px",
-                                            borderRadius: "14px",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            background: "linear-gradient(135deg, #A67C00, #C6A243)",
-                                            color: "#fff",
-                                            boxShadow: "0 8px 18px rgba(166, 124, 0, 0.22)",
-                                        }}
-                                    >
-                                        {item.icon}
-                                    </div>
-
-                                    <div>
-                                        <h3
-                                            style={{
-                                                margin: "2px 0 6px",
-                                                fontSize: "18px",
-                                                lineHeight: "1.2",
-                                                color: "#1c1917",
-                                            }}
-                                        >
-                                            {item.title}
-                                        </h3>
-                                        <p
-                                            style={{
-                                                margin: 0,
-                                                color: "#57534e",
-                                                fontSize: "14px",
-                                                lineHeight: "1.65",
-                                            }}
-                                        >
-                                            {item.text}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </section>
+              
 
                 <section
                     style={{
@@ -1297,6 +1167,84 @@ export default function DrawingsPlanning() {
                     </div>
                 </section>
 
+                {/* Short & Punchy About Section */}
+<section
+    style={{
+        borderTop: "1px solid #e7e5e4",
+        borderBottom: "1px solid #e7e5e4",
+        background: "#fcfbf8",
+        overflow: "hidden",
+    }}
+>
+    <div style={{ ...section, padding: isMobile ? "40px 16px" : "64px 20px" }}>
+        <div
+            style={{
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr" : "1fr 1.1fr",
+                gap: isMobile ? "24px" : "48px",
+                alignItems: "center",
+            }}
+        >
+            {/* Left Column */}
+            <div>
+                <div style={{ fontSize: "12px", letterSpacing: "2px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>
+                    The Crafman Difference
+                </div>
+                <h2
+                    style={{
+                        fontSize: isMobile ? "30px" : "40px",
+                        marginTop: "10px",
+                        marginBottom: "14px",
+                        lineHeight: "1.1",
+                        color: "#1f1f1f",
+                        letterSpacing: "-0.5px",
+                    }}
+                >
+                    We handle the drawings. <br />We also <span style={{ color: "#A67C00" }}>build the project.</span>
+                </h2>
+                <p style={{ color: "#44403c", fontSize: "15px", lineHeight: "1.6", margin: 0, fontWeight: "500" }}>
+                    Crafman is a fully integrated **Design & Build** contractor. We don’t just hand over drawings and walk away—our in-house team of master builders handles your entire project from first sketch to final brickwork. 
+                </p>
+            </div>
+
+            {/* Right Column */}
+            <div 
+                style={{ 
+                    display: "grid", 
+                    gap: "14px",
+                    background: "#fff",
+                    padding: isMobile ? "20px" : "24px",
+                    borderRadius: "20px",
+                    border: "1px solid #e7e5e4",
+                    boxShadow: "0 8px 24px rgba(0,0,0,0.02)"
+                }}
+            >
+                {[
+                    { title: "One Point of Contact", desc: "No friction or blame-shifting between architect and builder." },
+                    { title: "Budget-Aware Design", desc: "Drawings are optimized for real-world build costs from day one." },
+                    { title: "Full Project Delivery", desc: "From surveys and planning to structural engineering and construction." }
+                ].map((item, index) => (
+                    <div 
+                        key={index}
+                        style={{
+                            paddingTop: index !== 0 ? "12px" : "0",
+                            borderTop: index !== 0 ? "1px solid #f5f5f4" : "none",
+                            display: "flex",
+                            gap: "12px",
+                        }}
+                    >
+                        <span style={{ color: "#A67C00", fontWeight: "800", fontSize: "14px" }}>✓</span>
+                        <div>
+                            <h4 style={{ margin: "0 0 2px 0", fontSize: "14px", fontWeight: "700", color: "#1c1917" }}>{item.title}</h4>
+                            <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4" }}>{item.desc}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+</section>
+
                 <section
                     style={{
                         borderTop: "1px solid #e7e5e4",
@@ -1556,7 +1504,100 @@ export default function DrawingsPlanning() {
                         </style>
                     </div>
                 </section>
+
+
             </div>
+            {/* Footer Section */}
+<footer
+    style={{
+        borderTop: "1px solid #e7e5e4",
+        background: "#1f1f1f",
+        color: "#d6d3d1",
+        overflow: "hidden",
+    }}
+>
+    <div 
+        style={{ 
+            ...section, 
+            padding: isMobile ? "40px 16px 24px 16px" : "60px 20px 30px 20px",
+        }}
+    >
+        <div
+            style={{
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr" : "2fr 1fr 1fr",
+                gap: isMobile ? "32px" : "40px",
+                paddingBottom: "30px",
+                borderBottom: "1px solid rgba(255,255,255,0.08)",
+                alignItems: "start",
+            }}
+        >
+            {/* Column 1: Company & Address */}
+            <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: "18px", fontWeight: "800", color: "#fff", marginBottom: "12px", letterSpacing: "-0.3px" }}>
+                    Crafman <span style={{ color: "#C6A243", fontWeight: "400" }}>Design & Build</span>
+                </div>
+                <p style={{ margin: "0 0 16px 0", fontSize: "14px", color: "#a8a29e", lineHeight: "1.5", maxWidth: "320px" }}>
+                    Professional architectural drawing packages and premium full-lifecycle residential construction across London & Essex.
+                </p>
+                <div style={{ fontSize: "13px", lineHeight: "1.6", color: "#78716c" }}>
+                    <strong style={{ color: "#fff", display: "block", marginBottom: "2px" }}>Registered Office:</strong>
+                    Crafman Building and Landscaping Ltd<br />
+                    Marsh Wy, Rainham<br />
+                    RM13 8EU
+                </div>
+            </div>
+
+            {/* Column 2: Quick Links */}
+            <div>
+                <div style={{ fontSize: "12px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "1.5px", color: "#fff", marginBottom: "14px" }}>
+                    Services
+                </div>
+                <div style={{ display: "grid", gap: "10px", fontSize: "14px" }}>
+                    <a href="#packages" style={{ color: "#a8a29e", textDecoration: "none" }}>Drawing Packages</a>
+                    <a href="#contact-form" style={{ color: "#a8a29e", textDecoration: "none" }}>Get a Quote</a>
+                    <a href="#packages" style={{ color: "#a8a29e", textDecoration: "none" }}>Design & Build Support</a>
+                </div>
+            </div>
+
+            {/* Column 3: Contact Details */}
+            <div>
+                <div style={{ fontSize: "12px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "1.5px", color: "#fff", marginBottom: "14px" }}>
+                    Contact
+                </div>
+                <div style={{ display: "grid", gap: "10px", fontSize: "14px" }}>
+                    <a href="tel:02036335634" style={{ color: "#C6A243", textDecoration: "none", fontWeight: "700" }}>
+                        0203 633 5634
+                    </a>
+                    <span style={{ color: "#a8a29e" }}>Mon – Fri: 8am – 6pm</span>
+                    <span style={{ color: "#78716c", fontSize: "12px" }}>Promo Code: CRAF150</span>
+                </div>
+            </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div
+            style={{
+                paddingTop: "20px",
+                display: "flex",
+                flexDirection: isMobile ? "column" : "row",
+                justifyContent: "space-between",
+                alignItems: isMobile ? "flex-start" : "center",
+                gap: "12px",
+                fontSize: "12px",
+                color: "#78716c",
+            }}
+        >
+            <div>
+                © {new Date().getFullYear()} Crafman Building and Landscaping Ltd. All rights reserved.
+            </div>
+            <div style={{ display: "flex", gap: "16px" }}>
+                <span>Company No. Reg in UK</span>
+                <span>Vetted Master Builder</span>
+            </div>
+        </div>
+    </div>
+</footer>
         </Layout>
     );
 }
