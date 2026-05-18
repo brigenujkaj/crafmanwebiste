@@ -126,6 +126,18 @@ export default function DrawingsPlanningForm({
         return true;
     }, [step, form]);
 
+    // Helper functions to safely fire analytic events across both raw GTAG and GTM DataLayers
+    const trackConversionEvent = (eventName, params = {}) => {
+        // 1. Standard Google Tag Manager / GA4 Data Layer Push
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: eventName, ...params });
+
+        // 2. Direct Google Ads Native Tag Trigger Fallback
+        if (typeof window.gtag === "function") {
+            window.gtag("event", eventName, params);
+        }
+    };
+
     // Format display date nicely for success screen template blocks
     const formattedDisplayDate = useMemo(() => {
         if (!form.callbackDate) return "";
@@ -174,12 +186,12 @@ export default function DrawingsPlanningForm({
             });
             setSubmitStatus({ loading: false, success: true, error: "" });
 
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({
-                event: "drawings_callback_submitted",
+            // Fire completed form tracking
+            trackConversionEvent("drawings_callback_submitted", {
                 contact_preference: form.contactPreference,
-                package_interest: form.packageInterest,
+                package_interest: form.packageInterest || "None Selected",
             });
+
         } catch (error) {
             setSubmitStatus({
                 loading: false,
@@ -304,6 +316,11 @@ export default function DrawingsPlanningForm({
                             href={`https://wa.me/447858815820?text=Hi%20Crafman,%20I'd%20like%20to%20discuss%20a%20free%20planning%20and%20architectural%20drawings%20consultation%20for%20my%20property${form.packageInterest ? `%20regarding%20the%20${encodeURIComponent(form.packageInterest)}` : ''}.`}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={() => {
+                                trackConversionEvent("whatsapp_click", {
+                                    package_interest: form.packageInterest || "None Selected"
+                                });
+                            }}
                             style={{ ...optionCardStyle(false, true), textDecoration: "none", display: "block" }}
                         >
                             <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
@@ -348,6 +365,11 @@ export default function DrawingsPlanningForm({
                             </p>
                             <a
                                 href="tel:02036335634"
+                                onClick={() => {
+                                    trackConversionEvent("direct_phone_click", {
+                                        package_interest: form.packageInterest || "None Selected"
+                                    });
+                                }}
                                 style={{
                                     ...buttonPrimaryStyle,
                                     display: "inline-flex",

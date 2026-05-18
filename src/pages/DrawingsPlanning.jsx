@@ -231,18 +231,40 @@ export default function DrawingsPlanning() {
 
     return (
         <Layout>
-            <Helmet>
-                <title>Planning Drawings & Permission London | Crafman | London & Essex</title>
-                <meta
-                    name="description"
-                    content="Professional planning drawings and permission support in London & Essex. Fixed-price packages for extensions, lofts, and renovations starting from £950."
-                />
-                <link rel="canonical" href="https://crafman.co.uk/drawings-planning" />
-                <script 
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(drawingsSchema) }}
-                />
-            </Helmet>
+           <Helmet>
+    <title>Planning Drawings & Permission London | Crafman | London & Essex</title>
+    <meta
+        name="description"
+        content="Professional planning drawings and permission support in London & Essex. Fixed-price packages for extensions, lofts, and renovations starting from £950."
+    />
+    <link rel="canonical" href="https://crafman.co.uk/drawings-planning" />
+    
+    {/* Google Tag Manager - Master Antenna */}
+    <script>
+        {`
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-PLFBQMWH');
+        `}
+    </script>
+
+    <script 
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(drawingsSchema) }}
+    />
+</Helmet>
+
+{/* GTM Body Fallback Tracker */}
+<noscript>
+    <iframe 
+        src="https://www.googletagmanager.com/ns.html?id=GTM-PLFBQMWH"
+        height="0" 
+        width="0" 
+        style={{ display: 'none', visibility: 'hidden' }}
+    />
+</noscript>
 
             <div
                 style={{
