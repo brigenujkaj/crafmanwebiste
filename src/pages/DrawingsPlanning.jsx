@@ -88,7 +88,7 @@ export default function DrawingsPlanning() {
         },
         {
             name: "Technical Package",
-            price: "From £2150",
+            price: "From £1650",
             intro: "A fuller package for projects moving into technical design and build preparation.",
             includes: [
                 "Measured survey",
