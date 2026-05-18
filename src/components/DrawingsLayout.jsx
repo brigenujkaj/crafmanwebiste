@@ -207,7 +207,7 @@ export default function Layout({ children }) {
                             }}
                         >
                             <span style={{ color: "#0F0F0F" }}>Crafman</span>{" "}
-                            <span style={{ color: "#A67C00" }}>Planning & Drawings</span>
+                            <span style={{ color: "#A67C00" }}>Architectural</span>
                         </Link>
 
                         <div
