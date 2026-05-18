@@ -301,7 +301,7 @@ export default function DrawingsPlanningForm({
                         </button>
 
                         <a
-                            href={`https://wa.me/447858815820?text=Hi%20Crafman,%20I'd%20like%20to%20discuss%20a%20free%20planning%20and%20build%20consultation%20for%20my%20property${form.packageInterest ? `%20regarding%20the%20${encodeURIComponent(form.packageInterest)}` : ''}.`}
+                            href={`https://wa.me/447858815820?text=Hi%20Crafman,%20I'd%20like%20to%20discuss%20a%20free%20planning%20and%20architectural%20drawings%20consultation%20for%20my%20property${form.packageInterest ? `%20regarding%20the%20${encodeURIComponent(form.packageInterest)}` : ''}.`}
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{ ...optionCardStyle(false, true), textDecoration: "none", display: "block" }}
