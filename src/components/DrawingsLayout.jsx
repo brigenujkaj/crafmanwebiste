@@ -239,9 +239,7 @@ export default function Layout({ children }) {
                             Call Now
                         </a>
 
-                        <Link to="/contact" style={contactLinkStyle}>
-                            Contact
-                        </Link>
+                       
                     </nav>
                 </div>
             </header>

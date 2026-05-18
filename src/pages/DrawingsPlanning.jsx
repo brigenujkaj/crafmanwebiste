@@ -374,6 +374,108 @@ export default function DrawingsPlanning() {
                         </div>
                     </div>
                 </section>
+                {/* Free Consultation Visibility Section */}
+                {/* Fast-Scan Micro Process */}
+<section style={{ background: "#fcfbf8", padding: "32px 16px", borderBottom: "1px solid #e7e5e4" }}>
+    <div style={{ ...section, maxWidth: "800px", margin: "0 auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: "20px" }}>
+            {[
+                { step: "01", title: "Free Consultation", desc: "We map out layout viable options and real-time costs." },
+                { step: "02", title: "Measured Survey & Draft", desc: "Millimeter-accurate mapping of your existing space." },
+                { step: "03", title: "Council Submission", desc: "We manage the entire backend application package for you." }
+            ].map((item, i) => (
+                <div key={i} style={{ display: "flex", gap: "12px", alignItems: "start" }}>
+                    <span style={{ fontSize: "20px", fontWeight: "900", color: "#A67C00", opacity: 0.4 }}>{item.step}</span>
+                    <div>
+                        <h4 style={{ margin: "0 0 4px 0", fontSize: "14px", fontWeight: "700", color: "#1c1917" }}>{item.title}</h4>
+                        <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4" }}>{item.desc}</p>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<section
+    style={{
+        borderTop: "1px solid #e7e5e4",
+        borderBottom: "1px solid #e7e5e4",
+        background: "#fff",
+        overflow: "hidden",
+    }}
+>
+    <div style={{ ...section, padding: isMobile ? "32px 16px" : "64px 20px" }}>
+        <div
+            style={{
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr" : "1fr 1.1fr",
+                gap: isMobile ? "20px" : "48px",
+                alignItems: "center",
+            }}
+        >
+            {/* Left Column */}
+            <div>
+                <div style={{ fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>
+                    Free Consultation
+                </div>
+                <h2
+                    style={{
+                        fontSize: isMobile ? "26px" : "40px",
+                        marginTop: "6px",
+                        marginBottom: "12px",
+                        lineHeight: "1.15",
+                        color: "#1f1f1f",
+                        letterSpacing: "-0.5px",
+                    }}
+                >
+                    Complete <span style={{ color: "#A67C00" }}>project visibility</span> before you spend a penny
+                </h2>
+                <p style={{ color: "#44403c", fontSize: "14px", lineHeight: "1.5", margin: "0 0 20px 0", fontWeight: "500" }}>
+                    Get a clear roadmap for your home based on real-time London build costs and strict council guidelines—completely free.
+                </p>
+               
+            </div>
+
+            {/* Right Column: Fast-Scan List */}
+            <div 
+                style={{ 
+                    display: "grid", 
+                    gap: isMobile ? "12px" : "16px",
+                    background: "#fcfbf8",
+                    padding: isMobile ? "16px" : "24px",
+                    borderRadius: "20px",
+                    border: "1px solid #e7e5e4"
+                }}
+            >
+                {[
+                    { title: "Planning Strategy", desc: "Full permission vs. Permitted Development tracking." },
+                    { title: "Sizes & Layouts", desc: "A structural reality check of your layout goals." },
+                    { title: "Real Build Costs", desc: "Accurate budgets based on fluid local material & trade costs." },
+                    { title: "Property Value Return", desc: "An honest look at how your new floor area impacts market equity." }
+                ].map((item, index) => (
+                    <div 
+                        key={index}
+                        style={{
+                            display: "flex",
+                            gap: "12px",
+                            alignItems: "flex-start",
+                            paddingTop: index !== 0 ? (isMobile ? "10px" : "12px") : "0",
+                            borderTop: index !== 0 ? "1px solid #e7e5e4" : "none"
+                        }}
+                    >
+                        <span style={{ color: "#A67C00", fontWeight: "800", fontSize: "14px", lineHeight: "1" }}>✓</span>
+                        <div>
+                            <h4 style={{ margin: "0 0 2px 0", fontSize: "14px", fontWeight: "700", color: "#1c1917" }}>{item.title}</h4>
+                            <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4" }}>{item.desc}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+</section>
+
+
 
                 <section
                     style={{
@@ -406,7 +508,7 @@ export default function DrawingsPlanning() {
                                     <img src="/images/fmb.jpeg" alt="Federation of Master Builders Logo" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }} />
                                 </div>
                                 <div style={{ fontWeight: "900", color: "#9c0c26", fontSize: "14px", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "3px" }}>FMB</div>
-                                <h3 style={{ margin: "0 0 4px", fontSize: "16px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.2" }}>Master Builder Member</h3>
+                                <h3 style={{ margin: "0 0 4px", fontSize: "16px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.2" }}>Federation of Master Builders Member</h3>
                                 <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#57534e", lineHeight: "1.4" }}>Federation of Master Builders vetted & inspected architectural standards.</p>
                             </div>
 
@@ -423,6 +525,7 @@ export default function DrawingsPlanning() {
                             </div>
                         </div>
                     </div>
+
                 </section>
 
               
@@ -626,6 +729,145 @@ export default function DrawingsPlanning() {
                     </div>
                 </section>
 
+                   <section
+                    style={{
+                        borderTop: "1px solid #e7e5e4",
+                        borderBottom: "1px solid #e7e5e4",
+                        background: "linear-gradient(135deg, #1f1f1f 0%, #121212 100%)",
+                        color: "#fff",
+                        overflow: "hidden",
+                        position: "relative",
+                    }}
+                >
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: "-50%",
+                            right: "-20%",
+                            width: "400px",
+                            height: "400px",
+                            borderRadius: "50%",
+                            background: "rgba(166, 124, 0, 0.08)",
+                            filter: "blur(60px)",
+                            pointerEvents: "none",
+                        }}
+                    />
+
+                    <div
+                        style={{
+                            ...section,
+                            padding: isMobile ? "40px 16px" : "48px 24px",
+                            maxWidth: "1000px",
+                            margin: "0 auto",
+                        }}
+                    >
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
+                                gap: "28px",
+                                alignItems: "center",
+                            }}
+                        >
+                            <div style={{ minWidth: 0 }}>
+                                <div
+                                    style={{
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: "6px",
+                                        padding: "6px 14px",
+                                        borderRadius: "999px",
+                                        background: "rgba(166, 124, 0, 0.15)",
+                                        border: "1px solid #A67C00",
+                                        color: "#C6A243",
+                                        fontSize: "12px",
+                                        fontWeight: "800",
+                                        textTransform: "uppercase",
+                                        letterSpacing: "1px",
+                                        marginBottom: "16px",
+                                    }}
+                                >
+                                    <span style={{ fontSize: "14px", lineHeight: "1" }}>⚡</span> Limited Time Call Promotion
+                                </div>
+
+                                <h2
+                                    style={{
+                                        margin: "0 0 10px",
+                                        fontSize: isMobile ? "28px" : "38px",
+                                        lineHeight: "1.15",
+                                        fontWeight: "800",
+                                        letterSpacing: "-0.5px",
+                                        color: "#fff",
+                                    }}
+                                >
+                                    Get <span style={{ color: "#C6A243" }}>£100 Off</span> your drawing package on same-day booking
+                                </h2>
+                                
+                                <p
+                                    style={{
+                                        margin: 0,
+                                        color: "#d6d3d1",
+                                        fontSize: isMobile ? "15px" : "16px",
+                                        lineHeight: "1.6",
+                                        maxWidth: "620px",
+                                    }}
+                                >
+                                    Speak directly with a practical planning strategist today. Lock in an absolute fixed-price discount on any residential project bundle by securing your project reference number over the phone.
+                                </p>
+                            </div>
+
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: "10px",
+                                    width: isMobile ? "100%" : "auto",
+                                    minWidth: isMobile ? "100%" : "280px",
+                                    flexShrink: 0,
+                                }}
+                            >
+                                <a
+                                    href="tel:02036335634"
+                                    style={{
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        gap: "10px",
+                                        minHeight: "54px",
+                                        padding: "0 28px",
+                                        borderRadius: "16px",
+                                        background: "linear-gradient(135deg, #A67C00, #C6A243)",
+                                        color: "#fff",
+                                        fontSize: "16px",
+                                        fontWeight: "800",
+                                        textDecoration: "none",
+                                        boxShadow: "0 12px 24px rgba(166, 124, 0, 0.25)",
+                                        transition: "all 0.2s ease",
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ transform: "rotate(15deg)" }}>
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.9.32 1.77.59 2.6a2 2 0 0 1-.45 2.11L8.1 9.9a16 16 0 0 0 6 6l1.47-1.1a2 2 0 0 1 2.11-.45c.83.27 1.7.47 2.6.59A2 2 0 0 1 22 16.92z" />
+                                    </svg>
+                                    Call Now: 0203 633 5634
+                                </a>
+
+                                <div
+                                    style={{
+                                        textAlign: "center",
+                                        fontSize: "12px",
+                                        color: "#78716c",
+                                        fontWeight: "600",
+                                        letterSpacing: "0.2px",
+                                    }}
+                                >
+                                    Quote promotion code: <span style={{ color: "#C6A243" }}>CRAF100</span> when speaking to us
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 {/* Mobile-Friendly Accordion Packages Section */}
                 <section
                     id="packages"
@@ -762,144 +1004,7 @@ export default function DrawingsPlanning() {
                 </section>
 
                 {/* Direct Call Callout Promotion */}
-                <section
-                    style={{
-                        borderTop: "1px solid #e7e5e4",
-                        borderBottom: "1px solid #e7e5e4",
-                        background: "linear-gradient(135deg, #1f1f1f 0%, #121212 100%)",
-                        color: "#fff",
-                        overflow: "hidden",
-                        position: "relative",
-                    }}
-                >
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: "-50%",
-                            right: "-20%",
-                            width: "400px",
-                            height: "400px",
-                            borderRadius: "50%",
-                            background: "rgba(166, 124, 0, 0.08)",
-                            filter: "blur(60px)",
-                            pointerEvents: "none",
-                        }}
-                    />
-
-                    <div
-                        style={{
-                            ...section,
-                            padding: isMobile ? "40px 16px" : "48px 24px",
-                            maxWidth: "1000px",
-                            margin: "0 auto",
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
-                                gap: "28px",
-                                alignItems: "center",
-                            }}
-                        >
-                            <div style={{ minWidth: 0 }}>
-                                <div
-                                    style={{
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: "6px",
-                                        padding: "6px 14px",
-                                        borderRadius: "999px",
-                                        background: "rgba(166, 124, 0, 0.15)",
-                                        border: "1px solid #A67C00",
-                                        color: "#C6A243",
-                                        fontSize: "12px",
-                                        fontWeight: "800",
-                                        textTransform: "uppercase",
-                                        letterSpacing: "1px",
-                                        marginBottom: "16px",
-                                    }}
-                                >
-                                    <span style={{ fontSize: "14px", lineHeight: "1" }}>⚡</span> Limited Time Call Promotion
-                                </div>
-
-                                <h2
-                                    style={{
-                                        margin: "0 0 10px",
-                                        fontSize: isMobile ? "28px" : "38px",
-                                        lineHeight: "1.15",
-                                        fontWeight: "800",
-                                        letterSpacing: "-0.5px",
-                                        color: "#fff",
-                                    }}
-                                >
-                                    Get <span style={{ color: "#C6A243" }}>£150 Off</span> your drawing package
-                                </h2>
-                                
-                                <p
-                                    style={{
-                                        margin: 0,
-                                        color: "#d6d3d1",
-                                        fontSize: isMobile ? "15px" : "16px",
-                                        lineHeight: "1.6",
-                                        maxWidth: "620px",
-                                    }}
-                                >
-                                    Speak directly with a practical planning strategist today. Lock in an absolute fixed-price discount on any residential project bundle by securing your project reference number over the phone.
-                                </p>
-                            </div>
-
-                            <div
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: "10px",
-                                    width: isMobile ? "100%" : "auto",
-                                    minWidth: isMobile ? "100%" : "280px",
-                                    flexShrink: 0,
-                                }}
-                            >
-                                <a
-                                    href="tel:02036335634"
-                                    style={{
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        gap: "10px",
-                                        minHeight: "54px",
-                                        padding: "0 28px",
-                                        borderRadius: "16px",
-                                        background: "linear-gradient(135deg, #A67C00, #C6A243)",
-                                        color: "#fff",
-                                        fontSize: "16px",
-                                        fontWeight: "800",
-                                        textDecoration: "none",
-                                        boxShadow: "0 12px 24px rgba(166, 124, 0, 0.25)",
-                                        transition: "all 0.2s ease",
-                                        textAlign: "center",
-                                    }}
-                                >
-                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ transform: "rotate(15deg)" }}>
-                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.9.32 1.77.59 2.6a2 2 0 0 1-.45 2.11L8.1 9.9a16 16 0 0 0 6 6l1.47-1.1a2 2 0 0 1 2.11-.45c.83.27 1.7.47 2.6.59A2 2 0 0 1 22 16.92z" />
-                                    </svg>
-                                    Call Now: 0203 633 5634
-                                </a>
-
-                                <div
-                                    style={{
-                                        textAlign: "center",
-                                        fontSize: "12px",
-                                        color: "#78716c",
-                                        fontWeight: "600",
-                                        letterSpacing: "0.2px",
-                                    }}
-                                >
-                                    Quote promotion code: <span style={{ color: "#C6A243" }}>CRAF150</span> when speaking to us
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+             
 
                 {/* Simplified Contact Form Section Area */}
                 <section
@@ -1570,7 +1675,7 @@ export default function DrawingsPlanning() {
                         0203 633 5634
                     </a>
                     <span style={{ color: "#a8a29e" }}>Mon – Fri: 8am – 6pm</span>
-                    <span style={{ color: "#78716c", fontSize: "12px" }}>Promo Code: CRAF150</span>
+                    <span style={{ color: "#78716c", fontSize: "12px" }}>Promo Code: CRAF100</span>
                 </div>
             </div>
         </div>

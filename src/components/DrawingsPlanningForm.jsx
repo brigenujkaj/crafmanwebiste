@@ -233,11 +233,11 @@ export default function DrawingsPlanningForm({
 
     const labelStyle = { display: "grid", gap: "8px", minWidth: 0 };
 
-    const optionCardStyle = (active) => ({
+    const optionCardStyle = (active, isWhatsApp = false) => ({
         padding: "16px",
         borderRadius: "16px",
-        border: active ? "1px solid #1c1917" : "1px solid #ddd6ce",
-        background: active ? "#f5f5f4" : "#fff",
+        border: active ? (isWhatsApp ? "1px solid #25D366" : "1px solid #1c1917") : "1px solid #ddd6ce",
+        background: active ? (isWhatsApp ? "#f0fdf4" : "#f5f5f4") : "#fff",
         color: "#1f1f1f",
         cursor: "pointer",
         fontWeight: "600",
@@ -294,11 +294,30 @@ export default function DrawingsPlanningForm({
                                 <div>
                                     <div style={{ fontSize: "16px", fontWeight: "700" }}>Call our team directly now</div>
                                     <div style={{ fontSize: "13px", fontWeight: "400", color: "#57534e", marginTop: "2px" }}>
-                                        Instant setup — confirm your custom requirements directly over the phone.
+                                        Instant setup — confirm your details over the phone.
                                     </div>
                                 </div>
                             </div>
                         </button>
+
+                        <a
+                            href={`https://wa.me/447858815820?text=Hi%20Crafman,%20I'd%20like%20to%20discuss%20a%20free%20planning%20and%20build%20consultation%20for%20my%20property${form.packageInterest ? `%20regarding%20the%20${encodeURIComponent(form.packageInterest)}` : ''}.`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ ...optionCardStyle(false, true), textDecoration: "none", display: "block" }}
+                        >
+                            <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+                                <svg viewBox="0 0 24 24" width="24" height="24" fill="#25D366">
+                                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.66.986 3.288 1.447 5.36 1.448 5.517 0 10.003-4.479 10.006-9.994.001-2.672-1.03-5.184-2.903-7.06C17.18 1.67 14.685 1.04 12.012 1.04c-5.526 0-10.01 4.484-10.014 10.001-.001 2.124.566 4.135 1.644 5.943l-.995 3.633 3.744-.973zm13.102-6.42c-.299-.15-1.772-.875-2.046-.975-.275-.102-.475-.15-.675.15-.2.299-.775.975-.95 1.174-.175.2-.35.226-.65.075-1.207-.604-2.115-.98-2.964-2.433-.225-.386.225-.359.644-1.196.112-.224.056-.423-.028-.574-.084-.15-.675-1.626-.925-2.228-.243-.585-.491-.507-.675-.516-.174-.008-.374-.01-.574-.01-.2 0-.526.075-.802.374-.275.3-.1.524 1.05 1.349.113.149.224.299.374.423.824.675 1.822 1.147 2.896 1.622.3.15.524.225.774.15.249-.075.772-.324.872-.649.1-.324.1-.599.075-.649-.03-.05-.125-.075-.425-.226z"/>
+                                </svg>
+                                <div>
+                                    <div style={{ fontSize: "16px", fontWeight: "700", color: "#128C7E" }}>Chat via WhatsApp now</div>
+                                    <div style={{ fontSize: "13px", fontWeight: "400", color: "#57534e", marginTop: "2px" }}>
+                                        Instant text routing — skip the form entirely.
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
 
                         <button
                             type="button"
@@ -314,7 +333,7 @@ export default function DrawingsPlanningForm({
                                 <div>
                                     <div style={{ fontSize: "16px", fontWeight: "700" }}>Schedule a preferred callback</div>
                                     <div style={{ fontSize: "13px", fontWeight: "400", color: "#57534e", marginTop: "2px" }}>
-                                        Pick a convenient day within the next month and time window.
+                                        Pick a convenient day and time window over the next month.
                                     </div>
                                 </div>
                             </div>
@@ -466,7 +485,7 @@ export default function DrawingsPlanningForm({
 
             {submitStatus.error && <p style={{ color: "#b91c1c", fontWeight: "600", fontSize: "14px", margin: 0 }}>{submitStatus.error}</p>}
 
-            {!(step === 1 && form.contactPreference === "call_now") && (
+            {!(step === 1 && (form.contactPreference === "call_now" || !form.contactPreference)) && (
                 <div style={{ display: "flex", flexDirection: isMobile ? "column-reverse" : "row", justifyContent: "space-between", gap: "12px", marginTop: "8px" }}>
                     <button
                         type="button"
