@@ -23,8 +23,8 @@ export default function DrawingsPlanningForm({
     endpoint = "https://formspree.io/f/mojpjokd",
     selectedPackage = "",
     buttonText = "Schedule Callback",
-    title = "Request your drawings quote",
-    intro = "",
+    title = "",
+    intro = "We hate pushy sales calls as much as you do. You’ll speak directly with a practical planning strategist—just straight answers, clear package guidance, and zero pressure.",
 }) {
     const { buttonPrimary, buttonSecondary, card } = siteStyles;
     const navigate = useNavigate();

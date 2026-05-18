@@ -1834,350 +1834,83 @@ export default function DrawingsPlanning() {
                
 
                 <section
-                    id="contact-form"
+    id="contact-form"
+    style={{
+        borderTop: "1px solid #e7e5e4",
+        background: "#efebe6",
+    }}
+>
+    <div
+        style={{
+            maxWidth: "680px", // Centered single-column layout containment
+            margin: "0 auto",
+            padding: isMobile ? "48px 16px" : "70px 24px",
+            display: "grid",
+            gap: "24px",
+            boxSizing: "border-box",
+        }}
+    >
+        <div style={{ textAlign: "center", minWidth: 0 }}>
+            <div
+                style={{
+                    fontSize: "12px",
+                    letterSpacing: "2px",
+                    textTransform: "uppercase",
+                    color: "#78716c",
+                    fontWeight: "700",
+                }}
+            >
+                Enquiry Form
+            </div>
+
+            <h2
+                style={{
+                    fontSize: isMobile ? "30px" : "42px",
+                    marginTop: "12px",
+                    marginBottom: "12px",
+                    lineHeight: "1.08",
+                    color: "#1f1f1f",
+                }}
+            >
+                Request your drawings quote
+            </h2>
+
+            {selectedPackage && (
+                <div
                     style={{
-                        borderTop: "1px solid #e7e5e4",
-                        background: "#efebe6",
+                        marginTop: "8px",
+                        marginBottom: "16px",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        padding: "10px 14px",
+                        borderRadius: "999px",
+                        background: "#1f1f1f",
+                        color: "#fff",
+                        fontWeight: "700",
+                        maxWidth: "100%",
+                        flexWrap: "wrap",
+                        lineHeight: "1.5",
                     }}
                 >
-                    <div
-                        style={{
-                            maxWidth: "1200px",
-                            margin: "0 auto",
-                            padding: isMobile ? "48px 16px" : "70px 24px",
-                            display: "grid",
-                            gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(320px, 1fr))",
-                            gap: isMobile ? "24px" : "30px",
-                            boxSizing: "border-box",
-                            alignItems: "start",
-                        }}
-                    >
-                        <div style={{ minWidth: 0 }}>
-                            <div
-                                style={{
-                                    fontSize: "12px",
-                                    letterSpacing: "2px",
-                                    textTransform: "uppercase",
-                                    color: "#78716c",
-                                    fontWeight: "700",
-                                }}
-                            >
-                                Enquiry Form
-                            </div>
+                    <span>Selected: {selectedPackage}</span>
+                    <span style={{ opacity: 0.7 }}>•</span>
+                    <span>
+                        {packages.find((p) => p.name === selectedPackage)?.price}
+                    </span>
+                </div>
+            )}
+        </div>
 
-                            <h2
-                                style={{
-                                    fontSize: isMobile ? "30px" : "42px",
-                                    marginTop: "12px",
-                                    marginBottom: "12px",
-                                    lineHeight: "1.08",
-                                    color: "#1f1f1f",
-                                }}
-                            >
-                                Request your drawings quote
-                            </h2>
-
-                        
-
-                            {selectedPackage && (
-                                <div
-                                    style={{
-                                        marginTop: "20px",
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: "8px",
-                                        padding: "10px 14px",
-                                        borderRadius: "999px",
-                                        background: "#1f1f1f",
-                                        color: "#fff",
-                                        fontWeight: "700",
-                                        maxWidth: "100%",
-                                        flexWrap: "wrap",
-                                        lineHeight: "1.5",
-                                    }}
-                                >
-                                    <span>Selected: {selectedPackage}</span>
-                                    <span style={{ opacity: 0.7 }}>•</span>
-                                    <span>
-                                        {packages.find((p) => p.name === selectedPackage)?.price}
-                                    </span>
-                                </div>
-                            )}
-                            <div
-                                style={{
-                                    marginTop: "22px",
-                                    display: "grid",
-                                    gap: "14px",
-                                    maxWidth: "520px",
-                                }}
-                            >
-                                {[
-                                    {
-                                        label: "Phone",
-                                        value: "02036335634",
-                                        icon: (
-                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8">
-                                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.9.32 1.77.59 2.6a2 2 0 0 1-.45 2.11L8.1 9.9a16 16 0 0 0 6 6l1.47-1.1a2 2 0 0 1 2.11-.45c.83.27 1.7.47 2.6.59A2 2 0 0 1 22 16.92z" />
-                                            </svg>
-                                        ),
-                                    },
-                                    {
-                                        label: "Email",
-                                        value: "planning@crafman.co.uk",
-                                        icon: (
-                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8">
-                                                <rect x="3" y="5" width="18" height="14" rx="2" />
-                                                <path d="M3 7l9 6 9-6" />
-                                            </svg>
-                                        ),
-                                    },
-                                    {
-                                        label: "Location",
-                                        value: "London, United Kingdom",
-                                        icon: (
-                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8">
-                                                <path d="M12 21s7-5.33 7-11a7 7 0 1 0-14 0c0 5.67 7 11 7 11z" />
-                                                <circle cx="12" cy="10" r="2.5" />
-                                            </svg>
-                                        ),
-                                    },
-                                ].map((item) => (
-                                    <div
-                                        key={item.label}
-                                        style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: "14px",
-                                            padding: "14px 16px",
-                                            borderRadius: "18px",
-                                            background: "rgba(255,255,255,0.6)",
-                                            border: "1px solid #ddd6ce",
-                                            boxShadow: "0 8px 20px rgba(28,25,23,0.04)",
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                width: "38px",
-                                                height: "38px",
-                                                minWidth: "38px",
-                                                borderRadius: "12px",
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                                background: "linear-gradient(135deg, #A67C00, #C6A243)",
-                                                color: "#fff",
-                                                boxShadow: "0 6px 14px rgba(166,124,0,0.25)",
-                                            }}
-                                        >
-                                            {item.icon}
-                                        </div>
-
-                                        <div style={{ lineHeight: "1.4" }}>
-                                            <div
-                                                style={{
-                                                    fontSize: "12px",
-                                                    color: "#78716c",
-                                                    marginBottom: "2px",
-                                                    letterSpacing: "0.04em",
-                                                }}
-                                            >
-                                                {item.label}
-                                            </div>
-                                            <div
-                                                style={{
-                                                    fontSize: "15px",
-                                                    color: "#1c1917",
-                                                    fontWeight: 500,
-                                                }}
-                                            >
-                                                {item.value}
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div style={{ minWidth: 0 }}>
-                            <DrawingsPlanningForm
-                                endpoint="https://formspree.io/f/maqlqgzz"
-                                selectedPackage={selectedPackage}
-                               
-                            />
-                        </div>
-                    </div>
-                </section>
-
-
-                <section
-                    style={{
-                        borderTop: "1px solid #e7e5e4",
-                        borderBottom: "1px solid #e7e5e4",
-                        background: "#f5f3ef",
-                    }}
-                >
-                    <div
-                        style={{
-                            ...section,
-                            padding: isMobile ? "48px 16px" : "72px 20px",
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns: isMobile
-                                    ? "1fr"
-                                    : "minmax(320px, 0.95fr) minmax(320px, 1.05fr)",
-                                gap: isMobile ? "28px" : "44px",
-                                alignItems: "center",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    ...card,
-                                    background: "linear-gradient(180deg, #fcfbf8 0%, #f1ede7 100%)",
-                                    border: "1px solid #e7e5e4",
-                                    minHeight: isMobile ? "240px" : "420px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    padding: isMobile ? "24px" : "36px",
-                                    boxShadow: "0 18px 36px rgba(28,25,23,0.05)",
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        textAlign: "center",
-                                        maxWidth: "420px",
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            width: isMobile ? "74px" : "88px",
-                                            height: isMobile ? "74px" : "88px",
-                                            margin: "0 auto 18px",
-                                            borderRadius: "22px",
-                                            background: "#1f1f1f",
-                                            color: "#fff",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            fontSize: isMobile ? "30px" : "36px",
-                                            fontWeight: "800",
-                                            boxShadow: "0 16px 28px rgba(28,25,23,0.12)",
-                                        }}
-                                    >
-                                        ✓
-                                    </div>
-
-                                    <h3
-                                        style={{
-                                            margin: 0,
-                                            fontSize: isMobile ? "26px" : "34px",
-                                            lineHeight: "1.12",
-                                            color: "#1f1f1f",
-                                        }}
-                                    >
-                                        Trusted planning drawing support for homeowners
-                                    </h3>
-
-
-                                </div>
-                            </div>
-
-                            <div style={{ minWidth: 0 }}>
-                                <div
-                                    style={{
-                                        fontSize: "12px",
-                                        letterSpacing: "2px",
-                                        textTransform: "uppercase",
-                                        color: "#A67C00",
-                                        fontWeight: "800",
-                                    }}
-                                >
-                                    Our Track Record
-                                </div>
-
-                                <h2
-                                    style={{
-                                        fontSize: isMobile ? "34px" : "52px",
-                                        lineHeight: "1.05",
-                                        marginTop: "12px",
-                                        marginBottom: "14px",
-                                        color: "#1f1f1f",
-                                    }}
-                                >
-                                    Building trust through results
-                                </h2>
-
-
-
-                                <div
-                                    style={{
-                                        display: "grid",
-                                        gridTemplateColumns: isMobile
-                                            ? "1fr 1fr"
-                                            : "repeat(2, minmax(180px, 1fr))",
-                                        gap: isMobile ? "18px" : "26px 34px",
-                                        marginTop: "34px",
-                                        maxWidth: "640px",
-                                    }}
-                                >
-                                    {trustStats.map((item) => (
-                                        <div key={item.label}>
-                                            <div
-                                                style={{
-                                                    fontSize: isMobile ? "38px" : "52px",
-                                                    lineHeight: "1",
-                                                    fontWeight: "800",
-                                                    color: "#1f1f1f",
-                                                    letterSpacing: "-1.5px",
-                                                }}
-                                            >
-                                                {item.value}
-                                                <span style={{ color: "#A67C00" }}>+</span>
-                                            </div>
-                                            <div
-                                                style={{
-                                                    marginTop: "8px",
-                                                    fontSize: isMobile ? "15px" : "17px",
-                                                    lineHeight: "1.45",
-                                                    fontWeight: "700",
-                                                    color: "#1f1f1f",
-                                                }}
-                                            >
-                                                {item.label}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div style={{ marginTop: "30px" }}>
-                                    <a
-                                        href="#contact-form"
-                                        style={{
-                                            display: "inline-flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            minHeight: "52px",
-                                            padding: "0 26px",
-                                            borderRadius: "14px",
-                                            textDecoration: "none",
-                                            background: "#A67C00",
-                                            color: "#fff",
-                                            fontWeight: "800",
-                                            fontSize: "15px",
-                                            boxShadow: "0 14px 28px rgba(31,92,255,0.18)",
-                                        }}
-                                    >
-                                        Request a Quote
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
+        {/* Form Module Render Target Block */}
+        <div style={{ minWidth: 0 }}>
+            <DrawingsPlanningForm
+                endpoint="https://formspree.io/f/maqlqgzz"
+                selectedPackage={selectedPackage}
+            />
+        </div>
+    </div>
+</section>
                 <section
                     style={{
                         borderTop: "1px solid #e7e5e4",
