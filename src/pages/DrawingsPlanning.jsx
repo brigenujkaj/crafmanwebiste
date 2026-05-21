@@ -590,58 +590,7 @@ export default function DrawingsPlanning() {
                                 </div>
                             </div>
 
-                            <div
-                                style={{
-                                    display: "flex",
-                                    gap: "10px",
-                                    flexShrink: 0,
-                                    alignItems: "center",
-                                }}
-                            >
-                                <button
-                                    type="button"
-                                    onClick={showPrevDrawing}
-                                    aria-label="Previous drawing"
-                                    style={{
-                                        height: isMobile ? "42px" : "46px",
-                                        width: isMobile ? "42px" : "46px",
-                                        borderRadius: "999px",
-                                        border: "1px solid #d6d3d1",
-                                        background: "#fff",
-                                        cursor: "pointer",
-                                        fontSize: "18px",
-                                        color: "#1c1917",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        boxShadow: "0 8px 18px rgba(28,25,23,0.04)",
-                                    }}
-                                >
-                                    ←
-                                </button>
-
-                                <button
-                                    type="button"
-                                    onClick={showNextDrawing}
-                                    aria-label="Next drawing"
-                                    style={{
-                                        height: isMobile ? "42px" : "46px",
-                                        width: isMobile ? "42px" : "46px",
-                                        borderRadius: "999px",
-                                        border: "1px solid #1c1917",
-                                        background: "#1c1917",
-                                        color: "#fff",
-                                        cursor: "pointer",
-                                        fontSize: "18px",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        boxShadow: "0 12px 22px rgba(28,25,23,0.12)",
-                                    }}
-                                >
-                                    →
-                                </button>
-                            </div>
+                            
                         </div>
 
                         <div
@@ -748,6 +697,58 @@ export default function DrawingsPlanning() {
                                         />
                                     ))}
                                 </div>
+                            </div>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    gap: "10px",
+                                    flexShrink: 0,
+                                    alignItems: "center",
+                                }}
+                            >
+                                <button
+                                    type="button"
+                                    onClick={showPrevDrawing}
+                                    aria-label="Previous drawing"
+                                    style={{
+                                        height: isMobile ? "42px" : "46px",
+                                        width: isMobile ? "42px" : "46px",
+                                        borderRadius: "999px",
+                                        border: "1px solid #d6d3d1",
+                                        background: "#fff",
+                                        cursor: "pointer",
+                                        fontSize: "18px",
+                                        color: "#1c1917",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        boxShadow: "0 8px 18px rgba(28,25,23,0.04)",
+                                    }}
+                                >
+                                    ←
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={showNextDrawing}
+                                    aria-label="Next drawing"
+                                    style={{
+                                        height: isMobile ? "42px" : "46px",
+                                        width: isMobile ? "42px" : "46px",
+                                        borderRadius: "999px",
+                                        border: "1px solid #1c1917",
+                                        background: "#1c1917",
+                                        color: "#fff",
+                                        cursor: "pointer",
+                                        fontSize: "18px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        boxShadow: "0 12px 22px rgba(28,25,23,0.12)",
+                                    }}
+                                >
+                                    →
+                                </button>
                             </div>
                         </div>
                     </div>
