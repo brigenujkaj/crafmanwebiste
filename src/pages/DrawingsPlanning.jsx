@@ -45,6 +45,8 @@ export default function DrawingsPlanning() {
     }, []);
 
     const drawingImages = [
+        { src: "/images/drawingex14.jpeg", label: "3D Render" },
+        { src: "/images/drawingex15.jpeg", label: "3D Render" },
         { src: "/images/drawingex1.jpeg", label: "Elevations" },
         { src: "/images/drawingsex2.jpeg", label: "Elevations" },
         { src: "/images/drawingex3.jpeg", label: "Drainage" },
