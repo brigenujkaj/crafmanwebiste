@@ -14,7 +14,7 @@ import { useLocation } from "react-router-dom";
 import Projects from "./pages/Projects.jsx";
 import CaseStudies from "./pages/CaseStudies.jsx";
 import CaseStudyDetail from "./pages/CaseStudyDetail.jsx";
-
+import Landscaping from "./pages/Landscaping.jsx";
 
 // TEMP (until you build it)
 function TestPage({ title }) {
@@ -62,6 +62,9 @@ export default function App() {
           <Route path="/commercial-fit-outs-london" element={<CommercialFitOutsLondon />} />
           <Route path="/projects" element={<Projects />} />
       <Route path="/drawings-planning" element={<DrawingsPlanning />} />
+      <Route path="/drawings-planning" element={<DrawingsPlanning />} />
+      <Route path="/landscaping" element={<Landscaping />} />
+
 
       {/* ✅ TEMP PAGE */}
           <Route path="/contact" element={<TestPage title="Contact" />} />
