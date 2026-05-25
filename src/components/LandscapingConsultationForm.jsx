@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { siteStyles } from "./Layout.jsx";
 
 const initialFormState = {
-    contactPreference: "", // "call_now", "schedule_callback"
+    contactPreference: "", 
     callbackDate: "",
     callbackTimeSlot: "",
     postcode: "",
@@ -24,7 +24,7 @@ export default function LandscapingConsultationForm({
     selectedTier = "",
     buttonText = "Confirm My Consultation",
     title = "",
-    intro = "We hate pushy sales calls as much as you do. You'll consult directly with a practical landscape layout engineer—just straight answers, clear cost breakdowns, and zero pressure.",
+    intro = "We hate pushy sales calls as much as you do. You'll consult directly with a practical landscape site technician—just straight answers, clear configuration data, and zero pressure.",
 }) {
     const { buttonPrimary, buttonSecondary, card } = siteStyles;
     const navigate = useNavigate();
@@ -45,7 +45,23 @@ export default function LandscapingConsultationForm({
     const [isMobile, setIsMobile] = useState(false);
 
     const formTopRef = useRef(null);
-    const isFirstRender = useRef(true);
+
+    // 💎 FIXED SCROLLING INTERCEPTOR
+    const prevStepRef = useRef(step);
+
+    useLayoutEffect(() => {
+        if (prevStepRef.current !== step) {
+            prevStepRef.current = step;
+            const timeout = setTimeout(() => {
+                if (formTopRef.current) {
+                    const HEADER_OFFSET = window.innerWidth <= 768 ? 90 : 110;
+                    const y = formTopRef.current.getBoundingClientRect().top + window.pageYOffset - HEADER_OFFSET;
+                    window.scrollTo({ top: y, behavior: "smooth" });
+                }
+            }, 60);
+            return () => clearTimeout(timeout);
+        }
+    }, [step]);
 
     const dateBounds = useMemo(() => {
         const today = new Date();
@@ -80,21 +96,6 @@ export default function LandscapingConsultationForm({
         }));
     }, [selectedTier, submitStatus.success]);
 
-    useLayoutEffect(() => {
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
-            return;
-        }
-        const timeout = setTimeout(() => {
-            if (formTopRef.current) {
-                const HEADER_OFFSET = isMobile ? 90 : 110;
-                const y = formTopRef.current.getBoundingClientRect().top + window.pageYOffset - HEADER_OFFSET;
-                window.scrollTo({ top: y, behavior: "smooth" });
-            }
-        }, 60);
-        return () => clearTimeout(timeout);
-    }, [step, isMobile]);
-
     function handleChange(e) {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
@@ -121,7 +122,7 @@ export default function LandscapingConsultationForm({
     const stepIsValid = useMemo(() => {
         if (step === 1) return !!form.contactPreference;
         if (step === 2) return !!form.callbackDate && !!form.callbackTimeSlot;
-        if (step === 3) return !!form.name.trim() && !!form.phone.trim();
+        if (step === 3) return !!form.name.trim() && !!form.phone.trim() && !!form.postcode.trim();
         return true;
     }, [step, form]);
 
@@ -149,9 +150,9 @@ export default function LandscapingConsultationForm({
 
         try {
             const payload = {
-                formType: "Landscaping Consultation Request",
+                formType: "Bespoke Landscaping Inquiry",
                 contactPreference: form.contactPreference,
-                serviceInterest: form.serviceInterest || "General Landscape Interest",
+                chosenFocus: form.serviceInterest || "General Layout Inquiry",
                 name: form.name,
                 phone: form.phone,
                 postcode: form.postcode,
@@ -180,9 +181,9 @@ export default function LandscapingConsultationForm({
             });
             setSubmitStatus({ loading: false, success: true, error: "" });
 
-            trackConversionEvent("landscaping_form_submit", {
+            trackConversionEvent("bespoke_landscape_submit", {
                 contact_preference: form.contactPreference,
-                service_interest: form.serviceInterest || "General Landscape Interest",
+                chosen_focus: form.serviceInterest || "General Layout Inquiry",
             });
 
         } catch (error) {
@@ -278,13 +279,13 @@ export default function LandscapingConsultationForm({
                 <div style={{ display: "grid", gap: "20px" }}>
                     <div style={{ textAlign: "center", padding: "4px 0" }}>
                         <span style={{ fontSize: "13px", fontWeight: "700", color: "#A67C00", textTransform: "uppercase", letterSpacing: "1px" }}>
-                            Design Desk Open: Mon–Sat 7AM–8PM
+                            Desk Operations Open: Mon–Sat 7AM–8PM
                         </span>
                     </div>
 
                     {form.serviceInterest && (
                         <div style={{ padding: "12px 14px", borderRadius: "12px", background: "#f8f5ef", border: "1px solid #eadfcb", fontSize: "14px", color: "#44403c" }}>
-                            Selected Configuration Tier: <strong>{form.serviceInterest}</strong>
+                            Identified Focus Base: <strong>{form.serviceInterest}</strong>
                         </div>
                     )}
 
@@ -297,21 +298,21 @@ export default function LandscapingConsultationForm({
                             <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
                                 <span style={{ fontSize: "24px" }}>☎</span>
                                 <div>
-                                    <div style={{ fontSize: "16px", fontWeight: "700" }}>Call our layout engineers directly now</div>
+                                    <div style={{ fontSize: "16px", fontWeight: "700" }}>Call our estimator line directly now</div>
                                     <div style={{ fontSize: "13px", fontWeight: "400", color: "#57534e", marginTop: "2px" }}>
-                                        Instant Project Allocation — route plans over the phone.
+                                        Instant routing — discuss scope metrics straight over the phone.
                                     </div>
                                 </div>
                             </div>
                         </button>
 
                         <a
-                            href={`https://wa.me/447858815820?text=Hi%20Crafman,%20I'd%20like%20to%20discuss%20a%20turnkey%20garden%20landscaping%20and%20paving%20survey%20for%20my%20property${form.serviceInterest ? `%20targeting%20the%20${encodeURIComponent(form.serviceInterest)}` : ''}.`}
+                            href={`https://wa.me/447858815820?text=Hi%20Crafman,%20I'd%20like%20to%20arrange%20a%20turnkey%20bespoke%20landscaping%20survey%20for%20my%20property${form.serviceInterest ? `%20focusing%20on%20${encodeURIComponent(form.serviceInterest)}` : ''}.`}
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={() => {
                                 trackConversionEvent("whatsapp_landscape_click", {
-                                    service_interest: form.serviceInterest || "General Landscape Interest"
+                                    chosen_focus: form.serviceInterest || "General Layout Inquiry"
                                 });
                             }}
                             style={{ ...optionCardStyle(false, true), textDecoration: "none", display: "block" }}
@@ -323,7 +324,7 @@ export default function LandscapingConsultationForm({
                                 <div>
                                     <div style={{ fontSize: "16px", fontWeight: "700", color: "#128C7E" }}>Chat via WhatsApp Securely</div>
                                     <div style={{ fontSize: "13px", fontWeight: "400", color: "#57534e", marginTop: "2px" }}>
-                                        Instant file routing — dispatch blueprint ideas over message hooks.
+                                        Instant text routing — dispatch blueprint ideas over message hooks.
                                     </div>
                                 </div>
                             </div>
@@ -429,18 +430,18 @@ export default function LandscapingConsultationForm({
                 return (
                     <div style={{ display: "grid", gap: "18px" }}>
                         <div>
-                            <h3 style={{ margin: "0 0 6px", fontSize: "20px" }}>Personal Details</h3>
-                            <p style={{ margin: 0, color: "#57534e", fontSize: "14px" }}>Secure your layout block reservations by verifying site logistics coordinates.</p>
+                            <h3 style={{ margin: "0 0 6px", fontSize: "20px" }}>Your information</h3>
+                            <p style={{ margin: 0, color: "#57534e", fontSize: "14px" }}>Provide your contact parameters to secure your callback reference window.</p>
                         </div>
                         {form.serviceInterest && (
                             <div style={{ padding: "10px 12px", background: "#fafaf9", borderRadius: "10px", border: "1px solid #e7e5e4", fontSize: "13px", color: "#78716c" }}>
-                                Layout Configuration Track: <strong>{form.serviceInterest}</strong>
+                                Tracked Specification: <strong>{form.serviceInterest}</strong>
                             </div>
                         )}
-                        <input name="name" value={form.name} onChange={handleChange} placeholder="Your Full Name" style={inputStyle} required />
-                        <input name="phone" value={form.phone} onChange={handleChange} placeholder="Primary Contact Phone Number" style={inputStyle} required />
-                        <input name="postcode" value={form.postcode} onChange={handleChange} placeholder="Project Site Postcode" style={inputStyle} required />
-                        <textarea name="message" value={form.message} onChange={handleChange} placeholder="Briefly specify special access lines, stone metrics, or custom patio objectives (Optional)" rows="4" style={{ ...inputStyle, resize: "vertical" }} />
+                        <input name="name" value={form.name} onChange={handleChange} placeholder="Your full name" style={inputStyle} required />
+                        <input name="phone" value={form.phone} onChange={handleChange} placeholder="Primary phone number" style={inputStyle} required />
+                        <input name="postcode" value={form.postcode} onChange={handleChange} placeholder="Project site postcode" style={inputStyle} required />
+                        <textarea name="message" value={form.message} onChange={handleChange} placeholder="Briefly specify special access restrictions, layout preferences, or custom patio sizes (Optional)" rows="4" style={{ ...inputStyle, resize: "vertical" }} />
                     </div>
                 );
             }
@@ -453,26 +454,27 @@ export default function LandscapingConsultationForm({
                 <div style={{ display: "flex", gap: "14px", alignItems: "center" }}>
                     <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: "#166534", color: "#fff", display: "grid", placeItems: "center", fontSize: "28px" }}>✓</div>
                     <div>
-                        <h2 style={{ margin: 0, fontSize: "24px", color: "#14532d" }}>Turnkey Survey Block Locked</h2>
+                        <h2 style={{ margin: 0, fontSize: "24px", color: "#14532d" }}>Bespoke Survey Slot Secured</h2>
                         <p style={{ margin: "4px 0 0", color: "#166534", fontSize: "14px" }}>
-                            Our site engineers will ring you on {submittedSummary.displayDate} during the {submittedSummary.callbackTimeSlot.toLowerCase()}.
+                            We will call you on {submittedSummary.displayDate} during the {submittedSummary.callbackTimeSlot.toLowerCase()}.
                         </p>
                     </div>
                 </div>
 
                 <div style={{ borderTop: "1px solid #e7e5e4", paddingTop: "14px" }}>
-                    <h4 style={{ margin: "0 0 10px", fontSize: "15px" }}>Registered Logistics Vector</h4>
+                    <h4 style={{ margin: "0 0 10px", fontSize: "15px" }}>Submission Summary</h4>
                     <div style={{ background: "#fafaf9", padding: "14px", borderRadius: "12px", display: "grid", gap: "8px", fontSize: "14px" }}>
-                        <div><strong>Client Reference:</strong> {submittedSummary.name}</div>
-                        <div><strong>Contact Comms Trunk:</strong> {submittedSummary.phone}</div>
-                        <div><strong>Target Core Vector:</strong> {submittedSummary.serviceInterest || " turnkey hardscaping"}</div>
-                        <div><strong>Survey Call Window:</strong> {submittedSummary.displayDate} ({submittedSummary.callbackTimeSlot})</div>
+                        <div><strong>Client Name:</strong> {submittedSummary.name}</div>
+                        <div><strong>Linked Phone Line:</strong> {submittedSummary.phone}</div>
+                        <div><strong>Site Vector:</strong> {submittedSummary.postcode.toUpperCase()}</div>
+                        <div><strong>Tracked Focus:</strong> {submittedSummary.serviceInterest || "General Bespoke Scope"}</div>
+                        <div><strong>Callback Date:</strong> {submittedSummary.displayDate} ({submittedSummary.callbackTimeSlot})</div>
                     </div>
                 </div>
                 
                 <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-                    <button type="button" onClick={() => { setSubmittedSummary(null); setSubmitStatus({ loading: false, success: false, error: "" }); setForm({ ...initialFormState }); setStep(1); }} style={buttonSecondaryStyle}>Configure Another Zone</button>
-                    <button type="button" onClick={() => navigate("/")} style={buttonPrimaryStyle}>Return to Core Portal</button>
+                    <button type="button" onClick={() => { setSubmittedSummary(null); setSubmitStatus({ loading: false, success: false, error: "" }); setForm({ ...initialFormState }); setStep(1); }} style={buttonSecondaryStyle}>Configure Alternative Area</button>
+                    <button type="button" onClick={() => navigate("/")} style={buttonPrimaryStyle}>Return to Home Portal</button>
                 </div>
             </div>
         );
@@ -526,7 +528,7 @@ export default function LandscapingConsultationForm({
                             disabled={!stepIsValid || submitStatus.loading}
                             style={{ ...buttonPrimaryStyle, background: !stepIsValid ? '#78716c' : '#1c1917', cursor: !stepIsValid ? 'not-allowed' : 'pointer' }}
                         >
-                            {submitStatus.loading ? "Transmitting Scope..." : buttonText}
+                            {submitStatus.loading ? "Transmitting Requirements..." : buttonText}
                         </button>
                     )}
                 </div>

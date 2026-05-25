@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from "react";
-import Layout, { siteStyles } from "../components/Layout.jsx";
+import LandscapingLayout, { siteStyles } from "../components/LandscapingLayout.jsx";
 import DrivewayCalculator from "../components/DrivewayCalculator.jsx";
 import LandscapingConsultationForm from "../components/LandscapingConsultationForm.jsx";
 import { Helmet } from "react-helmet-async";
@@ -94,7 +94,7 @@ export default function Landscaping() {
     };
 
     return (
-        <Layout>
+        <LandscapingLayout>
             <Helmet>
                 <title>Bespoke Landscaping, Porcelain Patios & Block Paving | Crafman</title>
                 <meta name="description" content="Custom garden architectures, premium vitrified porcelain terraces, and SuDS block paving driveways across London & Essex. Plan your build specifications today." />
@@ -375,6 +375,6 @@ export default function Landscaping() {
                 </footer>
 
             </div>
-        </Layout>
+        </LandscapingLayout>
     );
 }
