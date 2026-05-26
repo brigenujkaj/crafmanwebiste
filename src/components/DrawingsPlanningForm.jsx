@@ -82,19 +82,23 @@ export default function DrawingsPlanningForm({
     }, [selectedPackage, submitStatus.success]);
 
     useLayoutEffect(() => {
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
-            return;
+    if (isFirstRender.current) {
+        isFirstRender.current = false;
+        return;
+    }
+    
+    const timeout = setTimeout(() => {
+        if (formTopRef.current) {
+            // Check window size directly here instead of relying on state
+            const HEADER_OFFSET = window.innerWidth <= 768 ? 90 : 110;
+            const y = formTopRef.current.getBoundingClientRect().top + window.pageYOffset - HEADER_OFFSET;
+            
+            window.scrollTo({ top: y, behavior: "smooth" });
         }
-        const timeout = setTimeout(() => {
-            if (formTopRef.current) {
-                const HEADER_OFFSET = isMobile ? 90 : 110;
-                const y = formTopRef.current.getBoundingClientRect().top + window.pageYOffset - HEADER_OFFSET;
-                window.scrollTo({ top: y, behavior: "smooth" });
-            }
-        }, 60);
-        return () => clearTimeout(timeout);
-    }, [step, isMobile]);
+    }, 60);
+    
+    return () => clearTimeout(timeout);
+}, [step]); // ONLY trigger the scroll when the user changes steps
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -187,7 +191,7 @@ export default function DrawingsPlanningForm({
             setSubmitStatus({ loading: false, success: true, error: "" });
 
             // Fire completed form tracking
-            trackConversionEvent("drawings_planning_form_submit", {
+            trackConversionEvent("drawings_callback_submitted", {
                 contact_preference: form.contactPreference,
                 package_interest: form.packageInterest || "None Selected",
             });
