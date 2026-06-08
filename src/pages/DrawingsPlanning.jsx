@@ -537,161 +537,229 @@ export default function DrawingsPlanning() {
                         </div>
                     </div>
                 </section>
-                {/* Free Consultation Visibility Section */}
-                {/* Fast-Scan Micro Process */}
-<section style={{ background: "#fcfbf8", padding: "32px 16px", borderBottom: "1px solid #e7e5e4" }}>
-    <div style={{ ...section, maxWidth: "800px", margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: "20px" }}>
-            {[
-                { step: "01", title: "Free Consultation", desc: "We map out layout viable options and real-time costs." },
-                { step: "02", title: "Measured Survey & Draft", desc: "Millimeter-accurate mapping of your existing space." },
-                { step: "03", title: "Council Submission", desc: "We manage the entire backend application package for you." }
-            ].map((item, i) => (
-                <div key={i} style={{ display: "flex", gap: "12px", alignItems: "start" }}>
-                    <span style={{ fontSize: "20px", fontWeight: "900", color: "#A67C00", opacity: 0.4 }}>{item.step}</span>
-                    <div>
-                        <h4 style={{ margin: "0 0 4px 0", fontSize: "14px", fontWeight: "700", color: "#1c1917" }}>{item.title}</h4>
-                        <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4" }}>{item.desc}</p>
-                    </div>
-                </div>
-            ))}
-        </div>
-    </div>
-</section>
 
-<section
-    style={{
-        borderTop: "1px solid #e7e5e4",
-        borderBottom: "1px solid #e7e5e4",
-        background: "#fff",
-        overflow: "hidden",
-    }}
->
-    <div style={{ ...section, padding: isMobile ? "32px 16px" : "64px 20px" }}>
-        <div
-            style={{
-                display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "1fr 1.1fr",
-                gap: isMobile ? "20px" : "48px",
-                alignItems: "center",
-            }}
-        >
-            {/* Left Column */}
-            <div>
-                <div style={{ fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>
-                    Free Consultation
-                </div>
-                <h2
-                    style={{
-                        fontSize: isMobile ? "26px" : "40px",
-                        marginTop: "6px",
-                        marginBottom: "12px",
-                        lineHeight: "1.15",
-                        color: "#1f1f1f",
-                        letterSpacing: "-0.5px",
-                    }}
-                >
-                    Complete <span style={{ color: "#A67C00" }}>project visibility</span> before you spend a penny
-                </h2>
-                <p style={{ color: "#44403c", fontSize: "14px", lineHeight: "1.5", margin: "0 0 20px 0", fontWeight: "500" }}>
-                    Get a clear roadmap for your home based on real-time London build costs and strict council guidelines—completely free.
-                </p>
-               
-            </div>
-
-            {/* Right Column: Fast-Scan List */}
-            <div 
-                style={{ 
-                    display: "grid", 
-                    gap: isMobile ? "12px" : "16px",
-                    background: "#fcfbf8",
-                    padding: isMobile ? "16px" : "24px",
-                    borderRadius: "20px",
-                    border: "1px solid #e7e5e4"
-                }}
-            >
-                {[
-                    { title: "Planning Strategy", desc: "Full permission vs. Permitted Development tracking." },
-                    { title: "Sizes & Layouts", desc: "A structural reality check of your layout goals." },
-                    { title: "Real Build Costs", desc: "Accurate budgets based on fluid local material & trade costs." },
-                    { title: "Property Value Return", desc: "An honest look at how your new floor area impacts market equity." }
-                ].map((item, index) => (
-                    <div 
-                        key={index}
-                        style={{
-                            display: "flex",
-                            gap: "12px",
-                            alignItems: "flex-start",
-                            paddingTop: index !== 0 ? (isMobile ? "10px" : "12px") : "0",
-                            borderTop: index !== 0 ? "1px solid #e7e5e4" : "none"
-                        }}
-                    >
-                        <span style={{ color: "#A67C00", fontWeight: "800", fontSize: "14px", lineHeight: "1" }}>✓</span>
-                        <div>
-                            <h4 style={{ margin: "0 0 2px 0", fontSize: "14px", fontWeight: "700", color: "#1c1917" }}>{item.title}</h4>
-                            <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4" }}>{item.desc}</p>
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </div>
-    </div>
-</section>
-
-
-
+                {/* Mobile-Friendly Accordion Packages Section */}
                 <section
+                    id="packages"
                     style={{
                         borderTop: "1px solid #e7e5e4",
                         borderBottom: "1px solid #e7e5e4",
-                        background: "#fcfbf8",
+                        background: "#fff",
                     }}
                 >
-                    <div style={{ ...section, padding: isMobile ? "40px 16px" : "48px 20px" }}>
-                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, minmax(0, 1fr))", gap: isMobile ? "16px" : "24px", alignItems: "stretch" }}>
-                            {/* Google Reviews Card */}
-                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
-                                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px" }}>
-                                    <svg viewBox="0 0 24 24" width="22" height="22" style={{ marginRight: "2px" }}>
-                                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.85z" fill="#FBBC05"/>
-                                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                                    </svg>
-                                    <span style={{ fontWeight: "800", color: "#1f1f1f", fontSize: "16px", letterSpacing: "-0.3px" }}>Google Rating</span>
-                                </div>
-                                <div style={{ color: "#f59e0b", fontSize: "18px", letterSpacing: "2px", marginBottom: "6px" }}>★★★★★</div>
-                                <div style={{ fontSize: "22px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.1" }}>4.9 / 5.0</div>
-                                <p style={{ margin: "6px 0 0", fontSize: "13px", color: "#78716c", fontWeight: "500" }}>Verified Homeowner Feedback</p>
-                            </div>
+                    <div style={{ ...section, padding: isMobile ? "40px 16px" : "64px 20px" }}>
+                        <div style={{ maxWidth: "760px", minWidth: 0, textAlign: isMobile ? "center" : "left" }}>
+                            <div style={{ fontSize: "12px", letterSpacing: "2px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>Packages</div>
+                            <h2 style={{ margin: "10px 0 8px", fontSize: isMobile ? "28px" : "42px", lineHeight: "1.1", color: "#1f1f1f", letterSpacing: "-0.5px" }}>Choose your project tier</h2>
+                            <p style={{ margin: 0, color: "#57534e", lineHeight: "1.6", fontSize: isMobile ? "14px" : "17px", maxWidth: "720px" }}>
+                                Clear, fixed-price drawing structures designed to move your application from concept to council approval seamlessly.
+                            </p>
+                        </div>
 
-                            {/* FMB Card */}
-                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
-                                <div style={{ width: "54px", height: "54px", marginBottom: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                    <img src="/images/fmb.jpeg" alt="Federation of Master Builders Logo" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }} />
-                                </div>
-                                <div style={{ fontWeight: "900", color: "#9c0c26", fontSize: "14px", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "3px" }}>FMB</div>
-                                <h3 style={{ margin: "0 0 4px", fontSize: "16px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.2" }}>Federation of Master Builders Member</h3>
-                                <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#57534e", lineHeight: "1.4" }}>Federation of Master Builders vetted & inspected architectural standards.</p>
-                            </div>
+                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(280px, 1fr))", gap: isMobile ? "16px" : "20px", marginTop: isMobile ? "24px" : "36px", alignItems: "stretch" }}>
+                            {packages.map((pkg) => {
+                                const isSelected = selectedPackage === pkg.name;
+                                const isExpanded = expandedPackage === pkg.name || !isMobile;
 
-                            {/* TrustMark Card */}
-                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
-                                <div style={{ width: "42px", height: "42px", borderRadius: "10px", background: "#16a34a", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "12px", boxShadow: "0 4px 12px rgba(22,163,74,0.15)" }}>
-                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                                        <path d="M9 11l2 2 4-4" />
-                                    </svg>
-                                </div>
-                                <h3 style={{ margin: "0 0 4px", fontSize: "16px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.2" }}>TrustMark Government Endorsed</h3>
-                                <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#57534e", lineHeight: "1.4" }}>Government-endorsed quality standard for absolute technical compliance.</p>
-                            </div>
+                                return (
+                                    <div
+                                        key={pkg.name}
+                                        style={{
+                                            ...card,
+                                            minWidth: 0,
+                                            position: "relative",
+                                            background: pkg.featured ? "#1f1f1f" : "#fff",
+                                            color: pkg.featured ? "#fff" : "#1f1f1f",
+                                            border: pkg.featured ? "1px solid #1f1f1f" : "1px solid #e7e5e4",
+                                            borderRadius: "24px",
+                                            padding: isMobile ? "20px" : "26px",
+                                            boxSizing: "border-box",
+                                            boxShadow: pkg.featured ? "0 20px 40px rgba(28,25,23,0.14)" : "0 10px 24px rgba(28,25,23,0.04)",
+                                            transform: !isMobile && pkg.featured ? "translateY(-8px)" : "none",
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            justifyContent: "space-between",
+                                        }}
+                                    >
+                                        <div>
+                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "4px" }}>
+                                                <h3 style={{ margin: 0, fontSize: isMobile ? "20px" : "24px", fontWeight: "800" }}>{pkg.name}</h3>
+                                                {pkg.featured && (
+                                                    <span style={{ padding: "4px 10px", borderRadius: "999px", background: "#A67C00", color: "#fff", fontSize: "10px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "0.5px" }}>Popular</span>
+                                                )}
+                                            </div>
+
+                                            <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "12px" }}>
+                                                <span style={{ fontSize: isMobile ? "28px" : "36px", fontWeight: "900", color: pkg.featured ? "#fff" : "#1f1f1f" }}>{pkg.price}</span>
+                                                <span style={{ fontSize: "12px", color: pkg.featured ? "#a8a29e" : "#78716c" }}>fixed cost</span>
+                                            </div>
+
+                                            <p style={{ margin: "0 0 16px", fontSize: "14px", lineHeight: "1.5", color: pkg.featured ? "#d6d3d1" : "#57534e" }}>{pkg.intro}</p>
+
+                                            {isMobile && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setExpandedPackage(isExpanded ? null : pkg.name)}
+                                                    style={{
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "space-between",
+                                                        width: "100%",
+                                                        background: "none",
+                                                        border: "none",
+                                                        padding: "12px 0",
+                                                        color: pkg.featured ? "#C6A243" : "#A67C00",
+                                                        fontWeight: "700",
+                                                        fontSize: "13px",
+                                                        cursor: "pointer",
+                                                        borderTop: pkg.featured ? "1px solid #2e2a24" : "1px solid #f5f5f4",
+                                                    }}
+                                                >
+                                                    <span>{isExpanded ? "Hide package details" : "Show package details"}</span>
+                                                    <span style={{ fontSize: "16px", transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }}>▼</span>
+                                                </button>
+                                            )}
+
+                                            <div
+                                                style={{
+                                                    display: isExpanded ? "grid" : "none",
+                                                    gap: "10px",
+                                                    paddingTop: isMobile ? "8px" : "16px",
+                                                    borderTop: !isMobile ? (pkg.featured ? "1px solid rgba(255,255,255,0.1)" : "1px solid #ece7df") : "none",
+                                                    animation: isMobile ? "faqFadeDown 0.2s ease" : "none",
+                                                }}
+                                            >
+                                                <div style={{ fontSize: "12px", fontWeight: "700", textTransform: "uppercase", color: pkg.featured ? "#a8a29e" : "#78716c", marginBottom: "4px" }}>Includes:</div>
+                                                {pkg.includes.map((item) => (
+                                                    <div key={item} style={{ display: "flex", gap: "8px", alignItems: "center", fontSize: "14px" }}>
+                                                        <span style={{ color: pkg.featured ? "#C6A243" : "#A67C00", fontWeight: "900" }}>✓</span>
+                                                        <span style={{ color: pkg.featured ? "#f5f5f4" : "#44403c" }}>{item}</span>
+                                                    </div>
+                                                ))}
+                                                <div style={{ fontSize: "12px", color: pkg.featured ? "#a8a29e" : "#78716c", marginTop: "4px", fontStyle: "italic" }}>
+                                                    ⏱ Turnaround: 7–10 working days
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div style={{ marginTop: "24px" }}>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    handlePackageSelect(pkg.name);
+                                                    document.getElementById("contact-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                                                }}
+                                                style={{
+                                                    width: "100%",
+                                                    minHeight: "48px",
+                                                    borderRadius: "14px",
+                                                    border: "none",
+                                                    background: isSelected ? "#A67C00" : (pkg.featured ? "#fff" : "#1f1f1f"),
+                                                    color: isSelected ? "#fff" : (pkg.featured ? "#1f1f1f" : "#fff"),
+                                                    fontSize: "14px",
+                                                    fontWeight: "800",
+                                                    cursor: "pointer",
+                                                    boxShadow: isSelected ? "0 8px 20px rgba(166,124,0,0.2)" : "none",
+                                                    transition: "all 0.2s",
+                                                }}
+                                            >
+                                                {isSelected ? "Selected" : "Ask About This Package"}
+                                            </button>
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
-
                 </section>
 
-              
+
+                {/* Direct Call Callout Promotion */}
+                {/* Direct Call Callout Promotion */}
+
+                {/* Simplified Contact Form Section Area */}
+                <section
+                    id="contact-form"
+                    style={{
+                        borderTop: "1px solid #e7e5e4",
+                        background: "#efebe6",
+                    }}
+                >
+                    <div
+                        style={{
+                            maxWidth: "680px",
+                            margin: "0 auto",
+                            padding: isMobile ? "48px 16px" : "70px 24px",
+                            display: "grid",
+                            gap: "24px",
+                            boxSizing: "border-box",
+                        }}
+                    >
+                        <div style={{ textAlign: "center", minWidth: 0 }}>
+                            <div
+                                style={{
+                                    fontSize: "12px",
+                                    letterSpacing: "2px",
+                                    textTransform: "uppercase",
+                                    color: "#78716c",
+                                    fontWeight: "700",
+                                }}
+                            >
+                                Enquiry Form
+                            </div>
+
+                            <h2
+                                style={{
+                                    fontSize: isMobile ? "30px" : "42px",
+                                    marginTop: "12px",
+                                    marginBottom: "4px",
+                                    lineHeight: "1.08",
+                                    color: "#1f1f1f",
+                                }}
+                            >
+                                Request your drawings quote
+                            </h2>
+
+                            <p style={{ margin: "0 0 12px", color: "#57534e", fontSize: "14px", fontWeight: "500" }}>
+                                No annoying sales calls. Just straight answers, clear advice, and zero pressure from our layout specialists.
+                            </p>
+
+                            {selectedPackage && (
+                                <div
+                                    style={{
+                                        marginTop: "8px",
+                                        marginBottom: "16px",
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: "8px",
+                                        padding: "10px 14px",
+                                        borderRadius: "999px",
+                                        background: "#1f1f1f",
+                                        color: "#fff",
+                                        fontWeight: "700",
+                                        maxWidth: "100%",
+                                        flexWrap: "wrap",
+                                        lineHeight: "1.5",
+                                    }}
+                                >
+                                    <span>Selected: {selectedPackage}</span>
+                                    <span style={{ opacity: 0.7 }}>•</span>
+                                    <span>
+                                        {packages.find((p) => p.name === selectedPackage)?.price}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+
+                        <div style={{ minWidth: 0 }}>
+                            <DrawingsPlanningForm
+                                endpoint="https://formspree.io/f/maqlqgzz"
+                                selectedPackage={selectedPackage}
+                            />
+                        </div>
+                    </div>
+                </section>
+                {/* Free Consultation Visibility Section */}
 
                 <section
                     style={{
@@ -729,7 +797,7 @@ export default function DrawingsPlanning() {
                                 </div>
                             </div>
 
-                            
+
                         </div>
 
                         <div
@@ -892,229 +960,171 @@ export default function DrawingsPlanning() {
                         </div>
                     </div>
                 </section>
+                {/* Fast-Scan Micro Process */}
+<section style={{ background: "#fcfbf8", padding: "32px 16px", borderBottom: "1px solid #e7e5e4" }}>
+    <div style={{ ...section, maxWidth: "800px", margin: "0 auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: "20px" }}>
+            {[
+                { step: "01", title: "Free Consultation", desc: "We map out layout viable options and real-time costs." },
+                { step: "02", title: "Measured Survey & Draft", desc: "Millimeter-accurate mapping of your existing space." },
+                { step: "03", title: "Council Submission", desc: "We manage the entire backend application package for you." }
+            ].map((item, i) => (
+                <div key={i} style={{ display: "flex", gap: "12px", alignItems: "start" }}>
+                    <span style={{ fontSize: "20px", fontWeight: "900", color: "#A67C00", opacity: 0.4 }}>{item.step}</span>
+                    <div>
+                        <h4 style={{ margin: "0 0 4px 0", fontSize: "14px", fontWeight: "700", color: "#1c1917" }}>{item.title}</h4>
+                        <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4" }}>{item.desc}</p>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+                </section>
 
-                  
 
-                {/* Mobile-Friendly Accordion Packages Section */}
+
+<section
+    style={{
+        borderTop: "1px solid #e7e5e4",
+        borderBottom: "1px solid #e7e5e4",
+        background: "#fff",
+        overflow: "hidden",
+    }}
+>
+    <div style={{ ...section, padding: isMobile ? "32px 16px" : "64px 20px" }}>
+        <div
+            style={{
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr" : "1fr 1.1fr",
+                gap: isMobile ? "20px" : "48px",
+                alignItems: "center",
+            }}
+        >
+            {/* Left Column */}
+            <div>
+                <div style={{ fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>
+                    Free Consultation
+                </div>
+                <h2
+                    style={{
+                        fontSize: isMobile ? "26px" : "40px",
+                        marginTop: "6px",
+                        marginBottom: "12px",
+                        lineHeight: "1.15",
+                        color: "#1f1f1f",
+                        letterSpacing: "-0.5px",
+                    }}
+                >
+                    Complete <span style={{ color: "#A67C00" }}>project visibility</span> before you spend a penny
+                </h2>
+                <p style={{ color: "#44403c", fontSize: "14px", lineHeight: "1.5", margin: "0 0 20px 0", fontWeight: "500" }}>
+                    Get a clear roadmap for your home based on real-time London build costs and strict council guidelines—completely free.
+                </p>
+               
+            </div>
+
+            {/* Right Column: Fast-Scan List */}
+            <div 
+                style={{ 
+                    display: "grid", 
+                    gap: isMobile ? "12px" : "16px",
+                    background: "#fcfbf8",
+                    padding: isMobile ? "16px" : "24px",
+                    borderRadius: "20px",
+                    border: "1px solid #e7e5e4"
+                }}
+            >
+                {[
+                    { title: "Planning Strategy", desc: "Full permission vs. Permitted Development tracking." },
+                    { title: "Sizes & Layouts", desc: "A structural reality check of your layout goals." },
+                    { title: "Real Build Costs", desc: "Accurate budgets based on fluid local material & trade costs." },
+                    { title: "Property Value Return", desc: "An honest look at how your new floor area impacts market equity." }
+                ].map((item, index) => (
+                    <div 
+                        key={index}
+                        style={{
+                            display: "flex",
+                            gap: "12px",
+                            alignItems: "flex-start",
+                            paddingTop: index !== 0 ? (isMobile ? "10px" : "12px") : "0",
+                            borderTop: index !== 0 ? "1px solid #e7e5e4" : "none"
+                        }}
+                    >
+                        <span style={{ color: "#A67C00", fontWeight: "800", fontSize: "14px", lineHeight: "1" }}>✓</span>
+                        <div>
+                            <h4 style={{ margin: "0 0 2px 0", fontSize: "14px", fontWeight: "700", color: "#1c1917" }}>{item.title}</h4>
+                            <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4" }}>{item.desc}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
                 <section
-                    id="packages"
                     style={{
                         borderTop: "1px solid #e7e5e4",
                         borderBottom: "1px solid #e7e5e4",
-                        background: "#fff",
+                        background: "#fcfbf8",
                     }}
                 >
-                    <div style={{ ...section, padding: isMobile ? "40px 16px" : "64px 20px" }}>
-                        <div style={{ maxWidth: "760px", minWidth: 0, textAlign: isMobile ? "center" : "left" }}>
-                            <div style={{ fontSize: "12px", letterSpacing: "2px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>Packages</div>
-                            <h2 style={{ margin: "10px 0 8px", fontSize: isMobile ? "28px" : "42px", lineHeight: "1.1", color: "#1f1f1f", letterSpacing: "-0.5px" }}>Choose your project tier</h2>
-                            <p style={{ margin: 0, color: "#57534e", lineHeight: "1.6", fontSize: isMobile ? "14px" : "17px", maxWidth: "720px" }}>
-                                Clear, fixed-price drawing structures designed to move your application from concept to council approval seamlessly.
-                            </p>
-                        </div>
-
-                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(280px, 1fr))", gap: isMobile ? "16px" : "20px", marginTop: isMobile ? "24px" : "36px", alignItems: "stretch" }}>
-                            {packages.map((pkg) => {
-                                const isSelected = selectedPackage === pkg.name;
-                                const isExpanded = expandedPackage === pkg.name || !isMobile;
-
-                                return (
-                                    <div
-                                        key={pkg.name}
-                                        style={{
-                                            ...card,
-                                            minWidth: 0,
-                                            position: "relative",
-                                            background: pkg.featured ? "#1f1f1f" : "#fff",
-                                            color: pkg.featured ? "#fff" : "#1f1f1f",
-                                            border: pkg.featured ? "1px solid #1f1f1f" : "1px solid #e7e5e4",
-                                            borderRadius: "24px",
-                                            padding: isMobile ? "20px" : "26px",
-                                            boxSizing: "border-box",
-                                            boxShadow: pkg.featured ? "0 20px 40px rgba(28,25,23,0.14)" : "0 10px 24px rgba(28,25,23,0.04)",
-                                            transform: !isMobile && pkg.featured ? "translateY(-8px)" : "none",
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            justifyContent: "space-between",
-                                        }}
-                                    >
-                                        <div>
-                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "4px" }}>
-                                                <h3 style={{ margin: 0, fontSize: isMobile ? "20px" : "24px", fontWeight: "800" }}>{pkg.name}</h3>
-                                                {pkg.featured && (
-                                                    <span style={{ padding: "4px 10px", borderRadius: "999px", background: "#A67C00", color: "#fff", fontSize: "10px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "0.5px" }}>Popular</span>
-                                                )}
-                                            </div>
-
-                                            <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "12px" }}>
-                                                <span style={{ fontSize: isMobile ? "28px" : "36px", fontWeight: "900", color: pkg.featured ? "#fff" : "#1f1f1f" }}>{pkg.price}</span>
-                                                <span style={{ fontSize: "12px", color: pkg.featured ? "#a8a29e" : "#78716c" }}>fixed cost</span>
-                                            </div>
-
-                                            <p style={{ margin: "0 0 16px", fontSize: "14px", lineHeight: "1.5", color: pkg.featured ? "#d6d3d1" : "#57534e" }}>{pkg.intro}</p>
-
-                                            {isMobile && (
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setExpandedPackage(isExpanded ? null : pkg.name)}
-                                                    style={{
-                                                        display: "flex",
-                                                        alignItems: "center",
-                                                        justifyContent: "space-between",
-                                                        width: "100%",
-                                                        background: "none",
-                                                        border: "none",
-                                                        padding: "12px 0",
-                                                        color: pkg.featured ? "#C6A243" : "#A67C00",
-                                                        fontWeight: "700",
-                                                        fontSize: "13px",
-                                                        cursor: "pointer",
-                                                        borderTop: pkg.featured ? "1px solid #2e2a24" : "1px solid #f5f5f4",
-                                                    }}
-                                                >
-                                                    <span>{isExpanded ? "Hide package details" : "Show package details"}</span>
-                                                    <span style={{ fontSize: "16px", transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }}>▼</span>
-                                                </button>
-                                            )}
-
-                                            <div
-                                                style={{
-                                                    display: isExpanded ? "grid" : "none",
-                                                    gap: "10px",
-                                                    paddingTop: isMobile ? "8px" : "16px",
-                                                    borderTop: !isMobile ? (pkg.featured ? "1px solid rgba(255,255,255,0.1)" : "1px solid #ece7df") : "none",
-                                                    animation: isMobile ? "faqFadeDown 0.2s ease" : "none",
-                                                }}
-                                            >
-                                                <div style={{ fontSize: "12px", fontWeight: "700", textTransform: "uppercase", color: pkg.featured ? "#a8a29e" : "#78716c", marginBottom: "4px" }}>Includes:</div>
-                                                {pkg.includes.map((item) => (
-                                                    <div key={item} style={{ display: "flex", gap: "8px", alignItems: "center", fontSize: "14px" }}>
-                                                        <span style={{ color: pkg.featured ? "#C6A243" : "#A67C00", fontWeight: "900" }}>✓</span>
-                                                        <span style={{ color: pkg.featured ? "#f5f5f4" : "#44403c" }}>{item}</span>
-                                                    </div>
-                                                ))}
-                                                <div style={{ fontSize: "12px", color: pkg.featured ? "#a8a29e" : "#78716c", marginTop: "4px", fontStyle: "italic" }}>
-                                                    ⏱ Turnaround: 7–10 working days
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div style={{ marginTop: "24px" }}>
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    handlePackageSelect(pkg.name);
-                                                    document.getElementById("contact-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
-                                                }}
-                                                style={{
-                                                    width: "100%",
-                                                    minHeight: "48px",
-                                                    borderRadius: "14px",
-                                                    border: "none",
-                                                    background: isSelected ? "#A67C00" : (pkg.featured ? "#fff" : "#1f1f1f"),
-                                                    color: isSelected ? "#fff" : (pkg.featured ? "#1f1f1f" : "#fff"),
-                                                    fontSize: "14px",
-                                                    fontWeight: "800",
-                                                    cursor: "pointer",
-                                                    boxShadow: isSelected ? "0 8px 20px rgba(166,124,0,0.2)" : "none",
-                                                    transition: "all 0.2s",
-                                                }}
-                                            >
-                                                {isSelected ? "Selected" : "Ask About This Package"}
-                                            </button>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </section>
-
-                {/* Direct Call Callout Promotion */}
-             
-
-                {/* Simplified Contact Form Section Area */}
-                <section
-                    id="contact-form"
-                    style={{
-                        borderTop: "1px solid #e7e5e4",
-                        background: "#efebe6",
-                    }}
-                >
-                    <div
-                        style={{
-                            maxWidth: "680px",
-                            margin: "0 auto",
-                            padding: isMobile ? "48px 16px" : "70px 24px",
-                            display: "grid",
-                            gap: "24px",
-                            boxSizing: "border-box",
-                        }}
-                    >
-                        <div style={{ textAlign: "center", minWidth: 0 }}>
-                            <div
-                                style={{
-                                    fontSize: "12px",
-                                    letterSpacing: "2px",
-                                    textTransform: "uppercase",
-                                    color: "#78716c",
-                                    fontWeight: "700",
-                                }}
-                            >
-                                Enquiry Form
+                    <div style={{ ...section, padding: isMobile ? "40px 16px" : "48px 20px" }}>
+                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, minmax(0, 1fr))", gap: isMobile ? "16px" : "24px", alignItems: "stretch" }}>
+                            {/* Google Reviews Card */}
+                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px" }}>
+                                    <svg viewBox="0 0 24 24" width="22" height="22" style={{ marginRight: "2px" }}>
+                                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.85z" fill="#FBBC05"/>
+                                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                                    </svg>
+                                    <span style={{ fontWeight: "800", color: "#1f1f1f", fontSize: "16px", letterSpacing: "-0.3px" }}>Google Rating</span>
+                                </div>
+                                <div style={{ color: "#f59e0b", fontSize: "18px", letterSpacing: "2px", marginBottom: "6px" }}>★★★★★</div>
+                                <div style={{ fontSize: "22px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.1" }}>4.9 / 5.0</div>
+                                <p style={{ margin: "6px 0 0", fontSize: "13px", color: "#78716c", fontWeight: "500" }}>Verified Homeowner Feedback</p>
                             </div>
 
-                            <h2
-                                style={{
-                                    fontSize: isMobile ? "30px" : "42px",
-                                    marginTop: "12px",
-                                    marginBottom: "4px",
-                                    lineHeight: "1.08",
-                                    color: "#1f1f1f",
-                                }}
-                            >
-                                Request your drawings quote
-                            </h2>
-
-                            <p style={{ margin: "0 0 12px", color: "#57534e", fontSize: "14px", fontWeight: "500" }}>
-                                No annoying sales calls. Just straight answers, clear advice, and zero pressure from our layout specialists.
-                            </p>
-
-                            {selectedPackage && (
-                                <div
-                                    style={{
-                                        marginTop: "8px",
-                                        marginBottom: "16px",
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: "8px",
-                                        padding: "10px 14px",
-                                        borderRadius: "999px",
-                                        background: "#1f1f1f",
-                                        color: "#fff",
-                                        fontWeight: "700",
-                                        maxWidth: "100%",
-                                        flexWrap: "wrap",
-                                        lineHeight: "1.5",
-                                    }}
-                                >
-                                    <span>Selected: {selectedPackage}</span>
-                                    <span style={{ opacity: 0.7 }}>•</span>
-                                    <span>
-                                        {packages.find((p) => p.name === selectedPackage)?.price}
-                                    </span>
+                            {/* FMB Card */}
+                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
+                                <div style={{ width: "54px", height: "54px", marginBottom: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                    <img src="/images/fmb.jpeg" alt="Federation of Master Builders Logo" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }} />
                                 </div>
-                            )}
-                        </div>
+                                <div style={{ fontWeight: "900", color: "#9c0c26", fontSize: "14px", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "3px" }}>FMB</div>
+                                <h3 style={{ margin: "0 0 4px", fontSize: "16px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.2" }}>Federation of Master Builders Member</h3>
+                                <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#57534e", lineHeight: "1.4" }}>Federation of Master Builders vetted & inspected architectural standards.</p>
+                            </div>
 
-                        <div style={{ minWidth: 0 }}>
-                            <DrawingsPlanningForm
-                                endpoint="https://formspree.io/f/maqlqgzz"
-                                selectedPackage={selectedPackage}
-                            />
+                            {/* TrustMark Card */}
+                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
+                                <div style={{ width: "42px", height: "42px", borderRadius: "10px", background: "#16a34a", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "12px", boxShadow: "0 4px 12px rgba(22,163,74,0.15)" }}>
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                        <path d="M9 11l2 2 4-4" />
+                                    </svg>
+                                </div>
+                                <h3 style={{ margin: "0 0 4px", fontSize: "16px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.2" }}>TrustMark Government Endorsed</h3>
+                                <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#57534e", lineHeight: "1.4" }}>Government-endorsed quality standard for absolute technical compliance.</p>
+                            </div>
                         </div>
                     </div>
+
                 </section>
+
+              
+
+             
+
+                  
+
+              
+             
+
+                
 
                 <section
                     style={{
