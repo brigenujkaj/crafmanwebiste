@@ -293,7 +293,7 @@ export default function DrawingsPlanning() {
                     position: "relative",
                 }}
             >
-
+                {/*PROMOTION
              <section
                     style={{
                         borderTop: "1px solid #e7e5e4",
@@ -433,126 +433,139 @@ export default function DrawingsPlanning() {
                     </div>
                 </section>
 
+                */ }
+
+
+
                 <section
                     style={{
                         position: "relative",
-                        borderBottom: "1px solid #e7e5e4",
+                        borderBottom: "1px solid #2e2a24",
                         backgroundImage: "url('/images/backgroundDrawings.png')",
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                         backgroundRepeat: "no-repeat",
                         overflow: "hidden",
+                        backgroundAttachment: !isMobile ? "fixed" : "scroll", // Smooth parallax depth on desktop
                     }}
                 >
+                    {/* Optimized Premium Overlay Mask: Swaps the flat white wash for deep obsidian glass */}
                     <div
                         style={{
                             position: "absolute",
                             inset: 0,
-                            background: "linear-gradient(135deg, rgba(241,237,231,0.88), rgba(255,255,255,0.85), rgba(234,229,221,0.88))",
+                            background: "linear-gradient(135deg, rgba(15,15,14,0.92) 0%, rgba(24,24,22,0.85) 60%, rgba(15,15,14,0.9) 100%)",
+                            zIndex: 1,
+                        }}
+                    />
+
+                    {/* Subtle Luxury Golden Ambient Ambient Flare sitting *behind* the text but over the image */}
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: "-20%",
+                            left: "15%",
+                            width: isMobile ? "300px" : "600px",
+                            height: isMobile ? "300px" : "600px",
+                            borderRadius: "50%",
+                            background: "radial-gradient(circle, rgba(198, 162, 67, 0.08) 0%, transparent 70%)",
+                            filter: "blur(50px)",
+                            pointerEvents: "none",
                             zIndex: 1,
                         }}
                     />
 
                     <div style={{ position: "relative", zIndex: 2 }}>
-                        <div style={{ ...section, paddingTop: "90px", paddingBottom: "90px" }}>
-                            <div style={tag}>Drawings & Planning</div>
+                        <div style={{ ...section, paddingTop: isMobile ? "60px" : "90px", paddingBottom: isMobile ? "60px" : "90px" }}>
 
-                            <h1
+                            {/* Tag Element - Upgraded to contrast on the dark background */}
+                            <div
                                 style={{
-                                    fontSize: "clamp(38px, 6vw, 62px)",
-                                    lineHeight: "1.05",
-                                    margin: 0,
-                                    maxWidth: "820px",
-                                    color: "#A67C00",
+                                    ...tag,
+                                    background: "rgba(166, 124, 0, 0.15)",
+                                    border: "1px solid rgba(166, 124, 0, 0.4)",
+                                    color: "#E2BA6E",
+                                    padding: "4px 12px",
+                                    borderRadius: "6px",
+                                    fontSize: "11px",
+                                    fontWeight: "800",
+                                    letterSpacing: "1.5px",
+                                    textTransform: "uppercase",
+                                    width: "fit-content",
+                                    marginBottom: "16px"
                                 }}
                             >
-                                Architectural drawings designed for approval
+                                Drawings & Planning
+                            </div>
+
+                            {/* Main Title - Flipped to Crisp White with a striking Gold Core */}
+                            <h1
+                                style={{
+                                    fontSize: "clamp(34px, 5.5vw, 56px)",
+                                    lineHeight: "1.1",
+                                    margin: 0,
+                                    maxWidth: "820px",
+                                    color: "#ffffff",
+                                    fontWeight: "900",
+                                    letterSpacing: "-0.5px"
+                                }}
+                            >
+                                Architectural drawings <br className="hidden md:inline" />designed for <span style={{ background: "linear-gradient(120deg, #E2BA6E 0%, #C6A243 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>council approval</span>
                             </h1>
 
+                            {/* Description Paragraph - High Readability Slate Gray */}
                             <p
                                 style={{
-                                    fontSize: "clamp(16px, 3vw, 20px)",
-                                    lineHeight: "1.2",
-                                    marginTop: "12px",
+                                    fontSize: "clamp(15px, 2.5vw, 18px)",
+                                    lineHeight: "1.5",
+                                    marginTop: "16px",
                                     marginBottom: 0,
-                                    maxWidth: "820px",
-                                    color: "#44403c",
-                                    fontWeight: "500",
+                                    maxWidth: "600px",
+                                    color: "#d6d3d1",
+                                    fontWeight: "400",
                                 }}
                             >
                                 Clear guidance on what’s needed and the next steps for your project
                             </p>
 
+                            {/* Action Buttons Container */}
                             <div
                                 style={{
-                                    marginTop: "30px",
+                                    marginTop: "32px",
                                     display: "flex",
                                     gap: "14px",
                                     flexWrap: "wrap",
                                 }}
                             >
-                                <a href="#packages" style={buttonPrimary}>
+                                <a
+                                    href="#packages"
+                                    style={{
+                                        ...buttonPrimary,
+                                        background: "linear-gradient(135deg, #A67C00 0%, #C6A243 100%)",
+                                        color: "#fff",
+                                        border: "none",
+                                        fontWeight: "800"
+                                    }}
+                                >
                                     View Packages
                                 </a>
-                                <a href="#contact-form" style={buttonSecondary}>
+                                <a
+                                    href="#contact-form"
+                                    style={{
+                                        ...buttonSecondary,
+                                        background: "rgba(255, 255, 255, 0.05)",
+                                        border: "1px solid rgba(255, 255, 255, 0.15)",
+                                        color: "#fff",
+                                        fontWeight: "700"
+                                    }}
+                                >
                                     Get Free Permission Strategy
                                 </a>
                             </div>
                         </div>
 
-                        <div
-                            style={{
-                                marginTop: "0px",
-                                display: "flex",
-                                flexWrap: "wrap",
-                                gap: isMobile ? "10px" : "12px",
-                                justifyContent: "center",
-                                paddingBottom: "40px",
-                            }}
-                        >
-                            {[
-                                "Planning-ready drawings",
-                                "Guidance included",
-                                "Clear next steps",
-                            ].map((item) => (
-                                <div
-                                    key={item}
-                                    style={{
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: "8px",
-                                        padding: "8px 12px",
-                                        borderRadius: "999px",
-                                        background: "rgba(255,255,255,0.55)",
-                                        border: "1px solid #d6d3d1",
-                                        color: "#44403c",
-                                        fontSize: isMobile ? "13px" : "14px",
-                                        fontWeight: "600",
-                                        lineHeight: 1.2,
-                                    }}
-                                >
-                                    <span
-                                        style={{
-                                            width: "18px",
-                                            height: "18px",
-                                            minWidth: "18px",
-                                            borderRadius: "999px",
-                                            display: "inline-flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            background: "#A67C00",
-                                            color: "#fff",
-                                            fontSize: "11px",
-                                            fontWeight: "800",
-                                            boxShadow: "0 4px 10px rgba(166,124,0,0.18)",
-                                        }}
-                                    >
-                                        ✓
-                                    </span>
-                                    <span>{item}</span>
-                                </div>
-                            ))}
-                        </div>
+                        {/* Bottom Horizontal Checkmark Feature Badges */}
+                       
                     </div>
                 </section>
 
