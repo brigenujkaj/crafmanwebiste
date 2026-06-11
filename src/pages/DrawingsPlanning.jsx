@@ -66,7 +66,8 @@ export default function DrawingsPlanning() {
         {
             name: "Starter Package",
             price: "From £950",
-            intro: "A practical starting point for simple projects and early-stage ideas.",
+            bestFor: "Feasibility & Ideas",
+            intro: "Ideal if you want to see what is structurally possible on your plot, sketch out early layout ideas, or check your options before committing.",
             includes: [
                 "Measured survey",
                 "Current scaled drawings",
@@ -77,7 +78,8 @@ export default function DrawingsPlanning() {
         {
             name: "Planning Package",
             price: "From £1250",
-            intro: "Our most popular option for projects that need planning drawings and guidance.",
+            bestFor: "Lofts & Extensions",
+            intro: "Our most popular tier. Perfect if you know exactly what you want to build (rear extension, dormer loft) and need full Council approval.",
             includes: [
                 "Measured survey",
                 "Current scaled drawings",
@@ -91,7 +93,8 @@ export default function DrawingsPlanning() {
         {
             name: "Technical Package",
             price: "From £1650",
-            intro: "A fuller package for projects moving into technical design and build preparation.",
+            bestFor: "Ready to Build",
+            intro: "For homeowners ready to hand blueprints to a builder. Includes structural calculations and technical details to pass Building Control.",
             includes: [
                 "Measured survey",
                 "Current scaled drawings",
@@ -100,6 +103,20 @@ export default function DrawingsPlanning() {
                 "Submission to council",
                 "Building control drawings",
                 "Structural calculations",
+            ],
+        },
+        {
+            name: "Bespoke Package",
+            price: "POA",
+            bestFor: "Large & Custom Builds",
+            intro: "For major renovations, new-build properties, premium smart-homes, or multi-unit residential developments requiring custom design consultation.",
+            includes: [
+                "Everything in Technical Package",
+                "Custom architectural concept design",
+                "Premium 3D spatial rendering layouts",
+                "Site feasibility & planning analysis",
+                "Direct specialist project advisory",
+                "Fast-tracked application compilation",
             ],
         },
     ];
@@ -312,7 +329,7 @@ export default function DrawingsPlanning() {
                         <div
                             style={{
                                 display: "grid",
-                                gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
+                                gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(230px, 1fr))",
                                 gap: "28px",
                                 alignItems: "center",
                             }}
@@ -415,6 +432,7 @@ export default function DrawingsPlanning() {
                         </div>
                     </div>
                 </section>
+
                 <section
                     style={{
                         position: "relative",
@@ -538,6 +556,113 @@ export default function DrawingsPlanning() {
                     </div>
                 </section>
 
+                {/* Trust & Guarantee High-Conversion Value Strip */}
+                <section
+                    style={{
+                        background: "#ffffff",
+                        borderBottom: "1px solid #e7e5e4",
+                        padding: isMobile ? "24px 16px" : "28px 24px",
+                        position: "relative",
+                        zIndex: 10,
+                    }}
+                >
+                    <div
+                        style={{
+                            maxWidth: "1000px",
+                            margin: "0 auto",
+                            width: "100%",
+                        }}
+                    >
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
+                                gap: isMobile ? "20px" : "32px",
+                                alignItems: "start",
+                            }}
+                        >
+                            {/* Feature 1: Pricing */}
+                            <div style={{ display: "flex", gap: "14px", alignItems: "start" }}>
+                                <div
+                                    style={{
+                                        background: "rgba(166, 124, 0, 0.08)",
+                                        padding: "10px",
+                                        borderRadius: "12px",
+                                        color: "#A67C00",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        flexShrink: 0
+                                    }}
+                                >
+                                    <PoundSterling size={isMobile ? 20 : 24} strokeWidth={2.5} />
+                                </div>
+                                <div>
+                                    <h3 style={{ margin: "0 0 4px 0", fontSize: "15px", fontWeight: "800", color: "#1c1917", letterSpacing: "-0.2px" }}>
+                                        100% Fixed Pricing
+                                    </h3>
+                                    <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4", fontWeight: "500" }}>
+                                        Clear, upfront package costs with absolute zero hidden fees or council administration extras.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Feature 2: Council Submissions */}
+                            <div style={{ display: "flex", gap: "14px", alignItems: "start" }}>
+                                <div
+                                    style={{
+                                        background: "rgba(166, 124, 0, 0.08)",
+                                        padding: "10px",
+                                        borderRadius: "12px",
+                                        color: "#A67C00",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        flexShrink: 0
+                                    }}
+                                >
+                                    <ShieldCheck size={isMobile ? 20 : 24} strokeWidth={2.5} />
+                                </div>
+                                <div>
+                                    <h3 style={{ margin: "0 0 4px 0", fontSize: "15px", fontWeight: "800", color: "#1c1917", letterSpacing: "-0.2px" }}>
+                                        Full Council Submission
+                                    </h3>
+                                    <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4", fontWeight: "500" }}>
+                                        We manage your entire backend application, paperwork, and agent updates directly with local planners.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Feature 3: Turnaround */}
+                            <div style={{ display: "flex", gap: "14px", alignItems: "start" }}>
+                                <div
+                                    style={{
+                                        background: "rgba(166, 124, 0, 0.08)",
+                                        padding: "10px",
+                                        borderRadius: "12px",
+                                        color: "#A67C00",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        flexShrink: 0
+                                    }}
+                                >
+                                    <Zap size={isMobile ? 20 : 24} strokeWidth={2.5} />
+                                </div>
+                                <div>
+                                    <h3 style={{ margin: "0 0 4px 0", fontSize: "15px", fontWeight: "800", color: "#1c1917", letterSpacing: "-0.2px" }}>
+                                        Fast 14-Day Turnaround
+                                    </h3>
+                                    <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4", fontWeight: "500" }}>
+                                        Precision CAD blueprints completed, reviewed, and finalized for your project approval within 2 weeks.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Mobile-Friendly Accordion Packages Section */}
                 {/* Mobile-Friendly Accordion Packages Section */}
                 <section
                     id="packages"
@@ -583,7 +708,23 @@ export default function DrawingsPlanning() {
                                     >
                                         <div>
                                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "4px" }}>
-                                                <h3 style={{ margin: 0, fontSize: isMobile ? "20px" : "24px", fontWeight: "800" }}>{pkg.name}</h3>
+                                                <div>
+                                                    {/* Dynamic Visual Breakdown Clarity Tag */}
+                                                    <span style={{
+                                                        display: "inline-block",
+                                                        padding: "2px 8px",
+                                                        borderRadius: "6px",
+                                                        background: pkg.featured ? "rgba(166, 124, 0, 0.2)" : "#f5f5f4",
+                                                        color: pkg.featured ? "#C6A243" : "#57534e",
+                                                        fontSize: "11px",
+                                                        fontWeight: "700",
+                                                        marginBottom: "6px",
+                                                        textTransform: "uppercase"
+                                                    }}>
+                                                        Best for: {pkg.bestFor}
+                                                    </span>
+                                                    <h3 style={{ margin: 0, fontSize: isMobile ? "20px" : "24px", fontWeight: "800" }}>{pkg.name}</h3>
+                                                </div>
                                                 {pkg.featured && (
                                                     <span style={{ padding: "4px 10px", borderRadius: "999px", background: "#A67C00", color: "#fff", fontSize: "10px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "0.5px" }}>Popular</span>
                                                 )}
