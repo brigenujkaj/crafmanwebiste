@@ -696,14 +696,7 @@ export default function DrawingsPlanning() {
                                 <p style={{ margin: "6px 0 0", fontSize: "13px", color: "#78716c", fontWeight: "500" }}>Verified Homeowner Feedback</p>
                             </div>
 
-                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
-                                <div style={{ width: "54px", height: "54px", marginBottom: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                    <img src="/images/fmb.jpeg" alt="Federation of Master Builders Logo" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }} />
-                                </div>
-                                <div style={{ fontWeight: "900", color: "#9c0c26", fontSize: "14px", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "3px" }}>FMB</div>
-                                <h3 style={{ margin: "0 0 4px", fontSize: "16px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.2" }}>Federation of Master Builders Member</h3>
-                                <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#57534e", lineHeight: "1.4" }}>Federation of Master Builders vetted & inspected architectural standards.</p>
-                            </div>
+                            
 
                             <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
                                 <div style={{ width: "42px", height: "42px", borderRadius: "10px", background: "#16a34a", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "12px", boxShadow: "0 4px 12px rgba(22,163,74,0.15)" }}>
