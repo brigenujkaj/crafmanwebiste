@@ -705,7 +705,6 @@ export default function DrawingsPlanning() {
                         <div style={{ maxWidth: "760px", minWidth: 0, textAlign: isMobile ? "center" : "left" }}>
                             <div style={{ fontSize: "12px", letterSpacing: "2px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>Packages</div>
                             <h2 style={{ margin: "10px 0 8px", fontSize: isMobile ? "28px" : "42px", lineHeight: "1.1", color: "#1f1f1f", letterSpacing: "-0.5px" }}>Choose your project tier</h2>
-                           
                         </div>
 
                         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(280px, 1fr))", gap: isMobile ? "16px" : "20px", marginTop: isMobile ? "24px" : "36px", alignItems: "stretch" }}>
@@ -736,7 +735,6 @@ export default function DrawingsPlanning() {
                                         <div>
                                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "4px" }}>
                                                 <div>
-                                                    {/* Dynamic Visual Breakdown Clarity Tag */}
                                                     <span style={{
                                                         display: "inline-block",
                                                         padding: "2px 8px",
@@ -767,7 +765,18 @@ export default function DrawingsPlanning() {
                                             {isMobile && (
                                                 <button
                                                     type="button"
-                                                    onClick={() => setExpandedPackage(isExpanded ? null : pkg.name)}
+                                                    onClick={() => {
+                                                        setExpandedPackage(isExpanded ? null : pkg.name);
+                                                        if (!isExpanded) {
+                                                            window.dataLayer = window.dataLayer || [];
+                                                            window.dataLayer.push({
+                                                                event: "package_details_toggle",
+                                                                package_name: pkg.name,
+                                                                action: "expand",
+                                                                device: "mobile"
+                                                            });
+                                                        }
+                                                    }}
                                                     style={{
                                                         display: "flex",
                                                         alignItems: "center",
@@ -814,12 +823,19 @@ export default function DrawingsPlanning() {
                                             <button
                                                 type="button"
                                                 onClick={() => {
+                                                    // 1. Process active state allocation
                                                     handlePackageSelect(pkg.name);
+
+                                                    // 2. Transmit fully-mapped analytics properties cleanly
                                                     window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-        event: "package_button_click",
-        package_name: pkg.name
-    });
+                                                    window.dataLayer.push({
+                                                        event: "package_button_click",
+                                                        package_name: pkg.name,
+                                                        package_price: pkg.price,
+                                                        is_featured: pkg.featured ? "yes" : "no"
+                                                    });
+
+                                                    // 3. Smooth scroll down to the final submission form
                                                     document.getElementById("contact-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
                                                 }}
                                                 style={{
