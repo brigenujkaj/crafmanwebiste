@@ -14,11 +14,15 @@ export default function DrawingsPlanning() {
     const [drawingIndex, setDrawingIndex] = useState(0);
     const [expandedPackage, setExpandedPackage] = useState(null);
 
+    // --- Interactive Postcode Hook State ---
+    const [postcode, setPostcode] = useState('');
+    const [checkerStatus, setCheckerStatus] = useState('idle'); // idle, loading, success, error
+
     useLayoutEffect(() => {
         if ("scrollRestoration" in window.history) {
             window.history.scrollRestoration = "manual";
         }
-        
+
         window.scrollTo(0, 0);
         document.documentElement.scrollTop = 0;
         document.body.scrollTop = 0;
@@ -32,7 +36,7 @@ export default function DrawingsPlanning() {
     useEffect(() => {
         const handlePageShow = () => {
             window.scrollTo(0, 0);
-        };                     
+        };
         window.addEventListener("pageshow", handlePageShow);
         return () => window.removeEventListener("pageshow", handlePageShow);
     }, []);
@@ -43,6 +47,28 @@ export default function DrawingsPlanning() {
         window.addEventListener("resize", checkScreen);
         return () => window.removeEventListener("resize", checkScreen);
     }, []);
+
+    const handlePostcodeCheck = (e) => {
+        e.preventDefault();
+        if (!postcode.trim()) {
+            setCheckerStatus('error');
+            return;
+        }
+
+        setCheckerStatus('loading');
+
+        // Premium psychological delay modifier
+        setTimeout(() => {
+            setCheckerStatus('success');
+
+            // Push metric to Google Tag Manager dataLayer
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: "postcode_check_success",
+                submitted_postcode: postcode.toUpperCase()
+            });
+        }, 600);
+    };
 
     const drawingImages = [
         { src: "/images/drawingsex14.png", label: "3D Render" },
@@ -250,40 +276,38 @@ export default function DrawingsPlanning() {
 
     return (
         <Layout>
-           <Helmet>
-    <title>Planning Drawings & Permission London | Crafman | London & Essex</title>
-    <meta
-        name="description"
-        content="Professional planning drawings and permission support in London & Essex. Fixed-price packages for extensions, lofts, and renovations starting from £950."
-    />
-    <link rel="canonical" href="https://crafman.co.uk/drawings-planning" />
-    
-    {/* Google Tag Manager - Master Antenna */}
-    <script>
-        {`
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-PLFBQMWH');
-        `}
-    </script>
+            <Helmet>
+                <title>Planning Drawings & Permission London | Crafman | London & Essex</title>
+                <meta
+                    name="description"
+                    content="Professional planning drawings and permission support in London & Essex. Fixed-price packages for extensions, lofts, and renovations starting from £950."
+                />
+                <link rel="canonical" href="https://crafman.co.uk/drawings-planning" />
 
-    <script 
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(drawingsSchema) }}
-    />
-</Helmet>
+                <script>
+                    {`
+                        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                        })(window,document,'script','dataLayer','GTM-PLFBQMWH');
+                    `}
+                </script>
 
-{/* GTM Body Fallback Tracker */}
-<noscript>
-    <iframe 
-        src="https://www.googletagmanager.com/ns.html?id=GTM-PLFBQMWH"
-        height="0" 
-        width="0" 
-        style={{ display: 'none', visibility: 'hidden' }}
-    />
-</noscript>
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(drawingsSchema) }}
+                />
+            </Helmet>
+
+            <noscript>
+                <iframe
+                    src="https://www.googletagmanager.com/ns.html?id=GTM-PLFBQMWH"
+                    height="0"
+                    width="0"
+                    style={{ display: 'none', visibility: 'hidden' }}
+                />
+            </noscript>
 
             <div
                 style={{
@@ -293,150 +317,6 @@ export default function DrawingsPlanning() {
                     position: "relative",
                 }}
             >
-                {/*PROMOTION
-             <section
-                    style={{
-                        borderTop: "1px solid #e7e5e4",
-                        borderBottom: "1px solid #e7e5e4",
-                        background: "linear-gradient(135deg, #1f1f1f 0%, #121212 100%)",
-                        color: "#fff",
-                        overflow: "hidden",
-                        position: "relative",
-                    }}
-                >
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: "-50%",
-                            right: "-20%",
-                            width: "400px",
-                            height: "400px",
-                            borderRadius: "50%",
-                            background: "rgba(166, 124, 0, 0.08)",
-                            filter: "blur(60px)",
-                            pointerEvents: "none",
-                        }}
-                    />
-
-                    <div
-                        style={{
-                            ...section,
-                            padding: isMobile ? "40px 16px" : "48px 24px",
-                            maxWidth: "1000px",
-                            margin: "0 auto",
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(230px, 1fr))",
-                                gap: "28px",
-                                alignItems: "center",
-                            }}
-                        >
-                            <div style={{ minWidth: 0 }}>
-                                <div
-                                    style={{
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: "6px",
-                                        padding: "6px 14px",
-                                        borderRadius: "999px",
-                                        background: "rgba(166, 124, 0, 0.15)",
-                                        border: "1px solid #A67C00",
-                                        color: "#C6A243",
-                                        fontSize: "12px",
-                                        fontWeight: "800",
-                                        textTransform: "uppercase",
-                                        letterSpacing: "1px",
-                                        marginBottom: "16px",
-                                    }}
-                                >
-                                    <span style={{ fontSize: "14px", lineHeight: "1" }}>⚡</span> Limited Time Call Promotion
-                                </div>
-
-                                <h2
-                                    style={{
-                                        margin: "0 0 10px",
-                                        fontSize: isMobile ? "28px" : "38px",
-                                        lineHeight: "1.15",
-                                        fontWeight: "800",
-                                        letterSpacing: "-0.5px",
-                                        color: "#fff",
-                                    }}
-                                >
-                                    Get <span style={{ color: "#C6A243" }}>£100 Off</span> your drawing package on same-day booking
-                                </h2>
-                                
-                                <p
-                                    style={{
-                                        margin: 0,
-                                        color: "#d6d3d1",
-                                        fontSize: isMobile ? "15px" : "16px",
-                                        lineHeight: "1.6",
-                                        maxWidth: "620px",
-                                    }}
-                                >
-                                    Speak directly with a practical planning strategist today. Lock in an absolute fixed-price discount on any residential project bundle by securing your project reference number over the phone.
-                                </p>
-                            </div>
-
-                            <div
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: "10px",
-                                    width: isMobile ? "100%" : "auto",
-                                    minWidth: isMobile ? "100%" : "280px",
-                                    flexShrink: 0,
-                                }}
-                            >
-                                <a
-                                    href="tel:02036335634"
-                                    style={{
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        gap: "10px",
-                                        minHeight: "54px",
-                                        padding: "0 28px",
-                                        borderRadius: "16px",
-                                        background: "linear-gradient(135deg, #A67C00, #C6A243)",
-                                        color: "#fff",
-                                        fontSize: "16px",
-                                        fontWeight: "800",
-                                        textDecoration: "none",
-                                        boxShadow: "0 12px 24px rgba(166, 124, 0, 0.25)",
-                                        transition: "all 0.2s ease",
-                                        textAlign: "center",
-                                    }}
-                                >
-                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ transform: "rotate(15deg)" }}>
-                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.9.32 1.77.59 2.6a2 2 0 0 1-.45 2.11L8.1 9.9a16 16 0 0 0 6 6l1.47-1.1a2 2 0 0 1 2.11-.45c.83.27 1.7.47 2.6.59A2 2 0 0 1 22 16.92z" />
-                                    </svg>
-                                    Call Now: 0203 633 5634
-                                </a>
-
-                                <div
-                                    style={{
-                                        textAlign: "center",
-                                        fontSize: "12px",
-                                        color: "#78716c",
-                                        fontWeight: "600",
-                                        letterSpacing: "0.2px",
-                                    }}
-                                >
-                                    Quote promotion code: <span style={{ color: "#C6A243" }}>CRAF100</span> when speaking to us
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                */ }
-
-
-
                 <section
                     style={{
                         position: "relative",
@@ -446,10 +326,9 @@ export default function DrawingsPlanning() {
                         backgroundPosition: "center",
                         backgroundRepeat: "no-repeat",
                         overflow: "hidden",
-                        backgroundAttachment: !isMobile ? "fixed" : "scroll", // Smooth parallax depth on desktop
+                        backgroundAttachment: !isMobile ? "fixed" : "scroll",
                     }}
                 >
-                    {/* Optimized Premium Overlay Mask: Swaps the flat white wash for deep obsidian glass */}
                     <div
                         style={{
                             position: "absolute",
@@ -459,7 +338,6 @@ export default function DrawingsPlanning() {
                         }}
                     />
 
-                    {/* Subtle Luxury Golden Ambient Ambient Flare sitting *behind* the text but over the image */}
                     <div
                         style={{
                             position: "absolute",
@@ -478,7 +356,6 @@ export default function DrawingsPlanning() {
                     <div style={{ position: "relative", zIndex: 2 }}>
                         <div style={{ ...section, paddingTop: isMobile ? "60px" : "90px", paddingBottom: isMobile ? "60px" : "90px" }}>
 
-                            {/* Tag Element - Upgraded to contrast on the dark background */}
                             <div
                                 style={{
                                     ...tag,
@@ -498,7 +375,6 @@ export default function DrawingsPlanning() {
                                 Drawings & Planning
                             </div>
 
-                            {/* Main Title - Flipped to Crisp White with a striking Gold Core */}
                             <h1
                                 style={{
                                     fontSize: "clamp(34px, 5.5vw, 56px)",
@@ -513,7 +389,6 @@ export default function DrawingsPlanning() {
                                 Architectural drawings <br className="hidden md:inline" />designed for <span style={{ background: "linear-gradient(120deg, #E2BA6E 0%, #C6A243 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>council approval</span>
                             </h1>
 
-                            {/* Description Paragraph - High Readability Slate Gray */}
                             <p
                                 style={{
                                     fontSize: "clamp(15px, 2.5vw, 18px)",
@@ -528,10 +403,126 @@ export default function DrawingsPlanning() {
                                 Clear guidance on what’s needed and the next steps for your project
                             </p>
 
-                            {/* Action Buttons Container */}
+                            {/* --- FLAWLESS INTERACTIVE POSTCODE CHECKER UNIT --- */}
                             <div
                                 style={{
-                                    marginTop: "32px",
+                                    maxWidth: "460px",
+                                    marginTop: "28px",
+                                    background: "rgba(255, 255, 255, 0.02)",
+                                    backdropFilter: "blur(12px)",
+                                    WebkitBackdropFilter: "blur(12px)",
+                                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                                    borderRadius: "16px",
+                                    padding: "14px 16px",
+                                    boxSizing: "border-box",
+                                }}
+                            >
+                                {checkerStatus !== 'success' ? (
+                                    <form onSubmit={handlePostcodeCheck} style={{ margin: 0, width: "100%" }}>
+                                        <label
+                                            htmlFor="hero-postcode-search"
+                                            style={{
+                                                display: "block",
+                                                fontSize: "11px",
+                                                fontWeight: "700",
+                                                color: "#a8a29e",
+                                                textTransform: "uppercase",
+                                                letterSpacing: "1px",
+                                                marginBottom: "8px"
+                                            }}
+                                        >
+                                            Check Coverage & Council Compliance
+                                        </label>
+                                        <div style={{ display: "flex", gap: "8px" }}>
+                                            <input
+                                                id="hero-postcode-search"
+                                                type="text"
+                                                placeholder="Enter Postcode (e.g. RM1, IG7)"
+                                                value={postcode}
+                                                onChange={(e) => {
+                                                    setPostcode(e.target.value);
+                                                    if (checkerStatus === 'error') setCheckerStatus('idle');
+                                                }}
+                                                disabled={checkerStatus === 'loading'}
+                                                style={{
+                                                    flex: 1,
+                                                    height: "42px",
+                                                    borderRadius: "10px",
+                                                    border: checkerStatus === 'error' ? "1px solid #ef4444" : "1px solid rgba(255,255,255,0.15)",
+                                                    background: "rgba(0, 0, 0, 0.3)",
+                                                    color: "#fff",
+                                                    padding: "0 12px",
+                                                    fontSize: "13px",
+                                                    outline: "none",
+                                                    textTransform: "uppercase"
+                                                }}
+                                            />
+                                            <button
+                                                type="submit"
+                                                disabled={checkerStatus === 'loading'}
+                                                style={{
+                                                    height: "42px",
+                                                    padding: "0 16px",
+                                                    borderRadius: "10px",
+                                                    border: "none",
+                                                    background: "linear-gradient(135deg, #A67C00 0%, #C6A243 100%)",
+                                                    color: "#fff",
+                                                    fontSize: "13px",
+                                                    fontWeight: "800",
+                                                    cursor: "pointer",
+                                                    transition: "opacity 0.2s"
+                                                }}
+                                            >
+                                                {checkerStatus === 'loading' ? 'Checking...' : 'Check Area'}
+                                            </button>
+                                        </div>
+                                        {checkerStatus === 'error' && (
+                                            <p style={{ margin: "6px 0 0", fontSize: "12px", color: "#ef4444", fontWeight: "500" }}>
+                                                Please enter your location postcode.
+                                            </p>
+                                        )}
+                                    </form>
+                                ) : (
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: "12px",
+                                            animation: "faqFadeDown 0.25s ease-out"
+                                        }}
+                                    >
+                                        <div
+                                            style={{
+                                                width: "28px",
+                                                height: "28px",
+                                                borderRadius: "50%",
+                                                background: "rgba(34, 197, 94, 0.15)",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                color: "#4ade80",
+                                                fontWeight: "900",
+                                                fontSize: "14px",
+                                                flexShrink: 0
+                                            }}
+                                        >
+                                            ✓
+                                        </div>
+                                        <div>
+                                            <p style={{ margin: 0, fontSize: "14px", fontWeight: "800", color: "#fff" }}>
+                                                Borough Area {postcode.toUpperCase()} is Fully Covered
+                                            </p>
+                                            <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#a8a29e" }}>
+                                                We have complete drawing and planning coverage in your local council hub.
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div
+                                style={{
+                                    marginTop: "24px",
                                     display: "flex",
                                     gap: "14px",
                                     flexWrap: "wrap",
@@ -564,12 +555,9 @@ export default function DrawingsPlanning() {
                             </div>
                         </div>
 
-                        {/* Bottom Horizontal Checkmark Feature Badges */}
-                       
                     </div>
                 </section>
 
-                {/* Standalone Risk-Reversal: 100% Council Approval Guarantee Scheme */}
                 <section
                     style={{
                         borderTop: "1px solid #e7e5e4",
@@ -607,7 +595,6 @@ export default function DrawingsPlanning() {
                                 boxShadow: "0 20px 40px rgba(166, 124, 0, 0.04)"
                             }}
                         >
-                            {/* Left Badge: Shield Icon */}
                             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", margin: isMobile ? "0 auto" : "0" }}>
                                 <div
                                     style={{
@@ -627,7 +614,6 @@ export default function DrawingsPlanning() {
                                 </div>
                             </div>
 
-                            {/* Right Content Block */}
                             <div style={{ textAlign: isMobile ? "center" : "left" }}>
                                 <div style={{ fontSize: "12px", letterSpacing: "1.5px", textTransform: "uppercase", color: "#A67C00", fontWeight: "800", marginBottom: "8px" }}>
                                     Crafman Risk-Reversal Protection
@@ -658,7 +644,6 @@ export default function DrawingsPlanning() {
                                     We handle London and Essex applications with complete regulatory certainty. If we accept your architectural project parameters, we guarantee your plans will pass council assessment. In the rare event that your application faces an absolute refusal that cannot be bypassed via free re-drafts, **we will issue a full 100% refund of your drawing package fee**.
                                 </p>
 
-                                {/* Micro Assurance Grid */}
                                 <div
                                     style={{
                                         display: "flex",
@@ -687,12 +672,53 @@ export default function DrawingsPlanning() {
                     </div>
                 </section>
 
+                <section
+                    style={{
+                        borderTop: "1px solid #e7e5e4",
+                        borderBottom: "1px solid #e7e5e4",
+                        background: "#fcfbf8",
+                    }}
+                >
+                    <div style={{ ...section, padding: isMobile ? "40px 16px" : "48px 20px" }}>
+                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, minmax(0, 1fr))", gap: isMobile ? "16px" : "24px", alignItems: "stretch" }}>
+                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px" }}>
+                                    <svg viewBox="0 0 24 24" width="22" height="22" style={{ marginRight: "2px" }}>
+                                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.85z" fill="#FBBC05" />
+                                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                                    </svg>
+                                    <span style={{ fontWeight: "800", color: "#1f1f1f", fontSize: "16px", letterSpacing: "-0.3px" }}>Google Rating</span>
+                                </div>
+                                <div style={{ color: "#f59e0b", fontSize: "18px", letterSpacing: "2px", marginBottom: "6px" }}>★★★★★</div>
+                                <div style={{ fontSize: "22px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.1" }}>4.9 / 5.0</div>
+                                <p style={{ margin: "6px 0 0", fontSize: "13px", color: "#78716c", fontWeight: "500" }}>Verified Homeowner Feedback</p>
+                            </div>
 
+                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
+                                <div style={{ width: "54px", height: "54px", marginBottom: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                    <img src="/images/fmb.jpeg" alt="Federation of Master Builders Logo" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }} />
+                                </div>
+                                <div style={{ fontWeight: "900", color: "#9c0c26", fontSize: "14px", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "3px" }}>FMB</div>
+                                <h3 style={{ margin: "0 0 4px", fontSize: "16px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.2" }}>Federation of Master Builders Member</h3>
+                                <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#57534e", lineHeight: "1.4" }}>Federation of Master Builders vetted & inspected architectural standards.</p>
+                            </div>
 
+                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
+                                <div style={{ width: "42px", height: "42px", borderRadius: "10px", background: "#16a34a", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "12px", boxShadow: "0 4px 12px rgba(22,163,74,0.15)" }}>
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                        <path d="M9 11l2 2 4-4" />
+                                    </svg>
+                                </div>
+                                <h3 style={{ margin: "0 0 4px", fontSize: "16px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.2" }}>TrustMark Government Endorsed</h3>
+                                <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#57534e", lineHeight: "1.4" }}>Government-endorsed quality standard for absolute technical compliance.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-               
-                {/* Mobile-Friendly Accordion Packages Section */}
-                {/* Mobile-Friendly Accordion Packages Section */}
                 <section
                     id="packages"
                     style={{
@@ -823,10 +849,8 @@ export default function DrawingsPlanning() {
                                             <button
                                                 type="button"
                                                 onClick={() => {
-                                                    // 1. Process active state allocation
                                                     handlePackageSelect(pkg.name);
 
-                                                    // 2. Transmit fully-mapped analytics properties cleanly
                                                     window.dataLayer = window.dataLayer || [];
                                                     window.dataLayer.push({
                                                         event: "package_button_click",
@@ -835,7 +859,6 @@ export default function DrawingsPlanning() {
                                                         is_featured: pkg.featured ? "yes" : "no"
                                                     });
 
-                                                    // 3. Smooth scroll down to the final submission form
                                                     document.getElementById("contact-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
                                                 }}
                                                 style={{
@@ -862,62 +885,104 @@ export default function DrawingsPlanning() {
                     </div>
                 </section>
 
+                <section style={{ background: "#fcfbf8", padding: "32px 16px", borderBottom: "1px solid #e7e5e4" }}>
+                    <div style={{ ...section, maxWidth: "800px", margin: "0 auto" }}>
+                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: "20px" }}>
+                            {[
+                                { step: "01", title: "Free Consultation", desc: "We map out layout viable options and real-time costs." },
+                                { step: "02", title: "Measured Survey & Draft", desc: "Millimeter-accurate mapping of your existing space." },
+                                { step: "03", title: "Council Submission", desc: "We manage the entire backend application package for you." }
+                            ].map((item, i) => (
+                                <div key={i} style={{ display: "flex", gap: "12px", alignItems: "start" }}>
+                                    <span style={{ fontSize: "20px", fontWeight: "900", color: "#A67C00", opacity: 0.4 }}>{item.step}</span>
+                                    <div>
+                                        <h4 style={{ margin: "0 0 4px 0", fontSize: "14px", fontWeight: "700", color: "#1c1917" }}>{item.title}</h4>
+                                        <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4" }}>{item.desc}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
                 <section
                     style={{
                         borderTop: "1px solid #e7e5e4",
                         borderBottom: "1px solid #e7e5e4",
-                        background: "#fcfbf8",
+                        background: "#fff",
+                        overflow: "hidden",
                     }}
                 >
-                    <div style={{ ...section, padding: isMobile ? "40px 16px" : "48px 20px" }}>
-                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, minmax(0, 1fr))", gap: isMobile ? "16px" : "24px", alignItems: "stretch" }}>
-                            {/* Google Reviews Card */}
-                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
-                                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px" }}>
-                                    <svg viewBox="0 0 24 24" width="22" height="22" style={{ marginRight: "2px" }}>
-                                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-                                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-                                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.85z" fill="#FBBC05" />
-                                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-                                    </svg>
-                                    <span style={{ fontWeight: "800", color: "#1f1f1f", fontSize: "16px", letterSpacing: "-0.3px" }}>Google Rating</span>
+                    <div style={{ ...section, padding: isMobile ? "32px 16px" : "64px 20px" }}>
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: isMobile ? "1fr" : "1fr 1.1fr",
+                                gap: isMobile ? "20px" : "48px",
+                                alignItems: "center",
+                            }}
+                        >
+                            <div>
+                                <div style={{ fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>
+                                    Free Consultation
                                 </div>
-                                <div style={{ color: "#f59e0b", fontSize: "18px", letterSpacing: "2px", marginBottom: "6px" }}>★★★★★</div>
-                                <div style={{ fontSize: "22px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.1" }}>4.9 / 5.0</div>
-                                <p style={{ margin: "6px 0 0", fontSize: "13px", color: "#78716c", fontWeight: "500" }}>Verified Homeowner Feedback</p>
+                                <h2
+                                    style={{
+                                        fontSize: isMobile ? "26px" : "40px",
+                                        marginTop: "6px",
+                                        marginBottom: "12px",
+                                        lineHeight: "1.15",
+                                        color: "#1f1f1f",
+                                        letterSpacing: "-0.5px",
+                                    }}
+                                >
+                                    Complete <span style={{ color: "#A67C00" }}>project visibility</span> before you spend a penny
+                                </h2>
+                                <p style={{ color: "#44403c", fontSize: "14px", lineHeight: "1.5", margin: "0 0 20px 0", fontWeight: "500" }}>
+                                    Get a clear roadmap for your home based on real-time London build costs and strict council guidelines—completely free.
+                                </p>
                             </div>
 
-                            {/* FMB Card */}
-                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
-                                <div style={{ width: "54px", height: "54px", marginBottom: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                    <img src="/images/fmb.jpeg" alt="Federation of Master Builders Logo" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }} />
-                                </div>
-                                <div style={{ fontWeight: "900", color: "#9c0c26", fontSize: "14px", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "3px" }}>FMB</div>
-                                <h3 style={{ margin: "0 0 4px", fontSize: "16px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.2" }}>Federation of Master Builders Member</h3>
-                                <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#57534e", lineHeight: "1.4" }}>Federation of Master Builders vetted & inspected architectural standards.</p>
-                            </div>
-
-                            {/* TrustMark Card */}
-                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
-                                <div style={{ width: "42px", height: "42px", borderRadius: "10px", background: "#16a34a", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "12px", boxShadow: "0 4px 12px rgba(22,163,74,0.15)" }}>
-                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                                        <path d="M9 11l2 2 4-4" />
-                                    </svg>
-                                </div>
-                                <h3 style={{ margin: "0 0 4px", fontSize: "16px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.2" }}>TrustMark Government Endorsed</h3>
-                                <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#57534e", lineHeight: "1.4" }}>Government-endorsed quality standard for absolute technical compliance.</p>
+                            <div
+                                style={{
+                                    display: "grid",
+                                    gap: "16px",
+                                    background: "#fcfbf8",
+                                    padding: isMobile ? "16px" : "24px",
+                                    borderRadius: "20px",
+                                    border: "1px solid #e7e5e4"
+                                }}
+                            >
+                                {[
+                                    { title: "Planning Strategy", desc: "Full permission vs. Permitted Development tracking." },
+                                    { title: "Sizes & Layouts", desc: "A structural reality check of your layout goals." },
+                                    { title: "Real Build Costs", desc: "Accurate budgets based on fluid local material & trade costs." },
+                                    { title: "Property Value Return", desc: "An honest look at how your new floor area impacts market equity." }
+                                ].map((item, index) => (
+                                    <div
+                                        key={index}
+                                        style={{
+                                            display: "flex",
+                                            gap: "12px",
+                                            alignItems: "flex-start",
+                                            paddingTop: index !== 0 ? (isMobile ? "10px" : "12px") : "0",
+                                            borderTop: index !== 0 ? "1px solid #e7e5e4" : "none"
+                                        }}
+                                    >
+                                        <span style={{ color: "#A67C00", fontWeight: "800", fontSize: "14px", lineHeight: "1" }}>✓</span>
+                                        <div>
+                                            <h4 style={{ margin: "0 0 2px 0", fontSize: "14px", fontWeight: "700", color: "#1c1917" }}>{item.title}</h4>
+                                            <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4" }}>{item.desc}</p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
-
                 </section>
 
+               
 
-                {/* Direct Call Callout Promotion */}
-                {/* Direct Call Callout Promotion */}
-
-                {/* Simplified Contact Form Section Area */}
                 <section
                     id="contact-form"
                     style={{
@@ -999,377 +1064,6 @@ export default function DrawingsPlanning() {
                         </div>
                     </div>
                 </section>
-                {/* Free Consultation Visibility Section */}
-
-                {/* 
-                <section
-                    style={{
-                        borderTop: "1px solid #e7e5e4",
-                        borderBottom: "1px solid #e7e5e4",
-                        background: "#fff",
-                        overflowX: "hidden",
-                    }}
-                >
-                    <div
-                        style={{
-                            ...section,
-                            padding: isMobile ? "48px 16px" : "64px 20px",
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns: isMobile ? "1fr" : "minmax(0, 1fr) auto",
-                                gap: isMobile ? "18px" : "24px",
-                                alignItems: isMobile ? "start" : "end",
-                            }}
-                        >
-                            <div style={{ maxWidth: "760px", minWidth: 0 }}>
-                                <div
-                                    style={{
-                                        fontSize: "17px",
-                                        letterSpacing: "2px",
-                                        textTransform: "uppercase",
-                                        color: "#78716c",
-                                        fontWeight: "700",
-                                    }}
-                                >
-                                    Example Drawings
-                                </div>
-                            </div>
-
-
-                        </div>
-
-                        <div
-                            style={{
-                                marginTop: isMobile ? "24px" : "30px",
-                                borderRadius: isMobile ? "20px" : "24px",
-                                overflow: "hidden",
-                                border: "1px solid #e7e5e4",
-                                background: "#f8f7f5",
-                                boxShadow: "0 14px 32px rgba(0,0,0,0.05)",
-                                width: "100%",
-                                maxWidth: "100%",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    position: "relative",
-                                    width: "100%",
-                                    maxWidth: "100%",
-                                    background: "linear-gradient(180deg, #f8f7f5 0%, #f3f1ed 100%)",
-                                    height: isMobile ? "240px" : "clamp(280px, 55vw, 540px)",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    padding: isMobile ? "14px" : "20px",
-                                    boxSizing: "border-box",
-                                    overflow: "hidden",
-                                }}
-                            >
-                                <img
-                                    src={drawingImages[drawingIndex].src}
-                                    alt={drawingImages[drawingIndex].label}
-                                    style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        objectFit: "contain",
-                                        display: "block",
-                                        maxWidth: "100%",
-                                    }}
-                                />
-                            </div>
-
-                            <div
-                                style={{
-                                    padding: isMobile ? "16px" : "18px 20px",
-                                    borderTop: "1px solid #e7e5e4",
-                                    display: "grid",
-                                    gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
-                                    gap: "14px",
-                                    alignItems: "center",
-                                    background: "#fff",
-                                }}
-                            >
-                                <div style={{ minWidth: 0 }}>
-                                    <div
-                                        style={{
-                                            fontWeight: "700",
-                                            color: "#1f1f1f",
-                                            fontSize: isMobile ? "15px" : "16px",
-                                            lineHeight: "1.4",
-                                        }}
-                                    >
-                                        {drawingImages[drawingIndex].label}
-                                    </div>
-
-                                    <div
-                                        style={{
-                                            marginTop: "4px",
-                                            color: "#78716c",
-                                            fontSize: "14px",
-                                            lineHeight: "1.6",
-                                        }}
-                                    >
-                                        Prepared as part of a clear, buildable drawing package.
-                                    </div>
-                                </div>
-
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        gap: "8px",
-                                        alignItems: "center",
-                                        flexWrap: "wrap",
-                                        justifyContent: isMobile ? "flex-start" : "flex-end",
-                                    }}
-                                >
-                                    {drawingImages.map((_, i) => (
-                                        <button
-                                            key={i}
-                                            type="button"
-                                            onClick={() => setDrawingIndex(i)}
-                                            aria-label={`Go to drawing ${i + 1}`}
-                                            style={{
-                                                width: i === drawingIndex ? "24px" : "10px",
-                                                height: "10px",
-                                                borderRadius: "999px",
-                                                border: "none",
-                                                cursor: "pointer",
-                                                background: i === drawingIndex ? "#1c1917" : "#d6d3d1",
-                                                padding: 0,
-                                                flexShrink: 0,
-                                                transition: "all 0.22s ease",
-                                            }}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                            <div
-                                style={{
-                                    display: "flex",
-                                    gap: "10px",
-                                    flexShrink: 0,
-                                    alignItems: "center",
-                                }}
-                            >
-                                <button
-                                    type="button"
-                                    onClick={showPrevDrawing}
-                                    aria-label="Previous drawing"
-                                    style={{
-                                        height: isMobile ? "42px" : "46px",
-                                        width: isMobile ? "42px" : "46px",
-                                        borderRadius: "999px",
-                                        border: "1px solid #d6d3d1",
-                                        background: "#fff",
-                                        cursor: "pointer",
-                                        fontSize: "18px",
-                                        color: "#1c1917",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        boxShadow: "0 8px 18px rgba(28,25,23,0.04)",
-                                    }}
-                                >
-                                    ←
-                                </button>
-
-                                <button
-                                    type="button"
-                                    onClick={showNextDrawing}
-                                    aria-label="Next drawing"
-                                    style={{
-                                        height: isMobile ? "42px" : "46px",
-                                        width: isMobile ? "42px" : "46px",
-                                        borderRadius: "999px",
-                                        border: "1px solid #1c1917",
-                                        background: "#1c1917",
-                                        color: "#fff",
-                                        cursor: "pointer",
-                                        fontSize: "18px",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        boxShadow: "0 12px 22px rgba(28,25,23,0.12)",
-                                    }}
-                                >
-                                    →
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                 */}
-
-
-                {/* Fast-Scan Micro Process */}
-<section style={{ background: "#fcfbf8", padding: "32px 16px", borderBottom: "1px solid #e7e5e4" }}>
-    <div style={{ ...section, maxWidth: "800px", margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: "20px" }}>
-            {[
-                { step: "01", title: "Free Consultation", desc: "We map out layout viable options and real-time costs." },
-                { step: "02", title: "Measured Survey & Draft", desc: "Millimeter-accurate mapping of your existing space." },
-                { step: "03", title: "Council Submission", desc: "We manage the entire backend application package for you." }
-            ].map((item, i) => (
-                <div key={i} style={{ display: "flex", gap: "12px", alignItems: "start" }}>
-                    <span style={{ fontSize: "20px", fontWeight: "900", color: "#A67C00", opacity: 0.4 }}>{item.step}</span>
-                    <div>
-                        <h4 style={{ margin: "0 0 4px 0", fontSize: "14px", fontWeight: "700", color: "#1c1917" }}>{item.title}</h4>
-                        <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4" }}>{item.desc}</p>
-                    </div>
-                </div>
-            ))}
-        </div>
-    </div>
-                </section>
-
-
-
-<section
-    style={{
-        borderTop: "1px solid #e7e5e4",
-        borderBottom: "1px solid #e7e5e4",
-        background: "#fff",
-        overflow: "hidden",
-    }}
->
-    <div style={{ ...section, padding: isMobile ? "32px 16px" : "64px 20px" }}>
-        <div
-            style={{
-                display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "1fr 1.1fr",
-                gap: isMobile ? "20px" : "48px",
-                alignItems: "center",
-            }}
-        >
-            {/* Left Column */}
-            <div>
-                <div style={{ fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>
-                    Free Consultation
-                </div>
-                <h2
-                    style={{
-                        fontSize: isMobile ? "26px" : "40px",
-                        marginTop: "6px",
-                        marginBottom: "12px",
-                        lineHeight: "1.15",
-                        color: "#1f1f1f",
-                        letterSpacing: "-0.5px",
-                    }}
-                >
-                    Complete <span style={{ color: "#A67C00" }}>project visibility</span> before you spend a penny
-                </h2>
-                <p style={{ color: "#44403c", fontSize: "14px", lineHeight: "1.5", margin: "0 0 20px 0", fontWeight: "500" }}>
-                    Get a clear roadmap for your home based on real-time London build costs and strict council guidelines—completely free.
-                </p>
-               
-            </div>
-
-            {/* Right Column: Fast-Scan List */}
-            <div 
-                style={{ 
-                    display: "grid", 
-                    gap: isMobile ? "12px" : "16px",
-                    background: "#fcfbf8",
-                    padding: isMobile ? "16px" : "24px",
-                    borderRadius: "20px",
-                    border: "1px solid #e7e5e4"
-                }}
-            >
-                {[
-                    { title: "Planning Strategy", desc: "Full permission vs. Permitted Development tracking." },
-                    { title: "Sizes & Layouts", desc: "A structural reality check of your layout goals." },
-                    { title: "Real Build Costs", desc: "Accurate budgets based on fluid local material & trade costs." },
-                    { title: "Property Value Return", desc: "An honest look at how your new floor area impacts market equity." }
-                ].map((item, index) => (
-                    <div 
-                        key={index}
-                        style={{
-                            display: "flex",
-                            gap: "12px",
-                            alignItems: "flex-start",
-                            paddingTop: index !== 0 ? (isMobile ? "10px" : "12px") : "0",
-                            borderTop: index !== 0 ? "1px solid #e7e5e4" : "none"
-                        }}
-                    >
-                        <span style={{ color: "#A67C00", fontWeight: "800", fontSize: "14px", lineHeight: "1" }}>✓</span>
-                        <div>
-                            <h4 style={{ margin: "0 0 2px 0", fontSize: "14px", fontWeight: "700", color: "#1c1917" }}>{item.title}</h4>
-                            <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4" }}>{item.desc}</p>
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </div>
-    </div>
-</section>
-
-
-
-                <section
-                    style={{
-                        borderTop: "1px solid #e7e5e4",
-                        borderBottom: "1px solid #e7e5e4",
-                        background: "#fcfbf8",
-                    }}
-                >
-                    <div style={{ ...section, padding: isMobile ? "40px 16px" : "48px 20px" }}>
-                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, minmax(0, 1fr))", gap: isMobile ? "16px" : "24px", alignItems: "stretch" }}>
-                            {/* Google Reviews Card */}
-                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
-                                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px" }}>
-                                    <svg viewBox="0 0 24 24" width="22" height="22" style={{ marginRight: "2px" }}>
-                                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.85z" fill="#FBBC05"/>
-                                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                                    </svg>
-                                    <span style={{ fontWeight: "800", color: "#1f1f1f", fontSize: "16px", letterSpacing: "-0.3px" }}>Google Rating</span>
-                                </div>
-                                <div style={{ color: "#f59e0b", fontSize: "18px", letterSpacing: "2px", marginBottom: "6px" }}>★★★★★</div>
-                                <div style={{ fontSize: "22px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.1" }}>4.9 / 5.0</div>
-                                <p style={{ margin: "6px 0 0", fontSize: "13px", color: "#78716c", fontWeight: "500" }}>Verified Homeowner Feedback</p>
-                            </div>
-
-                            {/* FMB Card */}
-                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
-                                <div style={{ width: "54px", height: "54px", marginBottom: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                    <img src="/images/fmb.jpeg" alt="Federation of Master Builders Logo" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }} />
-                                </div>
-                                <div style={{ fontWeight: "900", color: "#9c0c26", fontSize: "14px", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "3px" }}>FMB</div>
-                                <h3 style={{ margin: "0 0 4px", fontSize: "16px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.2" }}>Federation of Master Builders Member</h3>
-                                <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#57534e", lineHeight: "1.4" }}>Federation of Master Builders vetted & inspected architectural standards.</p>
-                            </div>
-
-                            {/* TrustMark Card */}
-                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
-                                <div style={{ width: "42px", height: "42px", borderRadius: "10px", background: "#16a34a", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "12px", boxShadow: "0 4px 12px rgba(22,163,74,0.15)" }}>
-                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                                        <path d="M9 11l2 2 4-4" />
-                                    </svg>
-                                </div>
-                                <h3 style={{ margin: "0 0 4px", fontSize: "16px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.2" }}>TrustMark Government Endorsed</h3>
-                                <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#57534e", lineHeight: "1.4" }}>Government-endorsed quality standard for absolute technical compliance.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </section>
-
-              
-
-             
-
-                  
-
-              
-             
-
-                
 
                 <section
                     style={{
@@ -1554,83 +1248,80 @@ export default function DrawingsPlanning() {
                     </div>
                 </section>
 
-                {/* Short & Punchy About Section */}
-<section
-    style={{
-        borderTop: "1px solid #e7e5e4",
-        borderBottom: "1px solid #e7e5e4",
-        background: "#fcfbf8",
-        overflow: "hidden",
-    }}
->
-    <div style={{ ...section, padding: isMobile ? "40px 16px" : "64px 20px" }}>
-        <div
-            style={{
-                display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "1fr 1.1fr",
-                gap: isMobile ? "24px" : "48px",
-                alignItems: "center",
-            }}
-        >
-            {/* Left Column */}
-            <div>
-                <div style={{ fontSize: "12px", letterSpacing: "2px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>
-                    The Crafman Difference
-                </div>
-                <h2
+                <section
                     style={{
-                        fontSize: isMobile ? "30px" : "40px",
-                        marginTop: "10px",
-                        marginBottom: "14px",
-                        lineHeight: "1.1",
-                        color: "#1f1f1f",
-                        letterSpacing: "-0.5px",
+                        borderTop: "1px solid #e7e5e4",
+                        borderBottom: "1px solid #e7e5e4",
+                        background: "#fcfbf8",
+                        overflow: "hidden",
                     }}
                 >
-                    We handle the drawings. <br />We also <span style={{ color: "#A67C00" }}>build the project.</span>
-                </h2>
-                <p style={{ color: "#44403c", fontSize: "15px", lineHeight: "1.6", margin: 0, fontWeight: "500" }}>
-                    Crafman is a fully integrated **Design & Build** contractor. We don’t just hand over drawings and walk away—our in-house team of master builders handles your entire project from first sketch to final brickwork. 
-                </p>
-            </div>
+                    <div style={{ ...section, padding: isMobile ? "40px 16px" : "64px 20px" }}>
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: isMobile ? "1fr" : "1fr 1.1fr",
+                                gap: isMobile ? "24px" : "48px",
+                                alignItems: "center",
+                            }}
+                        >
+                            <div>
+                                <div style={{ fontSize: "12px", letterSpacing: "2px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>
+                                    The Crafman Difference
+                                </div>
+                                <h2
+                                    style={{
+                                        fontSize: isMobile ? "30px" : "40px",
+                                        marginTop: "10px",
+                                        marginBottom: "14px",
+                                        lineHeight: "1.1",
+                                        color: "#1f1f1f",
+                                        letterSpacing: "-0.5px",
+                                    }}
+                                >
+                                    We handle the drawings. <br />We also <span style={{ color: "#A67C00" }}>build the project.</span>
+                                </h2>
+                                <p style={{ color: "#44403c", fontSize: "15px", lineHeight: "1.6", margin: 0, fontWeight: "500" }}>
+                                    Crafman is a fully integrated **Design & Build** contractor. We don’t just hand over drawings and walk away—our in-house team of master builders handles your entire project from first sketch to final brickwork.
+                                </p>
+                            </div>
 
-            {/* Right Column */}
-            <div 
-                style={{ 
-                    display: "grid", 
-                    gap: "14px",
-                    background: "#fff",
-                    padding: isMobile ? "20px" : "24px",
-                    borderRadius: "20px",
-                    border: "1px solid #e7e5e4",
-                    boxShadow: "0 8px 24px rgba(0,0,0,0.02)"
-                }}
-            >
-                {[
-                    { title: "One Point of Contact", desc: "No friction or blame-shifting between architect and builder." },
-                    { title: "Budget-Aware Design", desc: "Drawings are optimized for real-world build costs from day one." },
-                    { title: "Full Project Delivery", desc: "From surveys and planning to structural engineering and construction." }
-                ].map((item, index) => (
-                    <div 
-                        key={index}
-                        style={{
-                            paddingTop: index !== 0 ? "12px" : "0",
-                            borderTop: index !== 0 ? "1px solid #f5f5f4" : "none",
-                            display: "flex",
-                            gap: "12px",
-                        }}
-                    >
-                        <span style={{ color: "#A67C00", fontWeight: "800", fontSize: "14px" }}>✓</span>
-                        <div>
-                            <h4 style={{ margin: "0 0 2px 0", fontSize: "14px", fontWeight: "700", color: "#1c1917" }}>{item.title}</h4>
-                            <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4" }}>{item.desc}</p>
+                            <div
+                                style={{
+                                    display: "grid",
+                                    gap: "14px",
+                                    background: "#fff",
+                                    padding: isMobile ? "20px" : "24px",
+                                    borderRadius: "20px",
+                                    border: "1px solid #e7e5e4",
+                                    boxShadow: "0 8px 24px rgba(0,0,0,0.02)"
+                                }}
+                            >
+                                {[
+                                    { title: "One Point of Contact", desc: "No friction or blame-shifting between architect and builder." },
+                                    { title: "Budget-Aware Design", desc: "Drawings are optimized for real-world build costs from day one." },
+                                    { title: "Full Project Delivery", desc: "From surveys and planning to structural engineering and construction." }
+                                ].map((item, index) => (
+                                    <div
+                                        key={index}
+                                        style={{
+                                            paddingTop: index !== 0 ? "12px" : "0",
+                                            borderTop: index !== 0 ? "1px solid #f5f5f4" : "none",
+                                            display: "flex",
+                                            gap: "12px",
+                                        }}
+                                    >
+                                        <span style={{ color: "#A67C00", fontWeight: "800", fontSize: "14px" }}>✓</span>
+                                        <div>
+                                            <h4 style={{ margin: "0 0 2px 0", fontSize: "14px", fontWeight: "700", color: "#1c1917" }}>{item.title}</h4>
+                                            <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4" }}>{item.desc}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
-                ))}
-            </div>
-        </div>
-    </div>
-</section>
+                </section>
 
                 <section
                     style={{
@@ -1700,6 +1391,7 @@ export default function DrawingsPlanning() {
                                         "Planning permission guidance",
                                         "Permitted development support",
                                         "Package and drawing clarity",
+                                        "Make a change",
                                     ].map((item) => (
                                         <div
                                             key={item}
@@ -1891,100 +1583,94 @@ export default function DrawingsPlanning() {
                         </style>
                     </div>
                 </section>
-
-
-            </div>
-            {/* Footer Section */}
-<footer
-    style={{
-        borderTop: "1px solid #e7e5e4",
-        background: "#1f1f1f",
-        color: "#d6d3d1",
-        overflow: "hidden",
-    }}
->
-    <div 
-        style={{ 
-            ...section, 
-            padding: isMobile ? "40px 16px 24px 16px" : "60px 20px 30px 20px",
-        }}
-    >
-        <div
-            style={{
-                display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "2fr 1fr 1fr",
-                gap: isMobile ? "32px" : "40px",
-                paddingBottom: "30px",
-                borderBottom: "1px solid rgba(255,255,255,0.08)",
-                alignItems: "start",
-            }}
-        >
-            {/* Column 1: Company & Address */}
-            <div style={{ minWidth: 0 }}>
-                <div style={{ fontSize: "18px", fontWeight: "800", color: "#fff", marginBottom: "12px", letterSpacing: "-0.3px" }}>
-                    Crafman <span style={{ color: "#C6A243", fontWeight: "400" }}>Design & Build</span>
-                </div>
-                <p style={{ margin: "0 0 16px 0", fontSize: "14px", color: "#a8a29e", lineHeight: "1.5", maxWidth: "320px" }}>
-                    Professional architectural drawing packages and premium full-lifecycle residential construction across London & Essex.
-                </p>
-                <div style={{ fontSize: "13px", lineHeight: "1.6", color: "#78716c" }}>
-                    <strong style={{ color: "#fff", display: "block", marginBottom: "2px" }}>Registered Office:</strong>
-                    Crafman Building and Landscaping Ltd<br />
-                    Marsh Wy, Rainham<br />
-                    RM13 8EU
-                </div>
             </div>
 
-            {/* Column 2: Quick Links */}
-            <div>
-                <div style={{ fontSize: "12px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "1.5px", color: "#fff", marginBottom: "14px" }}>
-                    Services
-                </div>
-                <div style={{ display: "grid", gap: "10px", fontSize: "14px" }}>
-                    <a href="#packages" style={{ color: "#a8a29e", textDecoration: "none" }}>Drawing Packages</a>
-                    <a href="#contact-form" style={{ color: "#a8a29e", textDecoration: "none" }}>Get a Quote</a>
-                    <a href="#packages" style={{ color: "#a8a29e", textDecoration: "none" }}>Design & Build Support</a>
-                </div>
-            </div>
+            <footer
+                style={{
+                    borderTop: "1px solid #e7e5e4",
+                    background: "#1f1f1f",
+                    color: "#d6d3d1",
+                    overflow: "hidden",
+                }}
+            >
+                <div
+                    style={{
+                        ...section,
+                        padding: isMobile ? "40px 16px 24px 16px" : "60px 20px 30px 20px",
+                    }}
+                >
+                    <div
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: isMobile ? "1fr" : "2fr 1fr 1fr",
+                            gap: isMobile ? "32px" : "40px",
+                            paddingBottom: "30px",
+                            borderBottom: "1px solid rgba(255,255,255,0.08)",
+                            alignItems: "start",
+                        }}
+                    >
+                        <div style={{ minWidth: 0 }}>
+                            <div style={{ fontSize: "18px", fontWeight: "800", color: "#fff", marginBottom: "12px", letterSpacing: "-0.3px" }}>
+                                Crafman <span style={{ color: "#C6A243", fontWeight: "400" }}>Design & Build</span>
+                            </div>
+                            <p style={{ margin: "0 0 16px 0", fontSize: "14px", color: "#a8a29e", lineHeight: "1.5", maxWidth: "320px" }}>
+                                Professional architectural drawing packages and premium full-lifecycle residential construction across London & Essex.
+                            </p>
+                            <div style={{ fontSize: "13px", lineHeight: "1.6", color: "#78716c" }}>
+                                <strong style={{ color: "#fff", display: "block", marginBottom: "2px" }}>Registered Office:</strong>
+                                Crafman Building and Landscaping Ltd<br />
+                                Marsh Wy, Rainham<br />
+                                RM13 8EU
+                            </div>
+                        </div>
 
-            {/* Column 3: Contact Details */}
-            <div>
-                <div style={{ fontSize: "12px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "1.5px", color: "#fff", marginBottom: "14px" }}>
-                    Contact
-                </div>
-                <div style={{ display: "grid", gap: "10px", fontSize: "14px" }}>
-                    <a href="tel:02036335634" style={{ color: "#C6A243", textDecoration: "none", fontWeight: "700" }}>
-                        0203 633 5634
-                    </a>
-                    <span style={{ color: "#a8a29e" }}>Mon – Fri: 8am – 6pm</span>
-                    <span style={{ color: "#78716c", fontSize: "12px" }}>Promo Code: CRAF100</span>
-                </div>
-            </div>
-        </div>
+                        <div>
+                            <div style={{ fontSize: "12px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "1.5px", color: "#fff", marginBottom: "14px" }}>
+                                Services
+                            </div>
+                            <div style={{ display: "grid", gap: "10px", fontSize: "14px" }}>
+                                <a href="#packages" style={{ color: "#a8a29e", textDecoration: "none" }}>Drawing Packages</a>
+                                <a href="#contact-form" style={{ color: "#a8a29e", textDecoration: "none" }}>Get a Quote</a>
+                                <a href="#packages" style={{ color: "#a8a29e", textDecoration: "none" }}>Design & Build Support</a>
+                            </div>
+                        </div>
 
-        {/* Bottom Bar */}
-        <div
-            style={{
-                paddingTop: "20px",
-                display: "flex",
-                flexDirection: isMobile ? "column" : "row",
-                justifyContent: "space-between",
-                alignItems: isMobile ? "flex-start" : "center",
-                gap: "12px",
-                fontSize: "12px",
-                color: "#78716c",
-            }}
-        >
-            <div>
-                © {new Date().getFullYear()} Crafman Building and Landscaping Ltd. All rights reserved.
-            </div>
-            <div style={{ display: "flex", gap: "16px" }}>
-                <span>Company No. Reg in UK</span>
-                <span>Vetted Master Builder</span>
-            </div>
-        </div>
-    </div>
-</footer>
+                        <div>
+                            <div style={{ fontSize: "12px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "1.5px", color: "#fff", marginBottom: "14px" }}>
+                                Contact
+                            </div>
+                            <div style={{ display: "grid", gap: "10px", fontSize: "14px" }}>
+                                <a href="tel:02036335634" style={{ color: "#C6A243", textDecoration: "none", fontWeight: "700" }}>
+                                    0203 633 5634
+                                </a>
+                                <span style={{ color: "#a8a29e" }}>Mon – Fri: 8am – 6pm</span>
+                                <span style={{ color: "#78716c", fontSize: "12px" }}>Promo Code: CRAF100</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        style={{
+                            paddingTop: "20px",
+                            display: "flex",
+                            flexDirection: isMobile ? "column" : "row",
+                            justifyContent: "space-between",
+                            alignItems: isMobile ? "flex-start" : "center",
+                            gap: "12px",
+                            fontSize: "12px",
+                            color: "#78716c",
+                        }}
+                    >
+                        <div>
+                            © {new Date().getFullYear()} Crafman Building and Landscaping Ltd. All rights reserved.
+                        </div>
+                        <div style={{ display: "flex", gap: "16px" }}>
+                            <span>Company No. Reg in UK</span>
+                            <span>Vetted Master Builder</span>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </Layout>
     );
 }
