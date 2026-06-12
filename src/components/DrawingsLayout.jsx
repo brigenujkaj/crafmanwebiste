@@ -1,5 +1,5 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 export const siteStyles = {
     page: {
@@ -55,113 +55,30 @@ export const siteStyles = {
 };
 
 export default function Layout({ children }) {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const [servicesOpen, setServicesOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
 
-    const navLinkStyle = (to) => ({
-        color: location.pathname === to ? "#1c1917" : "#44403c",
-        textDecoration: "none",
-        fontSize: "15px",
-        fontWeight: location.pathname === to ? "700" : "500",
-        padding: "10px 14px",
-        borderRadius: "10px",
-        background: location.pathname === to ? "#f1ede7" : "transparent",
-        border: location.pathname === to ? "1px solid #e7e5e4" : "1px solid transparent",
-        transition: "all 0.2s ease",
-        whiteSpace: "nowrap",
-    });
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
 
     const callLinkStyle = {
         display: "inline-block",
-        background: "#A67C00",
+        background: "linear-gradient(135deg, #A67C00 0%, #C6A243 100%)",
         color: "#fff",
         textDecoration: "none",
         fontSize: "15px",
         fontWeight: "700",
-        padding: "11px 18px",
+        padding: "11px 20px",
         borderRadius: "12px",
-        border: "1px solid #A67C00",
         whiteSpace: "nowrap",
         boxShadow: "0 8px 18px rgba(166,124,0,0.18)",
-    };
-
-    const contactLinkStyle = {
-        display: "inline-block",
-        background: "#1c1917",
-        color: "#fff",
-        textDecoration: "none",
-        fontSize: "15px",
-        fontWeight: "600",
-        padding: "11px 18px",
-        borderRadius: "12px",
-        border: "1px solid #1c1917",
-        whiteSpace: "nowrap",
-    };
-
-    const dropdownButtonStyle = {
-        color: ["/house-extensions-london", "/renovations-london", "/commercial-fit-outs-london", "/drawings-planning"].includes(location.pathname)
-            ? "#1c1917"
-            : "#44403c",
-        fontSize: "15px",
-        fontWeight: ["/house-extensions-london", "/renovations-london", "/commercial-fit-outs-london", "/drawings-planning"].includes(location.pathname)
-            ? "700"
-            : "500",
-        padding: "10px 14px",
-        borderRadius: "10px",
-        background: ["/house-extensions-london", "/renovations-london", "/commercial-fit-outs-london", "/drawings-planning"].includes(location.pathname)
-            ? "#f1ede7"
-            : "transparent",
-        border: ["/house-extensions-london", "/renovations-london", "/commercial-fit-outs-london", "/drawings-planning"].includes(location.pathname)
-            ? "1px solid #e7e5e4"
-            : "1px solid transparent",
-        cursor: "pointer",
-        whiteSpace: "nowrap",
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "8px",
-    };
-
-    const dropdownMenuStyle = {
-        position: "absolute",
-        top: "calc(100% + 10px)",
-        left: 0,
-        minWidth: "240px",
-        background: "#fff",
-        border: "1px solid #e7e5e4",
-        borderRadius: "14px",
-        boxShadow: "0 14px 34px rgba(0,0,0,0.08)",
-        padding: "8px",
-        zIndex: 100,
-    };
-
-    const dropdownItemStyle = (to) => ({
-        display: "block",
-        width: "100%",
-        textAlign: "left",
-        textDecoration: "none",
-        color: location.pathname === to ? "#1c1917" : "#44403c",
-        fontSize: "14px",
-        fontWeight: location.pathname === to ? "700" : "500",
-        padding: "11px 12px",
-        borderRadius: "10px",
-        background: location.pathname === to ? "#f7f5f2" : "transparent",
         border: "none",
         cursor: "pointer",
-        boxSizing: "border-box",
-    });
-
-    const services = [
-        { to: "/house-extensions-london", label: "House Extensions" },
-        { to: "/renovations-london", label: "Renovations" },
-        { to: "/commercial-fit-outs-london", label: "Commercial" },
-        { to: "/drawings-planning", label: "Drawings & Planning" },
-    ];
-
-    function goToService(to) {
-        setServicesOpen(false);
-        navigate(to);
-    }
+        transition: "transform 0.2s ease"
+    };
 
     return (
         <div style={siteStyles.page}>
@@ -180,7 +97,7 @@ export default function Layout({ children }) {
                     style={{
                         maxWidth: "1200px",
                         margin: "0 auto",
-                        padding: "16px 24px",
+                        padding: isMobile ? "12px 16px" : "16px 24px",
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
@@ -233,13 +150,21 @@ export default function Layout({ children }) {
                             flex: 1,
                         }}
                     >
-                       
-
-                        <a href="tel:02036335634" style={callLinkStyle}>
-                            Call Now
+                        <a
+                            href="tel:02036335634"
+                            onClick={() => {
+                                // 🎯 Keep conversion tracking active for your live Google Ads campaign optimization
+                                window.dataLayer = window.dataLayer || [];
+                                window.dataLayer.push({
+                                    event: "direct_phone_click",
+                                    phone_number: "02036335634",
+                                    location: "Global Navbar Master Anchor Link"
+                                });
+                            }}
+                            style={callLinkStyle}
+                        >
+                            📞 {isMobile ? "Call Office" : "Call Now: 0203 633 5634"}
                         </a>
-
-                       
                     </nav>
                 </div>
             </header>
