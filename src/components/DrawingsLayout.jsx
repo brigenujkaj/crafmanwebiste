@@ -140,30 +140,7 @@ export default function Layout({ children }) {
                         </div>
                     </div>
 
-                    <div
-                        style={{
-                            width: "100%",
-                            background: "#fdfbf7", // Soft warm premium white
-                            borderBottom: "1px solid #e7e5e4",
-                            padding: "10px 16px",
-                            textAlign: "center",
-                            boxSizing: "border-box"
-                        }}
-                    >
-                        <p
-                            style={{
-                                margin: 0,
-                                fontSize: "13px",
-                                fontWeight: "600",
-                                color: "#1c1917",
-                                letterSpacing: "-0.2px",
-                                lineHeight: "1.4"
-                            }}
-                        >
-                            📍 <span style={{ color: "#A67C00", fontWeight: "700" }}>Areas Covered:</span> Proudly serving all London Boroughs & Essex
-                        </p>
-                       
-                    </div>
+                  
 
                     <nav
                         style={{
