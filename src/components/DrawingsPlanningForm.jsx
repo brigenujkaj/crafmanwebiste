@@ -338,7 +338,7 @@ export default function DrawingsPlanningForm({
                                 marginTop: "10px"
                             }}
                         >
-                            Continue to Personal Information
+                            Confirm Booking
                         </button>
                     </div>
                 )}
