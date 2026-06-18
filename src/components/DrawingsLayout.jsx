@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+// Global style design token framework for the Crafman funnel
 export const siteStyles = {
     page: {
         minHeight: "100vh",
@@ -28,6 +29,7 @@ export const siteStyles = {
         borderRadius: "12px",
         textDecoration: "none",
         fontWeight: "600",
+        textAlign: "center"
     },
     buttonSecondary: {
         display: "inline-block",
@@ -38,6 +40,7 @@ export const siteStyles = {
         border: "1px solid #d6d3d1",
         textDecoration: "none",
         fontWeight: "600",
+        textAlign: "center"
     },
     tag: {
         display: "inline-block",
@@ -54,7 +57,7 @@ export const siteStyles = {
     },
 };
 
-export default function Layout({ children }) {
+export default function DrawingsLayout({ children }) {
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
@@ -82,6 +85,7 @@ export default function Layout({ children }) {
 
     return (
         <div style={siteStyles.page}>
+            {/* STICKY CONFIGURATION HEADER FUNNEL */}
             <header
                 style={{
                     position: "sticky",
@@ -105,6 +109,7 @@ export default function Layout({ children }) {
                         flexWrap: "wrap",
                     }}
                 >
+                    {/* BRAND IDENTIFIER */}
                     <div
                         style={{
                             display: "inline-flex",
@@ -140,8 +145,7 @@ export default function Layout({ children }) {
                         </div>
                     </div>
 
-                  
-
+                    {/* DYNAMIC NAV ACTIONS */}
                     <nav
                         style={{
                             display: "flex",
@@ -155,7 +159,7 @@ export default function Layout({ children }) {
                         <a
                             href="tel:02036335634"
                             onClick={() => {
-                                // 🎯 Keep conversion tracking active for your live Google Ads campaign optimization
+                                // Google Ads / GTM conversion tracking hooks remain active
                                 window.dataLayer = window.dataLayer || [];
                                 window.dataLayer.push({
                                     event: "direct_phone_click",
@@ -171,6 +175,7 @@ export default function Layout({ children }) {
                 </div>
             </header>
 
+            {/* MAIN APP MOUNT POINT */}
             <main>{children}</main>
         </div>
     );

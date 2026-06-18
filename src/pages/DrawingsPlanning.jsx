@@ -17,6 +17,7 @@ export default function DrawingsPlanning() {
     // --- Interactive Postcode Hook State ---
     const [postcode, setPostcode] = useState('');
     const [checkerStatus, setCheckerStatus] = useState('idle'); // idle, loading, success, error
+    const [resolvedArea, setResolvedArea] = useState("");
 
     useLayoutEffect(() => {
         if ("scrollRestoration" in window.history) {
@@ -48,26 +49,74 @@ export default function DrawingsPlanning() {
         return () => window.removeEventListener("resize", checkScreen);
     }, []);
 
-    const handlePostcodeCheck = (e) => {
+    const handlePostcodeCheck = async (e) => {
         e.preventDefault();
-        if (!postcode.trim()) {
+
+        // Clean spaces and standardize to uppercase
+        const cleanPostcode = postcode.trim().toUpperCase().replace(/\s+/g, '');
+
+        if (!cleanPostcode) {
             setCheckerStatus('error');
             return;
         }
 
         setCheckerStatus('loading');
 
-        // Premium psychological delay modifier
-        setTimeout(() => {
-            setCheckerStatus('success');
+        try {
+            // Evaluate if user entered an outcode or full household postcode
+            const isOutcode = cleanPostcode.length <= 4;
+            const endpoint = isOutcode
+                ? `https://api.postcodes.io/outcodes/${cleanPostcode}`
+                : `https://api.postcodes.io/postcodes/${cleanPostcode}`;
 
-            // Push metric to Google Tag Manager dataLayer
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({
-                event: "postcode_check_success",
-                submitted_postcode: postcode.toUpperCase()
-            });
-        }, 600);
+            const response = await fetch(endpoint);
+
+            if (!response.ok) {
+                setCheckerStatus('error');
+                return;
+            }
+
+            const data = await response.json();
+
+            if (data.status === 200 && data.result) {
+                let councilOrDistrict = "";
+                let outcodeDisplay = isOutcode ? cleanPostcode : data.result.outcode;
+
+                if (isOutcode) {
+                    // Outcodes return arrays for governing districts
+                    councilOrDistrict = data.result.admin_district && data.result.admin_district.length > 0
+                        ? data.result.admin_district[0]
+                        : cleanPostcode;
+                } else {
+                    // Full household lookup returns standalone string properties
+                    councilOrDistrict = data.result.admin_district || data.result.parliamentary_constituency || outcodeDisplay;
+                }
+
+                // Strips out bureaucratic clutter to make text punchy on mobile cards
+                const humanReadableArea = councilOrDistrict
+                    .replace("London Borough of ", "")
+                    .replace("Borough of ", "")
+                    .replace("District", "")
+                    .trim();
+
+                // Store result into state: "Havering (RM1)" or "Barking and Dagenham (RM8)"
+                setResolvedArea(`${humanReadableArea} (${outcodeDisplay})`);
+                setCheckerStatus('success');
+
+                // Push precise tracking event to your live Google Ads optimizer baseline
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    event: "postcode_check_success",
+                    submitted_postcode: cleanPostcode,
+                    resolved_council_hub: humanReadableArea
+                });
+            } else {
+                setCheckerStatus('error');
+            }
+        } catch (error) {
+            console.error("Postcode API lookup engine failed:", error);
+            setCheckerStatus('error');
+        }
     };
 
     const drawingImages = [
@@ -207,6 +256,32 @@ export default function DrawingsPlanning() {
         setTestimonialIndex((prev) => (prev + 1) % testimonials.length);
     }
 
+    const postcodeToArea = {
+        // Romford / Havering / Dagenham
+        RM1: "Romford", RM2: "Gidea Park", RM3: "Harold Wood", RM4: "Havering-atte-Bower",
+        RM5: "Collier Row", RM6: "Chadwell Heath", RM7: "Rush Green", RM8: "Dagenham",
+        RM9: "Dagenham", RM10: "Dagenham", RM11: "Hornchurch", RM12: "Hornchurch",
+        RM13: "Rainham", RM14: "Upminster", RM15: "South Ockendon", RM16: "Chafford Hundred",
+        RM17: "Grays", RM19: "Purfleet", RM20: "West Thurrock",
+        // Ilford / Redbridge / Epping Forest
+        IG1: "Ilford", IG2: "Gants Hill", IG3: "Seven Kings", IG4: "Redbridge",
+        IG5: "Clayhall", IG6: "Barkingside", IG7: "Chigwell", IG8: "Woodford Green",
+        IG9: "Buckhurst Hill", IG10: "Loughton", IG11: "Barking",
+        // East London Core
+        E1: "Whitechapel", E2: "Bethnal Green", E3: "Bow", E4: "Chingford",
+        E5: "Clapton", E6: "East Ham", E7: "Forest Gate", E8: "Hackney",
+        E9: "Homerton", E10: "Leyton", E11: "Leytonstone", E12: "Manor Park",
+        E13: "Plaistow", E14: "Canary Wharf", E15: "Stratford", E16: "Canning Town",
+        E17: "Walthamstow", E18: "South Woodford",
+        // Brentwood & Basildon Regions
+        CM13: "Brentwood", CM14: "Brentwood", CM15: "Shenfield",
+        SS14: "Basildon", SS15: "Laindon",
+        // Kent / South London Border (Cross-River Targets)
+        DA1: "Dartford", DA5: "Bexley", DA8: "Erith", DA14: "Sidcup",
+        DA15: "Blackfen", DA16: "Welling", SE9: "Eltham", SE10: "Greenwich",
+        SE18: "Woolwich", SE28: "Thamesmead"
+    };
+
     const drawingsSchema = {
         "@context": "https://schema.org",
         "@graph": [
@@ -317,400 +392,402 @@ export default function DrawingsPlanning() {
                     position: "relative",
                 }}
             >
-                <section
-                    style={{
-                        position: "relative",
-                        borderBottom: "1px solid #2e2a24",
-                        backgroundImage: "url('/images/backgroundDrawings.png')",
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                        overflow: "hidden",
-                        backgroundAttachment: !isMobile ? "fixed" : "scroll",
-                    }}
-                >
-                    <div
+                <>
+                    {/* --- HERO & POSTCODE INTERACTIVE CHECKER SECTION --- */}
+                    <section
                         style={{
-                            position: "absolute",
-                            inset: 0,
-                            background: "linear-gradient(135deg, rgba(15,15,14,0.92) 0%, rgba(24,24,22,0.85) 60%, rgba(15,15,14,0.9) 100%)",
-                            zIndex: 1,
+                            position: "relative",
+                            borderBottom: "1px solid #2e2a24",
+                            backgroundImage: "url('/images/backgroundDrawings.png')",
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            backgroundRepeat: "no-repeat",
+                            overflow: "hidden",
+                            backgroundAttachment: !isMobile ? "fixed" : "scroll",
                         }}
-                    />
-
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: "-20%",
-                            left: "15%",
-                            width: isMobile ? "300px" : "600px",
-                            height: isMobile ? "300px" : "600px",
-                            borderRadius: "50%",
-                            background: "radial-gradient(circle, rgba(198, 162, 67, 0.08) 0%, transparent 70%)",
-                            filter: "blur(50px)",
-                            pointerEvents: "none",
-                            zIndex: 1,
-                        }}
-                    />
-
-                    <div style={{ position: "relative", zIndex: 2 }}>
-                        <div style={{ ...section, paddingTop: isMobile ? "60px" : "90px", paddingBottom: isMobile ? "60px" : "90px" }}>
-
-                            <div
-                                style={{
-                                    ...tag,
-                                    background: "rgba(166, 124, 0, 0.15)",
-                                    border: "1px solid rgba(166, 124, 0, 0.4)",
-                                    color: "#E2BA6E",
-                                    padding: "4px 12px",
-                                    borderRadius: "6px",
-                                    fontSize: "11px",
-                                    fontWeight: "800",
-                                    letterSpacing: "1.5px",
-                                    textTransform: "uppercase",
-                                    width: "fit-content",
-                                    marginBottom: "16px"
-                                }}
-                            >
-                                Drawings & Planning
-                            </div>
-
-                            <h1
-                                style={{
-                                    fontSize: "clamp(34px, 5.5vw, 56px)",
-                                    lineHeight: "1.1",
-                                    margin: 0,
-                                    maxWidth: "820px",
-                                    color: "#ffffff",
-                                    fontWeight: "900",
-                                    letterSpacing: "-0.5px"
-                                }}
-                            >
-                                Architectural drawings <br className="hidden md:inline" />designed for <span style={{ background: "linear-gradient(120deg, #E2BA6E 0%, #C6A243 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>council approval</span>
-                            </h1>
-
-                            <p
-                                style={{
-                                    fontSize: "clamp(15px, 2.5vw, 18px)",
-                                    lineHeight: "1.5",
-                                    marginTop: "16px",
-                                    marginBottom: 0,
-                                    maxWidth: "600px",
-                                    color: "#d6d3d1",
-                                    fontWeight: "400",
-                                }}
-                            >
-                                Clear guidance on what’s needed and the next steps for your project
-                            </p>
-
-                            {/* --- FLAWLESS INTERACTIVE POSTCODE CHECKER UNIT --- */}
-                            <div
-                                style={{
-                                    maxWidth: "460px",
-                                    marginTop: "28px",
-                                    background: "rgba(255, 255, 255, 0.02)",
-                                    backdropFilter: "blur(12px)",
-                                    WebkitBackdropFilter: "blur(12px)",
-                                    border: "1px solid rgba(255, 255, 255, 0.08)",
-                                    borderRadius: "16px",
-                                    padding: "14px 16px",
-                                    boxSizing: "border-box",
-                                }}
-                            >
-                                {checkerStatus !== 'success' ? (
-                                    <form onSubmit={handlePostcodeCheck} style={{ margin: 0, width: "100%" }}>
-                                        <label
-                                            htmlFor="hero-postcode-search"
-                                            style={{
-                                                display: "block",
-                                                fontSize: "11px",
-                                                fontWeight: "700",
-                                                color: "#a8a29e",
-                                                textTransform: "uppercase",
-                                                letterSpacing: "1px",
-                                                marginBottom: "8px"
-                                            }}
-                                        >
-                                            Check Coverage & Council Compliance
-                                        </label>
-                                        <div style={{ display: "flex", gap: "8px" }}>
-                                            <input
-                                                id="hero-postcode-search"
-                                                type="text"
-                                                placeholder="Enter Postcode (e.g. RM1, IG7)"
-                                                value={postcode}
-                                                onChange={(e) => {
-                                                    setPostcode(e.target.value);
-                                                    if (checkerStatus === 'error') setCheckerStatus('idle');
-                                                }}
-                                                disabled={checkerStatus === 'loading'}
-                                                style={{
-                                                    flex: 1,
-                                                    height: "42px",
-                                                    borderRadius: "10px",
-                                                    border: checkerStatus === 'error' ? "1px solid #ef4444" : "1px solid rgba(255,255,255,0.15)",
-                                                    background: "rgba(0, 0, 0, 0.3)",
-                                                    color: "#fff",
-                                                    padding: "0 12px",
-                                                    fontSize: "13px",
-                                                    outline: "none",
-                                                    textTransform: "uppercase"
-                                                }}
-                                            />
-                                            <button
-                                                type="submit"
-                                                disabled={checkerStatus === 'loading'}
-                                                style={{
-                                                    height: "42px",
-                                                    padding: "0 16px",
-                                                    borderRadius: "10px",
-                                                    border: "none",
-                                                    background: "linear-gradient(135deg, #A67C00 0%, #C6A243 100%)",
-                                                    color: "#fff",
-                                                    fontSize: "13px",
-                                                    fontWeight: "800",
-                                                    cursor: "pointer",
-                                                    transition: "opacity 0.2s"
-                                                }}
-                                            >
-                                                {checkerStatus === 'loading' ? 'Checking...' : 'Check Area'}
-                                            </button>
-                                        </div>
-                                        {checkerStatus === 'error' && (
-                                            <p style={{ margin: "6px 0 0", fontSize: "12px", color: "#ef4444", fontWeight: "500" }}>
-                                                Please enter your location postcode.
-                                            </p>
-                                        )}
-                                    </form>
-                                ) : (
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: "12px",
-                                            animation: "faqFadeDown 0.25s ease-out"
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                width: "28px",
-                                                height: "28px",
-                                                borderRadius: "50%",
-                                                background: "rgba(34, 197, 94, 0.15)",
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                                color: "#4ade80",
-                                                fontWeight: "900",
-                                                fontSize: "14px",
-                                                flexShrink: 0
-                                            }}
-                                        >
-                                            ✓
-                                        </div>
-                                        <div>
-                                            <p style={{ margin: 0, fontSize: "14px", fontWeight: "800", color: "#fff" }}>
-                                                Borough Area {postcode.toUpperCase()} is Fully Covered
-                                            </p>
-                                            <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#a8a29e" }}>
-                                                We have complete drawing and planning coverage in your local council hub.
-                                            </p>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-
-                            <div
-                                style={{
-                                    marginTop: "24px",
-                                    display: "flex",
-                                    gap: "14px",
-                                    flexWrap: "wrap",
-                                }}
-                            >
-                                <a
-                                    href="#packages"
-                                    style={{
-                                        ...buttonPrimary,
-                                        background: "linear-gradient(135deg, #A67C00 0%, #C6A243 100%)",
-                                        color: "#fff",
-                                        border: "none",
-                                        fontWeight: "800"
-                                    }}
-                                >
-                                    View Packages
-                                </a>
-                                <a
-                                    href="#contact-form"
-                                    style={{
-                                        ...buttonSecondary,
-                                        background: "rgba(255, 255, 255, 0.05)",
-                                        border: "1px solid rgba(255, 255, 255, 0.15)",
-                                        color: "#fff",
-                                        fontWeight: "700"
-                                    }}
-                                >
-                                    Get Free Permission Strategy
-                                </a>
-                            </div>
-                        </div>
-
-                    </div>
-                </section>
-
-                <section
-                    style={{
-                        borderTop: "1px solid #e7e5e4",
-                        borderBottom: "1px solid #e7e5e4",
-                        background: "linear-gradient(180deg, #fdfbf7 0%, #fcf9f2 100%)",
-                        padding: isMobile ? "48px 16px" : "64px 24px",
-                        position: "relative",
-                        overflow: "hidden"
-                    }}
-                >
-                    <div
-                        style={{
-                            position: "absolute",
-                            bottom: "-30%",
-                            right: "-10%",
-                            width: "350px",
-                            height: "350px",
-                            borderRadius: "50%",
-                            border: "2px dashed rgba(166, 124, 0, 0.06)",
-                            pointerEvents: "none"
-                        }}
-                    />
-
-                    <div style={{ maxWidth: "960px", margin: "0 auto", width: "100%" }}>
+                    >
                         <div
                             style={{
-                                display: "grid",
-                                gridTemplateColumns: isMobile ? "1fr" : "auto 1fr",
-                                gap: isMobile ? "24px" : "40px",
-                                alignItems: "center",
-                                background: "#ffffff",
-                                padding: isMobile ? "28px 20px" : "40px 48px",
-                                borderRadius: "28px",
-                                border: "1px solid #eadfcb",
-                                boxShadow: "0 20px 40px rgba(166, 124, 0, 0.04)"
+                                position: "absolute",
+                                inset: 0,
+                                background: "linear-gradient(135deg, rgba(15,15,14,0.92) 0%, rgba(24,24,22,0.85) 60%, rgba(15,15,14,0.9) 100%)",
+                                zIndex: 1,
                             }}
-                        >
-                            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", margin: isMobile ? "0 auto" : "0" }}>
+                        />
+                        <div
+                            style={{
+                                position: "absolute",
+                                top: "-20%",
+                                left: "15%",
+                                width: isMobile ? "300px" : "600px",
+                                height: isMobile ? "300px" : "600px",
+                                borderRadius: "50%",
+                                background: "radial-gradient(circle, rgba(198, 162, 67, 0.08) 0%, transparent 70%)",
+                                filter: "blur(50px)",
+                                pointerEvents: "none",
+                                zIndex: 1,
+                            }}
+                        />
+                        <div style={{ position: "relative", zIndex: 2 }}>
+                            <div style={{ ...section, paddingTop: isMobile ? "60px" : "90px", paddingBottom: isMobile ? "60px" : "90px" }}>
                                 <div
                                     style={{
-                                        width: isMobile ? "80px" : "100px",
-                                        height: isMobile ? "80px" : "100px",
-                                        borderRadius: "50%",
-                                        background: "linear-gradient(135deg, #1f1f1f 0%, #121212 100%)",
-                                        color: "#C6A243",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        boxShadow: "0 12px 24px rgba(0,0,0,0.15)",
-                                        border: "2px solid #A67C00"
+                                        ...tag,
+                                        background: "rgba(166, 124, 0, 0.15)",
+                                        border: "1px solid rgba(166, 124, 0, 0.4)",
+                                        color: "#E2BA6E",
+                                        padding: "4px 12px",
+                                        borderRadius: "6px",
+                                        fontSize: "11px",
+                                        fontWeight: "800",
+                                        letterSpacing: "1.5px",
+                                        textTransform: "uppercase",
+                                        width: "fit-content",
+                                        marginBottom: "16px"
                                     }}
                                 >
-                                    <ShieldCheck size={isMobile ? 40 : 48} strokeWidth={2} />
+                                    Drawings & Planning
                                 </div>
-                            </div>
-
-                            <div style={{ textAlign: isMobile ? "center" : "left" }}>
-                                <div style={{ fontSize: "12px", letterSpacing: "1.5px", textTransform: "uppercase", color: "#A67C00", fontWeight: "800", marginBottom: "8px" }}>
-                                    Crafman Risk-Reversal Protection
-                                </div>
-
-                                <h2
+                                <h1
                                     style={{
-                                        margin: "0 0 12px 0",
-                                        fontSize: isMobile ? "24px" : "32px",
-                                        lineHeight: "1.15",
+                                        fontSize: "clamp(34px, 5.5vw, 56px)",
+                                        lineHeight: "1.1",
+                                        margin: 0,
+                                        maxWidth: "820px",
+                                        color: "#ffffff",
                                         fontWeight: "900",
-                                        color: "#1c1917",
                                         letterSpacing: "-0.5px"
                                     }}
                                 >
-                                    Our 100% Council Approval <br className="hidden sm:inline" />Money-Back Guarantee Scheme
-                                </h2>
-
+                                    Architectural drawings <br className="hidden md:inline" />designed for <span style={{ background: "linear-gradient(120deg, #E2BA6E 0%, #C6A243 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>council approval</span>
+                                </h1>
                                 <p
                                     style={{
-                                        margin: "0 0 20px 0",
-                                        color: "#57534e",
-                                        fontSize: isMobile ? "14px" : "15px",
-                                        lineHeight: "1.6",
-                                        maxWidth: "680px"
+                                        fontSize: "clamp(15px, 2.5vw, 18px)",
+                                        lineHeight: "1.5",
+                                        marginTop: "16px",
+                                        marginBottom: 0,
+                                        maxWidth: "600px",
+                                        color: "#d6d3d1",
+                                        fontWeight: "400",
                                     }}
                                 >
-                                    We handle London and Essex applications with complete regulatory certainty. If we accept your architectural project parameters, we guarantee your plans will pass council assessment. In the rare event that your application faces an absolute refusal that cannot be bypassed via free re-drafts, **we will issue a full 100% refund of your drawing package fee**.
+                                    Clear guidance on what’s needed and the next steps for your project
                                 </p>
 
+                                {/* --- INTERACTIVE POSTCODE CHECKER UNIT --- */}
                                 <div
                                     style={{
-                                        display: "flex",
-                                        flexWrap: "wrap",
-                                        justifyContent: isMobile ? "center" : "flex-start",
-                                        gap: isMobile ? "12px" : "24px",
-                                        fontSize: "13px",
-                                        fontWeight: "700",
-                                        color: "#1c1917",
-                                        borderTop: "1px solid #f5f5f4",
-                                        paddingTop: "16px"
+                                        maxWidth: "460px",
+                                        marginTop: "28px",
+                                        background: "rgba(255, 255, 255, 0.02)",
+                                        backdropFilter: "blur(12px)",
+                                        WebkitBackdropFilter: "blur(12px)",
+                                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                                        borderRadius: "16px",
+                                        padding: "14px 16px",
+                                        boxSizing: "border-box",
                                     }}
                                 >
-                                    <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                                        <span style={{ color: "#166534" }}>✓</span> Zero Financial Risk
+                                    {checkerStatus !== 'success' ? (
+                                        <form onSubmit={handlePostcodeCheck} style={{ margin: 0, width: "100%" }}>
+                                            <label
+                                                htmlFor="hero-postcode-search"
+                                                style={{
+                                                    display: "block",
+                                                    fontSize: "11px",
+                                                    fontWeight: "700",
+                                                    color: "#a8a29e",
+                                                    textTransform: "uppercase",
+                                                    letterSpacing: "1px",
+                                                    marginBottom: "8px"
+                                                }}
+                                            >
+                                                Check Coverage & Council Compliance
+                                            </label>
+                                            <div style={{ display: "flex", gap: "8px" }}>
+                                                <input
+                                                    id="hero-postcode-search"
+                                                    type="text"
+                                                    placeholder="Enter Postcode (e.g. RM1, IG7)"
+                                                    value={postcode}
+                                                    onChange={(e) => {
+                                                        setPostcode(e.target.value);
+                                                        if (checkerStatus === 'error') setCheckerStatus('idle');
+                                                    }}
+                                                    disabled={checkerStatus === 'loading'}
+                                                    style={{
+                                                        flex: 1,
+                                                        height: "42px",
+                                                        borderRadius: "10px",
+                                                        border: checkerStatus === 'error' ? "1px solid #ef4444" : "1px solid rgba(255,255,255,0.15)",
+                                                        background: "rgba(0, 0, 0, 0.3)",
+                                                        color: "#fff",
+                                                        padding: "0 12px",
+                                                        fontSize: "13px",
+                                                        outline: "none",
+                                                        textTransform: "uppercase"
+                                                    }}
+                                                />
+                                                <button
+                                                    type="submit"
+                                                    disabled={checkerStatus === 'loading'}
+                                                    style={{
+                                                        height: "42px",
+                                                        padding: "0 16px",
+                                                        borderRadius: "10px",
+                                                        border: "none",
+                                                        background: "linear-gradient(135deg, #A67C00 0%, #C6A243 100%)",
+                                                        color: "#fff",
+                                                        fontSize: "13px",
+                                                        fontWeight: "800",
+                                                        cursor: "pointer",
+                                                        transition: "opacity 0.2s"
+                                                    }}
+                                                >
+                                                    {checkerStatus === 'loading' ? 'Checking...' : 'Check Area'}
+                                                </button>
+                                            </div>
+                                            {checkerStatus === 'error' && (
+                                                <p style={{ margin: "6px 0 0", fontSize: "12px", color: "#ef4444", fontWeight: "500" }}>
+                                                    Please enter your location postcode.
+                                                </p>
+                                            )}
+                                        </form>
+                                    ) : (
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: "12px",
+                                                animation: "faqFadeDown 0.25s ease-out"
+                                            }}
+                                        >
+                                            <div
+                                                style={{
+                                                    width: "28px",
+                                                    height: "28px",
+                                                    borderRadius: "50%",
+                                                    background: "rgba(34, 197, 94, 0.15)",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    color: "#4ade80",
+                                                    fontWeight: "900",
+                                                    fontSize: "14px",
+                                                    flexShrink: 0
+                                                }}
+                                            >
+                                                ✓
+                                            </div>
+                                            <div>
+                                                {/* Dynamically tracks and references your incoming live location text elements */}
+                                                <p style={{ margin: 0, fontSize: "14px", fontWeight: "800", color: "#fff" }}>
+                                                    Council District {resolvedArea || postcode.toUpperCase()} is Fully Covered
+                                                </p>
+                                                <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#a8a29e" }}>
+                                                    We have complete drawing and planning coverage in your local council hub.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* --- CTA ACTION LINKS (Gated until Postcode Check Success) --- */}
+                                {checkerStatus === 'success' && (
+                                    <div
+                                        style={{
+                                            marginTop: "24px",
+                                            display: "flex",
+                                            gap: "14px",
+                                            flexWrap: "wrap",
+                                            animation: "faqFadeDown 0.3s ease-out"
+                                        }}
+                                    >
+                                        <a
+                                            href="#packages"
+                                            style={{
+                                                ...buttonPrimary,
+                                                background: "linear-gradient(135deg, #A67C00 0%, #C6A243 100%)",
+                                                color: "#fff",
+                                                border: "none",
+                                                fontWeight: "800"
+                                            }}
+                                        >
+                                            View Packages
+                                        </a>
+                                        <a
+                                            href="#contact-form"
+                                            style={{
+                                                ...buttonSecondary,
+                                                background: "rgba(255, 255, 255, 0.05)",
+                                                border: "1px solid rgba(255, 255, 255, 0.15)",
+                                                color: "#fff",
+                                                fontWeight: "700"
+                                            }}
+                                        >
+                                            Get Free Permission Strategy
+                                        </a>
                                     </div>
-                                    <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                                        <span style={{ color: "#166534" }}>✓</span> Free Corrective Re-Drafts
+                                )}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* --- RISK-REVERSAL PROTECTION --- */}
+                    <section
+                        style={{
+                            borderTop: "1px solid #e7e5e4",
+                            borderBottom: "1px solid #e7e5e4",
+                            background: "linear-gradient(180deg, #fdfbf7 0%, #fcf9f2 100%)",
+                            padding: isMobile ? "48px 16px" : "64px 24px",
+                            position: "relative",
+                            overflow: "hidden"
+                        }}
+                    >
+                        <div
+                            style={{
+                                position: "absolute",
+                                bottom: "-30%",
+                                right: "-10%",
+                                width: "350px",
+                                height: "350px",
+                                borderRadius: "50%",
+                                border: "2px dashed rgba(166, 124, 0, 0.06)",
+                                pointerEvents: "none"
+                            }}
+                        />
+
+                        <div style={{ maxWidth: "960px", margin: "0 auto", width: "100%" }}>
+                            <div
+                                style={{
+                                    display: "grid",
+                                    gridTemplateColumns: isMobile ? "1fr" : "auto 1fr",
+                                    gap: isMobile ? "24px" : "40px",
+                                    alignItems: "center",
+                                    background: "#ffffff",
+                                    padding: isMobile ? "28px 20px" : "40px 48px",
+                                    borderRadius: "28px",
+                                    border: "1px solid #eadfcb",
+                                    boxShadow: "0 20px 40px rgba(166, 124, 0, 0.04)"
+                                }}
+                            >
+                                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", margin: isMobile ? "0 auto" : "0" }}>
+                                    <div
+                                        style={{
+                                            width: isMobile ? "80px" : "100px",
+                                            height: isMobile ? "80px" : "100px",
+                                            borderRadius: "50%",
+                                            background: "linear-gradient(135deg, #1f1f1f 0%, #121212 100%)",
+                                            color: "#C6A243",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            boxShadow: "0 12px 24px rgba(0,0,0,0.15)",
+                                            border: "2px solid #A67C00"
+                                        }}
+                                    >
+                                        <ShieldCheck size={isMobile ? 40 : 48} strokeWidth={2} />
                                     </div>
-                                    <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                                        <span style={{ color: "#166534" }}>✓</span> Vetted Planning Experts
+                                </div>
+
+                                <div style={{ textAlign: isMobile ? "center" : "left" }}>
+                                    <div style={{ fontSize: "12px", letterSpacing: "1.5px", textTransform: "uppercase", color: "#A67C00", fontWeight: "800", marginBottom: "8px" }}>
+                                        Crafman Risk-Reversal Protection
+                                    </div>
+
+                                    <h2
+                                        style={{
+                                            margin: "0 0 12px 0",
+                                            fontSize: isMobile ? "24px" : "32px",
+                                            lineHeight: "1.15",
+                                            fontWeight: "900",
+                                            color: "#1c1917",
+                                            letterSpacing: "-0.5px"
+                                        }}
+                                    >
+                                        Our 100% Council Approval <br className="hidden sm:inline" />Money-Back Guarantee Scheme
+                                    </h2>
+
+                                    <p
+                                        style={{
+                                            margin: "0 0 20px 0",
+                                            color: "#57534e",
+                                            fontSize: isMobile ? "14px" : "15px",
+                                            lineHeight: "1.6",
+                                            maxWidth: "680px"
+                                        }}
+                                    >
+                                        We handle London and Essex applications with complete regulatory certainty. If we accept your architectural project parameters, we guarantee your plans will pass council assessment. In the rare event that your application faces an absolute refusal that cannot be bypassed via free re-drafts, **we will issue a full 100% refund of your drawing package fee**.
+                                    </p>
+
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            flexWrap: "wrap",
+                                            justifyContent: isMobile ? "center" : "flex-start",
+                                            gap: isMobile ? "12px" : "24px",
+                                            fontSize: "13px",
+                                            fontWeight: "700",
+                                            color: "#1c1917",
+                                            borderTop: "1px solid #f5f5f4",
+                                            paddingTop: "16px"
+                                        }}
+                                    >
+                                        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                            <span style={{ color: "#166534" }}>✓</span> Zero Financial Risk
+                                        </div>
+                                        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                            <span style={{ color: "#166534" }}>✓</span> Free Corrective Re-Drafts
+                                        </div>
+                                        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                            <span style={{ color: "#166534" }}>✓</span> Vetted Planning Experts
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
 
-                <section
-                    style={{
-                        borderTop: "1px solid #e7e5e4",
-                        borderBottom: "1px solid #e7e5e4",
-                        background: "#fcfbf8",
-                    }}
-                >
-                    <div style={{ ...section, padding: isMobile ? "40px 16px" : "48px 20px" }}>
-                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, minmax(0, 1fr))", gap: isMobile ? "16px" : "24px", alignItems: "stretch" }}>
-                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
-                                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px" }}>
-                                    <svg viewBox="0 0 24 24" width="22" height="22" style={{ marginRight: "2px" }}>
-                                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-                                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-                                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.85z" fill="#FBBC05" />
-                                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-                                    </svg>
-                                    <span style={{ fontWeight: "800", color: "#1f1f1f", fontSize: "16px", letterSpacing: "-0.3px" }}>Google Rating</span>
+                    {/* --- TRUST SIGNALS BADGES --- */}
+                    <section
+                        style={{
+                            borderTop: "1px solid #e7e5e4",
+                            borderBottom: "1px solid #e7e5e4",
+                            background: "#fcfbf8",
+                        }}
+                    >
+                        <div style={{ ...section, padding: isMobile ? "40px 16px" : "48px 20px" }}>
+                            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, minmax(0, 1fr))", gap: isMobile ? "16px" : "24px", alignItems: "stretch" }}>
+                                <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px" }}>
+                                        <svg viewBox="0 0 24 24" width="22" height="22" style={{ marginRight: "2px" }}>
+                                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.85z" fill="#FBBC05" />
+                                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                                        </svg>
+                                        <span style={{ fontWeight: "800", color: "#1f1f1f", fontSize: "16px", letterSpacing: "-0.3px" }}>Google Rating</span>
+                                    </div>
+                                    <div style={{ color: "#f59e0b", fontSize: "18px", letterSpacing: "2px", marginBottom: "6px" }}>★★★★★</div>
+                                    <div style={{ fontSize: "22px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.1" }}>4.9 / 5.0</div>
+                                    <p style={{ margin: "6px 0 0", fontSize: "13px", color: "#78716c", fontWeight: "500" }}>Verified Homeowner Feedback</p>
                                 </div>
-                                <div style={{ color: "#f59e0b", fontSize: "18px", letterSpacing: "2px", marginBottom: "6px" }}>★★★★★</div>
-                                <div style={{ fontSize: "22px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.1" }}>4.9 / 5.0</div>
-                                <p style={{ margin: "6px 0 0", fontSize: "13px", color: "#78716c", fontWeight: "500" }}>Verified Homeowner Feedback</p>
-                            </div>
 
-                            
-
-                            <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
-                                <div style={{ width: "42px", height: "42px", borderRadius: "10px", background: "#16a34a", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "12px", boxShadow: "0 4px 12px rgba(22,163,74,0.15)" }}>
-                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                                        <path d="M9 11l2 2 4-4" />
-                                    </svg>
+                                <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
+                                    <div style={{ width: "42px", height: "42px", borderRadius: "10px", background: "#16a34a", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "12px", boxShadow: "0 4px 12px rgba(22,163,74,0.15)" }}>
+                                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                            <path d="M9 11l2 2 4-4" />
+                                        </svg>
+                                    </div>
+                                    <h3 style={{ margin: "0 0 4px", fontSize: "16px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.2" }}>TrustMark Government Endorsed</h3>
+                                    <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#57534e", lineHeight: "1.4" }}>Government-endorsed quality standard for absolute technical compliance.</p>
                                 </div>
-                                <h3 style={{ margin: "0 0 4px", fontSize: "16px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.2" }}>TrustMark Government Endorsed</h3>
-                                <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#57534e", lineHeight: "1.4" }}>Government-endorsed quality standard for absolute technical compliance.</p>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                </>
 
                 <section
                     id="packages"
@@ -868,7 +945,7 @@ export default function DrawingsPlanning() {
                                                     transition: "all 0.2s",
                                                 }}
                                             >
-                                                {isSelected ? "Selected" : "Ask About This Package"}
+                                                {isSelected ? "Selected" : "Get Free Project Strategy"}
                                             </button>
                                         </div>
                                     </div>
@@ -1003,20 +1080,10 @@ export default function DrawingsPlanning() {
                                     fontWeight: "700",
                                 }}
                             >
-                                Enquiry Form
+                             
                             </div>
 
-                            <h2
-                                style={{
-                                    fontSize: isMobile ? "30px" : "42px",
-                                    marginTop: "12px",
-                                    marginBottom: "4px",
-                                    lineHeight: "1.08",
-                                    color: "#1f1f1f",
-                                }}
-                            >
-                                Request your drawings quote
-                            </h2>
+                        
 
                             <p style={{ margin: "0 0 12px", color: "#57534e", fontSize: "14px", fontWeight: "500" }}>
                                 No annoying sales calls. Just straight answers, clear advice, and zero pressure from our layout specialists.
