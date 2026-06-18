@@ -22,7 +22,7 @@ const callbackTimeOptions = [
 export default function DrawingsPlanningForm({
     endpoint = "https://formspree.io/f/maqlqgzz",
     selectedPackage = "",
-    buttonText = "Secure My Free Strategy Session",
+    buttonText = "Request Consultation",
     title = "Get your free project strategy",
     intro = "We hate pushy sales calls as much as you do. You’ll speak directly with a practical planning strategist—just straight answers, clear package guidance, and zero pressure.",
 }) {
@@ -349,7 +349,7 @@ export default function DrawingsPlanningForm({
                         <div style={{ fontSize: "15px", fontWeight: "700", color: "#1c1917" }}>Step 2: Confirm Information</div>
 
                         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "14px" }}>
-                            <input name="name" value={form.name} onChange={handleChange} placeholder="Your full name" style={inputStyle} required autoComplete="name" />
+                            <input name="name" value={form.name} onChange={handleChange} placeholder="Name" style={inputStyle} required autoComplete="name" />
                             <input name="phone" value={form.phone} onChange={handleChange} placeholder="Primary phone line number" style={inputStyle} required type="tel" autoComplete="tel" />
                         </div>
 
