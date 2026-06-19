@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { siteStyles } from "./Layout.jsx";
 
@@ -94,6 +94,7 @@ export default function DrawingsPlanningForm({
 
     const formIsValid = useMemo(() => isStep1Valid && isStep2Valid, [isStep1Valid, isStep2Valid]);
 
+    // Master Tracking Router Engine
     const trackConversionEvent = (eventName, params = {}) => {
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({ event: eventName, ...params });
@@ -115,6 +116,13 @@ export default function DrawingsPlanningForm({
     async function handleSubmit(e) {
         e.preventDefault();
         if (!formIsValid) return;
+
+        // 🎯 Tracking: Record Submit Button Click Attempt
+        trackConversionEvent("form_submit_attempt", {
+            package_interest: form.packageInterest,
+            chosen_date: form.callbackDate,
+            chosen_time: form.callbackTimeSlot
+        });
 
         setSubmitStatus({ loading: true, success: false, error: "" });
 
@@ -152,9 +160,15 @@ export default function DrawingsPlanningForm({
             });
             setSubmitStatus({ loading: false, success: true, error: "" });
 
+            // 🎯 Tracking: Record Full Data Parameters on Successful Conversion
             trackConversionEvent("form_submission_success", {
                 contact_preference: form.contactPreference,
                 package_interest: form.packageInterest || "None Selected",
+                client_name_provided: !!form.name.trim(),
+                client_phone: form.phone,
+                client_postcode: form.postcode.toUpperCase(),
+                scheduled_date: form.callbackDate,
+                scheduled_time: form.callbackTimeSlot,
             });
 
         } catch (error) {
@@ -255,8 +269,31 @@ export default function DrawingsPlanningForm({
                 </div>
 
                 <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-                    <button type="button" onClick={() => { setSubmittedSummary(null); setSubmitStatus({ loading: false, success: false, error: "" }); setForm({ ...initialFormState }); setStep(1); }} style={buttonSecondaryStyle}>Schedule Another Call</button>
-                    <button type="button" onClick={() => navigate("/")} style={buttonPrimaryStyle}>Return to Home</button>
+                    {/* 🎯 Tracking: Reset Form Trigger */}
+                    <button
+                        type="button"
+                        onClick={() => {
+                            trackConversionEvent("success_screen_reset_click");
+                            setSubmittedSummary(null);
+                            setSubmitStatus({ loading: false, success: false, error: "" });
+                            setForm({ ...initialFormState });
+                            setStep(1);
+                        }}
+                        style={buttonSecondaryStyle}
+                    >
+                        Schedule Another Call
+                    </button>
+                    {/* 🎯 Tracking: Return Home Trigger */}
+                    <button
+                        type="button"
+                        onClick={() => {
+                            trackConversionEvent("success_screen_home_click");
+                            navigate("/");
+                        }}
+                        style={buttonPrimaryStyle}
+                    >
+                        Return to Home
+                    </button>
                 </div>
             </div>
         );
@@ -269,8 +306,8 @@ export default function DrawingsPlanningForm({
                 {intro && <p style={{ color: "#57534e", fontSize: "14px", margin: 0, lineHeight: "1.5" }}>{intro}</p>}
             </div>
 
-            <div style={{ textAlign: "center", padding: "2px 0" }}>
-                <span style={{ fontSize: "13px", fontWeight: "700", color: "#A67C00", textTransform: "uppercase", letterSpacing: "1px" }}>
+            <div style={{ textTransform: "uppercase", letterSpacing: "1px", textAlign: "center", padding: "2px 0" }}>
+                <span style={{ fontSize: "13px", fontWeight: "700", color: "#A67C00" }}>
                     Opening Hours: Mon–Sat 7AM–8PM
                 </span>
             </div>
@@ -299,7 +336,10 @@ export default function DrawingsPlanningForm({
                                     min={dateBounds.min}
                                     max={dateBounds.max}
                                     value={form.callbackDate}
-                                    onChange={handleChange}
+                                    onChange={(e) => {
+                                        handleChange(e);
+                                        trackConversionEvent("step1_date_change", { date_selected: e.target.value });
+                                    }}
                                     style={inputStyle}
                                     required
                                 />
@@ -312,7 +352,14 @@ export default function DrawingsPlanningForm({
                                         <button
                                             key={time}
                                             type="button"
-                                            onClick={() => setField("callbackTimeSlot", time)}
+                                            onClick={() => {
+                                                setField("callbackTimeSlot", time);
+                                                // 🎯 Tracking: Record exact time slot chosen
+                                                trackConversionEvent("step1_time_slot_click", {
+                                                    time_slot_value: time,
+                                                    date_linked: form.callbackDate
+                                                });
+                                            }}
                                             style={{
                                                 ...optionCardStyle(form.callbackTimeSlot === time),
                                                 padding: "10px 14px",
@@ -327,10 +374,17 @@ export default function DrawingsPlanningForm({
                             </div>
                         </div>
 
+                        {/* 🎯 Tracking: Record Step 1 Forward Movement */}
                         <button
                             type="button"
                             disabled={!isStep1Valid}
-                            onClick={() => setStep(2)}
+                            onClick={() => {
+                                setStep(2);
+                                trackConversionEvent("step1_continue_click", {
+                                    date_locked: form.callbackDate,
+                                    time_locked: form.callbackTimeSlot
+                                });
+                            }}
                             style={{
                                 ...buttonPrimaryStyle,
                                 background: !isStep1Valid ? '#a8a29e' : '#1c1917',
@@ -359,7 +413,10 @@ export default function DrawingsPlanningForm({
                                 id="packageInterestDropdown"
                                 name="packageInterest"
                                 value={form.packageInterest}
-                                onChange={handleChange}
+                                onChange={(e) => {
+                                    handleChange(e);
+                                    trackConversionEvent("step2_package_dropdown_change", { dropdown_selection: e.target.value });
+                                }}
                                 style={{ ...inputStyle, cursor: "pointer" }}
                             >
                                 <option value="Starter Package">Starter Package — From £950</option>
@@ -373,7 +430,18 @@ export default function DrawingsPlanningForm({
                         <textarea name="message" value={form.message} onChange={handleChange} placeholder="Briefly describe your property goals or design layout notes (Optional)" rows="2" style={{ ...inputStyle, resize: "vertical", marginTop: "4px" }} />
 
                         <div style={{ display: "flex", gap: "12px", marginTop: "8px" }}>
-                            <button type="button" onClick={() => setStep(1)} style={{ ...buttonSecondaryStyle, width: "35%", borderRadius: "14px" }}>Back</button>
+                            {/* 🎯 Tracking: Record Back Navigation */}
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setStep(1);
+                                    trackConversionEvent("step2_back_click", { current_fields_filled: !!form.name || !!form.phone });
+                                }}
+                                style={{ ...buttonSecondaryStyle, width: "35%", borderRadius: "14px" }}
+                            >
+                                Back
+                            </button>
+
                             <button
                                 type="submit"
                                 disabled={!formIsValid || submitStatus.loading}

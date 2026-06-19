@@ -140,7 +140,7 @@ export default function DrawingsPlanning() {
     const packages = [
         {
             name: "Starter Package",
-            price: "From £950",
+            price: "From £949",
             bestFor: "Feasibility & Ideas",
             intro: "Ideal if you want to see what is structurally possible on your plot, sketch out early layout ideas, or check your options before committing.",
             includes: [
@@ -151,8 +151,21 @@ export default function DrawingsPlanning() {
             ],
         },
         {
-            name: "Planning Package",
-            price: "From £1250",
+            name: "Garden Room Package",
+            price: "From £649",
+            bestFor: "Standalone Studios & Gyms",
+            intro: "Tailored for detached outbuildings, home offices, or garden gyms. We'll ensure your design maximizes your garden space while sticking strictly to Permitted Development rules.",
+            includes: [
+                "Measured survey",
+                "Site location & boundary mapping",
+                "Proposed scaled drawings",
+                "Elevations",
+                "Permitted Development compliance check",
+            ],
+        },
+        {
+            name: "Extension / Loft Planning Package",
+            price: "From £1149",
             bestFor: "Lofts & Extensions",
             intro: "Our most popular tier. Perfect if you know exactly what you want to build (rear extension, dormer loft) and need full Council approval.",
             includes: [
@@ -165,19 +178,32 @@ export default function DrawingsPlanning() {
             ],
             featured: true,
         },
+       
+        
         {
-            name: "Technical Package",
-            price: "From £1650",
-            bestFor: "Ready to Build",
-            intro: "For homeowners ready to hand blueprints to a builder. Includes structural calculations and technical details to pass Building Control.",
+            name: "Building Control Package",
+            price: "From £649",
+            bestFor: "Building Regs Approval",
+            intro: "Ideal if you already have planning approval (or are building under Permitted Development) and need the detailed architectural drawings required to clear Building Regulations.",
             includes: [
                 "Measured survey",
                 "Current scaled drawings",
                 "Proposed scaled drawings",
-                "Elevations",
-                "Submission to council",
-                "Building control drawings",
-                "Structural calculations",
+                "Detailed building regulations drawings",
+                "Submission to Building Control",
+                "Building regulations compliance guidance",
+            ],
+        },
+        {
+            name: "Layout Alteration Package",
+            price: "From £549",
+            bestFor: "Internal Remodeling & Open-Plan",
+            intro: "Perfect if you are modifying your home's interior layout without extending the footprint. Ideal for wall removals, kitchen knock-throughs, or converting spaces.",
+            includes: [
+                "Measured survey",
+                "Current floor plans",
+                "Proposed internal layout options",
+                "Structural opening indicators",
             ],
         },
         {
