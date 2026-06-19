@@ -164,7 +164,7 @@ export default function DrawingsPlanning() {
             ],
         },
         {
-            name: "Extension / Loft Planning Package",
+            name: "Extension /  Loft Planning Package",
             price: "From £1149",
             bestFor: "Lofts & Extensions",
             intro: "Our most popular tier. Perfect if you know exactly what you want to build (rear extension, dormer loft) and need full Council approval.",
@@ -501,123 +501,7 @@ export default function DrawingsPlanning() {
                                     Clear guidance on what’s needed and the next steps for your project
                                 </p>
 
-                                {/* --- INTERACTIVE POSTCODE CHECKER UNIT --- */}
-                                <div
-                                    style={{
-                                        maxWidth: "460px",
-                                        marginTop: "28px",
-                                        background: "rgba(255, 255, 255, 0.02)",
-                                        backdropFilter: "blur(12px)",
-                                        WebkitBackdropFilter: "blur(12px)",
-                                        border: "1px solid rgba(255, 255, 255, 0.08)",
-                                        borderRadius: "16px",
-                                        padding: "14px 16px",
-                                        boxSizing: "border-box",
-                                    }}
-                                >
-                                    {checkerStatus !== 'success' ? (
-                                        <form onSubmit={handlePostcodeCheck} style={{ margin: 0, width: "100%" }}>
-                                            <label
-                                                htmlFor="hero-postcode-search"
-                                                style={{
-                                                    display: "block",
-                                                    fontSize: "11px",
-                                                    fontWeight: "700",
-                                                    color: "#a8a29e",
-                                                    textTransform: "uppercase",
-                                                    letterSpacing: "1px",
-                                                    marginBottom: "8px"
-                                                }}
-                                            >
-                                                Check Coverage & Council Compliance
-                                            </label>
-                                            <div style={{ display: "flex", gap: "8px" }}>
-                                                <input
-                                                    id="hero-postcode-search"
-                                                    type="text"
-                                                    placeholder="Enter Postcode (e.g. RM1, IG7)"
-                                                    value={postcode}
-                                                    onChange={(e) => {
-                                                        setPostcode(e.target.value);
-                                                        if (checkerStatus === 'error') setCheckerStatus('idle');
-                                                    }}
-                                                    disabled={checkerStatus === 'loading'}
-                                                    style={{
-                                                        flex: 1,
-                                                        height: "42px",
-                                                        borderRadius: "10px",
-                                                        border: checkerStatus === 'error' ? "1px solid #ef4444" : "1px solid rgba(255,255,255,0.15)",
-                                                        background: "rgba(0, 0, 0, 0.3)",
-                                                        color: "#fff",
-                                                        padding: "0 12px",
-                                                        fontSize: "13px",
-                                                        outline: "none",
-                                                        textTransform: "uppercase"
-                                                    }}
-                                                />
-                                                <button
-                                                    type="submit"
-                                                    disabled={checkerStatus === 'loading'}
-                                                    style={{
-                                                        height: "42px",
-                                                        padding: "0 16px",
-                                                        borderRadius: "10px",
-                                                        border: "none",
-                                                        background: "linear-gradient(135deg, #A67C00 0%, #C6A243 100%)",
-                                                        color: "#fff",
-                                                        fontSize: "13px",
-                                                        fontWeight: "800",
-                                                        cursor: "pointer",
-                                                        transition: "opacity 0.2s"
-                                                    }}
-                                                >
-                                                    {checkerStatus === 'loading' ? 'Checking...' : 'Check Area'}
-                                                </button>
-                                            </div>
-                                            {checkerStatus === 'error' && (
-                                                <p style={{ margin: "6px 0 0", fontSize: "12px", color: "#ef4444", fontWeight: "500" }}>
-                                                    Please enter your location postcode.
-                                                </p>
-                                            )}
-                                        </form>
-                                    ) : (
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: "12px",
-                                                animation: "faqFadeDown 0.25s ease-out"
-                                            }}
-                                        >
-                                            <div
-                                                style={{
-                                                    width: "28px",
-                                                    height: "28px",
-                                                    borderRadius: "50%",
-                                                    background: "rgba(34, 197, 94, 0.15)",
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    justifyContent: "center",
-                                                    color: "#4ade80",
-                                                    fontWeight: "900",
-                                                    fontSize: "14px",
-                                                    flexShrink: 0
-                                                }}
-                                            >
-                                                ✓
-                                            </div>
-                                            <div>
-                                                {/* Dynamically tracks and references your incoming live location text elements */}
-                                                <p style={{ margin: 0, fontSize: "14px", fontWeight: "800", color: "#fff" }}>
-                                                    Council District {resolvedArea || postcode.toUpperCase()} is Fully Covered
-                                                </p>
-                                                <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#a8a29e" }}>
-                                                    We have complete drawing and planning coverage in your local council hub.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
+                               
 
                                 {/* --- CTA ACTION LINKS (Gated until Postcode Check Success) --- */}
                                 {checkerStatus === 'success' && (
@@ -659,6 +543,290 @@ export default function DrawingsPlanning() {
                             </div>
                         </div>
                     </section>
+
+                    <section
+                        id="packages"
+                        style={{
+                            borderTop: "1px solid #e7e5e4",
+                            borderBottom: "1px solid #e7e5e4",
+                            background: "#fff",
+                        }}
+                    >
+                        <div style={{ ...section, padding: isMobile ? "40px 16px" : "64px 20px" }}>
+                            <div style={{ maxWidth: "760px", minWidth: 0, textAlign: isMobile ? "center" : "left" }}>
+                                <div style={{ fontSize: "12px", letterSpacing: "2px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>Packages</div>
+                                <h2 style={{ margin: "10px 0 8px", fontSize: isMobile ? "28px" : "42px", lineHeight: "1.1", color: "#1f1f1f", letterSpacing: "-0.5px" }}>Choose your project tier</h2>
+                            </div>
+
+                            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(280px, 1fr))", gap: isMobile ? "16px" : "20px", marginTop: isMobile ? "24px" : "36px", alignItems: "stretch" }}>
+                                {packages.map((pkg) => {
+                                    const isSelected = selectedPackage === pkg.name;
+                                    const isExpanded = expandedPackage === pkg.name || !isMobile;
+
+                                    return (
+                                        <div
+                                            key={pkg.name}
+                                            style={{
+                                                ...card,
+                                                minWidth: 0,
+                                                position: "relative",
+                                                background: pkg.featured ? "#1f1f1f" : "#fff",
+                                                color: pkg.featured ? "#fff" : "#1f1f1f",
+                                                border: pkg.featured ? "1px solid #1f1f1f" : "1px solid #e7e5e4",
+                                                borderRadius: "24px",
+                                                padding: isMobile ? "20px" : "26px",
+                                                boxSizing: "border-box",
+                                                boxShadow: pkg.featured ? "0 20px 40px rgba(28,25,23,0.14)" : "0 10px 24px rgba(28,25,23,0.04)",
+                                                transform: !isMobile && pkg.featured ? "translateY(-8px)" : "none",
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                justifyContent: "space-between",
+                                            }}
+                                        >
+                                            <div>
+                                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "4px" }}>
+                                                    <div>
+                                                        <span style={{
+                                                            display: "inline-block",
+                                                            padding: "2px 8px",
+                                                            borderRadius: "6px",
+                                                            background: pkg.featured ? "rgba(166, 124, 0, 0.2)" : "#f5f5f4",
+                                                            color: pkg.featured ? "#C6A243" : "#57534e",
+                                                            fontSize: "11px",
+                                                            fontWeight: "700",
+                                                            marginBottom: "6px",
+                                                            textTransform: "uppercase"
+                                                        }}>
+                                                            Best for: {pkg.bestFor}
+                                                        </span>
+                                                        <h3 style={{ margin: 0, fontSize: isMobile ? "20px" : "24px", fontWeight: "800" }}>{pkg.name}</h3>
+                                                    </div>
+                                                    {pkg.featured && (
+                                                        <span style={{ padding: "4px 10px", borderRadius: "999px", background: "#A67C00", color: "#fff", fontSize: "10px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "0.5px" }}>Popular</span>
+                                                    )}
+                                                </div>
+
+                                                <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "12px" }}>
+                                                    <span style={{ fontSize: isMobile ? "28px" : "36px", fontWeight: "900", color: pkg.featured ? "#fff" : "#1f1f1f" }}>{pkg.price}</span>
+                                                    <span style={{ fontSize: "12px", color: pkg.featured ? "#a8a29e" : "#78716c" }}>fixed cost</span>
+                                                </div>
+
+                                                <p style={{ margin: "0 0 16px", fontSize: "14px", lineHeight: "1.5", color: pkg.featured ? "#d6d3d1" : "#57534e" }}>{pkg.intro}</p>
+
+                                                {isMobile && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setExpandedPackage(isExpanded ? null : pkg.name);
+                                                            if (!isExpanded) {
+                                                                window.dataLayer = window.dataLayer || [];
+                                                                window.dataLayer.push({
+                                                                    event: "package_details_toggle",
+                                                                    package_name: pkg.name,
+                                                                    action: "expand",
+                                                                    device: "mobile"
+                                                                });
+                                                            }
+                                                        }}
+                                                        style={{
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            justifyContent: "space-between",
+                                                            width: "100%",
+                                                            background: "none",
+                                                            border: "none",
+                                                            padding: "12px 0",
+                                                            color: pkg.featured ? "#C6A243" : "#A67C00",
+                                                            fontWeight: "700",
+                                                            fontSize: "13px",
+                                                            cursor: "pointer",
+                                                            borderTop: pkg.featured ? "1px solid #2e2a24" : "1px solid #f5f5f4",
+                                                        }}
+                                                    >
+                                                        <span>{isExpanded ? "Hide package details" : "Show package details"}</span>
+                                                        <span style={{ fontSize: "16px", transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }}>▼</span>
+                                                    </button>
+                                                )}
+
+                                                <div
+                                                    style={{
+                                                        display: isExpanded ? "grid" : "none",
+                                                        gap: "10px",
+                                                        paddingTop: isMobile ? "8px" : "16px",
+                                                        borderTop: !isMobile ? (pkg.featured ? "1px solid rgba(255,255,255,0.1)" : "1px solid #ece7df") : "none",
+                                                        animation: isMobile ? "faqFadeDown 0.2s ease" : "none",
+                                                    }}
+                                                >
+                                                    <div style={{ fontSize: "12px", fontWeight: "700", textTransform: "uppercase", color: pkg.featured ? "#a8a29e" : "#78716c", marginBottom: "4px" }}>Includes:</div>
+                                                    {pkg.includes.map((item) => (
+                                                        <div key={item} style={{ display: "flex", gap: "8px", alignItems: "center", fontSize: "14px" }}>
+                                                            <span style={{ color: pkg.featured ? "#C6A243" : "#A67C00", fontWeight: "900" }}>✓</span>
+                                                            <span style={{ color: pkg.featured ? "#f5f5f4" : "#44403c" }}>{item}</span>
+                                                        </div>
+                                                    ))}
+                                                    <div style={{ fontSize: "12px", color: pkg.featured ? "#a8a29e" : "#78716c", marginTop: "4px", fontStyle: "italic" }}>
+                                                        ⏱ Turnaround: 7–10 working days
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div style={{ marginTop: "24px" }}>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        handlePackageSelect(pkg.name);
+
+                                                        window.dataLayer = window.dataLayer || [];
+                                                        window.dataLayer.push({
+                                                            event: "package_button_click",
+                                                            package_name: pkg.name,
+                                                            package_price: pkg.price,
+                                                            is_featured: pkg.featured ? "yes" : "no"
+                                                        });
+
+                                                        document.getElementById("contact-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                                                    }}
+                                                    style={{
+                                                        width: "100%",
+                                                        minHeight: "48px",
+                                                        borderRadius: "14px",
+                                                        border: "none",
+                                                        background: isSelected ? "#A67C00" : (pkg.featured ? "#fff" : "#1f1f1f"),
+                                                        color: isSelected ? "#fff" : (pkg.featured ? "#1f1f1f" : "#fff"),
+                                                        fontSize: "14px",
+                                                        fontWeight: "800",
+                                                        cursor: "pointer",
+                                                        boxShadow: isSelected ? "0 8px 20px rgba(166,124,0,0.2)" : "none",
+                                                        transition: "all 0.2s",
+                                                    }}
+                                                >
+                                                    {isSelected ? "Selected" : "Get Free Project Strategy"}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* --- INTERACTIVE POSTCODE CHECKER UNIT --- */}
+                    <div
+                        style={{
+                            maxWidth: "460px",
+                            marginTop: "28px",
+                            background: "rgba(255, 255, 255, 0.02)",
+                            backdropFilter: "blur(12px)",
+                            WebkitBackdropFilter: "blur(12px)",
+                            border: "1px solid rgba(255, 255, 255, 0.08)",
+                            borderRadius: "16px",
+                            padding: "14px 16px",
+                            boxSizing: "border-box",
+                        }}
+                    >
+                        {checkerStatus !== 'success' ? (
+                            <form onSubmit={handlePostcodeCheck} style={{ margin: 0, width: "100%" }}>
+                                <label
+                                    htmlFor="hero-postcode-search"
+                                    style={{
+                                        display: "block",
+                                        fontSize: "11px",
+                                        fontWeight: "700",
+                                        color: "#a8a29e",
+                                        textTransform: "uppercase",
+                                        letterSpacing: "1px",
+                                        marginBottom: "8px"
+                                    }}
+                                >
+                                    Check Coverage & Council Compliance
+                                </label>
+                                <div style={{ display: "flex", gap: "8px" }}>
+                                    <input
+                                        id="hero-postcode-search"
+                                        type="text"
+                                        placeholder="Enter Postcode (e.g. RM1, IG7)"
+                                        value={postcode}
+                                        onChange={(e) => {
+                                            setPostcode(e.target.value);
+                                            if (checkerStatus === 'error') setCheckerStatus('idle');
+                                        }}
+                                        disabled={checkerStatus === 'loading'}
+                                        style={{
+                                            flex: 1,
+                                            height: "42px",
+                                            borderRadius: "10px",
+                                            border: checkerStatus === 'error' ? "1px solid #ef4444" : "1px solid rgba(255,255,255,0.15)",
+                                            background: "rgba(0, 0, 0, 0.3)",
+                                            color: "#fff",
+                                            padding: "0 12px",
+                                            fontSize: "13px",
+                                            outline: "none",
+                                            textTransform: "uppercase"
+                                        }}
+                                    />
+                                    <button
+                                        type="submit"
+                                        disabled={checkerStatus === 'loading'}
+                                        style={{
+                                            height: "42px",
+                                            padding: "0 16px",
+                                            borderRadius: "10px",
+                                            border: "none",
+                                            background: "linear-gradient(135deg, #A67C00 0%, #C6A243 100%)",
+                                            color: "#fff",
+                                            fontSize: "13px",
+                                            fontWeight: "800",
+                                            cursor: "pointer",
+                                            transition: "opacity 0.2s"
+                                        }}
+                                    >
+                                        {checkerStatus === 'loading' ? 'Checking...' : 'Check Area'}
+                                    </button>
+                                </div>
+                                {checkerStatus === 'error' && (
+                                    <p style={{ margin: "6px 0 0", fontSize: "12px", color: "#ef4444", fontWeight: "500" }}>
+                                        Please enter your location postcode.
+                                    </p>
+                                )}
+                            </form>
+                        ) : (
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "12px",
+                                    animation: "faqFadeDown 0.25s ease-out"
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        width: "28px",
+                                        height: "28px",
+                                        borderRadius: "50%",
+                                        background: "rgba(34, 197, 94, 0.15)",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        color: "#4ade80",
+                                        fontWeight: "900",
+                                        fontSize: "14px",
+                                        flexShrink: 0
+                                    }}
+                                >
+                                    ✓
+                                </div>
+                                <div>
+                                    {/* Dynamically tracks and references your incoming live location text elements */}
+                                    <p style={{ margin: 0, fontSize: "14px", fontWeight: "800", color: "#a8a29e" }}>
+                                        Council District {resolvedArea || postcode.toUpperCase()} is Fully Covered
+                                    </p>
+                                    <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#a8a29e" }}>
+                                        We have complete drawing and planning coverage in your local council hub.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+                    </div> 
 
                     {/* --- RISK-REVERSAL PROTECTION --- */}
                     <section
@@ -815,171 +983,7 @@ export default function DrawingsPlanning() {
                     </section>
                 </>
 
-                <section
-                    id="packages"
-                    style={{
-                        borderTop: "1px solid #e7e5e4",
-                        borderBottom: "1px solid #e7e5e4",
-                        background: "#fff",
-                    }}
-                >
-                    <div style={{ ...section, padding: isMobile ? "40px 16px" : "64px 20px" }}>
-                        <div style={{ maxWidth: "760px", minWidth: 0, textAlign: isMobile ? "center" : "left" }}>
-                            <div style={{ fontSize: "12px", letterSpacing: "2px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>Packages</div>
-                            <h2 style={{ margin: "10px 0 8px", fontSize: isMobile ? "28px" : "42px", lineHeight: "1.1", color: "#1f1f1f", letterSpacing: "-0.5px" }}>Choose your project tier</h2>
-                        </div>
-
-                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(280px, 1fr))", gap: isMobile ? "16px" : "20px", marginTop: isMobile ? "24px" : "36px", alignItems: "stretch" }}>
-                            {packages.map((pkg) => {
-                                const isSelected = selectedPackage === pkg.name;
-                                const isExpanded = expandedPackage === pkg.name || !isMobile;
-
-                                return (
-                                    <div
-                                        key={pkg.name}
-                                        style={{
-                                            ...card,
-                                            minWidth: 0,
-                                            position: "relative",
-                                            background: pkg.featured ? "#1f1f1f" : "#fff",
-                                            color: pkg.featured ? "#fff" : "#1f1f1f",
-                                            border: pkg.featured ? "1px solid #1f1f1f" : "1px solid #e7e5e4",
-                                            borderRadius: "24px",
-                                            padding: isMobile ? "20px" : "26px",
-                                            boxSizing: "border-box",
-                                            boxShadow: pkg.featured ? "0 20px 40px rgba(28,25,23,0.14)" : "0 10px 24px rgba(28,25,23,0.04)",
-                                            transform: !isMobile && pkg.featured ? "translateY(-8px)" : "none",
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            justifyContent: "space-between",
-                                        }}
-                                    >
-                                        <div>
-                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "4px" }}>
-                                                <div>
-                                                    <span style={{
-                                                        display: "inline-block",
-                                                        padding: "2px 8px",
-                                                        borderRadius: "6px",
-                                                        background: pkg.featured ? "rgba(166, 124, 0, 0.2)" : "#f5f5f4",
-                                                        color: pkg.featured ? "#C6A243" : "#57534e",
-                                                        fontSize: "11px",
-                                                        fontWeight: "700",
-                                                        marginBottom: "6px",
-                                                        textTransform: "uppercase"
-                                                    }}>
-                                                        Best for: {pkg.bestFor}
-                                                    </span>
-                                                    <h3 style={{ margin: 0, fontSize: isMobile ? "20px" : "24px", fontWeight: "800" }}>{pkg.name}</h3>
-                                                </div>
-                                                {pkg.featured && (
-                                                    <span style={{ padding: "4px 10px", borderRadius: "999px", background: "#A67C00", color: "#fff", fontSize: "10px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "0.5px" }}>Popular</span>
-                                                )}
-                                            </div>
-
-                                            <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "12px" }}>
-                                                <span style={{ fontSize: isMobile ? "28px" : "36px", fontWeight: "900", color: pkg.featured ? "#fff" : "#1f1f1f" }}>{pkg.price}</span>
-                                                <span style={{ fontSize: "12px", color: pkg.featured ? "#a8a29e" : "#78716c" }}>fixed cost</span>
-                                            </div>
-
-                                            <p style={{ margin: "0 0 16px", fontSize: "14px", lineHeight: "1.5", color: pkg.featured ? "#d6d3d1" : "#57534e" }}>{pkg.intro}</p>
-
-                                            {isMobile && (
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        setExpandedPackage(isExpanded ? null : pkg.name);
-                                                        if (!isExpanded) {
-                                                            window.dataLayer = window.dataLayer || [];
-                                                            window.dataLayer.push({
-                                                                event: "package_details_toggle",
-                                                                package_name: pkg.name,
-                                                                action: "expand",
-                                                                device: "mobile"
-                                                            });
-                                                        }
-                                                    }}
-                                                    style={{
-                                                        display: "flex",
-                                                        alignItems: "center",
-                                                        justifyContent: "space-between",
-                                                        width: "100%",
-                                                        background: "none",
-                                                        border: "none",
-                                                        padding: "12px 0",
-                                                        color: pkg.featured ? "#C6A243" : "#A67C00",
-                                                        fontWeight: "700",
-                                                        fontSize: "13px",
-                                                        cursor: "pointer",
-                                                        borderTop: pkg.featured ? "1px solid #2e2a24" : "1px solid #f5f5f4",
-                                                    }}
-                                                >
-                                                    <span>{isExpanded ? "Hide package details" : "Show package details"}</span>
-                                                    <span style={{ fontSize: "16px", transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }}>▼</span>
-                                                </button>
-                                            )}
-
-                                            <div
-                                                style={{
-                                                    display: isExpanded ? "grid" : "none",
-                                                    gap: "10px",
-                                                    paddingTop: isMobile ? "8px" : "16px",
-                                                    borderTop: !isMobile ? (pkg.featured ? "1px solid rgba(255,255,255,0.1)" : "1px solid #ece7df") : "none",
-                                                    animation: isMobile ? "faqFadeDown 0.2s ease" : "none",
-                                                }}
-                                            >
-                                                <div style={{ fontSize: "12px", fontWeight: "700", textTransform: "uppercase", color: pkg.featured ? "#a8a29e" : "#78716c", marginBottom: "4px" }}>Includes:</div>
-                                                {pkg.includes.map((item) => (
-                                                    <div key={item} style={{ display: "flex", gap: "8px", alignItems: "center", fontSize: "14px" }}>
-                                                        <span style={{ color: pkg.featured ? "#C6A243" : "#A67C00", fontWeight: "900" }}>✓</span>
-                                                        <span style={{ color: pkg.featured ? "#f5f5f4" : "#44403c" }}>{item}</span>
-                                                    </div>
-                                                ))}
-                                                <div style={{ fontSize: "12px", color: pkg.featured ? "#a8a29e" : "#78716c", marginTop: "4px", fontStyle: "italic" }}>
-                                                    ⏱ Turnaround: 7–10 working days
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div style={{ marginTop: "24px" }}>
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    handlePackageSelect(pkg.name);
-
-                                                    window.dataLayer = window.dataLayer || [];
-                                                    window.dataLayer.push({
-                                                        event: "package_button_click",
-                                                        package_name: pkg.name,
-                                                        package_price: pkg.price,
-                                                        is_featured: pkg.featured ? "yes" : "no"
-                                                    });
-
-                                                    document.getElementById("contact-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
-                                                }}
-                                                style={{
-                                                    width: "100%",
-                                                    minHeight: "48px",
-                                                    borderRadius: "14px",
-                                                    border: "none",
-                                                    background: isSelected ? "#A67C00" : (pkg.featured ? "#fff" : "#1f1f1f"),
-                                                    color: isSelected ? "#fff" : (pkg.featured ? "#1f1f1f" : "#fff"),
-                                                    fontSize: "14px",
-                                                    fontWeight: "800",
-                                                    cursor: "pointer",
-                                                    boxShadow: isSelected ? "0 8px 20px rgba(166,124,0,0.2)" : "none",
-                                                    transition: "all 0.2s",
-                                                }}
-                                            >
-                                                {isSelected ? "Selected" : "Get Free Project Strategy"}
-                                            </button>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </section>
+                
 
                 <section style={{ background: "#fcfbf8", padding: "32px 16px", borderBottom: "1px solid #e7e5e4" }}>
                     <div style={{ ...section, maxWidth: "800px", margin: "0 auto" }}>
