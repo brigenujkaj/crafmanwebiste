@@ -700,7 +700,7 @@ export default function DrawingsPlanning() {
                                                         transition: "all 0.2s",
                                                     }}
                                                 >
-                                                    {isSelected ? "Selected" : "Get Free Project Strategy"}
+                                                    {isSelected ? "Selected" : "Get More Info"}
                                                 </button>
                                             </div>
                                         </div>
