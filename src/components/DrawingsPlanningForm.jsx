@@ -4,6 +4,7 @@ import { siteStyles } from "./Layout.jsx";
 
 const initialFormState = {
     contactPreference: "schedule_callback",
+    meetingType: "phone_callback", // Tracks option: phone_callback or home_visit
     callbackDate: "",
     callbackTimeSlot: "",
     postcode: "",
@@ -88,8 +89,8 @@ export default function DrawingsPlanningForm({
         if (submitStatus.error) setSubmitStatus((prev) => ({ ...prev, error: "" }));
     }
 
-    // --- REVERSED PROGRESSIVE STEP VALIDATION LOGIC ---
-    const isStep1Valid = useMemo(() => !!form.callbackDate && !!form.callbackTimeSlot, [form.callbackDate, form.callbackTimeSlot]);
+    // --- PROGRESSIVE STEP VALIDATION LOGIC ---
+    const isStep1Valid = useMemo(() => !!form.callbackDate && !!form.callbackTimeSlot && !!form.meetingType, [form.callbackDate, form.callbackTimeSlot, form.meetingType]);
     const isStep2Valid = useMemo(() => !!form.name.trim() && !!form.phone.trim(), [form.name, form.phone]);
 
     const formIsValid = useMemo(() => isStep1Valid && isStep2Valid, [isStep1Valid, isStep2Valid]);
@@ -120,6 +121,7 @@ export default function DrawingsPlanningForm({
         // 🎯 Tracking: Record Submit Button Click Attempt
         trackConversionEvent("form_submit_attempt", {
             package_interest: form.packageInterest,
+            meeting_type: form.meetingType,
             chosen_date: form.callbackDate,
             chosen_time: form.callbackTimeSlot
         });
@@ -128,8 +130,9 @@ export default function DrawingsPlanningForm({
 
         try {
             const payload = {
-                formType: "Drawings Callback Request",
+                formType: "Drawings Strategy Consultation Request",
                 contactPreference: form.contactPreference,
+                meetingType: form.meetingType === "phone_callback" ? "Phone Call Back" : "In-Person Home Visit",
                 packageInterest: form.packageInterest || "None Selected",
                 name: form.name,
                 phone: form.phone,
@@ -163,6 +166,7 @@ export default function DrawingsPlanningForm({
             // 🎯 Tracking: Record Full Data Parameters on Successful Conversion
             trackConversionEvent("form_submission_success", {
                 contact_preference: form.contactPreference,
+                meeting_type: form.meetingType,
                 package_interest: form.packageInterest || "None Selected",
                 client_name_provided: !!form.name.trim(),
                 client_phone: form.phone,
@@ -251,25 +255,29 @@ export default function DrawingsPlanningForm({
                 <div style={{ display: "flex", gap: "14px", alignItems: "center" }}>
                     <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: "#166534", color: "#fff", display: "grid", placeItems: "center", fontSize: "28px" }}>✓</div>
                     <div>
-                        <h2 style={{ margin: 0, fontSize: "24px", color: "#14532d" }}>Strategy Session Scheduled</h2>
+                        <h2 style={{ margin: 0, fontSize: "24px", color: "#14532d" }}>
+                            {submittedSummary.meetingType === "home_visit" ? "Home Visit Arranged" : "Strategy Session Scheduled"}
+                        </h2>
                         <p style={{ margin: "4px 0 0", color: "#166534", fontSize: "14px" }}>
-                            We will ring you back on {submittedSummary.displayDate} during the {submittedSummary.callbackTimeSlot.toLowerCase()}.
+                            {submittedSummary.meetingType === "home_visit"
+                                ? `Our planning strategist will visit your property on ${submittedSummary.displayDate} during the ${submittedSummary.callbackTimeSlot.toLowerCase()}.`
+                                : `We will ring you back on ${submittedSummary.displayDate} during the ${submittedSummary.callbackTimeSlot.toLowerCase()}.`
+                            }
                         </p>
                     </div>
                 </div>
 
                 <div style={{ borderTop: "1px solid #e7e5e4", paddingTop: "14px" }}>
-                    <h4 style={{ margin: "0 0 10px", fontSize: "15px" }}>Submission Summary</h4>
+                    <h4 style={{ margin: "0 0 10px", fontSize: "15px" }}>Consultation Details</h4>
                     <div style={{ background: "#fafaf9", padding: "14px", borderRadius: "12px", display: "grid", gap: "8px", fontSize: "14px" }}>
                         <div><strong>Client Name:</strong> {submittedSummary.name}</div>
                         <div><strong>Linked Phone Line:</strong> {submittedSummary.phone}</div>
-                        <div><strong>Target Track:</strong> {submittedSummary.packageInterest}</div>
+                        <div><strong>Consultation Track:</strong> {submittedSummary.meetingType === "home_visit" ? "🏡 In-Person Property Home Visit" : "📞 Phone Consultation Call"}</div>
                         <div><strong>Arranged Date:</strong> {submittedSummary.displayDate} ({submittedSummary.callbackTimeSlot})</div>
                     </div>
                 </div>
 
                 <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-                    {/* 🎯 Tracking: Reset Form Trigger */}
                     <button
                         type="button"
                         onClick={() => {
@@ -281,9 +289,8 @@ export default function DrawingsPlanningForm({
                         }}
                         style={buttonSecondaryStyle}
                     >
-                        Schedule Another Call
+                        Schedule Another Appointment
                     </button>
-                    {/* 🎯 Tracking: Return Home Trigger */}
                     <button
                         type="button"
                         onClick={() => {
@@ -324,14 +331,77 @@ export default function DrawingsPlanningForm({
                 {/* STEP 1: INITIAL APPOINTMENT SELECTION MATRIX */}
                 {step === 1 && (
                     <div style={{ display: "grid", gap: "14px", animation: "faqFadeDown 0.25s ease-out" }}>
-                        <div style={{ fontSize: "15px", fontWeight: "700", color: "#1c1917" }}>Step 1: Choose Callback Arrangement</div>
+                        <div style={{ fontSize: "15px", fontWeight: "700", color: "#1c1917" }}>Step 1: Consultation Type & Schedule</div>
+
+                        {/* 🏡 INTERACTIVE SEGMENT CONTROL (MEETING TYPE TOGGLE) */}
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", background: "#f5f5f4", padding: "4px", borderRadius: "12px" }}>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setField("meetingType", "phone_callback");
+                                    trackConversionEvent("meeting_type_change", { type: "phone_callback" });
+                                }}
+                                style={{
+                                    border: "none",
+                                    padding: "10px",
+                                    borderRadius: "8px",
+                                    fontSize: "13px",
+                                    fontWeight: "700",
+                                    cursor: "pointer",
+                                    background: form.meetingType === "phone_callback" ? "#fff" : "transparent",
+                                    color: form.meetingType === "phone_callback" ? "#1c1917" : "#78716c",
+                                    boxShadow: form.meetingType === "phone_callback" ? "0 2px 4px rgba(0,0,0,0.06)" : "none",
+                                    transition: "all 0.2s"
+                                }}
+                            >
+                                📞 Phone Callback
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setField("meetingType", "home_visit");
+                                    trackConversionEvent("meeting_type_change", { type: "home_visit" });
+                                }}
+                                style={{
+                                    border: "none",
+                                    padding: "10px",
+                                    borderRadius: "8px",
+                                    fontSize: "13px",
+                                    fontWeight: "700",
+                                    cursor: "pointer",
+                                    background: form.meetingType === "home_visit" ? "#fff" : "transparent",
+                                    color: form.meetingType === "home_visit" ? "#1c1917" : "#78716c",
+                                    boxShadow: form.meetingType === "home_visit" ? "0 2px 4px rgba(0,0,0,0.06)" : "none",
+                                    transition: "all 0.2s"
+                                }}
+                            >
+                                🏡 Home Visit
+                            </button>
+                        </div>
+
+                        {/* 📍 HOME VISIT EXPLANATORY SPECIFICATION NOTICE */}
+                        {form.meetingType === "home_visit" && (
+                            <div style={{ background: "#fafaf9", border: "1px dashed #d6d3d1", padding: "14px", borderRadius: "14px", display: "grid", gap: "4px", animation: "faqFadeDown 0.2s ease-out" }}>
+                                <span style={{ fontSize: "11px", fontWeight: "800", color: "#b45309", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                                    🏡 On-Site Architectural Assessment
+                                </span>
+                                <span style={{ fontSize: "12px", color: "#57534e", marginTop: "2px", lineHeight: "1.4" }}>
+                                    We will send a practical planning specialist directly to your property. We'll map out layout constraints, discuss design viability, and answer local council questions live on-site.
+                                </span>
+                            </div>
+                        )}
 
                         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "16px", marginTop: "4px" }}>
                             <div style={labelStyle}>
-                                <label htmlFor="callbackDate" style={{ fontWeight: "700", fontSize: "13px", color: "#44403c" }}>Preferred Callback Date</label>
+                                <label htmlFor="callbackDate" style={{ fontWeight: "700", fontSize: "13px", color: "#44403c" }}>
+                                    {form.meetingType === "home_visit" ? "Preferred Visit Date" : "Preferred Callback Date"}
+                                </label>
                                 <input
                                     id="callbackDate"
-                                    type="date"
+                                    type={form.callbackDate ? "date" : "text"}
+                                    onFocus={(e) => (e.target.type = "date")}
+                                    onBlur={(e) => { if (!form.callbackDate) e.target.type = "text"; }}
+                                    placeholder="📅 Tap to select date..."
                                     name="callbackDate"
                                     min={dateBounds.min}
                                     max={dateBounds.max}
@@ -340,7 +410,7 @@ export default function DrawingsPlanningForm({
                                         handleChange(e);
                                         trackConversionEvent("step1_date_change", { date_selected: e.target.value });
                                     }}
-                                    style={inputStyle}
+                                    style={{ ...inputStyle, cursor: "pointer", appearance: "none", WebkitAppearance: "none" }}
                                     required
                                 />
                             </div>
@@ -354,7 +424,6 @@ export default function DrawingsPlanningForm({
                                             type="button"
                                             onClick={() => {
                                                 setField("callbackTimeSlot", time);
-                                                // 🎯 Tracking: Record exact time slot chosen
                                                 trackConversionEvent("step1_time_slot_click", {
                                                     time_slot_value: time,
                                                     date_linked: form.callbackDate
@@ -374,13 +443,13 @@ export default function DrawingsPlanningForm({
                             </div>
                         </div>
 
-                        {/* 🎯 Tracking: Record Step 1 Forward Movement */}
                         <button
                             type="button"
                             disabled={!isStep1Valid}
                             onClick={() => {
                                 setStep(2);
                                 trackConversionEvent("step1_continue_click", {
+                                    meeting_type: form.meetingType,
                                     date_locked: form.callbackDate,
                                     time_locked: form.callbackTimeSlot
                                 });
@@ -392,7 +461,7 @@ export default function DrawingsPlanningForm({
                                 marginTop: "10px"
                             }}
                         >
-                            Confirm Booking
+                            Next Step
                         </button>
                     </div>
                 )}
@@ -430,7 +499,6 @@ export default function DrawingsPlanningForm({
                         <textarea name="message" value={form.message} onChange={handleChange} placeholder="Briefly describe your property goals or design layout notes (Optional)" rows="2" style={{ ...inputStyle, resize: "vertical", marginTop: "4px" }} />
 
                         <div style={{ display: "flex", gap: "12px", marginTop: "8px" }}>
-                            {/* 🎯 Tracking: Record Back Navigation */}
                             <button
                                 type="button"
                                 onClick={() => {

@@ -1,5 +1,5 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
 
 // Global style design token framework for the Crafman funnel
 export const siteStyles = {
@@ -83,6 +83,16 @@ export default function DrawingsLayout({ children }) {
         transition: "transform 0.2s ease"
     };
 
+    const navAboutLinkStyle = {
+        fontSize: "15px",
+        fontWeight: "700",
+        color: "#44403c",
+        textDecoration: "none",
+        padding: "8px 16px",
+        borderRadius: "8px",
+        transition: "all 0.2s ease",
+    };
+
     return (
         <div style={siteStyles.page}>
             {/* STICKY CONFIGURATION HEADER FUNNEL */}
@@ -149,13 +159,30 @@ export default function DrawingsLayout({ children }) {
                     <nav
                         style={{
                             display: "flex",
-                            gap: "8px",
+                            gap: isMobile ? "4px" : "12px",
                             alignItems: "center",
                             justifyContent: "flex-end",
                             flexWrap: "wrap",
                             flex: 1,
                         }}
                     >
+                        {/* 🏢 ADDED ABOUT US ROUTE LINK ENTRY */}
+                        <Link
+                            to="/about"
+                            onClick={() => {
+                                window.dataLayer = window.dataLayer || [];
+                                window.dataLayer.push({
+                                    event: "nav_about_click",
+                                    location: "Global Navbar Navigation Menu Link"
+                                });
+                            }}
+                            style={navAboutLinkStyle}
+                            onMouseEnter={(e) => (e.currentTarget.style.background = "#f5f5f4")}
+                            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                        >
+                            About Us
+                        </Link>
+
                         <a
                             href="tel:02036335634"
                             onClick={() => {

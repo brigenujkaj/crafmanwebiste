@@ -1701,7 +1701,7 @@ export default function DrawingsPlanning() {
                     >
                         <div style={{ minWidth: 0 }}>
                             <div style={{ fontSize: "18px", fontWeight: "800", color: "#fff", marginBottom: "12px", letterSpacing: "-0.3px" }}>
-                                Crafman <span style={{ color: "#C6A243", fontWeight: "400" }}>Design & Build</span>
+                                Crafman <span style={{ color: "#C6A243", fontWeight: "400" }}>Architectural</span>
                             </div>
                             <p style={{ margin: "0 0 16px 0", fontSize: "14px", color: "#a8a29e", lineHeight: "1.5", maxWidth: "320px" }}>
                                 Professional architectural drawing packages and premium full-lifecycle residential construction across London & Essex.
