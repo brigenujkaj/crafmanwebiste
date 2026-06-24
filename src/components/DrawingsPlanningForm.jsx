@@ -339,7 +339,10 @@ export default function DrawingsPlanningForm({
                                 type="button"
                                 onClick={() => {
                                     setField("meetingType", "phone_callback");
-                                    trackConversionEvent("meeting_type_change", { type: "phone_callback" });
+                                    // 🎯 Distinct tracking event for Phone Callback clicks
+                                    trackConversionEvent("select_phone_callback", {
+                                        package_context: form.packageInterest || "None Selected"
+                                    });
                                 }}
                                 style={{
                                     border: "none",
@@ -360,7 +363,10 @@ export default function DrawingsPlanningForm({
                                 type="button"
                                 onClick={() => {
                                     setField("meetingType", "home_visit");
-                                    trackConversionEvent("meeting_type_change", { type: "home_visit" });
+                                    // 🎯 Distinct tracking event for Home Visit clicks
+                                    trackConversionEvent("select_home_visit", {
+                                        package_context: form.packageInterest || "None Selected"
+                                    });
                                 }}
                                 style={{
                                     border: "none",
