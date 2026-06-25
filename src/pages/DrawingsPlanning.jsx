@@ -120,21 +120,39 @@ export default function DrawingsPlanning() {
     };
 
     const drawingImages = [
-        { src: "/images/drawingsex14.png", label: "3D Render" },
-        { src: "/images/drawingsex15.png", label: "3D Render" },
-        { src: "/images/drawingex1.jpeg", label: "Elevations" },
+        //{ src: "/images/technicalDrawings1.png", label: "Technical Drawings" },
+        //{ src: "/images/technicalDrawings2.png", label: "Technical Drawings" },
+        //{ src: "/images/technicalDrawingsFront.png", label: "Technical Drawings" },
+       // { src: "/images/technicalElevationRear.png", label: "Technical Drawings" },
+        
+       
+        { src: "/images/drawingsex13.png", label: "Floorplan" },
+        { src: "/images/drawingsex16.png", label: "Floor Plans" },
+        { src: "/images/drawingsex17.png", label: "Floor Plans" },
+        { src: "/images/drawingsex18.png", label: "Roof Plan" },
+        { src: "/images/drawingsex19.png", label: "Elevations" },
+        { src: "/images/drawingsex20.png", label: "Elevations" },
+        { src: "/images/drawingsex21.png", label: "Roof Plan" },
+        { src: "/images/drawingsex22.png", label: "Site Plan" },
+        { src: "/images/drawingsex21.png", label: "3D Render" },
+
+
+
         { src: "/images/drawingsex2.jpeg", label: "Elevations" },
-        { src: "/images/drawingex3.jpeg", label: "Drainage" },
+       
         { src: "/images/drawingsex4.jpeg", label: "Layouts" },
-        { src: "/images/drawingsex5.jpeg", label: "Detailed Elevations" },
-        { src: "/images/drawingsex6.jpeg", label: "Floor Plans" },
-        { src: "/images/drawingsex7.jpeg", label: "Detailed Elevations" },
+        
+      
+       
         { src: "/images/drawingsex8.jpeg", label: "Roof Plan" },
-        { src: "/images/drawingsex9.jpeg", label: "Block Plan" },
+   
         { src: "/images/drawingsex10.png", label: "Roof Plan" },
         { src: "/images/drawingsex11.png", label: "Elevation" },
         { src: "/images/drawingsex12.png", label: "Elevation" },
-        { src: "/images/drawingsex13.png", label: "Floorplan" },
+        
+        { src: "/images/drawingsex14.png", label: "3D Render" },
+        { src: "/images/drawingsex15.png", label: "3D Render" },
+        
     ];
 
     const packages = [
@@ -540,6 +558,192 @@ export default function DrawingsPlanning() {
                                         </a>
                                     </div>
                                 )}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* --- BRAND NEW INTERACTIVE DRAWINGS SHOWCASE GALLERY --- */}
+                    <section
+                        id="portfolio-showcase"
+                        style={{
+                            borderTop: "1px solid #e7e5e4",
+                            borderBottom: "1px solid #e7e5e4",
+                            background: "#fcfbf8",
+                        }}
+                    >
+                        <div style={{ ...section, padding: isMobile ? "48px 16px" : "64px 20px" }}>
+                            {/* Header Stack */}
+                            <div style={{ textWidth: "760px", textAlign: "center", marginBottom: isMobile ? "24px" : "36px" }}>
+                                <div style={{ fontSize: "12px", letterSpacing: "2px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>
+                                    Our Portfolio
+                                </div>
+                                <h2 style={{ margin: "10px 0 8px", fontSize: isMobile ? "28px" : "42px", lineHeight: "1.1", color: "#1f1f1f", letterSpacing: "-0.5px", fontWeight: "900" }}>
+                                    Blueprint to reality: Sample project outputs
+                                </h2>
+                                <p style={{ margin: "0 auto", maxWidth: "600px", color: "#57534e", fontSize: "15px", lineHeight: "1.5" }}>
+                                    Explore the exact quality of our 3D visualization models, municipal planning packages, and surgical building control technical drawings.
+                                </p>
+                            </div>
+
+                            {/* Master Slider Container */}
+                            <div style={{ maxWidth: "960px", margin: "0 auto", display: "grid", gap: "20px" }}>
+
+                                {/* Focal Display Frame */}
+                                <div
+                                    style={{
+                                        position: "relative",
+                                        width: "100%",
+                                        height: isMobile ? "260px" : "520px",
+                                        borderRadius: "24px",
+                                        background: "#1f1f1f",
+                                        border: "1px solid #e7e5e4",
+                                        boxShadow: "0 20px 40px rgba(0,0,0,0.06)",
+                                        overflow: "hidden",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center"
+                                    }}
+                                >
+                                    {/* Live Image Frame */}
+                                    <img
+                                        src={drawingImages[drawingIndex].src}
+                                        alt={`Crafman Professional Architectural Sample - ${drawingImages[drawingIndex].label}`}
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "contain",
+                                            transition: "all 0.3s ease"
+                                        }}
+                                    />
+
+                                    {/* Technical Category Label Badge Overlay */}
+                                    <span
+                                        style={{
+                                            position: "absolute",
+                                            top: "16px",
+                                            left: "16px",
+                                            background: "rgba(31, 31, 31, 0.85)",
+                                            backdropFilter: "blur(8px)",
+                                            WebkitBackdropFilter: "blur(8px)",
+                                            color: "#E2BA6E",
+                                            padding: "6px 14px",
+                                            borderRadius: "8px",
+                                            fontSize: "12px",
+                                            fontWeight: "800",
+                                            textTransform: "uppercase",
+                                            letterSpacing: "1px",
+                                            border: "1px solid rgba(226, 186, 110, 0.3)"
+                                        }}
+                                    >
+                                        📐 {drawingImages[drawingIndex].label}
+                                    </span>
+
+                                    {/* Left Control Arrow */}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            showPrevDrawing();
+                                            window.dataLayer = window.dataLayer || [];
+                                            window.dataLayer.push({ event: "portfolio_nav_click", direction: "prev", item_index: drawingIndex });
+                                        }}
+                                        aria-label="Previous image"
+                                        style={{
+                                            position: "absolute",
+                                            left: "16px",
+                                            width: "44px",
+                                            height: "44px",
+                                            borderRadius: "50%",
+                                            border: "none",
+                                            background: "rgba(255,255,255,0.9)",
+                                            color: "#1c1917",
+                                            fontSize: "20px",
+                                            fontWeight: "bold",
+                                            cursor: "pointer",
+                                            display: "grid",
+                                            placeItems: "center",
+                                            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                                            transition: "transform 0.15s"
+                                        }}
+                                    >
+                                        ←
+                                    </button>
+
+                                    {/* Right Control Arrow */}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            showNextDrawing();
+                                            window.dataLayer = window.dataLayer || [];
+                                            window.dataLayer.push({ event: "portfolio_nav_click", direction: "next", item_index: drawingIndex });
+                                        }}
+                                        aria-label="Next image"
+                                        style={{
+                                            position: "absolute",
+                                            right: "16px",
+                                            width: "44px",
+                                            height: "44px",
+                                            borderRadius: "50%",
+                                            border: "none",
+                                            background: "rgba(255,255,255,0.9)",
+                                            color: "#1c1917",
+                                            fontSize: "20px",
+                                            fontWeight: "bold",
+                                            cursor: "pointer",
+                                            display: "grid",
+                                            placeItems: "center",
+                                            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                                            transition: "transform 0.15s"
+                                        }}
+                                    >
+                                        →
+                                    </button>
+                                </div>
+
+                                {/* Micro Thumbnail Strip Scroller Tray */}
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        gap: "10px",
+                                        overflowX: "auto",
+                                        padding: "4px 4px 12px 4px",
+                                        scrollBehavior: "smooth",
+                                        WebkitOverflowScrolling: "touch"
+                                    }}
+                                >
+                                    {drawingImages.map((img, idx) => {
+                                        const isCurrent = idx === drawingIndex;
+                                        return (
+                                            <button
+                                                key={idx}
+                                                type="button"
+                                                onClick={() => {
+                                                    setDrawingIndex(idx);
+                                                    window.dataLayer = window.dataLayer || [];
+                                                    window.dataLayer.push({ event: "portfolio_thumbnail_click", item_index: idx });
+                                                }}
+                                                style={{
+                                                    padding: 0,
+                                                    background: "#1f1f1f",
+                                                    border: isCurrent ? "3px solid #A67C00" : "1px solid #e7e5e4",
+                                                    borderRadius: "12px",
+                                                    minWidth: isMobile ? "70px" : "90px",
+                                                    height: isMobile ? "50px" : "65px",
+                                                    cursor: "pointer",
+                                                    overflow: "hidden",
+                                                    flexShrink: 0,
+                                                    opacity: isCurrent ? 1 : 0.6,
+                                                    transition: "all 0.2s"
+                                                }}
+                                            >
+                                                <img
+                                                    src={img.src}
+                                                    alt=""
+                                                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                                />
+                                            </button>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         </div>
                     </section>
