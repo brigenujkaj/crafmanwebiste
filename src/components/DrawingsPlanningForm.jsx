@@ -2,11 +2,12 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { siteStyles } from "./Layout.jsx";
 
+
 // =====================================================================================
-// 🎯 GOOGLE ADS CONFIGURATION MATRIX (REPLACE WITH YOUR ACTUAL STRINGS)
+// 🎯 GOOGLE ADS CONFIGURATION MATRIX (MATCHED TO YOUR NEW SUBMIT LEAD FORM 9)
 // =====================================================================================
 const GOOGLE_ADS_CONFIG = {
-    FORM_SUCCESS_SEND_TO: "AW-16534080284/9a6_CJqcv8UCeJyWiMw9", // 👈 Your live form tracking string
+    FORM_SUCCESS_SEND_TO: "AW-16534080284/P2BQCJ-81cUcEJyWiMw9", // 🚀 Exact match to your new screenshot!
     CALL_CLICK_SEND_TO: "",
     WHATSAPP_SEND_TO: "",
 };
