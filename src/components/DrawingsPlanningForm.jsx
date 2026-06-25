@@ -2,6 +2,15 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { siteStyles } from "./Layout.jsx";
 
+// =====================================================================================
+// 🎯 GOOGLE ADS CONFIGURATION MATRIX (REPLACE WITH YOUR ACTUAL STRINGS)
+// =====================================================================================
+const GOOGLE_ADS_CONFIG = {
+    FORM_SUCCESS_SEND_TO: "AW-16534080284/9a6_CJqcv8UCeJyWiMw9", // 👈 Your live form tracking string
+    CALL_CLICK_SEND_TO: "",
+    WHATSAPP_SEND_TO: "",
+};
+
 const initialFormState = {
     contactPreference: "schedule_callback",
     meetingType: "phone_callback", // Tracks option: phone_callback or home_visit
@@ -175,6 +184,13 @@ export default function DrawingsPlanningForm({
                 scheduled_time: form.callbackTimeSlot,
             });
 
+            // 🔥 MANDATORY DATA BRIDGE: Hard-Coded Native Google Ads Conversion Direct Trigger
+            if (typeof window.gtag === "function") {
+                window.gtag("event", "conversion", {
+                    send_to: GOOGLE_ADS_CONFIG.FORM_SUCCESS_SEND_TO,
+                });
+            }
+
         } catch (error) {
             setSubmitStatus({
                 loading: false,
@@ -339,7 +355,6 @@ export default function DrawingsPlanningForm({
                                 type="button"
                                 onClick={() => {
                                     setField("meetingType", "phone_callback");
-                                    // 🎯 Distinct tracking event for Phone Callback clicks
                                     trackConversionEvent("select_phone_callback", {
                                         package_context: form.packageInterest || "None Selected"
                                     });
@@ -363,7 +378,6 @@ export default function DrawingsPlanningForm({
                                 type="button"
                                 onClick={() => {
                                     setField("meetingType", "home_visit");
-                                    // 🎯 Distinct tracking event for Home Visit clicks
                                     trackConversionEvent("select_home_visit", {
                                         package_context: form.packageInterest || "None Selected"
                                     });
@@ -546,7 +560,13 @@ export default function DrawingsPlanningForm({
             <div style={{ display: "grid", gap: "12px" }}>
                 <a
                     href="tel:02036335634"
-                    onClick={() => trackConversionEvent("click_to_call", { method: "Enquiry Form Instant Call Bypass" })}
+                    onClick={() => {
+                        trackConversionEvent("click_to_call", { method: "Enquiry Form Instant Call Bypass" });
+                        // 🔥 Optional Link Call Click directly to Google Ads
+                        if (typeof window.gtag === "function") {
+                            window.gtag("event", "conversion", { send_to: GOOGLE_ADS_CONFIG.CALL_CLICK_SEND_TO });
+                        }
+                    }}
                     style={{ ...optionCardStyle(false), textDecoration: "none", display: "block" }}
                 >
                     <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
@@ -564,7 +584,13 @@ export default function DrawingsPlanningForm({
                     href={`https://wa.me/447858815820?text=Hi%20Crafman,%20I'd%20like%20to%20discuss%20a%20free%20planning%20and%20architectural%20drawings%20consultation%20for%20my%20property${form.packageInterest && !form.packageInterest.includes("not sure") ? `%20regarding%20the%20${encodeURIComponent(form.packageInterest)}` : ''}.`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => trackConversionEvent("whatsapp_click", { package_interest: form.packageInterest || "None Selected" })}
+                    onClick={() => {
+                        trackConversionEvent("whatsapp_click", { package_interest: form.packageInterest || "None Selected" });
+                        // 🔥 Optional Link WhatsApp Clicks directly to Google Ads
+                        if (typeof window.gtag === "function") {
+                            window.gtag("event", "conversion", { send_to: GOOGLE_ADS_CONFIG.WHATSAPP_SEND_TO });
+                        }
+                    }}
                     style={{ ...optionCardStyle(false, true), textDecoration: "none", display: "block" }}
                 >
                     <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
