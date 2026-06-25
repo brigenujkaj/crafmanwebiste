@@ -710,6 +710,262 @@ export default function DrawingsPlanning() {
                         </div>
                     </section>
 
+
+                    <section
+                        id="contact-form"
+                        style={{
+                            borderTop: "1px solid #e7e5e4",
+                            background: "#efebe6",
+                        }}
+                    >
+                        <div
+                            style={{
+                                maxWidth: "680px",
+                                margin: "0 auto",
+                                padding: isMobile ? "48px 16px" : "70px 24px",
+                                display: "grid",
+                                gap: "24px",
+                                boxSizing: "border-box",
+                            }}
+                        >
+                            <div style={{ textAlign: "center", minWidth: 0 }}>
+                                <div
+                                    style={{
+                                        fontSize: "12px",
+                                        letterSpacing: "2px",
+                                        textTransform: "uppercase",
+                                        color: "#78716c",
+                                        fontWeight: "700",
+                                    }}
+                                >
+
+                                </div>
+
+
+
+                                <p style={{ margin: "0 0 12px", color: "#57534e", fontSize: "14px", fontWeight: "500" }}>
+                                    No annoying sales calls. Just straight answers, clear advice, and zero pressure from our layout specialists.
+                                </p>
+
+                                {selectedPackage && (
+                                    <div
+                                        style={{
+                                            marginTop: "8px",
+                                            marginBottom: "16px",
+                                            display: "inline-flex",
+                                            alignItems: "center",
+                                            gap: "8px",
+                                            padding: "10px 14px",
+                                            borderRadius: "999px",
+                                            background: "#1f1f1f",
+                                            color: "#fff",
+                                            fontWeight: "700",
+                                            maxWidth: "100%",
+                                            flexWrap: "wrap",
+                                            lineHeight: "1.5",
+                                        }}
+                                    >
+                                        <span>Selected: {selectedPackage}</span>
+                                        <span style={{ opacity: 0.7 }}>•</span>
+                                        <span>
+                                            {packages.find((p) => p.name === selectedPackage)?.price}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div style={{ minWidth: 0 }}>
+                                <DrawingsPlanningForm
+                                    endpoint="https://formspree.io/f/maqlqgzz"
+                                    selectedPackage={selectedPackage}
+                                />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section
+                        style={{
+                            borderTop: "1px solid #e7e5e4",
+                            borderBottom: "1px solid #e7e5e4",
+                            background: "#fff",
+                        }}
+                    >
+                        <div
+                            style={{
+                                ...section,
+                                padding: isMobile ? "48px 16px" : undefined,
+                            }}
+                        >
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "end",
+                                    gap: "20px",
+                                    flexWrap: "wrap",
+                                }}
+                            >
+                                <div style={{ maxWidth: "760px", minWidth: 0 }}>
+                                    <div
+                                        style={{
+                                            fontSize: "12px",
+                                            letterSpacing: "2px",
+                                            textTransform: "uppercase",
+                                            color: "#78716c",
+                                            fontWeight: "700",
+                                        }}
+                                    >
+                                        Testimonials
+                                    </div>
+
+                                    <h2
+                                        style={{
+                                            fontSize: isMobile ? "30px" : "40px",
+                                            marginTop: "12px",
+                                            marginBottom: "12px",
+                                            color: "#A67C00",
+                                            lineHeight: "1.08",
+                                        }}
+                                    >
+                                        What clients say about working with us
+                                    </h2>
+
+                                    <p
+                                        style={{
+                                            color: "#57534e",
+                                            lineHeight: "1.8",
+                                            margin: 0,
+                                            fontSize: isMobile ? "15px" : "16px",
+                                        }}
+                                    >
+                                        Clear communication, practical advice, and drawing packages
+                                        designed to help projects move forward with confidence.
+                                    </p>
+                                </div>
+
+                                <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
+                                    <button
+                                        type="button"
+                                        onClick={showPrevTestimonials}
+                                        aria-label="Previous testimonials"
+                                        style={{
+                                            height: "44px",
+                                            width: "44px",
+                                            borderRadius: "999px",
+                                            border: "1px solid #d6d3d1",
+                                            background: "#fff",
+                                            cursor: "pointer",
+                                            fontSize: "18px",
+                                        }}
+                                    >
+                                        ←
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        onClick={showNextTestimonials}
+                                        aria-label="Next testimonials"
+                                        style={{
+                                            height: "44px",
+                                            width: "44px",
+                                            borderRadius: "999px",
+                                            border: "1px solid #1c1917",
+                                            background: "#1c1917",
+                                            color: "#fff",
+                                            cursor: "pointer",
+                                            fontSize: "18px",
+                                        }}
+                                    >
+                                        →
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div
+                                style={{
+                                    display: "grid",
+                                    gridTemplateColumns: isMobile
+                                        ? "1fr"
+                                        : "repeat(auto-fit, minmax(260px, 1fr))",
+                                    gap: "20px",
+                                    marginTop: "30px",
+                                }}
+                            >
+                                {visibleTestimonials.map((item, index) => (
+                                    <div
+                                        key={`${item.name}-${index}`}
+                                        style={{
+                                            ...card,
+                                            minWidth: 0,
+                                            borderRadius: "22px",
+                                            border: "1px solid #e7e5e4",
+                                            boxShadow: "0 12px 26px rgba(28,25,23,0.05)",
+                                        }}
+                                    >
+                                        <div
+                                            style={{
+                                                marginBottom: "10px",
+                                                color: "#f59e0b",
+                                                fontSize: "18px",
+                                                letterSpacing: "1px",
+                                            }}
+                                        >
+                                            ★★★★★
+                                        </div>
+
+                                        <p
+                                            style={{
+                                                color: "#57534e",
+                                                lineHeight: "1.8",
+                                                marginTop: 0,
+                                                marginBottom: "16px",
+                                                fontSize: isMobile ? "15px" : "16px",
+                                            }}
+                                        >
+                                            “{item.text}”
+                                        </p>
+
+                                        <div style={{ fontWeight: "700", color: "#1f1f1f" }}>
+                                            {item.name}
+                                        </div>
+                                        <div style={{ color: "#78716c", fontSize: "14px" }}>
+                                            {item.role}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    gap: "8px",
+                                    marginTop: "22px",
+                                    flexWrap: "wrap",
+                                }}
+                            >
+                                {testimonials.map((_, i) => (
+                                    <button
+                                        key={i}
+                                        type="button"
+                                        onClick={() => setTestimonialIndex(i)}
+                                        aria-label={`Go to testimonial ${i + 1}`}
+                                        style={{
+                                            width: i === testimonialIndex ? "24px" : "10px",
+                                            height: "10px",
+                                            borderRadius: "999px",
+                                            border: "none",
+                                            cursor: "pointer",
+                                            background: i === testimonialIndex ? "#1c1917" : "#d6d3d1",
+                                            padding: 0,
+                                            transition: "all 0.22s ease",
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
                     {/* --- INTERACTIVE POSTCODE CHECKER UNIT --- */}
                     <div
                         style={{
@@ -1083,260 +1339,6 @@ export default function DrawingsPlanning() {
 
                
 
-                <section
-                    id="contact-form"
-                    style={{
-                        borderTop: "1px solid #e7e5e4",
-                        background: "#efebe6",
-                    }}
-                >
-                    <div
-                        style={{
-                            maxWidth: "680px",
-                            margin: "0 auto",
-                            padding: isMobile ? "48px 16px" : "70px 24px",
-                            display: "grid",
-                            gap: "24px",
-                            boxSizing: "border-box",
-                        }}
-                    >
-                        <div style={{ textAlign: "center", minWidth: 0 }}>
-                            <div
-                                style={{
-                                    fontSize: "12px",
-                                    letterSpacing: "2px",
-                                    textTransform: "uppercase",
-                                    color: "#78716c",
-                                    fontWeight: "700",
-                                }}
-                            >
-                             
-                            </div>
-
-                        
-
-                            <p style={{ margin: "0 0 12px", color: "#57534e", fontSize: "14px", fontWeight: "500" }}>
-                                No annoying sales calls. Just straight answers, clear advice, and zero pressure from our layout specialists.
-                            </p>
-
-                            {selectedPackage && (
-                                <div
-                                    style={{
-                                        marginTop: "8px",
-                                        marginBottom: "16px",
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: "8px",
-                                        padding: "10px 14px",
-                                        borderRadius: "999px",
-                                        background: "#1f1f1f",
-                                        color: "#fff",
-                                        fontWeight: "700",
-                                        maxWidth: "100%",
-                                        flexWrap: "wrap",
-                                        lineHeight: "1.5",
-                                    }}
-                                >
-                                    <span>Selected: {selectedPackage}</span>
-                                    <span style={{ opacity: 0.7 }}>•</span>
-                                    <span>
-                                        {packages.find((p) => p.name === selectedPackage)?.price}
-                                    </span>
-                                </div>
-                            )}
-                        </div>
-
-                        <div style={{ minWidth: 0 }}>
-                            <DrawingsPlanningForm
-                                endpoint="https://formspree.io/f/maqlqgzz"
-                                selectedPackage={selectedPackage}
-                            />
-                        </div>
-                    </div>
-                </section>
-
-                <section
-                    style={{
-                        borderTop: "1px solid #e7e5e4",
-                        borderBottom: "1px solid #e7e5e4",
-                        background: "#fff",
-                    }}
-                >
-                    <div
-                        style={{
-                            ...section,
-                            padding: isMobile ? "48px 16px" : undefined,
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "end",
-                                gap: "20px",
-                                flexWrap: "wrap",
-                            }}
-                        >
-                            <div style={{ maxWidth: "760px", minWidth: 0 }}>
-                                <div
-                                    style={{
-                                        fontSize: "12px",
-                                        letterSpacing: "2px",
-                                        textTransform: "uppercase",
-                                        color: "#78716c",
-                                        fontWeight: "700",
-                                    }}
-                                >
-                                    Testimonials
-                                </div>
-
-                                <h2
-                                    style={{
-                                        fontSize: isMobile ? "30px" : "40px",
-                                        marginTop: "12px",
-                                        marginBottom: "12px",
-                                        color: "#A67C00",
-                                        lineHeight: "1.08",
-                                    }}
-                                >
-                                    What clients say about working with us
-                                </h2>
-
-                                <p
-                                    style={{
-                                        color: "#57534e",
-                                        lineHeight: "1.8",
-                                        margin: 0,
-                                        fontSize: isMobile ? "15px" : "16px",
-                                    }}
-                                >
-                                    Clear communication, practical advice, and drawing packages
-                                    designed to help projects move forward with confidence.
-                                </p>
-                            </div>
-
-                            <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
-                                <button
-                                    type="button"
-                                    onClick={showPrevTestimonials}
-                                    aria-label="Previous testimonials"
-                                    style={{
-                                        height: "44px",
-                                        width: "44px",
-                                        borderRadius: "999px",
-                                        border: "1px solid #d6d3d1",
-                                        background: "#fff",
-                                        cursor: "pointer",
-                                        fontSize: "18px",
-                                    }}
-                                >
-                                    ←
-                                </button>
-
-                                <button
-                                    type="button"
-                                    onClick={showNextTestimonials}
-                                    aria-label="Next testimonials"
-                                    style={{
-                                        height: "44px",
-                                        width: "44px",
-                                        borderRadius: "999px",
-                                        border: "1px solid #1c1917",
-                                        background: "#1c1917",
-                                        color: "#fff",
-                                        cursor: "pointer",
-                                        fontSize: "18px",
-                                    }}
-                                >
-                                    →
-                                </button>
-                            </div>
-                        </div>
-
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns: isMobile
-                                    ? "1fr"
-                                    : "repeat(auto-fit, minmax(260px, 1fr))",
-                                gap: "20px",
-                                marginTop: "30px",
-                            }}
-                        >
-                            {visibleTestimonials.map((item, index) => (
-                                <div
-                                    key={`${item.name}-${index}`}
-                                    style={{
-                                        ...card,
-                                        minWidth: 0,
-                                        borderRadius: "22px",
-                                        border: "1px solid #e7e5e4",
-                                        boxShadow: "0 12px 26px rgba(28,25,23,0.05)",
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            marginBottom: "10px",
-                                            color: "#f59e0b",
-                                            fontSize: "18px",
-                                            letterSpacing: "1px",
-                                        }}
-                                    >
-                                        ★★★★★
-                                    </div>
-
-                                    <p
-                                        style={{
-                                            color: "#57534e",
-                                            lineHeight: "1.8",
-                                            marginTop: 0,
-                                            marginBottom: "16px",
-                                            fontSize: isMobile ? "15px" : "16px",
-                                        }}
-                                    >
-                                        “{item.text}”
-                                    </p>
-
-                                    <div style={{ fontWeight: "700", color: "#1f1f1f" }}>
-                                        {item.name}
-                                    </div>
-                                    <div style={{ color: "#78716c", fontSize: "14px" }}>
-                                        {item.role}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                gap: "8px",
-                                marginTop: "22px",
-                                flexWrap: "wrap",
-                            }}
-                        >
-                            {testimonials.map((_, i) => (
-                                <button
-                                    key={i}
-                                    type="button"
-                                    onClick={() => setTestimonialIndex(i)}
-                                    aria-label={`Go to testimonial ${i + 1}`}
-                                    style={{
-                                        width: i === testimonialIndex ? "24px" : "10px",
-                                        height: "10px",
-                                        borderRadius: "999px",
-                                        border: "none",
-                                        cursor: "pointer",
-                                        background: i === testimonialIndex ? "#1c1917" : "#d6d3d1",
-                                        padding: 0,
-                                        transition: "all 0.22s ease",
-                                    }}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                </section>
 
                 <section
                     style={{
