@@ -437,7 +437,7 @@ export default function DrawingsPlanning() {
                 }}
             >
                 <>
-                    {/* --- HERO & POSTCODE INTERACTIVE CHECKER SECTION --- */}
+                    {/* --- HERO SECTION (UN-GATED WITH REGIONAL COVERAGE BADGE) --- */}
                     <section
                         style={{
                             position: "relative",
@@ -474,24 +474,51 @@ export default function DrawingsPlanning() {
                         />
                         <div style={{ position: "relative", zIndex: 2 }}>
                             <div style={{ ...section, paddingTop: isMobile ? "60px" : "90px", paddingBottom: isMobile ? "60px" : "90px" }}>
-                                <div
-                                    style={{
-                                        ...tag,
-                                        background: "rgba(166, 124, 0, 0.15)",
-                                        border: "1px solid rgba(166, 124, 0, 0.4)",
-                                        color: "#E2BA6E",
-                                        padding: "4px 12px",
-                                        borderRadius: "6px",
-                                        fontSize: "11px",
-                                        fontWeight: "800",
-                                        letterSpacing: "1.5px",
-                                        textTransform: "uppercase",
-                                        width: "fit-content",
-                                        marginBottom: "16px"
-                                    }}
-                                >
-                                    Drawings & Planning
+
+                                {/* Tag Stack Row */}
+                                <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "16px" }}>
+                                    <div
+                                        style={{
+                                            ...tag,
+                                            background: "rgba(166, 124, 0, 0.15)",
+                                            border: "1px solid rgba(166, 124, 0, 0.4)",
+                                            color: "#E2BA6E",
+                                            padding: "4px 12px",
+                                            borderRadius: "6px",
+                                            fontSize: "11px",
+                                            fontWeight: "800",
+                                            letterSpacing: "1.5px",
+                                            textTransform: "uppercase",
+                                            width: "fit-content",
+                                            margin: 0
+                                        }}
+                                    >
+                                        Drawings & Planning
+                                    </div>
+
+                                    {/* 📍 NEW: Regional Operational Coverage Trust Badge */}
+                                    <div
+                                        style={{
+                                            ...tag,
+                                            background: "rgba(34, 197, 94, 0.12)",
+                                            border: "1px solid rgba(34, 197, 94, 0.35)",
+                                            color: "#4ade80",
+                                            padding: "4px 12px",
+                                            borderRadius: "6px",
+                                            fontSize: "11px",
+                                            fontWeight: "800",
+                                            letterSpacing: "0.5px",
+                                            width: "fit-content",
+                                            margin: 0,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: "6px"
+                                        }}
+                                    >
+                                        <span>✓</span> All London & Essex Postcodes Covered
+                                    </div>
                                 </div>
+
                                 <h1
                                     style={{
                                         fontSize: "clamp(34px, 5.5vw, 56px)",
@@ -505,13 +532,13 @@ export default function DrawingsPlanning() {
                                 >
                                     Architectural drawings <br className="hidden md:inline" />designed for <span style={{ background: "linear-gradient(120deg, #E2BA6E 0%, #C6A243 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>council approval</span>
                                 </h1>
+
                                 <p
                                     style={{
                                         fontSize: "clamp(15px, 2.5vw, 18px)",
                                         lineHeight: "1.5",
                                         marginTop: "16px",
-                                        marginBottom: 0,
-                                        maxWidth: "600px",
+                                        marginBottom: 0, maxWidth: "600px",
                                         color: "#d6d3d1",
                                         fontWeight: "400",
                                     }}
@@ -519,45 +546,41 @@ export default function DrawingsPlanning() {
                                     Clear guidance on what’s needed and the next steps for your project
                                 </p>
 
-                               
-
-                                {/* --- CTA ACTION LINKS (Gated until Postcode Check Success) --- */}
-                                {checkerStatus === 'success' && (
-                                    <div
+                                {/* --- CTA ACTION LINKS (Permanently Un-Gated for Fast Clicks) --- */}
+                                <div
+                                    style={{
+                                        marginTop: "28px",
+                                        display: "flex",
+                                        gap: "14px",
+                                        flexWrap: "wrap",
+                                    }}
+                                >
+                                    <a
+                                        href="#packages"
                                         style={{
-                                            marginTop: "24px",
-                                            display: "flex",
-                                            gap: "14px",
-                                            flexWrap: "wrap",
-                                            animation: "faqFadeDown 0.3s ease-out"
+                                            ...buttonPrimary,
+                                            background: "linear-gradient(135deg, #A67C00 0%, #C6A243 100%)",
+                                            color: "#fff",
+                                            border: "none",
+                                            fontWeight: "800"
                                         }}
                                     >
-                                        <a
-                                            href="#packages"
-                                            style={{
-                                                ...buttonPrimary,
-                                                background: "linear-gradient(135deg, #A67C00 0%, #C6A243 100%)",
-                                                color: "#fff",
-                                                border: "none",
-                                                fontWeight: "800"
-                                            }}
-                                        >
-                                            View Packages
-                                        </a>
-                                        <a
-                                            href="#contact-form"
-                                            style={{
-                                                ...buttonSecondary,
-                                                background: "rgba(255, 255, 255, 0.05)",
-                                                border: "1px solid rgba(255, 255, 255, 0.15)",
-                                                color: "#fff",
-                                                fontWeight: "700"
-                                            }}
-                                        >
-                                            Get Free Permission Strategy
-                                        </a>
-                                    </div>
-                                )}
+                                        View Packages
+                                    </a>
+                                    <a
+                                        href="#contact-form"
+                                        style={{
+                                            ...buttonSecondary,
+                                            background: "rgba(255, 255, 255, 0.05)",
+                                            border: "1px solid rgba(255, 255, 255, 0.15)",
+                                            color: "#fff",
+                                            fontWeight: "700"
+                                        }}
+                                    >
+                                        Get Free Permission Strategy
+                                    </a>
+                                </div>
+
                             </div>
                         </div>
                     </section>
