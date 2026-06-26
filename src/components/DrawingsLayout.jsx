@@ -166,22 +166,7 @@ export default function DrawingsLayout({ children }) {
                             flex: 1,
                         }}
                     >
-                        {/* 🏢 ADDED ABOUT US ROUTE LINK ENTRY */}
-                        <Link
-                            to="/about"
-                            onClick={() => {
-                                window.dataLayer = window.dataLayer || [];
-                                window.dataLayer.push({
-                                    event: "nav_about_click",
-                                    location: "Global Navbar Navigation Menu Link"
-                                });
-                            }}
-                            style={navAboutLinkStyle}
-                            onMouseEnter={(e) => (e.currentTarget.style.background = "#f5f5f4")}
-                            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                        >
-                            About Us
-                        </Link>
+                        
 
                         <a
                             href="tel:02036335634"
