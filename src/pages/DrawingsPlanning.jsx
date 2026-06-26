@@ -585,18 +585,20 @@ export default function DrawingsPlanning() {
                         </div>
                     </section>
 
-                    {/* --- BRAND NEW INTERACTIVE DRAWINGS SHOWCASE GALLERY --- */}
+                    {/* --- UPDATED: MOBILE-OPTIMIZED INTERACTIVE DRAWINGS SHOWCASE GALLERY --- */}
                     <section
                         id="portfolio-showcase"
                         style={{
                             borderTop: "1px solid #e7e5e4",
                             borderBottom: "1px solid #e7e5e4",
                             background: "#fcfbf8",
+                            width: "100%",
+                            overflow: "hidden"
                         }}
                     >
                         <div style={{ ...section, padding: isMobile ? "48px 16px" : "64px 20px" }}>
                             {/* Header Stack */}
-                            <div style={{ textWidth: "760px", textAlign: "center", marginBottom: isMobile ? "24px" : "36px" }}>
+                            <div style={{ maxWidth: "760px", margin: "0 auto", textAlign: "center", marginBottom: isMobile ? "24px" : "36px" }}>
                                 <div style={{ fontSize: "12px", letterSpacing: "2px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>
                                     Our Portfolio
                                 </div>
@@ -609,7 +611,7 @@ export default function DrawingsPlanning() {
                             </div>
 
                             {/* Master Slider Container */}
-                            <div style={{ maxWidth: "960px", margin: "0 auto", display: "grid", gap: "20px" }}>
+                            <div style={{ maxWidth: "960px", margin: "0 auto", display: "grid", gap: isMobile ? "12px" : "20px" }}>
 
                                 {/* Focal Display Frame */}
                                 <div
@@ -655,7 +657,8 @@ export default function DrawingsPlanning() {
                                             fontWeight: "800",
                                             textTransform: "uppercase",
                                             letterSpacing: "1px",
-                                            border: "1px solid rgba(226, 186, 110, 0.3)"
+                                            border: "1px solid rgba(226, 186, 110, 0.3)",
+                                            zIndex: 3
                                         }}
                                     >
                                         📐 {drawingImages[drawingIndex].label}
@@ -685,7 +688,8 @@ export default function DrawingsPlanning() {
                                             display: "grid",
                                             placeItems: "center",
                                             boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                                            transition: "transform 0.15s"
+                                            transition: "transform 0.15s",
+                                            zIndex: 3
                                         }}
                                     >
                                         ←
@@ -715,22 +719,27 @@ export default function DrawingsPlanning() {
                                             display: "grid",
                                             placeItems: "center",
                                             boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                                            transition: "transform 0.15s"
+                                            transition: "transform 0.15s",
+                                            zIndex: 3
                                         }}
                                     >
                                         →
                                     </button>
                                 </div>
 
-                                {/* Micro Thumbnail Strip Scroller Tray */}
+                                {/* 🚀 FIXED: Hardware-Locked Micro Thumbnail Strip Scroller Tray */}
                                 <div
                                     style={{
                                         display: "flex",
                                         gap: "10px",
                                         overflowX: "auto",
-                                        padding: "4px 4px 12px 4px",
+                                        width: "100%",
+                                        maxWidth: "100%",
+                                        padding: "6px 4px 14px 4px",
                                         scrollBehavior: "smooth",
-                                        WebkitOverflowScrolling: "touch"
+                                        WebkitOverflowScrolling: "touch", // Fluid momentum swipe for iPhone
+                                        boxSizing: "border-box",
+                                        alignItems: "center"
                                     }}
                                 >
                                     {drawingImages.map((img, idx) => {
@@ -749,19 +758,29 @@ export default function DrawingsPlanning() {
                                                     background: "#1f1f1f",
                                                     border: isCurrent ? "3px solid #A67C00" : "1px solid #e7e5e4",
                                                     borderRadius: "12px",
-                                                    minWidth: isMobile ? "70px" : "90px",
-                                                    height: isMobile ? "50px" : "65px",
+                                                    // 🔒 Locked Dimensions: Forces browser layout engine to respect sizes on mobile
+                                                    width: isMobile ? "80px" : "100px",
+                                                    minWidth: isMobile ? "80px" : "100px",
+                                                    height: isMobile ? "56px" : "70px",
+                                                    minHeight: isMobile ? "56px" : "70px",
                                                     cursor: "pointer",
                                                     overflow: "hidden",
-                                                    flexShrink: 0,
-                                                    opacity: isCurrent ? 1 : 0.6,
-                                                    transition: "all 0.2s"
+                                                    flexShrink: 0, // Stops flex container from crushing the thumbnail
+                                                    boxSizing: "border-box", // Prevents borders from distorting height math
+                                                    opacity: isCurrent ? 1 : 0.5,
+                                                    transition: "all 0.2s",
+                                                    outline: "none"
                                                 }}
                                             >
                                                 <img
                                                     src={img.src}
                                                     alt=""
-                                                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                                    style={{
+                                                        width: "100%",
+                                                        height: "100%",
+                                                        objectFit: "cover",
+                                                        display: "block"
+                                                    }}
                                                 />
                                             </button>
                                         );
