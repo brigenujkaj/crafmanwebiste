@@ -120,10 +120,10 @@ export default function DrawingsPlanning() {
     };
 
     const drawingImages = [
-        //{ src: "/images/technicalDrawings1.png", label: "Technical Drawings" },
-        //{ src: "/images/technicalDrawings2.png", label: "Technical Drawings" },
-        //{ src: "/images/technicalDrawingsFront.png", label: "Technical Drawings" },
-       // { src: "/images/technicalElevationRear.png", label: "Technical Drawings" },
+        { src: "/images/technicalDrawings1.png", label: "Technical Drawings" },
+        { src: "/images/technicalDrawings2.png", label: "Technical Drawings" },
+       { src: "/images/technicalDrawingsFront.png", label: "Technical Drawings" },
+       { src: "/images/technicalElevationRear.png", label: "Technical Drawings" },
         
        
         { src: "/images/drawingsex13.png", label: "Floorplan" },
