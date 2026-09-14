@@ -419,10 +419,7 @@ export default function DrawingsPlanningForm({
                                 </label>
                                 <input
                                     id="callbackDate"
-                                    type={form.callbackDate ? "date" : "text"}
-                                    onFocus={(e) => (e.target.type = "date")}
-                                    onBlur={(e) => { if (!form.callbackDate) e.target.type = "text"; }}
-                                    placeholder="📅 Tap to select date..."
+                                    type="date"
                                     name="callbackDate"
                                     min={dateBounds.min}
                                     max={dateBounds.max}
@@ -431,7 +428,12 @@ export default function DrawingsPlanningForm({
                                         handleChange(e);
                                         trackConversionEvent("step1_date_change", { date_selected: e.target.value });
                                     }}
-                                    style={{ ...inputStyle, cursor: "pointer", appearance: "none", WebkitAppearance: "none" }}
+                                    style={{
+                                        ...inputStyle,
+                                        cursor: "pointer",
+                                        minHeight: "48px", // Guarantees a full mobile touch-target height
+                                        color: form.callbackDate ? "#1c1917" : "#78716c"
+                                    }}
                                     required
                                 />
                             </div>

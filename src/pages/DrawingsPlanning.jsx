@@ -156,31 +156,7 @@ export default function DrawingsPlanning() {
     ];
 
     const packages = [
-        {
-            name: "Starter Package",
-            price: "From £949",
-            bestFor: "Feasibility & Ideas",
-            intro: "Ideal if you want to see what is structurally possible on your plot, sketch out early layout ideas, or check your options before committing.",
-            includes: [
-                "Measured survey",
-                "Current scaled drawings",
-                "Proposed scaled drawings",
-                "Elevations",
-            ],
-        },
-        {
-            name: "Garden Room Package",
-            price: "From £649",
-            bestFor: "Standalone Studios & Gyms",
-            intro: "Tailored for detached outbuildings, home offices, or garden gyms. We'll ensure your design maximizes your garden space while sticking strictly to Permitted Development rules.",
-            includes: [
-                "Measured survey",
-                "Site location & boundary mapping",
-                "Proposed scaled drawings",
-                "Elevations",
-                "Permitted Development compliance check",
-            ],
-        },
+
         {
             name: "Extension /  Loft Planning Package",
             price: "From £1149",
@@ -196,8 +172,36 @@ export default function DrawingsPlanning() {
             ],
             featured: true,
         },
+        
+        {
+            name: "Garden Room Package",
+            price: "From £649",
+            bestFor: "Standalone Studios & Gyms",
+            intro: "Tailored for detached outbuildings, home offices, or garden gyms. We'll ensure your design maximizes your garden space while sticking strictly to Permitted Development rules.",
+            includes: [
+                "Measured survey",
+                "Site location & boundary mapping",
+                "Proposed scaled drawings",
+                "Elevations",
+                "Permitted Development compliance check",
+            ],
+        },
+        
        
         
+        
+        {
+            name: "Layout Alteration Package",
+            price: "From £549",
+            bestFor: "Internal Remodeling & Open-Plan",
+            intro: "Perfect if you are modifying your home's interior layout without extending the footprint. Ideal for wall removals, kitchen knock-throughs, or converting spaces.",
+            includes: [
+                "Measured survey",
+                "Current floor plans",
+                "Proposed internal layout options",
+                "Structural opening indicators",
+            ],
+        },
         {
             name: "Building Control Package",
             price: "From £649",
@@ -210,18 +214,6 @@ export default function DrawingsPlanning() {
                 "Detailed building regulations drawings",
                 "Submission to Building Control",
                 "Building regulations compliance guidance",
-            ],
-        },
-        {
-            name: "Layout Alteration Package",
-            price: "From £549",
-            bestFor: "Internal Remodeling & Open-Plan",
-            intro: "Perfect if you are modifying your home's interior layout without extending the footprint. Ideal for wall removals, kitchen knock-throughs, or converting spaces.",
-            includes: [
-                "Measured survey",
-                "Current floor plans",
-                "Proposed internal layout options",
-                "Structural opening indicators",
             ],
         },
         {
@@ -238,6 +230,7 @@ export default function DrawingsPlanning() {
                 "Fast-tracked application compilation",
             ],
         },
+
     ];
 
     function handlePackageSelect(packageName) {
