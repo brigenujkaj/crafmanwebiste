@@ -9,14 +9,7 @@ export default function ThankYouPage() {
     const navigate = useNavigate();
     const summary = location.state; // Receives data passed during navigate()
 
-    useEffect(() => {
-        // 🔥 Direct Pageview Conversion Trigger
-        if (typeof window.gtag === "function") {
-            window.gtag("event", "conversion", {
-                send_to: GOOGLE_ADS_CONVERSION_SEND_TO,
-            });
-        }
-    }, []);
+    
 
     return (
         <div style={{ background: "#fcfbf8", minHeight: "80vh", padding: "64px 20px", display: "grid", placeItems: "center" }}>
