@@ -6,9 +6,11 @@ import { siteStyles } from "./Layout.jsx";
 // =====================================================================================
 // 🎯 GOOGLE ADS CONFIGURATION MATRIX (MATCHED TO YOUR NEW SUBMIT LEAD FORM 9)
 // =====================================================================================
+
+
 const GOOGLE_ADS_CONFIG = {
-    FORM_SUCCESS_SEND_TO: "AW-16534080284/P2BQCJ-81cUcEJyWiMw9", // 🚀 Exact match to your new screenshot!
-    CALL_CLICK_SEND_TO: "",
+    FORM_SUCCESS_SEND_TO: "AW-18466429796",
+    CALL_CLICK_SEND_TO: "AW-18466429796/HPHiCIbN6oMdEOS2veVE",
     WHATSAPP_SEND_TO: "",
 };
 
@@ -133,10 +135,10 @@ export default function DrawingsPlanningForm({
             package_interest: form.packageInterest,
             meeting_type: form.meetingType,
             chosen_date: form.callbackDate,
-            chosen_time: form.callbackTimeSlot,
+            chosen_time: form.callbackTimeSlot
         });
 
-        setSubmitStatus({ loading: true, error: "" });
+        setSubmitStatus({ loading: true, success: false, error: "" });
 
         try {
             const payload = {
@@ -167,7 +169,13 @@ export default function DrawingsPlanningForm({
                 throw new Error(result?.errors?.[0]?.message || "Something went wrong. Please try again.");
             }
 
-            // 🎯 Tracking: Record Data Parameters
+            setSubmittedSummary({
+                ...form,
+                displayDate: formattedDisplayDate,
+            });
+            setSubmitStatus({ loading: false, success: true, error: "" });
+
+            // 🎯 Tracking: Record Full Data Parameters on Successful Conversion
             trackConversionEvent("form_submission_success", {
                 contact_preference: form.contactPreference,
                 meeting_type: form.meetingType,
@@ -179,21 +187,17 @@ export default function DrawingsPlanningForm({
                 scheduled_time: form.callbackTimeSlot,
             });
 
-            // 🚀 REDIRECT TO DEDICATED THANK YOU PAGE
-            navigate("/thank-you", {
-                state: {
-                    name: form.name,
-                    phone: form.phone,
-                    meetingType: form.meetingType,
-                    displayDate: formattedDisplayDate,
-                    callbackTimeSlot: form.callbackTimeSlot,
-                    packageInterest: form.packageInterest,
-                },
-            });
+            // 🔥 MANDATORY DATA BRIDGE: Hard-Coded Native Google Ads Conversion Direct Trigger
+            if (typeof window.gtag === "function") {
+                window.gtag("event", "conversion", {
+                    send_to: GOOGLE_ADS_CONFIG.FORM_SUCCESS_SEND_TO,
+                });
+            }
 
         } catch (error) {
             setSubmitStatus({
                 loading: false,
+                success: false,
                 error: error.message || "Something went wrong. Please try again.",
             });
         }
