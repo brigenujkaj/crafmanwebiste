@@ -133,10 +133,10 @@ export default function DrawingsPlanningForm({
             package_interest: form.packageInterest,
             meeting_type: form.meetingType,
             chosen_date: form.callbackDate,
-            chosen_time: form.callbackTimeSlot
+            chosen_time: form.callbackTimeSlot,
         });
 
-        setSubmitStatus({ loading: true, success: false, error: "" });
+        setSubmitStatus({ loading: true, error: "" });
 
         try {
             const payload = {
@@ -167,13 +167,7 @@ export default function DrawingsPlanningForm({
                 throw new Error(result?.errors?.[0]?.message || "Something went wrong. Please try again.");
             }
 
-            setSubmittedSummary({
-                ...form,
-                displayDate: formattedDisplayDate,
-            });
-            setSubmitStatus({ loading: false, success: true, error: "" });
-
-            // 🎯 Tracking: Record Full Data Parameters on Successful Conversion
+            // 🎯 Tracking: Record Data Parameters
             trackConversionEvent("form_submission_success", {
                 contact_preference: form.contactPreference,
                 meeting_type: form.meetingType,
@@ -185,17 +179,21 @@ export default function DrawingsPlanningForm({
                 scheduled_time: form.callbackTimeSlot,
             });
 
-            // 🔥 MANDATORY DATA BRIDGE: Hard-Coded Native Google Ads Conversion Direct Trigger
-            if (typeof window.gtag === "function") {
-                window.gtag("event", "conversion", {
-                    send_to: GOOGLE_ADS_CONFIG.FORM_SUCCESS_SEND_TO,
-                });
-            }
+            // 🚀 REDIRECT TO DEDICATED THANK YOU PAGE
+            navigate("/thank-you", {
+                state: {
+                    name: form.name,
+                    phone: form.phone,
+                    meetingType: form.meetingType,
+                    displayDate: formattedDisplayDate,
+                    callbackTimeSlot: form.callbackTimeSlot,
+                    packageInterest: form.packageInterest,
+                },
+            });
 
         } catch (error) {
             setSubmitStatus({
                 loading: false,
-                success: false,
                 error: error.message || "Something went wrong. Please try again.",
             });
         }
@@ -562,7 +560,7 @@ export default function DrawingsPlanningForm({
             {/* --- DIRECT ESCAPE FLOATING ROUTES --- */}
             <div style={{ display: "grid", gap: "12px" }}>
                 <a
-                    href="tel:02036335634"
+                    href="tel:020 8191 4122"
                     onClick={() => {
                         trackConversionEvent("click_to_call", { method: "Enquiry Form Instant Call Bypass" });
                         // 🔥 Optional Link Call Click directly to Google Ads

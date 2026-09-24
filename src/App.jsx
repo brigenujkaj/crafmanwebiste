@@ -15,6 +15,8 @@ import Projects from "./pages/Projects.jsx";
 import CaseStudies from "./pages/CaseStudies.jsx";
 import CaseStudyDetail from "./pages/CaseStudyDetail.jsx";
 import Landscaping from "./pages/Landscaping.jsx";
+import ThankYouPage from "./components/ThankYouPage";
+
 
 // TEMP (until you build it)
 function TestPage({ title }) {
@@ -73,6 +75,7 @@ export default function App() {
 
           <Route path="/case-studies" element={<CaseStudies />} />
           <Route path="/case-studies/:slug" element={<CaseStudyDetail />} />
+          <Route path="/thank-you" element={<ThankYouPage />} />
       
          
     </Routes>
