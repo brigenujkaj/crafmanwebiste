@@ -16,6 +16,7 @@ import CaseStudies from "./pages/CaseStudies.jsx";
 import CaseStudyDetail from "./pages/CaseStudyDetail.jsx";
 import Landscaping from "./pages/Landscaping.jsx";
 import ThankYouPage from "./components/ThankYouPage";
+import CraffyHeroSection from './components/CraffyHeroSection';
 
 
 // TEMP (until you build it)
@@ -47,7 +48,8 @@ function ScrollToHash() {
 }
 
 export default function App() {
-  return (
+    return (
+
     <Routes>
       {/* ✅ REAL HOME PAGE */}
       <Route path="/" element={<Home />} />

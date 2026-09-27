@@ -1,104 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 🌙 Force Dark Mode Globally (Prevents OS Light Mode from turning background white) */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  color-scheme: dark;
+  background-color: #09090b;
+  color: #ffffff;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+html, body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  padding: 0;
+  background-color: #09090b !important;
+  color: #ffffff;
   min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* 🚫 Hide Spline Watermark Badge */
+a[href*="spline.design"],
+div[style*="spline.design"] {
+  display: none !important;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
-
-/* This targets the slider globally */
+/* 🎚️ Custom Range Sliders (Accent tuned for CRAFMAN Blue) */
 input[type='range'] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 8px; /* Taller track */
-    background: #e7e5e4; /* Light grey track */
-    border-radius: 5px;
-    outline: none;
-    margin: 20px 0; /* More space around it */
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: #27272a; /* Dark track */
+  border-radius: 5px;
+  outline: none;
+  margin: 16px 0;
 }
 
-    /* The Grabber (Thumb) - Chrome, Safari, Edge */
-    input[type='range']::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 28px; /* Much bigger target for thumbs */
-        height: 28px;
-        background: #1c1917; /* Dark black/grey to match your theme */
-        border-radius: 50%;
-        cursor: pointer;
-        border: 2px solid #ffffff;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    }
+/* Range Thumb - Chrome, Safari, Edge */
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  background: #2563eb; /* CRAFMAN Blue */
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+}
 
-    /* The Grabber (Thumb) - Firefox */
-    input[type='range']::-moz-range-thumb {
-        width: 28px;
-        height: 28px;
-        background: #1c1917;
-        border-radius: 50%;
-        cursor: pointer;
-        border: 2px solid #ffffff;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    }
+/* Range Thumb - Firefox */
+input[type='range']::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background: #2563eb;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+}
