@@ -1,625 +1,616 @@
-import React, { useState, useRef, useEffect } from "react";
-import Spline from "@splinetool/react-spline";
-import { Sparkles, ArrowRight, CheckCircle2, Phone, ShieldCheck, Clock, Check, MessageSquareText, Loader2, ScanLine } from "lucide-react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { siteStyles } from "./Layout.jsx";
 
-// Native Web Audio Synthesizer for Craffy's Sci-Fi Voice
-const playCraffySound = (type = "talk") => {
-    try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtx) return;
-        const ctx = new AudioCtx();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
 
-        osc.connect(gain);
-        gain.connect(ctx.destination);
+// =====================================================================================
+// 🎯 GOOGLE ADS CONFIGURATION MATRIX (MATCHED TO YOUR NEW SUBMIT LEAD FORM 9)
+// =====================================================================================
 
-        if (type === "talk") {
-            osc.type = "sine";
-            osc.frequency.setValueAtTime(520, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.04);
-            gain.gain.setValueAtTime(0.02, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.04);
-        } else if (type === "tablet") {
-            osc.type = "triangle";
-            osc.frequency.setValueAtTime(300, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(1100, ctx.currentTime + 0.12);
-            gain.gain.setValueAtTime(0.04, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.12);
-        }
-    } catch (e) { }
+
+const GOOGLE_ADS_CONFIG = {
+    FORM_SUCCESS_SEND_TO: "AW-18466429796",
+    CALL_CLICK_SEND_TO: "AW-18466429796/HPHiCIbN6oMdEOS2veVE",
+    WHATSAPP_SEND_TO: "",
 };
 
-export default function CraffyHeroSection() {
-    const SPLINE_SCENE_URL = "https://prod.spline.design/blo2FccZ2Q7hEkIq/scene.splinecode";
-    const FORMSPREE_ENDPOINT = "https://formspree.io/f/maqlqgzz";
-    const GOOGLE_ADS_ID = "AW-18466429796";
+const initialFormState = {
+    contactPreference: "schedule_callback",
+    meetingType: "phone_callback", // Tracks option: phone_callback or home_visit
+    callbackDate: "",
+    callbackTimeSlot: "",
+    postcode: "",
+    packageInterest: "",
+    message: "",
+    name: "",
+    phone: "",
+};
 
-    const splineRef = useRef(null);
-    const [splineLoaded, setSplineLoaded] = useState(false);
-    const [craffyStatus, setCraffyStatus] = useState("Idle & Listening");
-    const [chatStep, setChatStep] = useState("initial"); // "initial" | "answered" | "postcode" | "custom_query" | "submitted"
+const callbackTimeOptions = [
+    "Morning (7 AM – 12 PM)",
+    "Afternoon (12 PM – 5 PM)",
+    "Evening (5 PM – 8 PM)",
+];
 
-    // Active Dialogue State
-    const [targetSpeech, setTargetSpeech] = useState(
-        "Welcome! Are you planning an extension, loft conversion, or internal layout change? Tap a topic below or ask a custom question."
-    );
+export default function DrawingsPlanningForm({
+    endpoint = "https://formspree.io/f/maqlqgzz",
+    selectedPackage = "",
+    buttonText = "Request Consultation",
+    title = "Get your free project strategy",
+    intro = "We hate pushy sales calls as much as you do. You’ll speak directly with a practical planning strategist—just straight answers, clear package guidance, and zero pressure.",
+}) {
+    const navigate = useNavigate();
 
-    // Tablet HUD Live Content
-    const [tabletContent, setTabletContent] = useState({
-        title: "CRAFMAN CAD ENGINE v2.4",
-        stat1: "FEES: £950 + VAT",
-        stat2: "TIME: 7 DAYS",
-        status: "READY FOR INPUT",
+    const [form, setForm] = useState({
+        ...initialFormState,
+        packageInterest: selectedPackage || "",
     });
 
-    // Lead Data Form State
-    const [postcode, setPostcode] = useState("");
-    const [phone, setPhone] = useState("");
-    const [name, setName] = useState("");
-    const [customQuestion, setCustomQuestion] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [step, setStep] = useState(1);
+    const [submittedSummary, setSubmittedSummary] = useState(null);
+    const [submitStatus, setSubmitStatus] = useState({
+        loading: false,
+        success: false,
+        error: "",
+    });
+    const [isMobile, setIsMobile] = useState(false);
 
-    // Typewriter Streaming Effect Hook
-    const [displayedSpeech, setDisplayedSpeech] = useState("");
+    const formTopRef = useRef(null);
 
-    useEffect(() => {
-        setDisplayedSpeech("");
-        let index = 0;
-        const interval = setInterval(() => {
-            if (index < targetSpeech.length) {
-                const char = targetSpeech.charAt(index);
-                setDisplayedSpeech((prev) => prev + char);
-                if (index % 4 === 0) playCraffySound("talk");
-                index++;
-            } else {
-                clearInterval(interval);
-            }
-        }, 18);
+    const dateBounds = useMemo(() => {
+        const today = new Date();
+        const oneMonthOut = new Date();
+        oneMonthOut.setMonth(today.getMonth() + 1);
 
-        return () => clearInterval(interval);
-    }, [targetSpeech]);
-
-    // Expanded General Knowledge Base
-    const quickAnswers = {
-        planning: {
-            question: "Do I need planning permission for extensions?",
-            answer: "Most single-storey rear extensions up to 3m (terraced) or 4m (detached)—and up to 6m/8m via Prior Approval—fall under Permitted Development! Full planning is only required in conservation areas or for complex wrapped extensions.",
-            price: "Fixed £950 + VAT",
-            turnaround: "7 Working Days",
-            tabletTitle: "REAR EXTENSIONS",
-            tabletCode: "PERMITTED // 3M-6M LIMIT",
-        },
-        lofts: {
-            question: "How do Loft Conversions & Dormers work?",
-            answer: "Under Permitted Development, lofts allow up to 40 cubic metres of extra space for terraced homes (50m³ for semi/detached). Rear dormers and Hip-to-Gable conversions usually don't need planning permission if headroom exceeds 2.2 metres!",
-            price: "Fixed Rates Available",
-            turnaround: "7 Working Days",
-            tabletTitle: "LOFT CONVERSIONS",
-            tabletCode: "VOL: 40-50M³ // CLEARANCE 2.2M",
-        },
-        internal: {
-            question: "Removing load-bearing walls & RSJ steels?",
-            answer: "Knocking down internal walls for open-plan kitchens does not require Planning Permission, but DOES legally require Building Regulations sign-off and Structural Engineer RSJ beam calculations so your house remains safe.",
-            price: "Technical Packages",
-            turnaround: "7-10 Working Days",
-            tabletTitle: "INTERNAL ALTERATIONS",
-            tabletCode: "RSJ CALCS // STRUCTURAL REGS",
-        },
-        outbuildings: {
-            question: "Garden Rooms, Studios & Outbuilding rules?",
-            answer: "Outbuildings are Permitted Development if kept under 2.5m eaves height when built within 2 metres of property boundaries (or 4m dual pitch overall). They must be for incidental use (gym, office, studio) and not a separate self-contained dwelling.",
-            price: "From £950 + VAT",
-            turnaround: "7 Working Days",
-            tabletTitle: "GARDEN OUTBUILDINGS",
-            tabletCode: "MAX 2.5M HEIGHT // INCIDENTAL",
-        },
-        regs: {
-            question: "Are Building Regulations drawings included?",
-            answer: "Planning Permission and Building Control drawings are two separate stages. Planning gets council permission for appearance, while Building Control provides structural construction plans for your builder.",
-            price: "Complete Packages",
-            turnaround: "Full Technical Pack",
-            tabletTitle: "BUILDING CONTROL",
-            tabletCode: "STRUCTURAL DRAFTING PACK",
-        },
-        pricing: {
-            question: "What are your fixed rates & guarantees?",
-            answer: "Our architectural planning drawings start at a guaranteed fixed rate of £950 + VAT with zero hidden fees. Includes unlimited drawing revisions until council approval.",
-            price: "From £950 + VAT",
-            turnaround: "7 Working Days",
-            tabletTitle: "FIXED RATE GUARANTEE",
-            tabletCode: "GUARANTEED £950 + VAT",
-        },
-    };
-
-    const [activeAnswer, setActiveAnswer] = useState(quickAnswers.planning);
-
-    const trigger3DAction = (actionType) => {
-        if (!splineRef.current) return;
-        try {
-            if (actionType === "thinking") {
-                setCraffyStatus("Analyzing Planning Rules...");
-                splineRef.current.emitEvent("mouseHover", "Head");
-            } else if (actionType === "pitching") {
-                setCraffyStatus("Updating Tablet HUD...");
-                splineRef.current.emitEvent("mouseDown", "Tablet");
-            } else if (actionType === "typing") {
-                setCraffyStatus("Checking Local Postcode...");
-                splineRef.current.emitEvent("mouseHover", "Tablet");
-            } else {
-                setCraffyStatus("Idle & Listening");
-                splineRef.current.emitEvent("mouseUp", "Head");
-            }
-        } catch (err) { }
-    };
-
-    const handleChipClick = (key) => {
-        const selected = quickAnswers[key];
-        setActiveAnswer(selected);
-        setTargetSpeech(selected.answer);
-        setTabletContent({
-            title: selected.tabletTitle,
-            stat1: `RATE: ${selected.price}`,
-            stat2: `TURNAROUND: ${selected.turnaround}`,
-            status: selected.tabletCode,
-        });
-        playCraffySound("tablet");
-        setChatStep("answered");
-        trigger3DAction("pitching");
-    };
-
-    const handleBespokeClick = () => {
-        setTargetSpeech("No problem! Type your specific property layout or planning question below. I'll bypass the automated script and send it straight to our senior planning strategists.");
-        setTabletContent({
-            title: "CUSTOM INQUIRY",
-            stat1: "ROUTING: HUMAN TEAM",
-            stat2: "PRIORITY: HIGH",
-            status: "DIRECT CHANNEL OPEN",
-        });
-        playCraffySound("tablet");
-        setChatStep("custom_query");
-        trigger3DAction("thinking");
-    };
-
-    // 🚀 FIXED FORMSPREE LEAD SUBMISSION ENGINE
-    const handleLeadSubmit = async (e) => {
-        e.preventDefault();
-        if (!phone || !postcode) {
-            setErrorMessage("Please enter both your postcode and phone number.");
-            return;
-        }
-
-        setIsSubmitting(true);
-        setErrorMessage("");
-        trigger3DAction("pitching");
-
-        // Standardized Formspree payload structure matching DrawingsPlanningForm
-        const payload = {
-            _subject: `NEW CRAFFY AI LEAD: ${postcode.toUpperCase()} (${name || "Anonymous"})`,
-            formType: chatStep === "custom_query" ? "Craffy Bespoke Custom Query" : "Craffy AI Quick Consultation",
-            name: name.trim() || "Client (Name Not Provided)",
-            phone: phone.trim(),
-            postcode: postcode.trim().toUpperCase(),
-            selectedTopic: chatStep === "custom_query" ? "Custom User Question" : activeAnswer.question,
-            message: chatStep === "custom_query" ? customQuestion : `Selected FAQ: ${activeAnswer.question}\nAnswer Provided: ${activeAnswer.answer}`,
-            submittedAt: new Date().toLocaleString("en-GB"),
+        const formatDate = (date) => {
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, "0");
+            const dd = String(date.getDate()).padStart(2, "0");
+            return `${yyyy}-${mm}-${dd}`;
         };
 
+        return {
+            min: formatDate(today),
+            max: formatDate(oneMonthOut),
+        };
+    }, []);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
+
+    useEffect(() => {
+        if (submitStatus.success) return;
+        setForm((prev) => ({
+            ...prev,
+            packageInterest: selectedPackage || "I'm not sure yet (Let us help guide you)",
+        }));
+    }, [selectedPackage, submitStatus.success]);
+
+    function handleChange(e) {
+        const { name, value } = e.target;
+        setForm((prev) => ({ ...prev, [name]: value }));
+        if (submitStatus.error) setSubmitStatus((prev) => ({ ...prev, error: "" }));
+    }
+
+    function setField(name, value) {
+        setForm((prev) => ({ ...prev, [name]: value }));
+        if (submitStatus.error) setSubmitStatus((prev) => ({ ...prev, error: "" }));
+    }
+
+    // --- PROGRESSIVE STEP VALIDATION LOGIC ---
+    const isStep1Valid = useMemo(() => !!form.callbackDate && !!form.callbackTimeSlot && !!form.meetingType, [form.callbackDate, form.callbackTimeSlot, form.meetingType]);
+    const isStep2Valid = useMemo(() => !!form.name.trim() && !!form.phone.trim(), [form.name, form.phone]);
+
+    const formIsValid = useMemo(() => isStep1Valid && isStep2Valid, [isStep1Valid, isStep2Valid]);
+
+    // Master Tracking Router Engine
+    const trackConversionEvent = (eventName, params = {}) => {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: eventName, ...params });
+        if (typeof window.gtag === "function") {
+            window.gtag("event", eventName, params);
+        }
+    };
+
+    const formattedDisplayDate = useMemo(() => {
+        if (!form.callbackDate) return "";
+        const parsedDate = new Date(form.callbackDate);
+        return parsedDate.toLocaleDateString("en-GB", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+        });
+    }, [form.callbackDate]);
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        if (!formIsValid) return;
+
+        // 🎯 Tracking: Record Submit Button Click Attempt
+        trackConversionEvent("form_submit_attempt", {
+            package_interest: form.packageInterest,
+            meeting_type: form.meetingType,
+            chosen_date: form.callbackDate,
+            chosen_time: form.callbackTimeSlot
+        });
+
+        setSubmitStatus({ loading: true, success: false, error: "" });
+
         try {
-            const response = await fetch(FORMSPREE_ENDPOINT, {
+            const payload = {
+                formType: "Drawings Strategy Consultation Request",
+                contactPreference: form.contactPreference,
+                meetingType: form.meetingType === "phone_callback" ? "Phone Call Back" : "In-Person Home Visit",
+                packageInterest: form.packageInterest || "None Selected",
+                name: form.name,
+                phone: form.phone,
+                postcode: form.postcode,
+                message: form.message,
+                preferredDate: form.callbackDate,
+                preferredTimeSlot: form.callbackTimeSlot,
+            };
+
+            const response = await fetch(endpoint, {
                 method: "POST",
                 mode: "cors",
                 headers: {
                     "Content-Type": "application/json",
-                    "Accept": "application/json",
+                    Accept: "application/json",
                 },
                 body: JSON.stringify(payload),
             });
 
-            const responseData = await response.json();
-
+            const result = await response.json();
             if (!response.ok) {
-                throw new Error(responseData?.errors?.[0]?.message || "Failed to submit lead to Formspree.");
+                throw new Error(result?.errors?.[0]?.message || "Something went wrong. Please try again.");
             }
 
-            // Fire Google Ads Conversion Event
-            if (typeof window !== "undefined" && typeof window.gtag === "function") {
-                window.gtag("event", "conversion", { send_to: GOOGLE_ADS_ID });
-            }
-
-            setIsSubmitting(false);
-            setTargetSpeech(`Fantastic! I've dispatched your details for site ${postcode.toUpperCase()} to our planning team. We'll send your report via WhatsApp/SMS shortly.`);
-            setTabletContent({
-                title: "DISPATCH COMPLETE",
-                stat1: `SITE: ${postcode.toUpperCase()}`,
-                stat2: `PHONE: ${phone}`,
-                status: "LEAD SENT TO FORMSPREE",
+            setSubmittedSummary({
+                ...form,
+                displayDate: formattedDisplayDate,
             });
-            playCraffySound("tablet");
-            setChatStep("submitted");
+            setSubmitStatus({ loading: false, success: true, error: "" });
+
+            // 🎯 Tracking: Record Full Data Parameters on Successful Conversion
+            trackConversionEvent("form_submission_success", {
+                contact_preference: form.contactPreference,
+                meeting_type: form.meetingType,
+                package_interest: form.packageInterest || "None Selected",
+                client_name_provided: !!form.name.trim(),
+                client_phone: form.phone,
+                client_postcode: form.postcode.toUpperCase(),
+                scheduled_date: form.callbackDate,
+                scheduled_time: form.callbackTimeSlot,
+            });
+
+            // 🔥 MANDATORY DATA BRIDGE: Hard-Coded Native Google Ads Conversion Direct Trigger
+            if (typeof window.gtag === "function") {
+                window.gtag("event", "conversion", {
+                    send_to: GOOGLE_ADS_CONFIG.FORM_SUCCESS_SEND_TO,
+                });
+            }
+
         } catch (error) {
-            console.error("Formspree Submission Error:", error);
-            setIsSubmitting(false);
-            setErrorMessage("Something went wrong. Please call us directly on 0203 633 5634.");
+            setSubmitStatus({
+                loading: false,
+                success: false,
+                error: error.message || "Something went wrong. Please try again.",
+            });
         }
+    }
+
+    const cardStyle = {
+        padding: "24px",
+        borderRadius: "24px",
+        background: "#fff",
+        border: "1px solid #e7e5e4",
+        boxSizing: "border-box",
     };
 
+    const buttonPrimaryStyle = {
+        background: "#1c1917",
+        color: "#fff",
+        padding: "14px 24px",
+        borderRadius: "14px",
+        border: "none",
+        fontSize: "15px",
+        fontWeight: "700",
+        cursor: "pointer",
+        width: "100%",
+        boxSizing: "border-box",
+        transition: "background 0.2s ease",
+    };
+
+    const buttonSecondaryStyle = {
+        background: "#f5f5f4",
+        color: "#1c1917",
+        padding: "14px 24px",
+        borderRadius: "14px",
+        border: "1px solid #d6d3d1",
+        fontSize: "15px",
+        fontWeight: "600",
+        cursor: "pointer",
+    };
+
+    const inputStyle = {
+        width: "100%",
+        padding: "14px 16px",
+        borderRadius: "14px",
+        border: "1px solid #ddd6ce",
+        fontSize: "15px",
+        boxSizing: "border-box",
+        background: "#fff",
+        outline: "none",
+        maxWidth: "100%",
+        color: "#1c1917"
+    };
+
+    const labelStyle = { display: "grid", gap: "6px", minWidth: 0 };
+
+    const optionCardStyle = (active, isWhatsApp = false) => ({
+        padding: "16px",
+        borderRadius: "16px",
+        border: active ? (isWhatsApp ? "1px solid #25D366" : "1px solid #1c1917") : "1px solid #ddd6ce",
+        background: active ? (isWhatsApp ? "#f0fdf4" : "#f5f5f4") : "#fff",
+        color: "#1f1f1f",
+        cursor: "pointer",
+        fontWeight: "600",
+        fontSize: "15px",
+        textAlign: "left",
+        transition: "all 0.22s ease",
+        transform: active ? "translateY(-2px)" : "translateY(0)",
+        boxShadow: active ? "0 14px 30px rgba(28,25,23,0.08)" : "0 1px 2px rgba(0,0,0,0.03)",
+        width: "100%",
+        boxSizing: "border-box",
+    });
+
+    if (submitStatus.success && submittedSummary) {
+        return (
+            <div style={{ ...cardStyle, display: "grid", gap: "24px", padding: "28px" }}>
+                <div style={{ display: "flex", gap: "14px", alignItems: "center" }}>
+                    <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: "#166534", color: "#fff", display: "grid", placeItems: "center", fontSize: "28px" }}>✓</div>
+                    <div>
+                        <h2 style={{ margin: 0, fontSize: "24px", color: "#14532d" }}>
+                            {submittedSummary.meetingType === "home_visit" ? "Home Visit Arranged" : "Strategy Session Scheduled"}
+                        </h2>
+                        <p style={{ margin: "4px 0 0", color: "#166534", fontSize: "14px" }}>
+                            {submittedSummary.meetingType === "home_visit"
+                                ? `Our planning strategist will visit your property on ${submittedSummary.displayDate} during the ${submittedSummary.callbackTimeSlot.toLowerCase()}.`
+                                : `We will ring you back on ${submittedSummary.displayDate} during the ${submittedSummary.callbackTimeSlot.toLowerCase()}.`
+                            }
+                        </p>
+                    </div>
+                </div>
+
+                <div style={{ borderTop: "1px solid #e7e5e4", paddingTop: "14px" }}>
+                    <h4 style={{ margin: "0 0 10px", fontSize: "15px" }}>Consultation Details</h4>
+                    <div style={{ background: "#fafaf9", padding: "14px", borderRadius: "12px", display: "grid", gap: "8px", fontSize: "14px" }}>
+                        <div><strong>Client Name:</strong> {submittedSummary.name}</div>
+                        <div><strong>Linked Phone Line:</strong> {submittedSummary.phone}</div>
+                        <div><strong>Consultation Track:</strong> {submittedSummary.meetingType === "home_visit" ? "🏡 In-Person Property Home Visit" : "📞 Phone Consultation Call"}</div>
+                        <div><strong>Arranged Date:</strong> {submittedSummary.displayDate} ({submittedSummary.callbackTimeSlot})</div>
+                    </div>
+                </div>
+
+                <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            trackConversionEvent("success_screen_reset_click");
+                            setSubmittedSummary(null);
+                            setSubmitStatus({ loading: false, success: false, error: "" });
+                            setForm({ ...initialFormState });
+                            setStep(1);
+                        }}
+                        style={buttonSecondaryStyle}
+                    >
+                        Schedule Another Appointment
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            trackConversionEvent("success_screen_home_click");
+                            navigate("/");
+                        }}
+                        style={buttonPrimaryStyle}
+                    >
+                        Return to Home
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <div style={styles.heroWrapper}>
-            <div style={styles.bgGlow} />
-
-            <style>{`
-        @keyframes pulseGlow {
-          0%, 100% { box-shadow: 0 0 25px rgba(37, 99, 235, 0.25); }
-          50% { box-shadow: 0 0 45px rgba(59, 130, 246, 0.45); }
-        }
-        @keyframes laserSweep {
-          0% { top: 0%; opacity: 0.8; }
-          50% { opacity: 0.3; }
-          100% { top: 95%; opacity: 0.8; }
-        }
-        .hero-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 2.5rem;
-          max-width: 1240px;
-          margin: 0 auto;
-          align-items: center;
-          position: relative;
-          z-index: 10;
-        }
-        @media (min-width: 992px) {
-          .hero-grid { grid-template-columns: 5.5fr 6.5fr; }
-        }
-        .chip-button {
-          background: #18181b;
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          color: #e4e4e7;
-          padding: 13px 16px;
-          border-radius: 14px;
-          cursor: pointer;
-          font-size: 13px;
-          font-weight: 500;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          width: 100%;
-          transition: all 0.25s ease;
-          margin-bottom: 8px;
-        }
-        .chip-button:hover {
-          background: #27272a;
-          border-color: #3b82f6;
-          color: #ffffff;
-          transform: translateX(4px);
-        }
-        .tablet-laser {
-          position: absolute;
-          left: 0;
-          right: 0;
-          height: 2px;
-          background: #38bdf8;
-          box-shadow: 0 0 10px #38bdf8;
-          animation: laserSweep 2.5s linear infinite;
-        }
-        a[href*="spline.design"], div[style*="spline.design"] { display: none !important; }
-      `}</style>
-
-            {/* TOP HEADLINE */}
-            <div style={styles.topHeader}>
-                <div style={styles.topPill}>
-                    <Sparkles size={13} color="#60a5fa" />
-                    <span>BESPOKE ARCHITECTURAL DRAWINGS & PLANNING PERMISSION</span>
-                </div>
-                <h1 style={styles.mainTitle}>
-                    Get Your Planning Drawings in <span style={{ color: '#3b82f6' }}>7 Days</span>
-                </h1>
-                <p style={styles.subTitle}>
-                    Fixed fees from £950 + VAT across East London & Essex. Zero hidden costs.
-                </p>
+        <form ref={formTopRef} onSubmit={handleSubmit} style={{ ...cardStyle, display: "grid", gap: "22px", width: "100%", position: "relative" }}>
+            <div style={{ minWidth: 0 }}>
+                <h2 style={{ fontSize: isMobile ? "28px" : "36px", marginTop: 0, marginBottom: "8px", fontWeight: "800" }}>{title}</h2>
+                {intro && <p style={{ color: "#57534e", fontSize: "14px", margin: 0, lineHeight: "1.5" }}>{intro}</p>}
             </div>
 
-            <div className="hero-grid">
+            <div style={{ textTransform: "uppercase", letterSpacing: "1px", textAlign: "center", padding: "2px 0" }}>
+                <span style={{ fontSize: "13px", fontWeight: "700", color: "#A67C00" }}>
+                    Opening Hours: Mon–Sat 7AM–8PM
+                </span>
+            </div>
 
-                {/* 👷‍♂️ LEFT COLUMN: 3D CRAFFY + DYNAMIC TABLET HUD */}
-                <div style={styles.splineCol}>
-                    <div style={styles.craffyContainer} className="craffy-card">
+            {/* --- PROGRESS INDICATOR DOTS --- */}
+            <div style={{ display: "flex", justifyContent: "center", gap: "8px", margin: "2px 0" }}>
+                <div style={{ width: "24px", height: "6px", borderRadius: "999px", background: step === 1 ? "#A67C00" : "#ece7df", transition: "all 0.2s" }} />
+                <div style={{ width: "24px", height: "6px", borderRadius: "999px", background: step === 2 ? "#A67C00" : "#ece7df", transition: "all 0.2s" }} />
+            </div>
 
-                        <div style={styles.liveTag}>
-                            <span style={styles.greenPulse} />
-                            <span style={{ fontSize: '11px', color: '#93c5fd', fontWeight: 600 }}>
-                                {craffyStatus}
-                            </span>
+            {/* --- PRIMARY MULTI-STEP ENGINE --- */}
+            <div style={{ display: "grid", gap: "16px", background: "#fdfdfc", padding: isMobile ? "16px" : "20px", borderRadius: "20px", border: "1px solid #f5f2eb" }}>
+
+                {/* STEP 1: INITIAL APPOINTMENT SELECTION MATRIX */}
+                {step === 1 && (
+                    <div style={{ display: "grid", gap: "14px", animation: "faqFadeDown 0.25s ease-out" }}>
+                        <div style={{ fontSize: "15px", fontWeight: "700", color: "#1c1917" }}>Step 1: Consultation Type & Schedule</div>
+
+                        {/* 🏡 INTERACTIVE SEGMENT CONTROL (MEETING TYPE TOGGLE) */}
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", background: "#f5f5f4", padding: "4px", borderRadius: "12px" }}>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setField("meetingType", "phone_callback");
+                                    trackConversionEvent("select_phone_callback", {
+                                        package_context: form.packageInterest || "None Selected"
+                                    });
+                                }}
+                                style={{
+                                    border: "none",
+                                    padding: "10px",
+                                    borderRadius: "8px",
+                                    fontSize: "13px",
+                                    fontWeight: "700",
+                                    cursor: "pointer",
+                                    background: form.meetingType === "phone_callback" ? "#fff" : "transparent",
+                                    color: form.meetingType === "phone_callback" ? "#1c1917" : "#78716c",
+                                    boxShadow: form.meetingType === "phone_callback" ? "0 2px 4px rgba(0,0,0,0.06)" : "none",
+                                    transition: "all 0.2s"
+                                }}
+                            >
+                                📞 Phone Callback
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setField("meetingType", "home_visit");
+                                    trackConversionEvent("select_home_visit", {
+                                        package_context: form.packageInterest || "None Selected"
+                                    });
+                                }}
+                                style={{
+                                    border: "none",
+                                    padding: "10px",
+                                    borderRadius: "8px",
+                                    fontSize: "13px",
+                                    fontWeight: "700",
+                                    cursor: "pointer",
+                                    background: form.meetingType === "home_visit" ? "#fff" : "transparent",
+                                    color: form.meetingType === "home_visit" ? "#1c1917" : "#78716c",
+                                    boxShadow: form.meetingType === "home_visit" ? "0 2px 4px rgba(0,0,0,0.06)" : "none",
+                                    transition: "all 0.2s"
+                                }}
+                            >
+                                🏡 Home Visit
+                            </button>
                         </div>
 
-                        <div style={styles.canvasFrame}>
-                            {!splineLoaded && (
-                                <div style={styles.loaderOverlay}>
-                                    <div style={styles.avatarCircle}>👷‍♂️</div>
-                                    <span style={{ fontSize: '13px', color: '#a1a1aa' }}>Initializing 3D Craffy Engine...</span>
-                                </div>
-                            )}
+                        {/* 📍 HOME VISIT EXPLANATORY SPECIFICATION NOTICE */}
+                        {form.meetingType === "home_visit" && (
+                            <div style={{ background: "#fafaf9", border: "1px dashed #d6d3d1", padding: "14px", borderRadius: "14px", display: "grid", gap: "4px", animation: "faqFadeDown 0.2s ease-out" }}>
+                                <span style={{ fontSize: "11px", fontWeight: "800", color: "#b45309", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                                    🏡 On-Site Architectural Assessment
+                                </span>
+                                <span style={{ fontSize: "12px", color: "#57534e", marginTop: "2px", lineHeight: "1.4" }}>
+                                    We will send a practical planning specialist directly to your property. We'll map out layout constraints, discuss design viability, and answer local council questions live on-site.
+                                </span>
+                            </div>
+                        )}
 
-                            <Spline
-                                scene={SPLINE_SCENE_URL}
-                                onLoad={(app) => { splineRef.current = app; setSplineLoaded(true); }}
-                                style={{ width: '100%', height: '100%' }}
-                            />
-
-                            {/* DYNAMIC DIGITAL TABLET HUD OVERLAY */}
-                            <div style={styles.tabletHud}>
-                                <div className="tablet-laser" />
-                                <div style={styles.tabletHudHeader}>
-                                    <ScanLine size={12} color="#38bdf8" />
-                                    <span>{tabletContent.title}</span>
-                                </div>
-                                <div style={styles.tabletHudBody}>
-                                    <div>{tabletContent.stat1}</div>
-                                    <div>{tabletContent.stat2}</div>
-                                </div>
-                                <div style={styles.tabletHudStatus}>
-                                    [{tabletContent.status}]
-                                </div>
+                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "16px", marginTop: "4px" }}>
+                            <div style={labelStyle}>
+                                <label htmlFor="callbackDate" style={{ fontWeight: "700", fontSize: "13px", color: "#44403c" }}>
+                                    {form.meetingType === "home_visit" ? "Preferred Visit Date" : "Preferred Callback Date"}
+                                </label>
+                                <input
+                                    id="callbackDate"
+                                    type="date"
+                                    name="callbackDate"
+                                    min={dateBounds.min}
+                                    max={dateBounds.max}
+                                    value={form.callbackDate}
+                                    onChange={(e) => {
+                                        handleChange(e);
+                                        trackConversionEvent("step1_date_change", { date_selected: e.target.value });
+                                    }}
+                                    style={{
+                                        ...inputStyle,
+                                        cursor: "pointer",
+                                        minHeight: "48px", // Guarantees a full mobile touch-target height
+                                        color: form.callbackDate ? "#1c1917" : "#78716c"
+                                    }}
+                                    required
+                                />
                             </div>
 
+                            <div style={labelStyle}>
+                                <span style={{ fontWeight: "700", fontSize: "13px", color: "#44403c" }}>Preferred Time Window</span>
+                                <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "6px" }}>
+                                    {callbackTimeOptions.map((time) => (
+                                        <button
+                                            key={time}
+                                            type="button"
+                                            onClick={() => {
+                                                setField("callbackTimeSlot", time);
+                                                trackConversionEvent("step1_time_slot_click", {
+                                                    time_slot_value: time,
+                                                    date_linked: form.callbackDate
+                                                });
+                                            }}
+                                            style={{
+                                                ...optionCardStyle(form.callbackTimeSlot === time),
+                                                padding: "10px 14px",
+                                                fontSize: "13px",
+                                                borderRadius: "10px"
+                                            }}
+                                        >
+                                            {time}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
 
-                        <div style={styles.canvasFooter}>
-                            <MessageSquareText size={14} color="#60a5fa" />
-                            <span>Craffy updates his tablet screen live based on your inputs</span>
+                        <button
+                            type="button"
+                            disabled={!isStep1Valid}
+                            onClick={() => {
+                                setStep(2);
+                                trackConversionEvent("step1_continue_click", {
+                                    meeting_type: form.meetingType,
+                                    date_locked: form.callbackDate,
+                                    time_locked: form.callbackTimeSlot
+                                });
+                            }}
+                            style={{
+                                ...buttonPrimaryStyle,
+                                background: !isStep1Valid ? '#a8a29e' : '#1c1917',
+                                cursor: !isStep1Valid ? 'not-allowed' : 'pointer',
+                                marginTop: "10px"
+                            }}
+                        >
+                            Next Step
+                        </button>
+                    </div>
+                )}
+
+                {/* STEP 2: ACCOUNT ASSIGNMENT & DATA CAPTURE */}
+                {step === 2 && (
+                    <div style={{ display: "grid", gap: "14px", animation: "faqFadeDown 0.25s ease-out" }}>
+                        <div style={{ fontSize: "15px", fontWeight: "700", color: "#1c1917" }}>Step 2: Confirm Information</div>
+
+                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "14px" }}>
+                            <input name="name" value={form.name} onChange={handleChange} placeholder="Name" style={inputStyle} required autoComplete="name" />
+                            <input name="phone" value={form.phone} onChange={handleChange} placeholder="Primary phone line number" style={inputStyle} required type="tel" autoComplete="tel" />
+                        </div>
+
+                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 2fr", gap: "14px" }}>
+                            <input name="postcode" value={form.postcode} onChange={handleChange} placeholder="Project site postcode" style={inputStyle} autoComplete="postal-code" />
+                            <select
+                                id="packageInterestDropdown"
+                                name="packageInterest"
+                                value={form.packageInterest}
+                                onChange={(e) => {
+                                    handleChange(e);
+                                    trackConversionEvent("step2_package_dropdown_change", { dropdown_selection: e.target.value });
+                                }}
+                                style={{ ...inputStyle, cursor: "pointer" }}
+                            >
+                                <option value="Starter Package">Starter Package — From £950</option>
+                                <option value="Planning Package">Planning Package — From £1250</option>
+                                <option value="Technical Package">Technical Package — From £1650</option>
+                                <option value="Bespoke Package">Bespoke Package — POA</option>
+                                <option value="I'm not sure yet (Let us help guide you)">I'm not sure yet (Let us help guide you)</option>
+                            </select>
+                        </div>
+
+                        <textarea name="message" value={form.message} onChange={handleChange} placeholder="Briefly describe your property goals or design layout notes (Optional)" rows="2" style={{ ...inputStyle, resize: "vertical", marginTop: "4px" }} />
+
+                        <div style={{ display: "flex", gap: "12px", marginTop: "8px" }}>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setStep(1);
+                                    trackConversionEvent("step2_back_click", { current_fields_filled: !!form.name || !!form.phone });
+                                }}
+                                style={{ ...buttonSecondaryStyle, width: "35%", borderRadius: "14px" }}
+                            >
+                                Back
+                            </button>
+
+                            <button
+                                type="submit"
+                                disabled={!formIsValid || submitStatus.loading}
+                                style={{
+                                    ...buttonPrimaryStyle,
+                                    width: "65%",
+                                    background: !formIsValid ? '#a8a29e' : '#1c1917',
+                                    cursor: !formIsValid ? 'not-allowed' : 'pointer'
+                                }}
+                            >
+                                {submitStatus.loading ? "Processing..." : buttonText}
+                            </button>
                         </div>
                     </div>
-                </div>
+                )}
 
-                {/* 💬 RIGHT COLUMN: STREAMING SPEECH BUBBLE */}
-                <div style={styles.speechCol}>
-                    <div style={styles.speechCard}>
+                {submitStatus.error && <p style={{ color: "#b91c1c", fontWeight: "600", fontSize: "14px", margin: "8px 0 0", textAlign: "center" }}>{submitStatus.error}</p>}
+            </div>
 
-                        <div style={styles.cardHeader}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <div style={styles.craffyAvatar}>👷‍♂️</div>
-                                <div>
-                                    <h3 style={{ margin: 0, color: '#fff', fontSize: '17px', fontWeight: 700 }}>
-                                        Craffy <span style={styles.aiTag}>AI PLANNING LEAD</span>
-                                    </h3>
-                                    <p style={{ margin: '3px 0 0 0', color: '#a1a1aa', fontSize: '12px' }}>
-                                        East London & Essex Specialist
-                                    </p>
-                                </div>
-                            </div>
+            {/* --- SEPARATOR LINE --- */}
+            <div style={{ display: "flex", alignItems: "center", textTransform: "uppercase", fontSize: "13px", fontWeight: "800", color: "#78716c", margin: "4px 0" }}>
+                <div style={{ flex: 1, height: "1px", background: "#e7e5e4" }} />
+                <span style={{ padding: "0 16px", letterSpacing: "1px" }}>OR</span>
+                <div style={{ flex: 1, height: "1px", background: "#e7e5e4" }} />
+            </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#34d399', fontSize: '12px', fontWeight: 600 }}>
-                                <ShieldCheck size={16} />
-                                <span>Fixed Rate Guarantee</span>
+            {/* --- DIRECT ESCAPE FLOATING ROUTES --- */}
+            <div style={{ display: "grid", gap: "12px" }}>
+                <a
+                    href="tel:020 8191 4122"
+                    onClick={() => {
+                        trackConversionEvent("click_to_call", { method: "Enquiry Form Instant Call Bypass" });
+                        // 🔥 Optional Link Call Click directly to Google Ads
+                        if (typeof window.gtag === "function") {
+                            window.gtag("event", "conversion", { send_to: GOOGLE_ADS_CONFIG.CALL_CLICK_SEND_TO });
+                        }
+                    }}
+                    style={{ ...optionCardStyle(false), textDecoration: "none", display: "block" }}
+                >
+                    <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+                        <span style={{ fontSize: "22px" }}>☎</span>
+                        <div>
+                            <div style={{ fontSize: "15px", fontWeight: "700" }}>Call our planning office line directly now</div>
+                            <div style={{ fontSize: "12px", fontWeight: "400", color: "#57534e", marginTop: "1px" }}>
+                                Dial 0203 633 5634 for instant advice and layout consultations.
                             </div>
                         </div>
-
-                        {/* LIVE STREAMING SPEECH BUBBLE */}
-                        <div style={styles.speechBubble}>
-                            "{displayedSpeech}"
-                            <span style={styles.typingCursor}>|</span>
-                        </div>
-
-                        {/* CONVERSATION FLOW STATES */}
-                        {chatStep === "initial" && (
-                            <div style={{ maxHeight: '380px', overflowY: 'auto', paddingRight: '4px' }}>
-                                <p style={styles.sectionHeader}>Select a topic or ask a question:</p>
-
-                                <button className="chip-button" onClick={() => handleChipClick("planning")} onMouseEnter={() => trigger3DAction("thinking")}>
-                                    <span>💡 Planning Permission & Extensions</span>
-                                    <ArrowRight size={14} color="#60a5fa" />
-                                </button>
-
-                                <button className="chip-button" onClick={() => handleChipClick("lofts")} onMouseEnter={() => trigger3DAction("thinking")}>
-                                    <span>🏠 Loft Conversions & Dormer Rules</span>
-                                    <ArrowRight size={14} color="#60a5fa" />
-                                </button>
-
-                                <button className="chip-button" onClick={() => handleChipClick("internal")} onMouseEnter={() => trigger3DAction("thinking")}>
-                                    <span>🔨 Load-Bearing Walls & RSJ Steels</span>
-                                    <ArrowRight size={14} color="#60a5fa" />
-                                </button>
-
-                                <button className="chip-button" onClick={() => handleChipClick("outbuildings")} onMouseEnter={() => trigger3DAction("thinking")}>
-                                    <span>🌳 Garden Rooms & Outbuildings</span>
-                                    <ArrowRight size={14} color="#60a5fa" />
-                                </button>
-
-                                <button className="chip-button" onClick={() => handleChipClick("pricing")} onMouseEnter={() => trigger3DAction("thinking")}>
-                                    <span>💰 See Fixed Rates (£950 + VAT)</span>
-                                    <ArrowRight size={14} color="#60a5fa" />
-                                </button>
-
-                                <div style={styles.divider}>
-                                    <div style={styles.dividerLine}></div>
-                                    <span style={styles.dividerText}>OR</span>
-                                    <div style={styles.dividerLine}></div>
-                                </div>
-
-                                {/* BESPOKE QUESTION BUTTON */}
-                                <button
-                                    className="chip-button"
-                                    onClick={handleBespokeClick}
-                                    style={{ borderColor: '#38bdf8', backgroundColor: 'rgba(56, 189, 248, 0.08)' }}
-                                >
-                                    <span style={{ color: '#bae6fd', fontWeight: 600 }}>✍️ I have a specific / custom question...</span>
-                                    <ArrowRight size={14} color="#38bdf8" />
-                                </button>
-                            </div>
-                        )}
-
-                        {chatStep === "answered" && (
-                            <div style={{ marginTop: '16px' }}>
-                                <div style={styles.priceRow}>
-                                    <div>
-                                        <span style={{ color: '#a1a1aa', fontSize: '11px', display: 'block', textTransform: 'uppercase' }}>Drawings Rate</span>
-                                        <strong style={{ color: '#34d399', fontSize: '16px' }}>{activeAnswer.price}</strong>
-                                    </div>
-                                    <div>
-                                        <span style={{ color: '#a1a1aa', fontSize: '11px', display: 'block', textTransform: 'uppercase' }}>Turnaround Time</span>
-                                        <strong style={{ color: '#ffffff', fontSize: '16px' }}>{activeAnswer.turnaround}</strong>
-                                    </div>
-                                </div>
-
-                                <button
-                                    style={styles.primaryButton}
-                                    onClick={() => {
-                                        setChatStep("postcode");
-                                        setTargetSpeech("Enter your site postcode and phone line below. I'll summarize your local council constraints.");
-                                        trigger3DAction("typing");
-                                    }}
-                                >
-                                    <span>Check Council Rules For My Postcode</span>
-                                    <ArrowRight size={16} />
-                                </button>
-
-                                <button
-                                    style={styles.backButton}
-                                    onClick={() => {
-                                        setChatStep("initial");
-                                        setTargetSpeech("Welcome back! Select another query below, or ask a custom question.");
-                                        setTabletContent({ title: "CRAFMAN CAD ENGINE v2.4", stat1: "FEES: £950 + VAT", stat2: "TIME: 7 DAYS", status: "READY FOR INPUT" });
-                                    }}
-                                >
-                                    ← Ask another question
-                                </button>
-                            </div>
-                        )}
-
-                        {/* STANDARD LEAD CAPTURE FORM (POSTCODE ROUTE) */}
-                        {chatStep === "postcode" && (
-                            <form onSubmit={handleLeadSubmit} style={{ marginTop: '16px' }}>
-                                <div style={{ marginBottom: '12px' }}>
-                                    <label style={styles.inputLabel}>1. Your Name (Optional)</label>
-                                    <input type="text" placeholder="e.g. Sarah Jenkins" value={name} onFocus={() => trigger3DAction("typing")} onChange={(e) => setName(e.target.value)} style={styles.textInput} />
-                                </div>
-                                <div style={{ marginBottom: '12px' }}>
-                                    <label style={styles.inputLabel}>2. Project Site Postcode</label>
-                                    <input type="text" required placeholder="e.g. RM11 3BL or IG11 7BT" value={postcode} onFocus={() => trigger3DAction("typing")} onChange={(e) => {
-                                        setPostcode(e.target.value);
-                                        if (e.target.value.length >= 3) setTabletContent({ title: "POSTCODE SEARCH", stat1: `POSTCODE: ${e.target.value.toUpperCase()}`, stat2: "COUNCIL: MATCHING...", status: "ANALYZING RULES" });
-                                    }} style={styles.textInput} />
-                                </div>
-                                <div style={{ marginBottom: '16px' }}>
-                                    <label style={styles.inputLabel}>3. Mobile Phone Line</label>
-                                    <input type="tel" required placeholder="07123 456789" value={phone} onFocus={() => trigger3DAction("typing")} onChange={(e) => setPhone(e.target.value)} style={styles.textInput} />
-                                </div>
-                                {errorMessage && <p style={{ color: '#f87171', fontSize: '12px', margin: '0 0 12px 0' }}>{errorMessage}</p>}
-                                <button type="submit" disabled={isSubmitting} style={styles.primaryButton}>
-                                    {isSubmitting ? <><Loader2 size={16} className="animate-spin" /><span>Sending Report...</span></> : <><span>Generate Free Planning Report</span><ArrowRight size={16} /></>}
-                                </button>
-                                <button type="button" style={styles.backButton} onClick={() => setChatStep("initial")}>← Back to topics</button>
-                            </form>
-                        )}
-
-                        {/* CUSTOM / BESPOKE QUESTION FORM */}
-                        {chatStep === "custom_query" && (
-                            <form onSubmit={handleLeadSubmit} style={{ marginTop: '16px' }}>
-                                <div style={{ marginBottom: '12px' }}>
-                                    <label style={styles.inputLabel}>What is your specific question?</label>
-                                    <textarea
-                                        required
-                                        placeholder="e.g. We have a Thames Water pipe near the boundary, can we still do a 4m rear extension?"
-                                        value={customQuestion}
-                                        onFocus={() => trigger3DAction("typing")}
-                                        onChange={(e) => setCustomQuestion(e.target.value)}
-                                        style={{ ...styles.textInput, height: '80px', resize: 'vertical' }}
-                                    />
-                                </div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
-                                    <div>
-                                        <label style={styles.inputLabel}>Site Postcode</label>
-                                        <input type="text" required placeholder="Postcode" value={postcode} onFocus={() => trigger3DAction("typing")} onChange={(e) => setPostcode(e.target.value)} style={styles.textInput} />
-                                    </div>
-                                    <div>
-                                        <label style={styles.inputLabel}>Phone Number</label>
-                                        <input type="tel" required placeholder="07123 456789" value={phone} onFocus={() => trigger3DAction("typing")} onChange={(e) => setPhone(e.target.value)} style={styles.textInput} />
-                                    </div>
-                                </div>
-                                <div style={{ marginBottom: '16px' }}>
-                                    <label style={styles.inputLabel}>Your Name (Optional)</label>
-                                    <input type="text" placeholder="Name" value={name} onFocus={() => trigger3DAction("typing")} onChange={(e) => setName(e.target.value)} style={styles.textInput} />
-                                </div>
-                                {errorMessage && <p style={{ color: '#f87171', fontSize: '12px', margin: '0 0 12px 0' }}>{errorMessage}</p>}
-                                <button type="submit" disabled={isSubmitting} style={{ ...styles.primaryButton, backgroundColor: '#0284c7' }}>
-                                    {isSubmitting ? <><Loader2 size={16} className="animate-spin" /><span>Sending to Team...</span></> : <><span>Send to Architectural Team</span><ArrowRight size={16} /></>}
-                                </button>
-                                <button type="button" style={styles.backButton} onClick={() => setChatStep("initial")}>← Back to topics</button>
-                            </form>
-                        )}
-
-                        {chatStep === "submitted" && (
-                            <div style={{ textAlign: 'center', padding: '16px 0 0 0' }}>
-                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '16px' }}>
-                                    <a href="tel:02036335634" style={styles.callLink}>
-                                        <Phone size={14} color="#60a5fa" />
-                                        <span>Call Direct: 0203 633 5634</span>
-                                    </a>
-                                    <a href={`https://wa.me/447858815820?text=Hi%20Crafman,%20I%20just%20submitted%20a%20request%20for%20postcode%20${encodeURIComponent(postcode)}.`} target="_blank" rel="noopener noreferrer" style={styles.whatsAppBtn}>
-                                        <span>WhatsApp Us</span>
-                                    </a>
-                                </div>
-                            </div>
-                        )}
-
                     </div>
-                </div>
+                </a>
 
+                <a
+                    href={`https://wa.me/447858815820?text=Hi%20Crafman,%20I'd%20like%20to%20discuss%20a%20free%20planning%20and%20architectural%20drawings%20consultation%20for%20my%20property${form.packageInterest && !form.packageInterest.includes("not sure") ? `%20regarding%20the%20${encodeURIComponent(form.packageInterest)}` : ''}.`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => {
+                        trackConversionEvent("whatsapp_click", { package_interest: form.packageInterest || "None Selected" });
+                        // 🔥 Optional Link WhatsApp Clicks directly to Google Ads
+                        if (typeof window.gtag === "function") {
+                            window.gtag("event", "conversion", { send_to: GOOGLE_ADS_CONFIG.WHATSAPP_SEND_TO });
+                        }
+                    }}
+                    style={{ ...optionCardStyle(false, true), textDecoration: "none", display: "block" }}
+                >
+                    <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="#25D366">
+                            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.66.986 3.288 1.447 5.36 1.448 5.517 0 10.003-4.479 10.006-9.994.001-2.672-1.03-5.184-2.903-7.06C17.18 1.67 14.685 1.04 12.012 1.04c-5.526 0-10.01 4.484-10.014 10.001-.001 2.124.566 4.135 1.644 5.943l-.995 3.633 3.744-.973zm13.102-6.42c-.299-.15-1.772-.875-2.046-.975-.275-.102-.475-.15-.675.15-.2.299-.775.975-.95 1.174-.175.2-.35.226-.65.075-1.207-.604-2.115-.98-2.964-2.433-.225-.386.225-.359.644-1.196.112-.224.056-.423-.028-.574-.084-.15-.675-1.626-.925-2.228-.243-.585-.491-.507-.675-.516-.174-.008-.374-.01-.574-.01-.2 0-.526.075-.802.374-.275.3-.1.524 1.05 1.349.113.149.224.299.374.423.824.675 1.822 1.147 2.896 1.622.3.15.524.225.774.15.249-.075.772-.324.872-.649.1-.324.1-.599.075-.649-.03-.05-.125-.075-.425-.226z" />
+                        </svg>
+                        <div>
+                            <div style={{ fontSize: "15px", fontWeight: "700", color: "#128C7E" }}>Chat via WhatsApp now</div>
+                            <div style={{ fontSize: "12px", fontWeight: "400", color: "#57534e", marginTop: "1px" }}>
+                                Instant text routing — skip filling out forms entirely.
+                            </div>
+                        </div>
+                    </div>
+                </a>
             </div>
-
-            {/* TRUST BAR */}
-            <div style={styles.trustBar}>
-                <div style={styles.trustItem}><Check size={16} color="#3b82f6" /><span>7-Working-Day Turnaround</span></div>
-                <div style={styles.trustItem}><Check size={16} color="#3b82f6" /><span>Fixed Rates from £950 + VAT</span></div>
-                <div style={styles.trustItem}><Check size={16} color="#3b82f6" /><span>100% Council Sign-Off Track Record</span></div>
-                <div style={styles.trustItem}><Clock size={16} color="#3b82f6" /><span>Unlimited Revisions Included</span></div>
-            </div>
-        </div>
+        </form>
     );
 }
-
-const styles = {
-    heroWrapper: { backgroundColor: '#09090b', color: '#ffffff', minHeight: '100vh', padding: '40px 24px 60px 24px', boxSizing: 'border-box', fontFamily: 'system-ui, -apple-system, sans-serif', position: 'relative', overflow: 'hidden' },
-    bgGlow: { position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: '800px', height: '500px', background: 'radial-gradient(circle, rgba(37,99,235,0.12) 0%, rgba(9,9,11,0) 70%)', pointerEvents: 'none' },
-    topHeader: { textAlign: 'center', maxWidth: '800px', margin: '0 auto 40px auto', position: 'relative', zIndex: 10 },
-    topPill: { display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(30, 58, 138, 0.35)', border: '1px solid rgba(59, 130, 246, 0.3)', color: '#93c5fd', padding: '6px 16px', borderRadius: '30px', fontSize: '11px', fontWeight: 700, letterSpacing: '1px', marginBottom: '16px' },
-    mainTitle: { fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 800, lineHeight: '1.2', margin: '0 0 12px 0', color: '#ffffff' },
-    subTitle: { fontSize: '15px', color: '#a1a1aa', margin: 0 },
-    splineCol: { display: 'flex', flexDirection: 'column', alignItems: 'center' },
-    craffyContainer: { width: '100%', backgroundColor: '#121215', border: '1px solid rgba(255, 255, 255, 0.12)', borderRadius: '28px', padding: '16px', boxSizing: 'border-box', position: 'relative' },
-    liveTag: { position: 'absolute', top: '28px', left: '28px', zIndex: 20, display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(9, 9, 11, 0.85)', border: '1px solid rgba(255, 255, 255, 0.15)', padding: '6px 14px', borderRadius: '20px', backdropFilter: 'blur(8px)' },
-    greenPulse: { width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%', boxShadow: '0 0 8px #10b981' },
-    canvasFrame: { width: '100%', height: '460px', borderRadius: '20px', overflow: 'hidden', position: 'relative', backgroundColor: '#09090b' },
-    tabletHud: { position: 'absolute', bottom: '20px', right: '20px', width: '210px', backgroundColor: 'rgba(9, 9, 11, 0.92)', border: '1px solid rgba(56, 189, 248, 0.4)', borderRadius: '12px', padding: '10px 12px', boxShadow: '0 0 20px rgba(56, 189, 248, 0.2)', zIndex: 25, backdropFilter: 'blur(10px)', overflow: 'hidden' },
-    tabletHudHeader: { display: 'flex', alignItems: 'center', gap: '6px', fontSize: '9.5px', fontWeight: 800, color: '#38bdf8', letterSpacing: '0.5px', borderBottom: '1px solid rgba(56, 189, 248, 0.2)', paddingBottom: '4px', marginBottom: '6px' },
-    tabletHudBody: { fontSize: '10px', fontWeight: 700, color: '#f4f4f5', lineHeight: '1.4' },
-    tabletHudStatus: { fontSize: '8.5px', color: '#34d399', marginTop: '4px', fontWeight: 600, letterSpacing: '0.5px' },
-    canvasFooter: { display: 'flex', alignItems: 'center', justify: 'center', gap: '8px', marginTop: '12px', fontSize: '12px', color: '#a1a1aa' },
-    loaderOverlay: { position: 'absolute', inset: 0, backgroundColor: '#09090b', display: 'flex', flexDirection: 'column', alignItems: 'center', justify: 'center', gap: '12px' },
-    avatarCircle: { width: '64px', height: '64px', borderRadius: '50%', backgroundColor: 'rgba(37, 99, 235, 0.2)', border: '1px solid rgba(59, 130, 246, 0.4)', display: 'flex', alignItems: 'center', justify: 'center', fontSize: '28px' },
-    speechCol: { width: '100%' },
-    speechCard: { backgroundColor: '#121215', border: '1px solid rgba(255, 255, 255, 0.12)', borderRadius: '28px', padding: '28px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)' },
-    cardHeader: { display: 'flex', alignItems: 'center', justify: 'space-between', paddingBottom: '20px', marginBottom: '20px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' },
-    craffyAvatar: { width: '44px', height: '44px', borderRadius: '50%', backgroundColor: 'rgba(37, 99, 235, 0.2)', border: '1px solid rgba(59, 130, 246, 0.4)', display: 'flex', alignItems: 'center', justify: 'center', fontSize: '20px' },
-    aiTag: { fontSize: '10px', backgroundColor: 'rgba(37, 99, 235, 0.3)', color: '#60a5fa', border: '1px solid rgba(59, 130, 246, 0.3)', padding: '2px 7px', borderRadius: '4px', marginLeft: '6px', fontWeight: 700 },
-    speechBubble: { backgroundColor: '#18181b', border: '1px solid rgba(59, 130, 246, 0.3)', borderRadius: '18px', padding: '20px', color: '#f4f4f5', fontSize: '14.5px', lineHeight: '1.6', minHeight: '80px', position: 'relative' },
-    typingCursor: { color: '#38bdf8', fontWeight: 'bold', marginLeft: '2px' },
-    sectionHeader: { fontSize: '11px', color: '#a1a1aa', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', margin: '16px 0 10px 0' },
-    divider: { display: 'flex', alignItems: 'center', margin: '12px 0' },
-    dividerLine: { flex: 1, height: '1px', backgroundColor: 'rgba(255, 255, 255, 0.1)' },
-    dividerText: { margin: '0 12px', fontSize: '11px', color: '#71717a', fontWeight: 700 },
-    priceRow: { display: 'flex', gap: '32px', paddingTop: '14px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', backgroundColor: '#18181b', padding: '14px', borderRadius: '14px' },
-    primaryButton: { width: '100%', backgroundColor: '#2563eb', color: '#ffffff', border: 'none', padding: '16px 20px', borderRadius: '14px', fontWeight: 700, fontSize: '14.5px', cursor: 'pointer', display: 'flex', alignItems: 'center', justify: 'center', gap: '10px', marginTop: '16px' },
-    backButton: { background: 'none', border: 'none', color: '#a1a1aa', fontSize: '12px', cursor: 'pointer', width: '100%', marginTop: '12px' },
-    inputLabel: { display: 'block', fontSize: '12px', color: '#a1a1aa', marginBottom: '6px' },
-    textInput: { width: '100%', backgroundColor: '#18181b', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#ffffff', padding: '14px', borderRadius: '14px', fontSize: '14px', boxSizing: 'border-box', outline: 'none' },
-    callLink: { display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#18181b', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#ffffff', textDecoration: 'none', padding: '12px 18px', borderRadius: '14px', fontSize: '12.5px', fontWeight: 600 },
-    whatsAppBtn: { display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#25D366', color: '#ffffff', textDecoration: 'none', padding: '12px 18px', borderRadius: '14px', fontSize: '12.5px', fontWeight: 700 },
-    trustBar: { display: 'flex', flexWrap: 'wrap', alignItems: 'center', justify: 'center', gap: '24px sm:36px', maxWidth: '1240px', margin: '50px auto 0 auto', paddingTop: '30px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', position: 'relative', zIndex: 10 },
-    trustItem: { display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#e4e4e7', fontWeight: 500 },
-};
