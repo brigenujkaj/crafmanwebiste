@@ -1,0 +1,147 @@
+{/* --- HERO SECTION (UN-GATED WITH REGIONAL COVERAGE BADGE) --- */}
+                    <section
+                        style={{
+                            position: "relative",
+                            borderBottom: "1px solid #2e2a24",
+                            backgroundImage: "url('/images/backgroundDrawings.png')",
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            backgroundRepeat: "no-repeat",
+                            overflow: "hidden",
+                            backgroundAttachment: !isMobile ? "fixed" : "scroll",
+                        }}
+                    >
+                        <div
+                            style={{
+                                position: "absolute",
+                                inset: 0,
+                                background: "linear-gradient(135deg, rgba(15,15,14,0.92) 0%, rgba(24,24,22,0.85) 60%, rgba(15,15,14,0.9) 100%)",
+                                zIndex: 1,
+                            }}
+                        />
+                        <div
+                            style={{
+                                position: "absolute",
+                                top: "-20%",
+                                left: "15%",
+                                width: isMobile ? "300px" : "600px",
+                                height: isMobile ? "300px" : "600px",
+                                borderRadius: "50%",
+                                background: "radial-gradient(circle, rgba(198, 162, 67, 0.08) 0%, transparent 70%)",
+                                filter: "blur(50px)",
+                                pointerEvents: "none",
+                                zIndex: 1,
+                            }}
+                        />
+                        <div style={{ position: "relative", zIndex: 2 }}>
+                            <div style={{ ...section, paddingTop: isMobile ? "60px" : "90px", paddingBottom: isMobile ? "60px" : "90px" }}>
+
+                                {/* Tag Stack Row */}
+                                <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "16px" }}>
+                                    <div
+                                        style={{
+                                            ...tag,
+                                            background: "rgba(166, 124, 0, 0.15)",
+                                            border: "1px solid rgba(166, 124, 0, 0.4)",
+                                            color: "#E2BA6E",
+                                            padding: "4px 12px",
+                                            borderRadius: "6px",
+                                            fontSize: "11px",
+                                            fontWeight: "800",
+                                            letterSpacing: "1.5px",
+                                            textTransform: "uppercase",
+                                            width: "fit-content",
+                                            margin: 0
+                                        }}
+                                    >
+                                        Drawings & Planning
+                                    </div>
+
+                                    {/* 📍 NEW: Regional Operational Coverage Trust Badge */}
+                                    <div
+                                        style={{
+                                            ...tag,
+                                            background: "rgba(34, 197, 94, 0.12)",
+                                            border: "1px solid rgba(34, 197, 94, 0.35)",
+                                            color: "#4ade80",
+                                            padding: "4px 12px",
+                                            borderRadius: "6px",
+                                            fontSize: "11px",
+                                            fontWeight: "800",
+                                            letterSpacing: "0.5px",
+                                            width: "fit-content",
+                                            margin: 0,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: "6px"
+                                        }}
+                                    >
+                                        <span>✓</span> All London & Essex Postcodes Covered
+                                    </div>
+                                </div>
+
+                                <h1
+                                    style={{
+                                        fontSize: "clamp(34px, 5.5vw, 56px)",
+                                        lineHeight: "1.1",
+                                        margin: 0,
+                                        maxWidth: "820px",
+                                        color: "#ffffff",
+                                        fontWeight: "900",
+                                        letterSpacing: "-0.5px"
+                                    }}
+                                >
+                                    Architectural drawings <br className="hidden md:inline" />designed for <span style={{ background: "linear-gradient(120deg, #E2BA6E 0%, #C6A243 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>council approval</span>
+                                </h1>
+
+                                <p
+                                    style={{
+                                        fontSize: "clamp(15px, 2.5vw, 18px)",
+                                        lineHeight: "1.5",
+                                        marginTop: "16px",
+                                        marginBottom: 0, maxWidth: "600px",
+                                        color: "#d6d3d1",
+                                        fontWeight: "400",
+                                    }}
+                                >
+                                    Clear guidance on what’s needed and the next steps for your project
+                                </p>
+
+                                {/* --- CTA ACTION LINKS (Permanently Un-Gated for Fast Clicks) --- */}
+                                <div
+                                    style={{
+                                        marginTop: "28px",
+                                        display: "flex",
+                                        gap: "14px",
+                                        flexWrap: "wrap",
+                                    }}
+                                >
+                                    <a
+                                        href="#packages"
+                                        style={{
+                                            ...buttonPrimary,
+                                            background: "linear-gradient(135deg, #A67C00 0%, #C6A243 100%)",
+                                            color: "#fff",
+                                            border: "none",
+                                            fontWeight: "800"
+                                        }}
+                                    >
+                                        View Packages
+                                    </a>
+                                    <a
+                                        href="#contact-form"
+                                        style={{
+                                            ...buttonSecondary,
+                                            background: "rgba(255, 255, 255, 0.05)",
+                                            border: "1px solid rgba(255, 255, 255, 0.15)",
+                                            color: "#fff",
+                                            fontWeight: "700"
+                                        }}
+                                    >
+                                        Get Free Permission Strategy
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </section>  
