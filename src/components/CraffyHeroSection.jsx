@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Spline from "@splinetool/react-spline";
-import { Sparkles, ArrowRight, ShieldCheck, Clock, Check, MessageSquareText, Loader2, ScanLine, Phone } from "lucide-react";
+import { Sparkles, ArrowRight, ShieldCheck, Clock, Check, MessageSquareText, Loader2, ScanLine, Phone, Calendar } from "lucide-react";
 
 // =====================================================================================
 // 🎯 GOOGLE ADS & ANALYTICS CONFIGURATION MATRIX
@@ -65,7 +65,7 @@ export default function CraffyHeroSection() {
 
     // Dialogue State
     const [targetSpeech, setTargetSpeech] = useState(
-        "Welcome! Are you planning an extension, loft conversion, or internal layout change? Tap a topic below, ask a custom question, or call us directly."
+        "Welcome! Are you planning an extension, loft conversion, or internal layout change? Tap a topic below, ask a custom question, or schedule a human callback."
     );
 
     // Tablet HUD Content
@@ -104,7 +104,22 @@ export default function CraffyHeroSection() {
         return () => clearInterval(interval);
     }, [targetSpeech]);
 
-    // Refined Knowledge Base (No overcrowding, explicit pricing chip removed)
+    // Smooth Scroll directly to main #contact-form
+    const scrollToMainForm = () => {
+        trackConversionEvent("craffy_schedule_human_callback_click", {
+            widget_source: "Craffy AI Hero",
+            destination: "#contact-form",
+        });
+
+        const formElement = document.getElementById("contact-form");
+        if (formElement) {
+            formElement.scrollIntoView({ behavior: "smooth" });
+        } else {
+            window.location.hash = "contact-form";
+        }
+    };
+
+    // Architectural Knowledge Base Matrix
     const quickAnswers = {
         planning: {
             key: "planning",
@@ -239,7 +254,7 @@ export default function CraffyHeroSection() {
             has_name_provided: !!name.trim(),
         });
 
-        // Clean JSON Payload (Only sending whatever is filled)
+        // Clean JSON Payload
         const payload = {
             "Site Postcode": postcode.trim().toUpperCase(),
             "Phone Number": phone.trim(),
@@ -296,7 +311,7 @@ export default function CraffyHeroSection() {
         } catch (error) {
             console.error("Craffy Submission Error:", error);
             setIsSubmitting(false);
-            setErrorMessage(error.message || "Something went wrong. Please call us on 02081914122.");
+            setErrorMessage(error.message || "Something went wrong. Please call us on 020 8191 4122.");
         }
     };
 
@@ -361,17 +376,24 @@ export default function CraffyHeroSection() {
         a[href*="spline.design"], div[style*="spline.design"] { display: none !important; }
       `}</style>
 
-            {/* TOP HEADLINE */}
+            {/* TOP HEADLINE & REGIONAL COVERAGE BADGES */}
             <div style={styles.topHeader}>
-                <div style={styles.topPill}>
-                    <Sparkles size={13} color="#60a5fa" />
-                    <span>BESPOKE ARCHITECTURAL DRAWINGS & PLANNING PERMISSION</span>
+                <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap", marginBottom: "16px" }}>
+                    <div style={styles.topPill}>
+                        <Sparkles size={13} color="#60a5fa" />
+                        <span>Drawings & Planning</span>
+                    </div>
+
+                    <div style={styles.regionalBadge}>
+                        <span>✓</span> All London & Essex Postcodes Covered
+                    </div>
                 </div>
+
                 <h1 style={styles.mainTitle}>
-                    Get Your Planning Drawings in <span style={{ color: '#3b82f6' }}>7 Days</span>
+                    Architectural Drawings Designed for <span style={{ color: '#3b82f6' }}>Council Approval</span>
                 </h1>
                 <p style={styles.subTitle}>
-                    Fixed fees from £950 + VAT across East London & Essex. Zero hidden costs.
+                    Fixed fees from £950 + VAT. Guaranteed 7-day turnaround across London & Essex.
                 </p>
             </div>
 
@@ -456,10 +478,10 @@ export default function CraffyHeroSection() {
                             <span style={styles.typingCursor}>|</span>
                         </div>
 
-                        {/* STATE 1: INITIAL TOPIC SELECTION + DIRECT CALL OPTION */}
+                        {/* STATE 1: INITIAL TOPIC SELECTION + CALLBACK & DIRECT CALL OPTIONS */}
                         {chatStep === "initial" && (
-                            <div style={{ maxHeight: '420px', overflowY: 'auto', paddingRight: '4px' }}>
-                                <p style={styles.sectionHeader}>Select a topic or ask a question:</p>
+                            <div style={{ maxHeight: '440px', overflowY: 'auto', paddingRight: '4px' }}>
+                                <p style={styles.sectionHeader}>Select a topic or action below:</p>
 
                                 <button className="chip-button" onClick={() => handleChipClick("planning")} onMouseEnter={() => trigger3DAction("thinking")}>
                                     <span>💡 Rear Extensions & Permitted Development</span>
@@ -483,9 +505,22 @@ export default function CraffyHeroSection() {
 
                                 <div style={styles.divider}>
                                     <div style={styles.dividerLine}></div>
-                                    <span style={styles.dividerText}>OR</span>
+                                    <span style={styles.dividerText}>OR SPEAK TO A HUMAN</span>
                                     <div style={styles.dividerLine}></div>
                                 </div>
+
+                                {/* 📅 DIRECT HUMAN CALLBACK / FORM ROUTE BUTTON */}
+                                <button
+                                    onClick={scrollToMainForm}
+                                    className="chip-button"
+                                    style={{ borderColor: '#e2ba6e', backgroundColor: 'rgba(226, 186, 110, 0.08)' }}
+                                >
+                                    <span style={{ color: '#fef08a', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <Calendar size={14} color="#fef08a" />
+                                        Schedule a Free Human Strategy Session
+                                    </span>
+                                    <ArrowRight size={14} color="#fef08a" />
+                                </button>
 
                                 {/* BESPOKE QUESTION BUTTON */}
                                 <button
@@ -509,7 +544,7 @@ export default function CraffyHeroSection() {
                                         </div>
                                         <div>
                                             <div style={{ fontSize: '13px', fontWeight: 700, color: '#ffffff' }}>Speak to a Strategist Right Now</div>
-                                            <div style={{ fontSize: '11px', color: '#a1a1aa' }}>Call 02081914122 for instant advice</div>
+                                            <div style={{ fontSize: '11px', color: '#a1a1aa' }}>Call 020 8191 4122 for instant advice</div>
                                         </div>
                                     </div>
                                     <ArrowRight size={15} color="#60a5fa" />
@@ -517,7 +552,7 @@ export default function CraffyHeroSection() {
                             </div>
                         )}
 
-                        {/* STATE 2: ANSWERED TOPIC + CALL OFFICE OPTION */}
+                        {/* STATE 2: ANSWERED TOPIC + CALL OFFICE & CALLBACK OPTIONS */}
                         {chatStep === "answered" && (
                             <div style={{ marginTop: '16px' }}>
                                 <div style={styles.priceRow}>
@@ -544,6 +579,15 @@ export default function CraffyHeroSection() {
                                     <ArrowRight size={16} />
                                 </button>
 
+                                {/* 📅 HUMAN STRATEGY SESSION CALLBACK BUTTON */}
+                                <button
+                                    onClick={scrollToMainForm}
+                                    style={styles.scheduleCallbackBtn}
+                                >
+                                    <Calendar size={15} color="#E2BA6E" />
+                                    <span>Book Human Consultation Call (Scroll to Form)</span>
+                                </button>
+
                                 {/* 📞 DIRECT CALL BUTTON AFTER QUESTION */}
                                 <a
                                     href="tel:02081914122"
@@ -551,7 +595,7 @@ export default function CraffyHeroSection() {
                                     onClick={() => handleCallOfficeClick("answered_screen")}
                                 >
                                     <Phone size={15} color="#60a5fa" />
-                                    <span>Or Call Planning Office Directly (02081914122)</span>
+                                    <span>Call Planning Office Directly (020 8191 4122)</span>
                                 </a>
 
                                 <button
@@ -633,14 +677,14 @@ export default function CraffyHeroSection() {
                         {/* STATE 5: CONFIRMATION & ESCAPE ROUTES */}
                         {chatStep === "submitted" && (
                             <div style={{ textAlign: 'center', padding: '16px 0 0 0' }}>
-                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '16px' }}>
+                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '16px', flexWrap: 'wrap' }}>
                                     <a
                                         href="tel:02081914122"
                                         style={styles.callLink}
                                         onClick={() => handleCallOfficeClick("submitted_screen")}
                                     >
                                         <Phone size={14} color="#60a5fa" />
-                                        <span>Call Direct: 02081914122</span>
+                                        <span>Call Direct: 020 8191 4122</span>
                                     </a>
 
                                     <a
@@ -681,7 +725,8 @@ const styles = {
     heroWrapper: { backgroundColor: '#09090b', color: '#ffffff', minHeight: '100vh', padding: '40px 24px 60px 24px', boxSizing: 'border-box', fontFamily: 'system-ui, -apple-system, sans-serif', position: 'relative', overflow: 'hidden' },
     bgGlow: { position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: '800px', height: '500px', background: 'radial-gradient(circle, rgba(37,99,235,0.12) 0%, rgba(9,9,11,0) 70%)', pointerEvents: 'none' },
     topHeader: { textAlign: 'center', maxWidth: '800px', margin: '0 auto 40px auto', position: 'relative', zIndex: 10 },
-    topPill: { display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(30, 58, 138, 0.35)', border: '1px solid rgba(59, 130, 246, 0.3)', color: '#93c5fd', padding: '6px 16px', borderRadius: '30px', fontSize: '11px', fontWeight: 700, letterSpacing: '1px', marginBottom: '16px' },
+    topPill: { display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(30, 58, 138, 0.35)', border: '1px solid rgba(59, 130, 246, 0.3)', color: '#93c5fd', padding: '6px 16px', borderRadius: '30px', fontSize: '11px', fontWeight: 700, letterSpacing: '1px' },
+    regionalBadge: { display: 'inline-flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(34, 197, 94, 0.12)', border: '1px solid rgba(34, 197, 94, 0.35)', color: '#4ade80', padding: '6px 16px', borderRadius: '30px', fontSize: '11px', fontWeight: 800 },
     mainTitle: { fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 800, lineHeight: '1.2', margin: '0 0 12px 0', color: '#ffffff' },
     subTitle: { fontSize: '15px', color: '#a1a1aa', margin: 0 },
     splineCol: { display: 'flex', flexDirection: 'column', alignItems: 'center' },
@@ -711,6 +756,7 @@ const styles = {
     phoneIconBadge: { width: '32px', height: '32px', borderRadius: '50%', backgroundColor: 'rgba(37, 99, 235, 0.2)', border: '1px solid rgba(59, 130, 246, 0.4)', display: 'flex', alignItems: 'center', justify: 'center' },
     priceRow: { display: 'flex', gap: '32px', paddingTop: '14px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', backgroundColor: '#18181b', padding: '14px', borderRadius: '14px' },
     primaryButton: { width: '100%', backgroundColor: '#2563eb', color: '#ffffff', border: 'none', padding: '16px 20px', borderRadius: '14px', fontWeight: 700, fontSize: '14.5px', cursor: 'pointer', display: 'flex', alignItems: 'center', justify: 'center', gap: '10px', marginTop: '16px' },
+    scheduleCallbackBtn: { width: '100%', backgroundColor: 'rgba(226, 186, 110, 0.12)', color: '#fef08a', border: '1px solid rgba(226, 186, 110, 0.4)', padding: '14px 20px', borderRadius: '14px', fontWeight: 700, fontSize: '13.5px', cursor: 'pointer', display: 'flex', alignItems: 'center', justify: 'center', gap: '10px', marginTop: '10px', boxSizing: 'border-box' },
     secondaryCallButton: { width: '100%', backgroundColor: '#18181b', color: '#ffffff', border: '1px solid rgba(255, 255, 255, 0.15)', padding: '14px 20px', borderRadius: '14px', fontWeight: 600, fontSize: '13.5px', cursor: 'pointer', display: 'flex', alignItems: 'center', justify: 'center', gap: '10px', marginTop: '10px', textDecoration: 'none', boxSizing: 'border-box' },
     backButton: { background: 'none', border: 'none', color: '#a1a1aa', fontSize: '12px', cursor: 'pointer', width: '100%', marginTop: '12px' },
     inputLabel: { display: 'block', fontSize: '12px', color: '#a1a1aa', marginBottom: '6px' },
