@@ -1,6 +1,26 @@
 import React, { useState, useRef, useEffect } from "react";
 import Spline from "@splinetool/react-spline";
-import { Sparkles, ArrowRight, CheckCircle2, Phone, ShieldCheck, Clock, Check, MessageSquareText, Loader2, ScanLine } from "lucide-react";
+import { Sparkles, ArrowRight, ShieldCheck, Clock, Check, MessageSquareText, Loader2, ScanLine, Phone } from "lucide-react";
+
+// =====================================================================================
+// 🎯 GOOGLE ADS & ANALYTICS CONFIGURATION MATRIX
+// =====================================================================================
+const GOOGLE_ADS_CONFIG = {
+    FORM_SUCCESS_SEND_TO: "AW-18466429796",
+    CALL_CLICK_SEND_TO: "AW-18466429796/HPHiCIbN6oMdEOS2veVE",
+    WHATSAPP_SEND_TO: "",
+};
+
+// Master Analytics Tracking Router Engine
+const trackConversionEvent = (eventName, params = {}) => {
+    if (typeof window !== "undefined") {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: eventName, ...params });
+        if (typeof window.gtag === "function") {
+            window.gtag("event", eventName, params);
+        }
+    }
+};
 
 // Web Audio Synthesizer for Craffy's Voice
 const playCraffySound = (type = "talk") => {
@@ -37,19 +57,18 @@ const playCraffySound = (type = "talk") => {
 export default function CraffyHeroSection() {
     const SPLINE_SCENE_URL = "https://prod.spline.design/blo2FccZ2Q7hEkIq/scene.splinecode";
     const FORMSPREE_ENDPOINT = "https://formspree.io/f/maqlqgzz";
-    const GOOGLE_ADS_ID = "AW-18466429796";
 
     const splineRef = useRef(null);
     const [splineLoaded, setSplineLoaded] = useState(false);
     const [craffyStatus, setCraffyStatus] = useState("Idle & Listening");
     const [chatStep, setChatStep] = useState("initial"); // "initial" | "answered" | "postcode" | "custom_query" | "submitted"
 
-    // Dialogue & Speech State
+    // Dialogue State
     const [targetSpeech, setTargetSpeech] = useState(
-        "Welcome! Are you planning an extension, loft conversion, or internal layout change? Tap a topic below or ask a custom question."
+        "Welcome! Are you planning an extension, loft conversion, or internal layout change? Tap a topic below, ask a custom question, or call us directly."
     );
 
-    // Tablet HUD Overlay Content
+    // Tablet HUD Content
     const [tabletContent, setTabletContent] = useState({
         title: "CRAFMAN CAD ENGINE v2.4",
         stat1: "FEES: £950 + VAT",
@@ -65,7 +84,7 @@ export default function CraffyHeroSection() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
-    // Live Typewriter Effect Hook
+    // Live Typewriter Streaming Effect
     const [displayedSpeech, setDisplayedSpeech] = useState("");
 
     useEffect(() => {
@@ -85,55 +104,43 @@ export default function CraffyHeroSection() {
         return () => clearInterval(interval);
     }, [targetSpeech]);
 
-    // General Knowledge Base
+    // Refined Knowledge Base (No overcrowding, explicit pricing chip removed)
     const quickAnswers = {
         planning: {
-            question: "Do I need planning permission for extensions?",
-            answer: "Most single-storey rear extensions up to 3m (terraced) or 4m (detached)—and up to 6m/8m via Prior Approval—fall under Permitted Development! Full planning is only needed in conservation areas or for complex wrapped extensions.",
+            key: "planning",
+            question: "Rear Extensions & Permitted Development",
+            answer: "Most single-storey rear extensions up to 3m (terraced) or 4m (detached)—and up to 6m/8m via Prior Approval—fall under Permitted Development! Full planning permission is only needed in conservation areas or for complex wraparound extensions.",
             price: "Fixed £950 + VAT",
             turnaround: "7 Working Days",
             tabletTitle: "REAR EXTENSIONS",
             tabletCode: "PERMITTED // 3M-6M LIMIT",
         },
         lofts: {
-            question: "How do Loft Conversions & Dormers work?",
-            answer: "Under Permitted Development, lofts allow up to 40 cubic metres of extra space for terraced homes (50m³ for semi/detached). Rear dormers and Hip-to-Gable conversions usually don't need planning permission if headroom exceeds 2.2 metres!",
+            key: "lofts",
+            question: "Loft Conversions & Dormer Heights",
+            answer: "Under Permitted Development, lofts allow up to 40 cubic metres of extra volume for terraced homes (50m³ for semi/detached). Rear dormers and Hip-to-Gable conversions usually don't need planning permission as long as ridge headroom exceeds 2.2 metres!",
             price: "Fixed Rates Available",
             turnaround: "7 Working Days",
             tabletTitle: "LOFT CONVERSIONS",
             tabletCode: "VOL: 40-50M³ // CLEARANCE 2.2M",
         },
         internal: {
-            question: "Removing load-bearing walls & RSJ steels?",
-            answer: "Knocking down internal walls for open-plan kitchens does not require Planning Permission, but DOES legally require Building Regulations sign-off and Structural Engineer RSJ beam calculations so your house remains safe.",
+            key: "internal",
+            question: "Open-Plan Layouts & Structural RSJ Steels",
+            answer: "Knocking down load-bearing walls for open-plan kitchens does not require Planning Permission, but DOES legally require Building Control sign-off and Structural Engineer RSJ beam calculations so your house structural integrity is signed off.",
             price: "Technical Packages",
             turnaround: "7-10 Working Days",
             tabletTitle: "INTERNAL ALTERATIONS",
             tabletCode: "RSJ CALCS // STRUCTURAL REGS",
         },
         outbuildings: {
-            question: "Garden Rooms, Studios & Outbuilding rules?",
-            answer: "Outbuildings are Permitted Development if kept under 2.5m eaves height when built within 2 metres of property boundaries (or 4m dual pitch overall). They must be for incidental use (gym, office, studio) and not a separate self-contained dwelling.",
+            key: "outbuildings",
+            question: "Garden Rooms & Outbuilding Limits",
+            answer: "Garden rooms are Permitted Development if kept under 2.5m eaves height when built within 2 metres of property boundaries (or 4m dual pitch overall). They must be for incidental use (home office, gym, studio) and not a separate self-contained living unit.",
             price: "From £950 + VAT",
             turnaround: "7 Working Days",
             tabletTitle: "GARDEN OUTBUILDINGS",
             tabletCode: "MAX 2.5M HEIGHT // INCIDENTAL",
-        },
-        regs: {
-            question: "Are Building Regulations drawings included?",
-            answer: "Planning Permission and Building Control drawings are two separate stages. Planning gets council permission for appearance, while Building Control provides structural construction plans for your builder.",
-            price: "Complete Packages",
-            turnaround: "Full Technical Pack",
-            tabletTitle: "BUILDING CONTROL",
-            tabletCode: "STRUCTURAL DRAFTING PACK",
-        },
-        pricing: {
-            question: "What are your fixed rates & guarantees?",
-            answer: "Our architectural planning drawings start at a guaranteed fixed rate of £950 + VAT with zero hidden fees. Includes unlimited drawing revisions until council approval.",
-            price: "From £950 + VAT",
-            turnaround: "7 Working Days",
-            tabletTitle: "FIXED RATE GUARANTEE",
-            tabletCode: "GUARANTEED £950 + VAT",
         },
     };
 
@@ -158,6 +165,7 @@ export default function CraffyHeroSection() {
         } catch (err) { }
     };
 
+    // 🎯 Track & Handle Topic Selection
     const handleChipClick = (key) => {
         const selected = quickAnswers[key];
         setActiveAnswer(selected);
@@ -171,8 +179,14 @@ export default function CraffyHeroSection() {
         playCraffySound("tablet");
         setChatStep("answered");
         trigger3DAction("pitching");
+
+        trackConversionEvent("craffy_topic_select", {
+            topic_id: selected.key,
+            question_text: selected.question,
+        });
     };
 
+    // 🎯 Track & Handle Custom Question Route
     const handleBespokeClick = () => {
         setTargetSpeech("No problem! Type your specific property layout or planning question below. I'll bypass the automated script and send it straight to our senior planning strategists.");
         setTabletContent({
@@ -184,9 +198,27 @@ export default function CraffyHeroSection() {
         playCraffySound("tablet");
         setChatStep("custom_query");
         trigger3DAction("thinking");
+
+        trackConversionEvent("craffy_custom_question_click", {
+            widget_source: "Craffy AI Hero",
+        });
     };
 
-    // 🚀 CLEAN & LEAN FORMSPREE SUBMISSION (NO FILLER FIELDS)
+    // 🎯 Track Office Phone Calls
+    const handleCallOfficeClick = (locationSource) => {
+        trackConversionEvent("craffy_phone_call_click", {
+            location: locationSource,
+            widget_source: "Craffy AI Hero",
+        });
+
+        if (typeof window !== "undefined" && typeof window.gtag === "function") {
+            window.gtag("event", "conversion", {
+                send_to: GOOGLE_ADS_CONFIG.CALL_CLICK_SEND_TO,
+            });
+        }
+    };
+
+    // 🚀 CLEAN LEAD SUBMISSION + ANALYTICS & GOOGLE ADS TRACKING
     const handleLeadSubmit = async (e) => {
         e.preventDefault();
         if (!phone.trim() || !postcode.trim()) {
@@ -198,15 +230,22 @@ export default function CraffyHeroSection() {
         setErrorMessage("");
         trigger3DAction("pitching");
 
-        // Dynamic clean payload — Formspree receives ONLY what was provided
+        const flowType = chatStep === "custom_query" ? "custom_question" : "faq_report";
+
+        trackConversionEvent("craffy_form_submit_attempt", {
+            flow_type: flowType,
+            topic_context: activeAnswer.question,
+            client_postcode: postcode.trim().toUpperCase(),
+            has_name_provided: !!name.trim(),
+        });
+
+        // Clean JSON Payload (Only sending whatever is filled)
         const payload = {
             "Site Postcode": postcode.trim().toUpperCase(),
             "Phone Number": phone.trim(),
         };
 
-        if (name.trim()) {
-            payload["Client Name"] = name.trim();
-        }
+        if (name.trim()) payload["Client Name"] = name.trim();
 
         if (chatStep === "custom_query" && customQuestion.trim()) {
             payload["Custom Question"] = customQuestion.trim();
@@ -231,9 +270,17 @@ export default function CraffyHeroSection() {
                 throw new Error(responseData?.errors?.[0]?.message || "Formspree submission failed.");
             }
 
-            // Trigger Google Ads Conversion
+            trackConversionEvent("craffy_form_submit_success", {
+                flow_type: flowType,
+                postcode: postcode.trim().toUpperCase(),
+                phone: phone.trim(),
+                selected_topic: activeAnswer.question,
+            });
+
             if (typeof window !== "undefined" && typeof window.gtag === "function") {
-                window.gtag("event", "conversion", { send_to: GOOGLE_ADS_ID });
+                window.gtag("event", "conversion", {
+                    send_to: GOOGLE_ADS_CONFIG.FORM_SUCCESS_SEND_TO,
+                });
             }
 
             setIsSubmitting(false);
@@ -247,9 +294,9 @@ export default function CraffyHeroSection() {
             playCraffySound("tablet");
             setChatStep("submitted");
         } catch (error) {
-            console.error("Formspree Submission Error:", error);
+            console.error("Craffy Submission Error:", error);
             setIsSubmitting(false);
-            setErrorMessage(error.message || "Something went wrong. Please call us on 0203 633 5634.");
+            setErrorMessage(error.message || "Something went wrong. Please call us on 02081914122.");
         }
     };
 
@@ -380,7 +427,7 @@ export default function CraffyHeroSection() {
                     </div>
                 </div>
 
-                {/* 💬 RIGHT COLUMN: STREAMING SPEECH BUBBLE */}
+                {/* 💬 RIGHT COLUMN: STREAMING SPEECH BUBBLE & ACTIONS */}
                 <div style={styles.speechCol}>
                     <div style={styles.speechCard}>
 
@@ -409,33 +456,28 @@ export default function CraffyHeroSection() {
                             <span style={styles.typingCursor}>|</span>
                         </div>
 
-                        {/* CONVERSATION FLOW STATES */}
+                        {/* STATE 1: INITIAL TOPIC SELECTION + DIRECT CALL OPTION */}
                         {chatStep === "initial" && (
-                            <div style={{ maxHeight: '380px', overflowY: 'auto', paddingRight: '4px' }}>
+                            <div style={{ maxHeight: '420px', overflowY: 'auto', paddingRight: '4px' }}>
                                 <p style={styles.sectionHeader}>Select a topic or ask a question:</p>
 
                                 <button className="chip-button" onClick={() => handleChipClick("planning")} onMouseEnter={() => trigger3DAction("thinking")}>
-                                    <span>💡 Planning Permission & Extensions</span>
+                                    <span>💡 Rear Extensions & Permitted Development</span>
                                     <ArrowRight size={14} color="#60a5fa" />
                                 </button>
 
                                 <button className="chip-button" onClick={() => handleChipClick("lofts")} onMouseEnter={() => trigger3DAction("thinking")}>
-                                    <span>🏠 Loft Conversions & Dormer Rules</span>
+                                    <span>🏠 Loft Conversions & Dormer Heights</span>
                                     <ArrowRight size={14} color="#60a5fa" />
                                 </button>
 
                                 <button className="chip-button" onClick={() => handleChipClick("internal")} onMouseEnter={() => trigger3DAction("thinking")}>
-                                    <span>🔨 Load-Bearing Walls & RSJ Steels</span>
+                                    <span>🔨 Open-Plan Layouts & Structural RSJ Steels</span>
                                     <ArrowRight size={14} color="#60a5fa" />
                                 </button>
 
                                 <button className="chip-button" onClick={() => handleChipClick("outbuildings")} onMouseEnter={() => trigger3DAction("thinking")}>
-                                    <span>🌳 Garden Rooms & Outbuildings</span>
-                                    <ArrowRight size={14} color="#60a5fa" />
-                                </button>
-
-                                <button className="chip-button" onClick={() => handleChipClick("pricing")} onMouseEnter={() => trigger3DAction("thinking")}>
-                                    <span>💰 See Fixed Rates (£950 + VAT)</span>
+                                    <span>🌳 Garden Rooms & Outbuilding Limits</span>
                                     <ArrowRight size={14} color="#60a5fa" />
                                 </button>
 
@@ -451,12 +493,31 @@ export default function CraffyHeroSection() {
                                     onClick={handleBespokeClick}
                                     style={{ borderColor: '#38bdf8', backgroundColor: 'rgba(56, 189, 248, 0.08)' }}
                                 >
-                                    <span style={{ color: '#bae6fd', fontWeight: 600 }}>✍️ I have a specific / custom question...</span>
+                                    <span style={{ color: '#bae6fd', fontWeight: 600 }}>✍️ Ask a specific or bespoke question...</span>
                                     <ArrowRight size={14} color="#38bdf8" />
                                 </button>
+
+                                {/* 📞 MAIN DIRECT CALL OFFICE BANNER */}
+                                <a
+                                    href="tel:02081914122"
+                                    style={styles.initialCallBanner}
+                                    onClick={() => handleCallOfficeClick("initial_screen")}
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                        <div style={styles.phoneIconBadge}>
+                                            <Phone size={14} color="#60a5fa" />
+                                        </div>
+                                        <div>
+                                            <div style={{ fontSize: '13px', fontWeight: 700, color: '#ffffff' }}>Speak to a Strategist Right Now</div>
+                                            <div style={{ fontSize: '11px', color: '#a1a1aa' }}>Call 02081914122 for instant advice</div>
+                                        </div>
+                                    </div>
+                                    <ArrowRight size={15} color="#60a5fa" />
+                                </a>
                             </div>
                         )}
 
+                        {/* STATE 2: ANSWERED TOPIC + CALL OFFICE OPTION */}
                         {chatStep === "answered" && (
                             <div style={{ marginTop: '16px' }}>
                                 <div style={styles.priceRow}>
@@ -476,18 +537,30 @@ export default function CraffyHeroSection() {
                                         setChatStep("postcode");
                                         setTargetSpeech("Enter your site postcode and phone line below. I'll summarize your local council constraints.");
                                         trigger3DAction("typing");
+                                        trackConversionEvent("craffy_check_rules_click", { topic: activeAnswer.question });
                                     }}
                                 >
                                     <span>Check Council Rules For My Postcode</span>
                                     <ArrowRight size={16} />
                                 </button>
 
+                                {/* 📞 DIRECT CALL BUTTON AFTER QUESTION */}
+                                <a
+                                    href="tel:02081914122"
+                                    style={styles.secondaryCallButton}
+                                    onClick={() => handleCallOfficeClick("answered_screen")}
+                                >
+                                    <Phone size={15} color="#60a5fa" />
+                                    <span>Or Call Planning Office Directly (02081914122)</span>
+                                </a>
+
                                 <button
                                     style={styles.backButton}
                                     onClick={() => {
                                         setChatStep("initial");
-                                        setTargetSpeech("Welcome back! Select another query below, or ask a custom question.");
+                                        setTargetSpeech("Welcome back! Select another topic below, or ask a custom question.");
                                         setTabletContent({ title: "CRAFMAN CAD ENGINE v2.4", stat1: "FEES: £950 + VAT", stat2: "TIME: 7 DAYS", status: "READY FOR INPUT" });
+                                        trackConversionEvent("craffy_back_to_topics", { previous_step: "answered" });
                                     }}
                                 >
                                     ← Ask another question
@@ -495,7 +568,7 @@ export default function CraffyHeroSection() {
                             </div>
                         )}
 
-                        {/* STANDARD LEAD CAPTURE FORM (POSTCODE ROUTE) */}
+                        {/* STATE 3: POSTCODE LEAD CAPTURE */}
                         {chatStep === "postcode" && (
                             <form onSubmit={handleLeadSubmit} style={{ marginTop: '16px' }}>
                                 <div style={{ marginBottom: '12px' }}>
@@ -517,11 +590,11 @@ export default function CraffyHeroSection() {
                                 <button type="submit" disabled={isSubmitting} style={styles.primaryButton}>
                                     {isSubmitting ? <><Loader2 size={16} className="animate-spin" /><span>Sending Report...</span></> : <><span>Generate Free Planning Report</span><ArrowRight size={16} /></>}
                                 </button>
-                                <button type="button" style={styles.backButton} onClick={() => setChatStep("initial")}>← Back to topics</button>
+                                <button type="button" style={styles.backButton} onClick={() => { setChatStep("initial"); trackConversionEvent("craffy_back_to_topics", { previous_step: "postcode" }); }}>← Back to topics</button>
                             </form>
                         )}
 
-                        {/* CUSTOM / BESPOKE QUESTION FORM */}
+                        {/* STATE 4: CUSTOM QUESTION FORM */}
                         {chatStep === "custom_query" && (
                             <form onSubmit={handleLeadSubmit} style={{ marginTop: '16px' }}>
                                 <div style={{ marginBottom: '12px' }}>
@@ -553,18 +626,35 @@ export default function CraffyHeroSection() {
                                 <button type="submit" disabled={isSubmitting} style={{ ...styles.primaryButton, backgroundColor: '#0284c7' }}>
                                     {isSubmitting ? <><Loader2 size={16} className="animate-spin" /><span>Sending to Team...</span></> : <><span>Send to Architectural Team</span><ArrowRight size={16} /></>}
                                 </button>
-                                <button type="button" style={styles.backButton} onClick={() => setChatStep("initial")}>← Back to topics</button>
+                                <button type="button" style={styles.backButton} onClick={() => { setChatStep("initial"); trackConversionEvent("craffy_back_to_topics", { previous_step: "custom_query" }); }}>← Back to topics</button>
                             </form>
                         )}
 
+                        {/* STATE 5: CONFIRMATION & ESCAPE ROUTES */}
                         {chatStep === "submitted" && (
                             <div style={{ textAlign: 'center', padding: '16px 0 0 0' }}>
                                 <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '16px' }}>
-                                    <a href="tel:02036335634" style={styles.callLink}>
+                                    <a
+                                        href="tel:02081914122"
+                                        style={styles.callLink}
+                                        onClick={() => handleCallOfficeClick("submitted_screen")}
+                                    >
                                         <Phone size={14} color="#60a5fa" />
-                                        <span>Call Direct: 0203 633 5634</span>
+                                        <span>Call Direct: 02081914122</span>
                                     </a>
-                                    <a href={`https://wa.me/447858815820?text=Hi%20Crafman,%20I%20just%20submitted%20a%20request%20for%20postcode%20${encodeURIComponent(postcode)}.`} target="_blank" rel="noopener noreferrer" style={styles.whatsAppBtn}>
+
+                                    <a
+                                        href={`https://wa.me/447858815820?text=Hi%20Crafman,%20I%20just%20submitted%20a%20request%20for%20postcode%20${encodeURIComponent(postcode)}.`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={styles.whatsAppBtn}
+                                        onClick={() => {
+                                            trackConversionEvent("craffy_whatsapp_click", { source: "Craffy Success Screen" });
+                                            if (GOOGLE_ADS_CONFIG.WHATSAPP_SEND_TO && typeof window !== "undefined" && typeof window.gtag === "function") {
+                                                window.gtag("event", "conversion", { send_to: GOOGLE_ADS_CONFIG.WHATSAPP_SEND_TO });
+                                            }
+                                        }}
+                                    >
                                         <span>WhatsApp Us</span>
                                     </a>
                                 </div>
@@ -591,7 +681,7 @@ const styles = {
     heroWrapper: { backgroundColor: '#09090b', color: '#ffffff', minHeight: '100vh', padding: '40px 24px 60px 24px', boxSizing: 'border-box', fontFamily: 'system-ui, -apple-system, sans-serif', position: 'relative', overflow: 'hidden' },
     bgGlow: { position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: '800px', height: '500px', background: 'radial-gradient(circle, rgba(37,99,235,0.12) 0%, rgba(9,9,11,0) 70%)', pointerEvents: 'none' },
     topHeader: { textAlign: 'center', maxWidth: '800px', margin: '0 auto 40px auto', position: 'relative', zIndex: 10 },
-    topPill: { display: 'inline-flex', items: 'center', gap: '8px', backgroundColor: 'rgba(30, 58, 138, 0.35)', border: '1px solid rgba(59, 130, 246, 0.3)', color: '#93c5fd', padding: '6px 16px', borderRadius: '30px', fontSize: '11px', fontWeight: 700, letterSpacing: '1px', marginBottom: '16px' },
+    topPill: { display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(30, 58, 138, 0.35)', border: '1px solid rgba(59, 130, 246, 0.3)', color: '#93c5fd', padding: '6px 16px', borderRadius: '30px', fontSize: '11px', fontWeight: 700, letterSpacing: '1px', marginBottom: '16px' },
     mainTitle: { fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 800, lineHeight: '1.2', margin: '0 0 12px 0', color: '#ffffff' },
     subTitle: { fontSize: '15px', color: '#a1a1aa', margin: 0 },
     splineCol: { display: 'flex', flexDirection: 'column', alignItems: 'center' },
@@ -603,13 +693,13 @@ const styles = {
     tabletHudHeader: { display: 'flex', alignItems: 'center', gap: '6px', fontSize: '9.5px', fontWeight: 800, color: '#38bdf8', letterSpacing: '0.5px', borderBottom: '1px solid rgba(56, 189, 248, 0.2)', paddingBottom: '4px', marginBottom: '6px' },
     tabletHudBody: { fontSize: '10px', fontWeight: 700, color: '#f4f4f5', lineHeight: '1.4' },
     tabletHudStatus: { fontSize: '8.5px', color: '#34d399', marginTop: '4px', fontWeight: 600, letterSpacing: '0.5px' },
-    canvasFooter: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '12px', fontSize: '12px', color: '#a1a1aa' },
-    loaderOverlay: { position: 'absolute', inset: 0, backgroundColor: '#09090b', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px' },
-    avatarCircle: { width: '64px', height: '64px', borderRadius: '50%', backgroundColor: 'rgba(37, 99, 235, 0.2)', border: '1px solid rgba(59, 130, 246, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px' },
+    canvasFooter: { display: 'flex', alignItems: 'center', justify: 'center', gap: '8px', marginTop: '12px', fontSize: '12px', color: '#a1a1aa' },
+    loaderOverlay: { position: 'absolute', inset: 0, backgroundColor: '#09090b', display: 'flex', flexDirection: 'column', alignItems: 'center', justify: 'center', gap: '12px' },
+    avatarCircle: { width: '64px', height: '64px', borderRadius: '50%', backgroundColor: 'rgba(37, 99, 235, 0.2)', border: '1px solid rgba(59, 130, 246, 0.4)', display: 'flex', alignItems: 'center', justify: 'center', fontSize: '28px' },
     speechCol: { width: '100%' },
     speechCard: { backgroundColor: '#121215', border: '1px solid rgba(255, 255, 255, 0.12)', borderRadius: '28px', padding: '28px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)' },
-    cardHeader: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '20px', marginBottom: '20px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' },
-    craffyAvatar: { width: '44px', height: '44px', borderRadius: '50%', backgroundColor: 'rgba(37, 99, 235, 0.2)', border: '1px solid rgba(59, 130, 246, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' },
+    cardHeader: { display: 'flex', alignItems: 'center', justify: 'space-between', paddingBottom: '20px', marginBottom: '20px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' },
+    craffyAvatar: { width: '44px', height: '44px', borderRadius: '50%', backgroundColor: 'rgba(37, 99, 235, 0.2)', border: '1px solid rgba(59, 130, 246, 0.4)', display: 'flex', alignItems: 'center', justify: 'center', fontSize: '20px' },
     aiTag: { fontSize: '10px', backgroundColor: 'rgba(37, 99, 235, 0.3)', color: '#60a5fa', border: '1px solid rgba(59, 130, 246, 0.3)', padding: '2px 7px', borderRadius: '4px', marginLeft: '6px', fontWeight: 700 },
     speechBubble: { backgroundColor: '#18181b', border: '1px solid rgba(59, 130, 246, 0.3)', borderRadius: '18px', padding: '20px', color: '#f4f4f5', fontSize: '14.5px', lineHeight: '1.6', minHeight: '80px', position: 'relative' },
     typingCursor: { color: '#38bdf8', fontWeight: 'bold', marginLeft: '2px' },
@@ -617,8 +707,11 @@ const styles = {
     divider: { display: 'flex', alignItems: 'center', margin: '12px 0' },
     dividerLine: { flex: 1, height: '1px', backgroundColor: 'rgba(255, 255, 255, 0.1)' },
     dividerText: { margin: '0 12px', fontSize: '11px', color: '#71717a', fontWeight: 700 },
+    initialCallBanner: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#18181b', border: '1px solid rgba(59, 130, 246, 0.4)', borderRadius: '14px', padding: '12px 16px', marginTop: '12px', textDecoration: 'none', transition: 'all 0.2s ease' },
+    phoneIconBadge: { width: '32px', height: '32px', borderRadius: '50%', backgroundColor: 'rgba(37, 99, 235, 0.2)', border: '1px solid rgba(59, 130, 246, 0.4)', display: 'flex', alignItems: 'center', justify: 'center' },
     priceRow: { display: 'flex', gap: '32px', paddingTop: '14px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', backgroundColor: '#18181b', padding: '14px', borderRadius: '14px' },
     primaryButton: { width: '100%', backgroundColor: '#2563eb', color: '#ffffff', border: 'none', padding: '16px 20px', borderRadius: '14px', fontWeight: 700, fontSize: '14.5px', cursor: 'pointer', display: 'flex', alignItems: 'center', justify: 'center', gap: '10px', marginTop: '16px' },
+    secondaryCallButton: { width: '100%', backgroundColor: '#18181b', color: '#ffffff', border: '1px solid rgba(255, 255, 255, 0.15)', padding: '14px 20px', borderRadius: '14px', fontWeight: 600, fontSize: '13.5px', cursor: 'pointer', display: 'flex', alignItems: 'center', justify: 'center', gap: '10px', marginTop: '10px', textDecoration: 'none', boxSizing: 'border-box' },
     backButton: { background: 'none', border: 'none', color: '#a1a1aa', fontSize: '12px', cursor: 'pointer', width: '100%', marginTop: '12px' },
     inputLabel: { display: 'block', fontSize: '12px', color: '#a1a1aa', marginBottom: '6px' },
     textInput: { width: '100%', backgroundColor: '#18181b', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#ffffff', padding: '14px', borderRadius: '14px', fontSize: '14px', boxSizing: 'border-box', outline: 'none' },
