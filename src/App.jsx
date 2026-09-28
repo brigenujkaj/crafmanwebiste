@@ -17,6 +17,7 @@ import CaseStudyDetail from "./pages/CaseStudyDetail.jsx";
 import Landscaping from "./pages/Landscaping.jsx";
 import ThankYouPage from "./components/ThankYouPage";
 import CraffyHeroSection from './components/CraffyHeroSection';
+import CraffyThankYouPage from "./components/CraffyThankYouPage";
 
 
 // TEMP (until you build it)
@@ -76,8 +77,9 @@ export default function App() {
 
 
           <Route path="/case-studies" element={<CaseStudies />} />
-          <Route path="/case-studies/:slug" element={<CaseStudyDetail />} />
-          <Route path="/thank-you" element={<ThankYouPage />} />
+            <Route path="/case-studies/:slug" element={<CaseStudyDetail />} />
+            <Route path="/thank-you" element={<ThankYouPage />} />
+            <Route path="/craffy-thank-you" element={<CraffyThankYouPage />} />
       
          
     </Routes>

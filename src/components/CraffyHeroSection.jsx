@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Spline from "@splinetool/react-spline";
 import { Sparkles, ArrowRight, ShieldCheck, Clock, Check, MessageSquareText, Loader2, ScanLine, Phone, Calendar } from "lucide-react";
 
@@ -55,6 +56,7 @@ const playCraffySound = (type = "talk") => {
 };
 
 export default function CraffyHeroSection() {
+    const navigate = useNavigate();
     const SPLINE_SCENE_URL = "https://prod.spline.design/blo2FccZ2Q7hEkIq/scene.splinecode";
     const FORMSPREE_ENDPOINT = "https://formspree.io/f/maqlqgzz";
 
@@ -233,7 +235,7 @@ export default function CraffyHeroSection() {
         }
     };
 
-    // 🚀 CLEAN LEAD SUBMISSION + ANALYTICS & GOOGLE ADS TRACKING
+    // 🚀 CLEAN LEAD SUBMISSION + ANALYTICS & REDIRECT TO /craffy-thank-you
     const handleLeadSubmit = async (e) => {
         e.preventDefault();
         if (!phone.trim() || !postcode.trim()) {
@@ -254,7 +256,7 @@ export default function CraffyHeroSection() {
             has_name_provided: !!name.trim(),
         });
 
-        // Clean JSON Payload
+        // Clean JSON Payload (Only sending whatever is filled)
         const payload = {
             "Site Postcode": postcode.trim().toUpperCase(),
             "Phone Number": phone.trim(),
@@ -299,15 +301,17 @@ export default function CraffyHeroSection() {
             }
 
             setIsSubmitting(false);
-            setTargetSpeech(`Fantastic! I've dispatched your details for site ${postcode.toUpperCase()} directly to our planning team.`);
-            setTabletContent({
-                title: "DISPATCH COMPLETE",
-                stat1: `SITE: ${postcode.toUpperCase()}`,
-                stat2: `PHONE: ${phone}`,
-                status: "LEAD SENT TO FORMSPREE",
+
+            // 🚀 REDIRECT TO DEDICATED CRAFFY THANK YOU PAGE
+            navigate("/craffy-thank-you", {
+                state: {
+                    source: "Craffy AI Assistant",
+                    postcode: postcode.trim().toUpperCase(),
+                    phone: phone.trim(),
+                    name: name.trim(),
+                },
             });
-            playCraffySound("tablet");
-            setChatStep("submitted");
+
         } catch (error) {
             console.error("Craffy Submission Error:", error);
             setIsSubmitting(false);
@@ -674,37 +678,6 @@ export default function CraffyHeroSection() {
                             </form>
                         )}
 
-                        {/* STATE 5: CONFIRMATION & ESCAPE ROUTES */}
-                        {chatStep === "submitted" && (
-                            <div style={{ textAlign: 'center', padding: '16px 0 0 0' }}>
-                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '16px', flexWrap: 'wrap' }}>
-                                    <a
-                                        href="tel:02081914122"
-                                        style={styles.callLink}
-                                        onClick={() => handleCallOfficeClick("submitted_screen")}
-                                    >
-                                        <Phone size={14} color="#60a5fa" />
-                                        <span>Call Direct: 020 8191 4122</span>
-                                    </a>
-
-                                    <a
-                                        href={`https://wa.me/447858815820?text=Hi%20Crafman,%20I%20just%20submitted%20a%20request%20for%20postcode%20${encodeURIComponent(postcode)}.`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={styles.whatsAppBtn}
-                                        onClick={() => {
-                                            trackConversionEvent("craffy_whatsapp_click", { source: "Craffy Success Screen" });
-                                            if (GOOGLE_ADS_CONFIG.WHATSAPP_SEND_TO && typeof window !== "undefined" && typeof window.gtag === "function") {
-                                                window.gtag("event", "conversion", { send_to: GOOGLE_ADS_CONFIG.WHATSAPP_SEND_TO });
-                                            }
-                                        }}
-                                    >
-                                        <span>WhatsApp Us</span>
-                                    </a>
-                                </div>
-                            </div>
-                        )}
-
                     </div>
                 </div>
 
@@ -761,8 +734,6 @@ const styles = {
     backButton: { background: 'none', border: 'none', color: '#a1a1aa', fontSize: '12px', cursor: 'pointer', width: '100%', marginTop: '12px' },
     inputLabel: { display: 'block', fontSize: '12px', color: '#a1a1aa', marginBottom: '6px' },
     textInput: { width: '100%', backgroundColor: '#18181b', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#ffffff', padding: '14px', borderRadius: '14px', fontSize: '14px', boxSizing: 'border-box', outline: 'none' },
-    callLink: { display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#18181b', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#ffffff', textDecoration: 'none', padding: '12px 18px', borderRadius: '14px', fontSize: '12.5px', fontWeight: 600 },
-    whatsAppBtn: { display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#25D366', color: '#ffffff', textDecoration: 'none', padding: '12px 18px', borderRadius: '14px', fontSize: '12.5px', fontWeight: 700 },
     trustBar: { display: 'flex', flexWrap: 'wrap', alignItems: 'center', justify: 'center', gap: '24px sm:36px', maxWidth: '1240px', margin: '50px auto 0 auto', paddingTop: '30px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', position: 'relative', zIndex: 10 },
     trustItem: { display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#e4e4e7', fontWeight: 500 },
 };
