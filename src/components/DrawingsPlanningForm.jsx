@@ -2,12 +2,9 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { siteStyles } from "./Layout.jsx";
 
-
 // =====================================================================================
-// 🎯 GOOGLE ADS CONFIGURATION MATRIX (MATCHED TO YOUR NEW SUBMIT LEAD FORM 9)
+// 🎯 GOOGLE ADS CONFIGURATION MATRIX
 // =====================================================================================
-
-
 const GOOGLE_ADS_CONFIG = {
     FORM_SUCCESS_SEND_TO: "AW-18466429796",
     CALL_CLICK_SEND_TO: "AW-18466429796/HPHiCIbN6oMdEOS2veVE",
@@ -102,10 +99,20 @@ export default function DrawingsPlanningForm({
     }
 
     // --- PROGRESSIVE STEP VALIDATION LOGIC ---
-    const isStep1Valid = useMemo(() => !!form.callbackDate && !!form.callbackTimeSlot && !!form.meetingType, [form.callbackDate, form.callbackTimeSlot, form.meetingType]);
-    const isStep2Valid = useMemo(() => !!form.name.trim() && !!form.phone.trim(), [form.name, form.phone]);
+    const isStep1Valid = useMemo(
+        () => !!form.callbackDate && !!form.callbackTimeSlot && !!form.meetingType,
+        [form.callbackDate, form.callbackTimeSlot, form.meetingType]
+    );
 
-    const formIsValid = useMemo(() => isStep1Valid && isStep2Valid, [isStep1Valid, isStep2Valid]);
+    const isStep2Valid = useMemo(
+        () => !!form.name.trim() && !!form.phone.trim(),
+        [form.name, form.phone]
+    );
+
+    const formIsValid = useMemo(
+        () => isStep1Valid && isStep2Valid,
+        [isStep1Valid, isStep2Valid]
+    );
 
     // Master Tracking Router Engine
     const trackConversionEvent = (eventName, params = {}) => {
@@ -113,6 +120,23 @@ export default function DrawingsPlanningForm({
         window.dataLayer.push({ event: eventName, ...params });
         if (typeof window.gtag === "function") {
             window.gtag("event", eventName, params);
+        }
+    };
+
+    // 🚀 AUTOMATED STEP 1 TRANSITION FUNCTION
+    const triggerAutoStepTransition = (updatedDate, updatedTimeSlot) => {
+        const dateReady = updatedDate || form.callbackDate;
+        const timeReady = updatedTimeSlot || form.callbackTimeSlot;
+
+        if (dateReady && timeReady && form.meetingType) {
+            setTimeout(() => {
+                setStep(2);
+                trackConversionEvent("step1_auto_advance", {
+                    meeting_type: form.meetingType,
+                    date_locked: dateReady,
+                    time_locked: timeReady,
+                });
+            }, 200); // Brief 200ms delay so the user visually sees their selection highlight
         }
     };
 
@@ -135,7 +159,7 @@ export default function DrawingsPlanningForm({
             package_interest: form.packageInterest,
             meeting_type: form.meetingType,
             chosen_date: form.callbackDate,
-            chosen_time: form.callbackTimeSlot
+            chosen_time: form.callbackTimeSlot,
         });
 
         setSubmitStatus({ loading: true, success: false, error: "" });
@@ -144,7 +168,10 @@ export default function DrawingsPlanningForm({
             const payload = {
                 formType: "Drawings Strategy Consultation Request",
                 contactPreference: form.contactPreference,
-                meetingType: form.meetingType === "phone_callback" ? "Phone Call Back" : "In-Person Home Visit",
+                meetingType:
+                    form.meetingType === "phone_callback"
+                        ? "Phone Call Back"
+                        : "In-Person Home Visit",
                 packageInterest: form.packageInterest || "None Selected",
                 name: form.name,
                 phone: form.phone,
@@ -166,7 +193,10 @@ export default function DrawingsPlanningForm({
 
             const result = await response.json();
             if (!response.ok) {
-                throw new Error(result?.errors?.[0]?.message || "Something went wrong. Please try again.");
+                throw new Error(
+                    result?.errors?.[0]?.message ||
+                    "Something went wrong. Please try again."
+                );
             }
 
             setSubmittedSummary({
@@ -187,13 +217,12 @@ export default function DrawingsPlanningForm({
                 scheduled_time: form.callbackTimeSlot,
             });
 
-            // 🔥 MANDATORY DATA BRIDGE: Hard-Coded Native Google Ads Conversion Direct Trigger
+            // 🔥 Native Google Ads Conversion Direct Trigger
             if (typeof window.gtag === "function") {
                 window.gtag("event", "conversion", {
                     send_to: GOOGLE_ADS_CONFIG.FORM_SUCCESS_SEND_TO,
                 });
             }
-
         } catch (error) {
             setSubmitStatus({
                 loading: false,
@@ -246,7 +275,7 @@ export default function DrawingsPlanningForm({
         background: "#fff",
         outline: "none",
         maxWidth: "100%",
-        color: "#1c1917"
+        color: "#1c1917",
     };
 
     const labelStyle = { display: "grid", gap: "6px", minWidth: 0 };
@@ -254,7 +283,11 @@ export default function DrawingsPlanningForm({
     const optionCardStyle = (active, isWhatsApp = false) => ({
         padding: "16px",
         borderRadius: "16px",
-        border: active ? (isWhatsApp ? "1px solid #25D366" : "1px solid #1c1917") : "1px solid #ddd6ce",
+        border: active
+            ? isWhatsApp
+                ? "1px solid #25D366"
+                : "1px solid #1c1917"
+            : "1px solid #ddd6ce",
         background: active ? (isWhatsApp ? "#f0fdf4" : "#f5f5f4") : "#fff",
         color: "#1f1f1f",
         cursor: "pointer",
@@ -263,36 +296,84 @@ export default function DrawingsPlanningForm({
         textAlign: "left",
         transition: "all 0.22s ease",
         transform: active ? "translateY(-2px)" : "translateY(0)",
-        boxShadow: active ? "0 14px 30px rgba(28,25,23,0.08)" : "0 1px 2px rgba(0,0,0,0.03)",
+        boxShadow: active
+            ? "0 14px 30px rgba(28,25,23,0.08)"
+            : "0 1px 2px rgba(0,0,0,0.03)",
         width: "100%",
         boxSizing: "border-box",
     });
 
     if (submitStatus.success && submittedSummary) {
         return (
-            <div style={{ ...cardStyle, display: "grid", gap: "24px", padding: "28px" }}>
+            <div
+                style={{
+                    ...cardStyle,
+                    display: "grid",
+                    gap: "24px",
+                    padding: "28px",
+                }}
+            >
                 <div style={{ display: "flex", gap: "14px", alignItems: "center" }}>
-                    <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: "#166534", color: "#fff", display: "grid", placeItems: "center", fontSize: "28px" }}>✓</div>
+                    <div
+                        style={{
+                            width: "56px",
+                            height: "56px",
+                            borderRadius: "50%",
+                            background: "#166534",
+                            color: "#fff",
+                            display: "grid",
+                            placeItems: "center",
+                            fontSize: "28px",
+                        }}
+                    >
+                        ✓
+                    </div>
                     <div>
                         <h2 style={{ margin: 0, fontSize: "24px", color: "#14532d" }}>
-                            {submittedSummary.meetingType === "home_visit" ? "Home Visit Arranged" : "Strategy Session Scheduled"}
+                            {submittedSummary.meetingType === "home_visit"
+                                ? "Home Visit Arranged"
+                                : "Strategy Session Scheduled"}
                         </h2>
-                        <p style={{ margin: "4px 0 0", color: "#166534", fontSize: "14px" }}>
+                        <p
+                            style={{ margin: "4px 0 0", color: "#166534", fontSize: "14px" }}
+                        >
                             {submittedSummary.meetingType === "home_visit"
                                 ? `Our planning strategist will visit your property on ${submittedSummary.displayDate} during the ${submittedSummary.callbackTimeSlot.toLowerCase()}.`
-                                : `We will ring you back on ${submittedSummary.displayDate} during the ${submittedSummary.callbackTimeSlot.toLowerCase()}.`
-                            }
+                                : `We will ring you back on ${submittedSummary.displayDate} during the ${submittedSummary.callbackTimeSlot.toLowerCase()}.`}
                         </p>
                     </div>
                 </div>
 
                 <div style={{ borderTop: "1px solid #e7e5e4", paddingTop: "14px" }}>
-                    <h4 style={{ margin: "0 0 10px", fontSize: "15px" }}>Consultation Details</h4>
-                    <div style={{ background: "#fafaf9", padding: "14px", borderRadius: "12px", display: "grid", gap: "8px", fontSize: "14px" }}>
-                        <div><strong>Client Name:</strong> {submittedSummary.name}</div>
-                        <div><strong>Linked Phone Line:</strong> {submittedSummary.phone}</div>
-                        <div><strong>Consultation Track:</strong> {submittedSummary.meetingType === "home_visit" ? "🏡 In-Person Property Home Visit" : "📞 Phone Consultation Call"}</div>
-                        <div><strong>Arranged Date:</strong> {submittedSummary.displayDate} ({submittedSummary.callbackTimeSlot})</div>
+                    <h4 style={{ margin: "0 0 10px", fontSize: "15px" }}>
+                        Consultation Details
+                    </h4>
+                    <div
+                        style={{
+                            background: "#fafaf9",
+                            padding: "14px",
+                            borderRadius: "12px",
+                            display: "grid",
+                            gap: "8px",
+                            fontSize: "14px",
+                        }}
+                    >
+                        <div>
+                            <strong>Client Name:</strong> {submittedSummary.name}
+                        </div>
+                        <div>
+                            <strong>Linked Phone Line:</strong> {submittedSummary.phone}
+                        </div>
+                        <div>
+                            <strong>Consultation Track:</strong>{" "}
+                            {submittedSummary.meetingType === "home_visit"
+                                ? "🏡 In-Person Property Home Visit"
+                                : "📞 Phone Consultation Call"}
+                        </div>
+                        <div>
+                            <strong>Arranged Date:</strong> {submittedSummary.displayDate} (
+                            {submittedSummary.callbackTimeSlot})
+                        </div>
                     </div>
                 </div>
 
@@ -302,7 +383,11 @@ export default function DrawingsPlanningForm({
                         onClick={() => {
                             trackConversionEvent("success_screen_reset_click");
                             setSubmittedSummary(null);
-                            setSubmitStatus({ loading: false, success: false, error: "" });
+                            setSubmitStatus({
+                                loading: false,
+                                success: false,
+                                error: "",
+                            });
                             setForm({ ...initialFormState });
                             setStep(1);
                         }}
@@ -326,40 +411,135 @@ export default function DrawingsPlanningForm({
     }
 
     return (
-        <form ref={formTopRef} onSubmit={handleSubmit} style={{ ...cardStyle, display: "grid", gap: "22px", width: "100%", position: "relative" }}>
+        <form
+            id="contact-form"
+            ref={formTopRef}
+            onSubmit={handleSubmit}
+            style={{
+                ...cardStyle,
+                display: "grid",
+                gap: "22px",
+                width: "100%",
+                position: "relative",
+            }}
+        >
             <div style={{ minWidth: 0 }}>
-                <h2 style={{ fontSize: isMobile ? "28px" : "36px", marginTop: 0, marginBottom: "8px", fontWeight: "800" }}>{title}</h2>
-                {intro && <p style={{ color: "#57534e", fontSize: "14px", margin: 0, lineHeight: "1.5" }}>{intro}</p>}
+                <h2
+                    style={{
+                        fontSize: isMobile ? "28px" : "36px",
+                        marginTop: 0,
+                        marginBottom: "8px",
+                        fontWeight: "800",
+                    }}
+                >
+                    {title}
+                </h2>
+                {intro && (
+                    <p
+                        style={{
+                            color: "#57534e",
+                            fontSize: "14px",
+                            margin: 0,
+                            lineHeight: "1.5",
+                        }}
+                    >
+                        {intro}
+                    </p>
+                )}
             </div>
 
-            <div style={{ textTransform: "uppercase", letterSpacing: "1px", textAlign: "center", padding: "2px 0" }}>
-                <span style={{ fontSize: "13px", fontWeight: "700", color: "#A67C00" }}>
+            <div
+                style={{
+                    textTransform: "uppercase",
+                    letterSpacing: "1px",
+                    textAlign: "center",
+                    padding: "2px 0",
+                }}
+            >
+                <span
+                    style={{ fontSize: "13px", fontWeight: "700", color: "#A67C00" }}
+                >
                     Opening Hours: Mon–Sat 7AM–8PM
                 </span>
             </div>
 
             {/* --- PROGRESS INDICATOR DOTS --- */}
-            <div style={{ display: "flex", justifyContent: "center", gap: "8px", margin: "2px 0" }}>
-                <div style={{ width: "24px", height: "6px", borderRadius: "999px", background: step === 1 ? "#A67C00" : "#ece7df", transition: "all 0.2s" }} />
-                <div style={{ width: "24px", height: "6px", borderRadius: "999px", background: step === 2 ? "#A67C00" : "#ece7df", transition: "all 0.2s" }} />
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    gap: "8px",
+                    margin: "2px 0",
+                }}
+            >
+                <div
+                    style={{
+                        width: "24px",
+                        height: "6px",
+                        borderRadius: "999px",
+                        background: step === 1 ? "#A67C00" : "#ece7df",
+                        transition: "all 0.2s",
+                    }}
+                />
+                <div
+                    style={{
+                        width: "24px",
+                        height: "6px",
+                        borderRadius: "999px",
+                        background: step === 2 ? "#A67C00" : "#ece7df",
+                        transition: "all 0.2s",
+                    }}
+                />
             </div>
 
             {/* --- PRIMARY MULTI-STEP ENGINE --- */}
-            <div style={{ display: "grid", gap: "16px", background: "#fdfdfc", padding: isMobile ? "16px" : "20px", borderRadius: "20px", border: "1px solid #f5f2eb" }}>
-
-                {/* STEP 1: INITIAL APPOINTMENT SELECTION MATRIX */}
+            <div
+                style={{
+                    display: "grid",
+                    gap: "16px",
+                    background: "#fdfdfc",
+                    padding: isMobile ? "16px" : "20px",
+                    borderRadius: "20px",
+                    border: "1px solid #f5f2eb",
+                }}
+            >
+                {/* STEP 1: INITIAL APPOINTMENT SELECTION MATRIX (AUTOMATED STEP PROGRESSION) */}
                 {step === 1 && (
-                    <div style={{ display: "grid", gap: "14px", animation: "faqFadeDown 0.25s ease-out" }}>
-                        <div style={{ fontSize: "15px", fontWeight: "700", color: "#1c1917" }}>Step 1: Consultation Type & Schedule</div>
+                    <div
+                        style={{
+                            display: "grid",
+                            gap: "14px",
+                            animation: "faqFadeDown 0.25s ease-out",
+                        }}
+                    >
+                        <div
+                            style={{
+                                fontSize: "15px",
+                                fontWeight: "700",
+                                color: "#1c1917",
+                            }}
+                        >
+                            Step 1: Consultation Type & Schedule
+                        </div>
 
                         {/* 🏡 INTERACTIVE SEGMENT CONTROL (MEETING TYPE TOGGLE) */}
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", background: "#f5f5f4", padding: "4px", borderRadius: "12px" }}>
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: "1fr 1fr",
+                                gap: "8px",
+                                background: "#f5f5f4",
+                                padding: "4px",
+                                borderRadius: "12px",
+                            }}
+                        >
                             <button
                                 type="button"
                                 onClick={() => {
                                     setField("meetingType", "phone_callback");
                                     trackConversionEvent("select_phone_callback", {
-                                        package_context: form.packageInterest || "None Selected"
+                                        package_context:
+                                            form.packageInterest || "None Selected",
                                     });
                                 }}
                                 style={{
@@ -369,10 +549,19 @@ export default function DrawingsPlanningForm({
                                     fontSize: "13px",
                                     fontWeight: "700",
                                     cursor: "pointer",
-                                    background: form.meetingType === "phone_callback" ? "#fff" : "transparent",
-                                    color: form.meetingType === "phone_callback" ? "#1c1917" : "#78716c",
-                                    boxShadow: form.meetingType === "phone_callback" ? "0 2px 4px rgba(0,0,0,0.06)" : "none",
-                                    transition: "all 0.2s"
+                                    background:
+                                        form.meetingType === "phone_callback"
+                                            ? "#fff"
+                                            : "transparent",
+                                    color:
+                                        form.meetingType === "phone_callback"
+                                            ? "#1c1917"
+                                            : "#78716c",
+                                    boxShadow:
+                                        form.meetingType === "phone_callback"
+                                            ? "0 2px 4px rgba(0,0,0,0.06)"
+                                            : "none",
+                                    transition: "all 0.2s",
                                 }}
                             >
                                 📞 Phone Callback
@@ -382,7 +571,8 @@ export default function DrawingsPlanningForm({
                                 onClick={() => {
                                     setField("meetingType", "home_visit");
                                     trackConversionEvent("select_home_visit", {
-                                        package_context: form.packageInterest || "None Selected"
+                                        package_context:
+                                            form.packageInterest || "None Selected",
                                     });
                                 }}
                                 style={{
@@ -392,10 +582,19 @@ export default function DrawingsPlanningForm({
                                     fontSize: "13px",
                                     fontWeight: "700",
                                     cursor: "pointer",
-                                    background: form.meetingType === "home_visit" ? "#fff" : "transparent",
-                                    color: form.meetingType === "home_visit" ? "#1c1917" : "#78716c",
-                                    boxShadow: form.meetingType === "home_visit" ? "0 2px 4px rgba(0,0,0,0.06)" : "none",
-                                    transition: "all 0.2s"
+                                    background:
+                                        form.meetingType === "home_visit"
+                                            ? "#fff"
+                                            : "transparent",
+                                    color:
+                                        form.meetingType === "home_visit"
+                                            ? "#1c1917"
+                                            : "#78716c",
+                                    boxShadow:
+                                        form.meetingType === "home_visit"
+                                            ? "0 2px 4px rgba(0,0,0,0.06)"
+                                            : "none",
+                                    transition: "all 0.2s",
                                 }}
                             >
                                 🏡 Home Visit
@@ -404,20 +603,63 @@ export default function DrawingsPlanningForm({
 
                         {/* 📍 HOME VISIT EXPLANATORY SPECIFICATION NOTICE */}
                         {form.meetingType === "home_visit" && (
-                            <div style={{ background: "#fafaf9", border: "1px dashed #d6d3d1", padding: "14px", borderRadius: "14px", display: "grid", gap: "4px", animation: "faqFadeDown 0.2s ease-out" }}>
-                                <span style={{ fontSize: "11px", fontWeight: "800", color: "#b45309", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                            <div
+                                style={{
+                                    background: "#fafaf9",
+                                    border: "1px dashed #d6d3d1",
+                                    padding: "14px",
+                                    borderRadius: "14px",
+                                    display: "grid",
+                                    gap: "4px",
+                                    animation: "faqFadeDown 0.2s ease-out",
+                                }}
+                            >
+                                <span
+                                    style={{
+                                        fontSize: "11px",
+                                        fontWeight: "800",
+                                        color: "#b45309",
+                                        textTransform: "uppercase",
+                                        letterSpacing: "0.5px",
+                                    }}
+                                >
                                     🏡 On-Site Architectural Assessment
                                 </span>
-                                <span style={{ fontSize: "12px", color: "#57534e", marginTop: "2px", lineHeight: "1.4" }}>
-                                    We will send a practical planning specialist directly to your property. We'll map out layout constraints, discuss design viability, and answer local council questions live on-site.
+                                <span
+                                    style={{
+                                        fontSize: "12px",
+                                        color: "#57534e",
+                                        marginTop: "2px",
+                                        lineHeight: "1.4",
+                                    }}
+                                >
+                                    We will send a practical planning specialist directly to your
+                                    property. We'll map out layout constraints, discuss design
+                                    viability, and answer local council questions live on-site.
                                 </span>
                             </div>
                         )}
 
-                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "16px", marginTop: "4px" }}>
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+                                gap: "16px",
+                                marginTop: "4px",
+                            }}
+                        >
                             <div style={labelStyle}>
-                                <label htmlFor="callbackDate" style={{ fontWeight: "700", fontSize: "13px", color: "#44403c" }}>
-                                    {form.meetingType === "home_visit" ? "Preferred Visit Date" : "Preferred Callback Date"}
+                                <label
+                                    htmlFor="callbackDate"
+                                    style={{
+                                        fontWeight: "700",
+                                        fontSize: "13px",
+                                        color: "#44403c",
+                                    }}
+                                >
+                                    {form.meetingType === "home_visit"
+                                        ? "Preferred Visit Date"
+                                        : "Preferred Callback Date"}
                                 </label>
                                 <input
                                     id="callbackDate"
@@ -427,22 +669,40 @@ export default function DrawingsPlanningForm({
                                     max={dateBounds.max}
                                     value={form.callbackDate}
                                     onChange={(e) => {
+                                        const newDate = e.target.value;
                                         handleChange(e);
-                                        trackConversionEvent("step1_date_change", { date_selected: e.target.value });
+                                        trackConversionEvent("step1_date_change", {
+                                            date_selected: newDate,
+                                        });
+                                        triggerAutoStepTransition(newDate, null);
                                     }}
                                     style={{
                                         ...inputStyle,
                                         cursor: "pointer",
-                                        minHeight: "48px", // Guarantees a full mobile touch-target height
-                                        color: form.callbackDate ? "#1c1917" : "#78716c"
+                                        minHeight: "48px",
+                                        color: form.callbackDate ? "#1c1917" : "#78716c",
                                     }}
                                     required
                                 />
                             </div>
 
                             <div style={labelStyle}>
-                                <span style={{ fontWeight: "700", fontSize: "13px", color: "#44403c" }}>Preferred Time Window</span>
-                                <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "6px" }}>
+                                <span
+                                    style={{
+                                        fontWeight: "700",
+                                        fontSize: "13px",
+                                        color: "#44403c",
+                                    }}
+                                >
+                                    Preferred Time Window
+                                </span>
+                                <div
+                                    style={{
+                                        display: "grid",
+                                        gridTemplateColumns: "1fr",
+                                        gap: "6px",
+                                    }}
+                                >
                                     {callbackTimeOptions.map((time) => (
                                         <button
                                             key={time}
@@ -451,14 +711,15 @@ export default function DrawingsPlanningForm({
                                                 setField("callbackTimeSlot", time);
                                                 trackConversionEvent("step1_time_slot_click", {
                                                     time_slot_value: time,
-                                                    date_linked: form.callbackDate
+                                                    date_linked: form.callbackDate,
                                                 });
+                                                triggerAutoStepTransition(null, time);
                                             }}
                                             style={{
                                                 ...optionCardStyle(form.callbackTimeSlot === time),
                                                 padding: "10px 14px",
                                                 fontSize: "13px",
-                                                borderRadius: "10px"
+                                                borderRadius: "10px",
                                             }}
                                         >
                                             {time}
@@ -467,70 +728,125 @@ export default function DrawingsPlanningForm({
                                 </div>
                             </div>
                         </div>
-
-                        <button
-                            type="button"
-                            disabled={!isStep1Valid}
-                            onClick={() => {
-                                setStep(2);
-                                trackConversionEvent("step1_continue_click", {
-                                    meeting_type: form.meetingType,
-                                    date_locked: form.callbackDate,
-                                    time_locked: form.callbackTimeSlot
-                                });
-                            }}
-                            style={{
-                                ...buttonPrimaryStyle,
-                                background: !isStep1Valid ? '#a8a29e' : '#1c1917',
-                                cursor: !isStep1Valid ? 'not-allowed' : 'pointer',
-                                marginTop: "10px"
-                            }}
-                        >
-                            Next Step
-                        </button>
                     </div>
                 )}
 
                 {/* STEP 2: ACCOUNT ASSIGNMENT & DATA CAPTURE */}
                 {step === 2 && (
-                    <div style={{ display: "grid", gap: "14px", animation: "faqFadeDown 0.25s ease-out" }}>
-                        <div style={{ fontSize: "15px", fontWeight: "700", color: "#1c1917" }}>Step 2: Confirm Information</div>
-
-                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "14px" }}>
-                            <input name="name" value={form.name} onChange={handleChange} placeholder="Name" style={inputStyle} required autoComplete="name" />
-                            <input name="phone" value={form.phone} onChange={handleChange} placeholder="Primary phone line number" style={inputStyle} required type="tel" autoComplete="tel" />
+                    <div
+                        style={{
+                            display: "grid",
+                            gap: "14px",
+                            animation: "faqFadeDown 0.25s ease-out",
+                        }}
+                    >
+                        <div
+                            style={{
+                                fontSize: "15px",
+                                fontWeight: "700",
+                                color: "#1c1917",
+                            }}
+                        >
+                            Step 2: Confirm Information
                         </div>
 
-                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 2fr", gap: "14px" }}>
-                            <input name="postcode" value={form.postcode} onChange={handleChange} placeholder="Project site postcode" style={inputStyle} autoComplete="postal-code" />
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+                                gap: "14px",
+                            }}
+                        >
+                            <input
+                                name="name"
+                                value={form.name}
+                                onChange={handleChange}
+                                placeholder="Name"
+                                style={inputStyle}
+                                required
+                                autoComplete="name"
+                            />
+                            <input
+                                name="phone"
+                                value={form.phone}
+                                onChange={handleChange}
+                                placeholder="Primary phone line number"
+                                style={inputStyle}
+                                required
+                                type="tel"
+                                autoComplete="tel"
+                            />
+                        </div>
+
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: isMobile ? "1fr" : "1fr 2fr",
+                                gap: "14px",
+                            }}
+                        >
+                            <input
+                                name="postcode"
+                                value={form.postcode}
+                                onChange={handleChange}
+                                placeholder="Project site postcode"
+                                style={inputStyle}
+                                autoComplete="postal-code"
+                            />
                             <select
                                 id="packageInterestDropdown"
                                 name="packageInterest"
                                 value={form.packageInterest}
                                 onChange={(e) => {
                                     handleChange(e);
-                                    trackConversionEvent("step2_package_dropdown_change", { dropdown_selection: e.target.value });
+                                    trackConversionEvent("step2_package_dropdown_change", {
+                                        dropdown_selection: e.target.value,
+                                    });
                                 }}
                                 style={{ ...inputStyle, cursor: "pointer" }}
                             >
-                                <option value="Starter Package">Starter Package — From £950</option>
-                                <option value="Planning Package">Planning Package — From £1250</option>
-                                <option value="Technical Package">Technical Package — From £1650</option>
+                                <option value="Starter Package">
+                                    Starter Package — From £950
+                                </option>
+                                <option value="Planning Package">
+                                    Planning Package — From £1250
+                                </option>
+                                <option value="Technical Package">
+                                    Technical Package — From £1650
+                                </option>
                                 <option value="Bespoke Package">Bespoke Package — POA</option>
-                                <option value="I'm not sure yet (Let us help guide you)">I'm not sure yet (Let us help guide you)</option>
+                                <option value="I'm not sure yet (Let us help guide you)">
+                                    I'm not sure yet (Let us help guide you)
+                                </option>
                             </select>
                         </div>
 
-                        <textarea name="message" value={form.message} onChange={handleChange} placeholder="Briefly describe your property goals or design layout notes (Optional)" rows="2" style={{ ...inputStyle, resize: "vertical", marginTop: "4px" }} />
+                        <textarea
+                            name="message"
+                            value={form.message}
+                            onChange={handleChange}
+                            placeholder="Briefly describe your property goals or design layout notes (Optional)"
+                            rows="2"
+                            style={{ ...inputStyle, resize: "vertical", marginTop: "4px" }}
+                        />
 
-                        <div style={{ display: "flex", gap: "12px", marginTop: "8px" }}>
+                        <div
+                            style={{ display: "flex", gap: "12px", marginTop: "8px" }}
+                        >
                             <button
                                 type="button"
                                 onClick={() => {
                                     setStep(1);
-                                    trackConversionEvent("step2_back_click", { current_fields_filled: !!form.name || !!form.phone });
+                                    trackConversionEvent("step2_back_click", {
+                                        current_fields_filled:
+                                            !!form.name || !!form.phone,
+                                    });
                                 }}
-                                style={{ ...buttonSecondaryStyle, width: "35%", borderRadius: "14px" }}
+                                style={{
+                                    ...buttonSecondaryStyle,
+                                    width: "35%",
+                                    borderRadius: "14px",
+                                }}
                             >
                                 Back
                             </button>
@@ -541,8 +857,8 @@ export default function DrawingsPlanningForm({
                                 style={{
                                     ...buttonPrimaryStyle,
                                     width: "65%",
-                                    background: !formIsValid ? '#a8a29e' : '#1c1917',
-                                    cursor: !formIsValid ? 'not-allowed' : 'pointer'
+                                    background: !formIsValid ? "#a8a29e" : "#1c1917",
+                                    cursor: !formIsValid ? "not-allowed" : "pointer",
                                 }}
                             >
                                 {submitStatus.loading ? "Processing..." : buttonText}
@@ -551,11 +867,33 @@ export default function DrawingsPlanningForm({
                     </div>
                 )}
 
-                {submitStatus.error && <p style={{ color: "#b91c1c", fontWeight: "600", fontSize: "14px", margin: "8px 0 0", textAlign: "center" }}>{submitStatus.error}</p>}
+                {submitStatus.error && (
+                    <p
+                        style={{
+                            color: "#b91c1c",
+                            fontWeight: "600",
+                            fontSize: "14px",
+                            margin: "8px 0 0",
+                            textAlign: "center",
+                        }}
+                    >
+                        {submitStatus.error}
+                    </p>
+                )}
             </div>
 
             {/* --- SEPARATOR LINE --- */}
-            <div style={{ display: "flex", alignItems: "center", textTransform: "uppercase", fontSize: "13px", fontWeight: "800", color: "#78716c", margin: "4px 0" }}>
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    textTransform: "uppercase",
+                    fontSize: "13px",
+                    fontWeight: "800",
+                    color: "#78716c",
+                    margin: "4px 0",
+                }}
+            >
                 <div style={{ flex: 1, height: "1px", background: "#e7e5e4" }} />
                 <span style={{ padding: "0 16px", letterSpacing: "1px" }}>OR</span>
                 <div style={{ flex: 1, height: "1px", background: "#e7e5e4" }} />
@@ -564,47 +902,91 @@ export default function DrawingsPlanningForm({
             {/* --- DIRECT ESCAPE FLOATING ROUTES --- */}
             <div style={{ display: "grid", gap: "12px" }}>
                 <a
-                    href="tel:020 8191 4122"
+                    href="tel:02081914122"
                     onClick={() => {
-                        trackConversionEvent("click_to_call", { method: "Enquiry Form Instant Call Bypass" });
-                        // 🔥 Optional Link Call Click directly to Google Ads
+                        trackConversionEvent("click_to_call", {
+                            method: "Enquiry Form Instant Call Bypass",
+                        });
                         if (typeof window.gtag === "function") {
-                            window.gtag("event", "conversion", { send_to: GOOGLE_ADS_CONFIG.CALL_CLICK_SEND_TO });
+                            window.gtag("event", "conversion", {
+                                send_to: GOOGLE_ADS_CONFIG.CALL_CLICK_SEND_TO,
+                            });
                         }
                     }}
-                    style={{ ...optionCardStyle(false), textDecoration: "none", display: "block" }}
+                    style={{
+                        ...optionCardStyle(false),
+                        textDecoration: "none",
+                        display: "block",
+                    }}
                 >
                     <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
                         <span style={{ fontSize: "22px" }}>☎</span>
                         <div>
-                            <div style={{ fontSize: "15px", fontWeight: "700" }}>Call our planning office line directly now</div>
-                            <div style={{ fontSize: "12px", fontWeight: "400", color: "#57534e", marginTop: "1px" }}>
-                                Dial 0203 633 5634 for instant advice and layout consultations.
+                            <div style={{ fontSize: "15px", fontWeight: "700" }}>
+                                Call our planning office line directly now
+                            </div>
+                            <div
+                                style={{
+                                    fontSize: "12px",
+                                    fontWeight: "400",
+                                    color: "#57534e",
+                                    marginTop: "1px",
+                                }}
+                            >
+                                Dial 020 8191 4122 for instant advice and layout consultations.
                             </div>
                         </div>
                     </div>
                 </a>
 
                 <a
-                    href={`https://wa.me/447858815820?text=Hi%20Crafman,%20I'd%20like%20to%20discuss%20a%20free%20planning%20and%20architectural%20drawings%20consultation%20for%20my%20property${form.packageInterest && !form.packageInterest.includes("not sure") ? `%20regarding%20the%20${encodeURIComponent(form.packageInterest)}` : ''}.`}
+                    href={`https://wa.me/447858815820?text=Hi%20Crafman,%20I'd%20like%20to%20discuss%20a%20free%20planning%20and%20architectural%20drawings%20consultation%20for%20my%20property${form.packageInterest && !form.packageInterest.includes("not sure")
+                            ? `%20regarding%20the%20${encodeURIComponent(form.packageInterest)}`
+                            : ""
+                        }.`}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => {
-                        trackConversionEvent("whatsapp_click", { package_interest: form.packageInterest || "None Selected" });
-                        // 🔥 Optional Link WhatsApp Clicks directly to Google Ads
-                        if (typeof window.gtag === "function") {
-                            window.gtag("event", "conversion", { send_to: GOOGLE_ADS_CONFIG.WHATSAPP_SEND_TO });
+                        trackConversionEvent("whatsapp_click", {
+                            package_interest: form.packageInterest || "None Selected",
+                        });
+                        if (
+                            GOOGLE_ADS_CONFIG.WHATSAPP_SEND_TO &&
+                            typeof window.gtag === "function"
+                        ) {
+                            window.gtag("event", "conversion", {
+                                send_to: GOOGLE_ADS_CONFIG.WHATSAPP_SEND_TO,
+                            });
                         }
                     }}
-                    style={{ ...optionCardStyle(false, true), textDecoration: "none", display: "block" }}
+                    style={{
+                        ...optionCardStyle(false, true),
+                        textDecoration: "none",
+                        display: "block",
+                    }}
                 >
                     <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
                         <svg viewBox="0 0 24 24" width="22" height="22" fill="#25D366">
                             <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.66.986 3.288 1.447 5.36 1.448 5.517 0 10.003-4.479 10.006-9.994.001-2.672-1.03-5.184-2.903-7.06C17.18 1.67 14.685 1.04 12.012 1.04c-5.526 0-10.01 4.484-10.014 10.001-.001 2.124.566 4.135 1.644 5.943l-.995 3.633 3.744-.973zm13.102-6.42c-.299-.15-1.772-.875-2.046-.975-.275-.102-.475-.15-.675.15-.2.299-.775.975-.95 1.174-.175.2-.35.226-.65.075-1.207-.604-2.115-.98-2.964-2.433-.225-.386.225-.359.644-1.196.112-.224.056-.423-.028-.574-.084-.15-.675-1.626-.925-2.228-.243-.585-.491-.507-.675-.516-.174-.008-.374-.01-.574-.01-.2 0-.526.075-.802.374-.275.3-.1.524 1.05 1.349.113.149.224.299.374.423.824.675 1.822 1.147 2.896 1.622.3.15.524.225.774.15.249-.075.772-.324.872-.649.1-.324.1-.599.075-.649-.03-.05-.125-.075-.425-.226z" />
                         </svg>
                         <div>
-                            <div style={{ fontSize: "15px", fontWeight: "700", color: "#128C7E" }}>Chat via WhatsApp now</div>
-                            <div style={{ fontSize: "12px", fontWeight: "400", color: "#57534e", marginTop: "1px" }}>
+                            <div
+                                style={{
+                                    fontSize: "15px",
+                                    fontWeight: "700",
+                                    color: "#128C7E",
+                                }}
+                            >
+                                Chat via WhatsApp now
+                            </div>
+                            <div
+                                style={{
+                                    fontSize: "12px",
+                                    fontWeight: "400",
+                                    color: "#57534e",
+                                    marginTop: "1px",
+                                }}
+                            >
                                 Instant text routing — skip filling out forms entirely.
                             </div>
                         </div>
