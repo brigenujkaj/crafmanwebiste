@@ -1057,6 +1057,25 @@ export default function CraffyHeroSection() {
                                 <div style={styles.includedCheck}>✓ Council Planning / Permitted Development Submission</div>
                                 <div style={styles.includedCheck}>✓ Unlimited Drawing Revisions Until Approval</div>
                             </div>
+                            {/* DRAWINGS RATE & TURNAROUND WITH BOOK NOW ACTION */}
+                            <div style={styles.priceRow}>
+                                <div>
+                                    <span style={{ color: '#a1a1aa', fontSize: '11px', display: 'block', textTransform: 'uppercase' }}>Drawings Rate</span>
+                                    <strong style={{ color: '#34d399', fontSize: '15px' }}>{activeKnowledge.drawingPrice}</strong>
+                                </div>
+
+                                <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center' }}>
+                                    <span style={{ color: '#a1a1aa', fontSize: '11px', display: 'block', textTransform: 'uppercase', marginBottom: '4px' }}>Turnaround: {activeKnowledge.turnaround}</span>
+                                    <button
+                                        type="button"
+                                        onClick={handleBookNowClick}
+                                        style={styles.inlineBookNowBtn}
+                                    >
+                                        <Send size={12} />
+                                        <span>Book Now</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     )}
 
