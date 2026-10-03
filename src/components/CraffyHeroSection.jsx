@@ -717,19 +717,7 @@ export default function CraffyHeroSection() {
                                     <ArrowRight size={16} />
                                 </button>
 
-                                {/* 2. SWAPPED POSITION #2: CHECK LOCAL POSTCODE RULES */}
-                                <button
-                                    style={{ ...styles.scheduleCallbackBtn, borderColor: '#60a5fa', color: '#93c5fd' }}
-                                    onClick={() => {
-                                        playCraffySound("click");
-                                        setTargetSpeech("Enter your site postcode and phone line below. I'll summarize your local council constraints.");
-                                        setChatStep("step3_postcode");
-                                    }}
-                                >
-                                    <Building2 size={15} color="#60a5fa" />
-                                    <span>Check Council Rules For My Postcode</span>
-                                </button>
-
+                                
                                 <button
                                     onClick={scrollToMainForm}
                                     style={styles.scheduleCallbackBtn}
