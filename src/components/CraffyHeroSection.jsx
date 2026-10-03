@@ -73,7 +73,7 @@ export default function CraffyHeroSection() {
     // 🧠 1. TYPEWRITER & DIALOGUE ENGINE
     // -----------------------------------------------------------------------------------
     const [targetSpeech, setTargetSpeech] = useState(
-        "Hey! I'm Craffy, your practical planning strategist. What type of project are you planning today?"
+        "Hey! I'm Craffy, your practical planning advisor. I'm here to direct you to the right specialist. What type of project are you planning today?"
     );
     const [displayedSpeech, setDisplayedSpeech] = useState("");
     const [isTyping, setIsTyping] = useState(false);
@@ -105,7 +105,7 @@ export default function CraffyHeroSection() {
         extensions: {
             id: "extensions",
             title: "Rear Extensions & Permitted Development",
-            summary: "Most single-storey rear extensions up to 3m (terraced) or 4m (detached)—and up to 6m/8m via Prior Approval—fall under Permitted Development! Full planning is only needed in conservation areas or for complex wraparound extensions.",
+            summary: "Most single-storey rear extensions up to 3m (terraced) or 4m (detached)—and up to 6m/8m via Prior Approval—fall under Permitted Development! You can also extend on the side of your house up to half of the width of the original property and it shall not extend further than the original fornt and rear walls of the house.  Full planning is only needed in conservation areas or for complex wraparound extensions.",
             drawingPrice: "Fixed £950 + VAT",
             turnaround: "7 Working Days",
             calcType: "extension",
@@ -292,7 +292,7 @@ export default function CraffyHeroSection() {
 
     const handleResetToMenu = () => {
         playCraffySound("click");
-        setTargetSpeech("Hey! I'm Craffy, your practical planning strategist. What type of project are you planning today?");
+        setTargetSpeech("Hey! I'm Craffy, your practical planning assistant. I'm here to direct you to the right specialist. What type of project are you planning today?");
         setChatStep("step1_menu");
         setLeadError("");
 
@@ -588,7 +588,7 @@ export default function CraffyHeroSection() {
                                 <button className="chip-button" onClick={() => handleTopicSelection("extensions")}>
                                     <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                         <Home size={15} color="#60a5fa" />
-                                        Rear & Side Extensions
+                                        Rear or Side Extensions
                                     </span>
                                     <ArrowRight size={14} color="#60a5fa" />
                                 </button>
@@ -923,9 +923,7 @@ export default function CraffyHeroSection() {
                             <div style={{ marginTop: '16px' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
                                     <span style={styles.inputLabel}>SELECT BUILD TYPE</span>
-                                    <span style={{ fontSize: '11px', color: '#38bdf8', fontWeight: 700 }}>
-                                        RATE: £{baseRates.shell}/m²
-                                    </span>
+                                    
                                 </div>
 
                                 {/* TYPE SELECTOR */}
@@ -936,7 +934,7 @@ export default function CraffyHeroSection() {
                                         style={styles.typeBtn(calcBuildType === "extension")}
                                     >
                                         <Home size={15} />
-                                        <span>Extension (£1,800/m²)</span>
+                                        <span>Extension </span>
                                     </button>
 
                                     <button
@@ -945,7 +943,7 @@ export default function CraffyHeroSection() {
                                         style={styles.typeBtn(calcBuildType === "loft")}
                                     >
                                         <Building2 size={15} />
-                                        <span>Loft (£1,500/m²)</span>
+                                        <span>Loft </span>
                                     </button>
 
                                     <button
@@ -954,7 +952,7 @@ export default function CraffyHeroSection() {
                                         style={styles.typeBtn(calcBuildType === "garden_room")}
                                     >
                                         <Trees size={15} />
-                                        <span>Garden Room (£1,300/m²)</span>
+                                        <span>Garden Room </span>
                                     </button>
                                 </div>
 
