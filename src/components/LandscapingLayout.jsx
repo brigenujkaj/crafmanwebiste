@@ -142,7 +142,7 @@ export default function LandscapingLayout({ children }) {
                             flex: 1,
                         }}
                     >
-                        <a href="tel:02036335634" style={callLinkStyle}>
+                        <a href="tel:020 8191 4122" style={callLinkStyle}>
                             Call Now
                         </a>
                     </nav>

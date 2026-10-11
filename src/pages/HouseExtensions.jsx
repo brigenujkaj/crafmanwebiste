@@ -533,7 +533,7 @@ export default function HouseExtensions() {
                             </h3>
 
                             <div style={{ color: "#57534e", lineHeight: "1.9" }}>
-                                <p><strong>Phone:</strong> 02036335634</p>
+                                <p><strong>Phone:</strong> 020 8191 4122</p>
                                 <p><strong>Email:</strong> sales@crafman.co.uk</p>
                                 <p><strong>Location:</strong> London & Essex, United Kingdom</p>
                             </div>
@@ -1017,7 +1017,7 @@ export default function HouseExtensions() {
                         </p>
 
                         <div style={{ marginTop: "20px", color: "#44403c", lineHeight: "1.9" }}>
-                            <p><strong>Phone:</strong> 02036335634</p>
+                            <p><strong>Phone:</strong> 020 8191 4122</p>
                             <p><strong>Email:</strong> sales@crafman.co.uk</p>
                             <p><strong>Location:</strong> London & Essex, UK</p>
                         </div>

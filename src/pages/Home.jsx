@@ -204,7 +204,7 @@ const pillStyle = (active) => ({
     "name": "Crafman Design and Build",
     "legalName": "Crafman Building and Landscaping Ltd",
     "url": "https://crafman.co.uk",
-    "telephone": "02036335634",
+      "telephone": "020 8191 4122",
     "email": "sales@crafman.co.uk",
     "priceRange": "£££",
     "image": "https://crafman.co.uk/wp-content/uploads/2022/10/Crafman-Logo.png",
@@ -511,7 +511,7 @@ const pillStyle = (active) => ({
         </h3>
 
         <div style={{ color: "#57534e", lineHeight: "1.9" }}>
-          <p><strong>Phone:</strong> 02036335634</p>
+                              <p><strong>Phone:</strong> 020 8191 4122</p>
           <p><strong>Email:</strong> sales@crafman.co.uk</p>
           <p><strong>Location:</strong> London, United Kingdom</p>
         </div>
@@ -886,7 +886,7 @@ const pillStyle = (active) => ({
               touch to discuss your ideas and the best path forward.
             </p>
             <div style={{ marginTop: "22px", color: "#44403c", lineHeight: "1.9" }}>
-              <p><strong>Phone:</strong> 02036335634</p>
+                          <p><strong>Phone:</strong> 020 8191 4122</p>
               <p><strong>Email:</strong> info@crafman.co.uk</p>
               <p><strong>Location:</strong> London, UK</p>
             </div>

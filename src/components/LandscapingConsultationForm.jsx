@@ -358,7 +358,7 @@ export default function LandscapingConsultationForm({
                                 Connect directly with our hardscaping estimation desk to map layouts out manually.
                             </p>
                             <a
-                                href="tel:02036335634"
+                                href="tel:020 8191 4122"
                                 onClick={() => {
                                     trackConversionEvent("direct_landscape_phone_click", {
                                         service_interest: form.serviceInterest || "General Landscape Interest"
@@ -380,7 +380,7 @@ export default function LandscapingConsultationForm({
                                     boxShadow: "0 8px 20px rgba(166,124,0,0.2)"
                                 }}
                             >
-                                📞 Call 0203 633 5634
+                                📞 Call 020 8191 4122
                             </a>
                         </div>
                     )}

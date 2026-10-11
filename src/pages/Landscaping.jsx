@@ -295,8 +295,8 @@ export default function Landscaping() {
                                 </p>
                             </div>
                             <div>
-                                <a href="tel:02036335634" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "10px", minHeight: "54px", padding: "0 28px", borderRadius: "16px", background: "linear-gradient(135deg, #A67C00, #C6A243)", color: "#fff", fontSize: "16px", fontWeight: "800", textDecoration: "none", boxShadow: "0 12px 24px rgba(166, 124, 0, 0.25)" }}>
-                                    Call Office: 0203 633 5634
+                                <a href="tel:020 8191 4122" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "10px", minHeight: "54px", padding: "0 28px", borderRadius: "16px", background: "linear-gradient(135deg, #A67C00, #C6A243)", color: "#fff", fontSize: "16px", fontWeight: "800", textDecoration: "none", boxShadow: "0 12px 24px rgba(166, 124, 0, 0.25)" }}>
+                                    Call Office: 020 8191 4122
                                 </a>
                             </div>
                         </div>
@@ -362,7 +362,7 @@ export default function Landscaping() {
                             <div>
                                 <div style={{ fontSize: "12px", fontWeight: "700", textTransform: "uppercase", color: "#fff", marginBottom: "14px" }}>Comms Access</div>
                                 <div style={{ display: "grid", gap: "10px", fontSize: "14px" }}>
-                                    <a href="tel:02036335634" style={{ color: "#C6A243", textDecoration: "none", fontWeight: "700" }}>0203 633 5634</a>
+                                    <a href="tel:020 8191 4122" style={{ color: "#C6A243", textDecoration: "none", fontWeight: "700" }}>020 8191 4122</a>
                                     <span style={{ color: "#a8a29e" }}>Operational Hours: 8 AM – 6 PM</span>
                                 </div>
                             </div>

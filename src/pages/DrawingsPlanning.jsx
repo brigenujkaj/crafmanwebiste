@@ -1,1871 +1,291 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import Layout, { siteStyles } from "../components/DrawingsLayout.jsx";
-import DrawingsPlanningForm from "../components/DrawingsPlanningForm.jsx";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Ruler, PencilRuler, FileCheck, PoundSterling, Zap, ShieldCheck } from "lucide-react";
-import CraffyHeroSection from '../components/CraffyHeroSection';
+import {
+    ArrowRight, ArrowLeft, Check, ChevronDown, FileCheck2,
+    MapPin, Phone, Ruler, ShieldCheck, ClipboardCheck, PencilRuler,
+    MessageCircle, Clock3, Building2
+} from "lucide-react";
+import Layout from "../components/DrawingsLayout.jsx";
+import DrawingsPlanningForm from "../components/DrawingsPlanningForm.jsx";
+
+// This page leaves DrawingsPlanningForm.jsx entirely unchanged.
+// Keep your existing global GTM installation. Do not install GTM twice here.
+const PHONE = "02081914122";
+const FORM_ENDPOINT = "https://formspree.io/f/maqlqgzz";
+const GOLD = "#C6A243";
+const DARK = "#171714";
+
+const PACKAGES = [
+    {
+        name: "Extension / Loft Planning Package", price: "From £1,149", bestFor: "House extensions & lofts", popular: true,
+        intro: "For homeowners who need measured drawings and a planning submission for a proposed extension or loft.",
+        includes: ["Measured survey", "Existing scaled plans", "Proposed scaled plans", "Elevations", "Council submission", "Planning guidance"]
+    },
+    {
+        name: "Garden Room Package", price: "From £649", bestFor: "Garden offices, gyms & studios",
+        intro: "Drawings and advice for an outbuilding, including an initial permitted development assessment.",
+        includes: ["Measured survey", "Site and boundary mapping", "Proposed drawings", "Elevations", "Permitted development assessment"]
+    },
+    {
+        name: "Layout Alteration Package", price: "From £549", bestFor: "Internal layouts & knock-throughs",
+        intro: "Explore a more practical internal layout before committing to construction.",
+        includes: ["Measured survey", "Existing floor plans", "Proposed layout options", "Structural opening indicators"]
+    },
+    {
+        name: "Building Control Package", price: "From £649", bestFor: "Technical / Building Regulations drawings",
+        intro: "Detailed architectural information for a project that is proceeding to the Building Regulations stage.",
+        includes: ["Measured survey", "Existing scaled drawings", "Proposed scaled drawings", "Detailed Building Regulations drawings", "Building Control submission", "Compliance guidance"]
+    },
+    {
+        name: "Bespoke Package", price: "Price on request", bestFor: "Larger or unusual projects",
+        intro: "A tailored design and documentation service for projects requiring a different level of support.",
+        includes: ["Project-specific scope", "Concept and layout development", "Feasibility review", "Specialist coordination as agreed", "Custom quotation"]
+    },
+];
+
+const GALLERY = [
+    { src: "/images/approvals/barkingApproval.jpeg", label: "Planning decision – Barking" },
+    { src: "/images/approvals/greenwichApproval.jpeg", label: "Planning decision – Greenwich" },
+    { src: "/images/approvals/southwarkApproval.jpeg", label: "Planning decision – Southwark" },
+    { src: "/images/approvals/croydonApproval.jpeg", label: "Planning decision – Croydon" },
+    { src: "/images/drawingsex14.png", label: "3D visual" },
+    { src: "/images/drawingsex15.png", label: "3D visual" },
+    { src: "/images/drawingsex13.png", label: "Floor plan" },
+    { src: "/images/drawingsex16.png", label: "Floor plans" },
+    { src: "/images/drawingsex17.png", label: "Floor plans" },
+    { src: "/images/drawingsex18.png", label: "Roof plan" },
+    { src: "/images/drawingsex19.png", label: "Elevation drawing" },
+    { src: "/images/drawingsex20.png", label: "Elevation drawing" },
+    { src: "/images/drawingsex21.png", label: "Roof plan" },
+    { src: "/images/drawingsex22.png", label: "Site plan" },
+    { src: "/images/drawingsex2.jpeg", label: "Elevation drawing" },
+    { src: "/images/drawingsex4.jpeg", label: "Layout drawing" },
+    { src: "/images/drawingsex8.jpeg", label: "Roof plan" },
+    { src: "/images/drawingsex10.png", label: "Roof plan" },
+    { src: "/images/drawingsex11.png", label: "Elevation drawing" },
+    { src: "/images/drawingsex12.png", label: "Elevation drawing" },
+];
+
+const FAQS = [
+    { q: "Do I need planning permission for my extension?", a: "Not always. Some extensions may qualify as permitted development, depending on the house, dimensions, previous alterations and planning constraints. We can assess the likely route before preparing drawings." },
+    { q: "Can you submit the application to my council?", a: "Yes. Council planning submission is included in the Extension / Loft Planning Package as listed. Other applications and specialist reports are quoted according to your project." },
+    { q: "Are council application fees included?", a: "Council application charges and any third-party reports or specialist fees are separate unless explicitly included in your written quotation." },
+    { q: "What if my property is in a conservation area?", a: "Additional restrictions may apply. We review the property details and advise on the appropriate planning route before confirming scope." },
+    { q: "Do I need structural calculations and Building Regulations drawings?", a: "Many construction projects need Building Regulations approval. Structural calculations may also be required. These are separate from planning permission and we can advise on the documents your project needs." },
+    { q: "How soon can we begin?", a: "Tell us about the property and the proposed works. We'll discuss availability, the survey, deliverables and an estimated programme before you proceed." },
+];
+
+const sendEvent = (event, details = {}) => {
+    if (typeof window !== "undefined") {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event, ...details });
+    }
+};
+
+function Cta({ href, children, secondary = false, onClick, full = false }) {
+    return <a href={href} onClick={onClick} className={`dp-btn ${secondary ? "dp-btn-outline" : "dp-btn-gold"} ${full ? "dp-btn-full" : ""}`}>{children}<ArrowRight size={17} aria-hidden="true" /></a>;
+}
 
 export default function DrawingsPlanning() {
-    const { section, card, buttonPrimary, buttonSecondary, tag } = siteStyles;
-
     const [selectedPackage, setSelectedPackage] = useState("");
-    const [testimonialIndex, setTestimonialIndex] = useState(0);
+    const [activeImage, setActiveImage] = useState(0);
     const [openFaq, setOpenFaq] = useState(0);
-    const [isMobile, setIsMobile] = useState(false);
-    const [drawingIndex, setDrawingIndex] = useState(0);
-    const [expandedPackage, setExpandedPackage] = useState(null);
+    const [postcode, setPostcode] = useState("");
+    const [postcodeStatus, setPostcodeStatus] = useState("idle");
+    const [postcodeResult, setPostcodeResult] = useState("");
 
-    // --- Interactive Postcode Hook State ---
-    const [postcode, setPostcode] = useState('');
-    const [checkerStatus, setCheckerStatus] = useState('idle'); // idle, loading, success, error
-    const [resolvedArea, setResolvedArea] = useState("");
-
-    useLayoutEffect(() => {
-        if ("scrollRestoration" in window.history) {
-            window.history.scrollRestoration = "manual";
-        }
-
-        window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-
+    useEffect(() => {
+        // Respect normal anchor navigation; do not erase #contact-form or #packages.
         if (window.location.hash) {
-            const cleanPath = window.location.pathname + window.location.search;
-            window.history.replaceState(null, "", cleanPath);
+            const id = decodeURIComponent(window.location.hash.slice(1));
+            requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView());
         }
     }, []);
 
-    useEffect(() => {
-        const handlePageShow = () => {
-            window.scrollTo(0, 0);
-        };
-        window.addEventListener("pageshow", handlePageShow);
-        return () => window.removeEventListener("pageshow", handlePageShow);
-    }, []);
+    function selectPackage(pkg) {
+        setSelectedPackage(pkg.name);
+        sendEvent("package_button_click", {
+            package_name: pkg.name,
+            package_price: pkg.price,
+            is_featured: pkg.popular ? "yes" : "no",
+        });
+        document.getElementById("contact-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
 
-    useEffect(() => {
-        const checkScreen = () => setIsMobile(window.innerWidth <= 768);
-        checkScreen();
-        window.addEventListener("resize", checkScreen);
-        return () => window.removeEventListener("resize", checkScreen);
-    }, []);
-
-    const handlePostcodeCheck = async (e) => {
+    async function checkPostcode(e) {
         e.preventDefault();
-
-        // Clean spaces and standardize to uppercase
-        const cleanPostcode = postcode.trim().toUpperCase().replace(/\s+/g, '');
-
-        if (!cleanPostcode) {
-            setCheckerStatus('error');
+        const clean = postcode.toUpperCase().replace(/\s+/g, "").trim();
+        if (!/^[A-Z]{1,2}\d[A-Z\d]?(?:\d[A-Z]{2})?$/.test(clean)) {
+            setPostcodeStatus("error");
             return;
         }
-
-        setCheckerStatus('loading');
-
+        setPostcodeStatus("loading");
         try {
-            // Evaluate if user entered an outcode or full household postcode
-            const isOutcode = cleanPostcode.length <= 4;
-            const endpoint = isOutcode
-                ? `https://api.postcodes.io/outcodes/${cleanPostcode}`
-                : `https://api.postcodes.io/postcodes/${cleanPostcode}`;
-
-            const response = await fetch(endpoint);
-
-            if (!response.ok) {
-                setCheckerStatus('error');
-                return;
-            }
-
-            const data = await response.json();
-
-            if (data.status === 200 && data.result) {
-                let councilOrDistrict = "";
-                let outcodeDisplay = isOutcode ? cleanPostcode : data.result.outcode;
-
-                if (isOutcode) {
-                    // Outcodes return arrays for governing districts
-                    councilOrDistrict = data.result.admin_district && data.result.admin_district.length > 0
-                        ? data.result.admin_district[0]
-                        : cleanPostcode;
-                } else {
-                    // Full household lookup returns standalone string properties
-                    councilOrDistrict = data.result.admin_district || data.result.parliamentary_constituency || outcodeDisplay;
-                }
-
-                // Strips out bureaucratic clutter to make text punchy on mobile cards
-                const humanReadableArea = councilOrDistrict
-                    .replace("London Borough of ", "")
-                    .replace("Borough of ", "")
-                    .replace("District", "")
-                    .trim();
-
-                // Store result into state: "Havering (RM1)" or "Barking and Dagenham (RM8)"
-                setResolvedArea(`${humanReadableArea} (${outcodeDisplay})`);
-                setCheckerStatus('success');
-
-                // Push precise tracking event to your live Google Ads optimizer baseline
-                window.dataLayer = window.dataLayer || [];
-                window.dataLayer.push({
-                    event: "postcode_check_success",
-                    submitted_postcode: cleanPostcode,
-                    resolved_council_hub: humanReadableArea
-                });
-            } else {
-                setCheckerStatus('error');
-            }
-        } catch (error) {
-            console.error("Postcode API lookup engine failed:", error);
-            setCheckerStatus('error');
+            const isOutcode = !/\d[A-Z]{2}$/.test(clean);
+            const url = isOutcode
+                ? `https://api.postcodes.io/outcodes/${encodeURIComponent(clean)}`
+                : `https://api.postcodes.io/postcodes/${encodeURIComponent(clean)}`;
+            const res = await fetch(url);
+            if (!res.ok) throw new Error("Postcode lookup failed");
+            const json = await res.json();
+            if (json.status !== 200 || !json.result) throw new Error("Not found");
+            const district = isOutcode
+                ? (json.result.admin_district?.[0] || clean)
+                : (json.result.admin_district || json.result.outcode);
+            setPostcodeResult(district.replace(/^London Borough of /, ""));
+            setPostcodeStatus("success");
+            // Preserve the existing event name; do not collect a full household postcode in analytics.
+            sendEvent("postcode_check_success", {
+                submitted_postcode: isOutcode ? clean : json.result.outcode,
+                resolved_council_hub: district,
+            });
+        } catch {
+            setPostcodeStatus("error");
         }
-    };
-
-    const drawingImages = [
-        { src: "/images/technicalDrawings1.png", label: "Technical Drawings" },
-        { src: "/images/technicalDrawings2.png", label: "Technical Drawings" },
-       { src: "/images/technicalDrawingsFront.png", label: "Technical Drawings" },
-       { src: "/images/technicalElevationRear.png", label: "Technical Drawings" },
-        
-       
-        { src: "/images/drawingsex13.png", label: "Floorplan" },
-        { src: "/images/drawingsex16.png", label: "Floor Plans" },
-        { src: "/images/drawingsex17.png", label: "Floor Plans" },
-        { src: "/images/drawingsex18.png", label: "Roof Plan" },
-        { src: "/images/drawingsex19.png", label: "Elevations" },
-        { src: "/images/drawingsex20.png", label: "Elevations" },
-        { src: "/images/drawingsex21.png", label: "Roof Plan" },
-        { src: "/images/drawingsex22.png", label: "Site Plan" },
-        { src: "/images/drawingsex21.png", label: "3D Render" },
-
-
-
-        { src: "/images/drawingsex2.jpeg", label: "Elevations" },
-       
-        { src: "/images/drawingsex4.jpeg", label: "Layouts" },
-        
-      
-       
-        { src: "/images/drawingsex8.jpeg", label: "Roof Plan" },
-   
-        { src: "/images/drawingsex10.png", label: "Roof Plan" },
-        { src: "/images/drawingsex11.png", label: "Elevation" },
-        { src: "/images/drawingsex12.png", label: "Elevation" },
-        
-        { src: "/images/drawingsex14.png", label: "3D Render" },
-        { src: "/images/drawingsex15.png", label: "3D Render" },
-        
-    ];
-
-    const packages = [
-
-        {
-            name: "Extension /  Loft Planning Package",
-            price: "From £1149",
-            bestFor: "Lofts & Extensions",
-            intro: "Our most popular tier. Perfect if you know exactly what you want to build (rear extension, dormer loft) and need full Council approval.",
-            includes: [
-                "Measured survey",
-                "Current scaled drawings",
-                "Proposed scaled drawings",
-                "Elevations",
-                "Submission to council",
-                "Planning guidance",
-            ],
-            featured: true,
-        },
-        
-        {
-            name: "Garden Room Package",
-            price: "From £649",
-            bestFor: "Standalone Studios & Gyms",
-            intro: "Tailored for detached outbuildings, home offices, or garden gyms. We'll ensure your design maximizes your garden space while sticking strictly to Permitted Development rules.",
-            includes: [
-                "Measured survey",
-                "Site location & boundary mapping",
-                "Proposed scaled drawings",
-                "Elevations",
-                "Permitted Development compliance check",
-            ],
-        },
-        
-       
-        
-        
-        {
-            name: "Layout Alteration Package",
-            price: "From £549",
-            bestFor: "Internal Remodeling & Open-Plan",
-            intro: "Perfect if you are modifying your home's interior layout without extending the footprint. Ideal for wall removals, kitchen knock-throughs, or converting spaces.",
-            includes: [
-                "Measured survey",
-                "Current floor plans",
-                "Proposed internal layout options",
-                "Structural opening indicators",
-            ],
-        },
-        {
-            name: "Building Control Package",
-            price: "From £649",
-            bestFor: "Building Regs Approval",
-            intro: "Ideal if you already have planning approval (or are building under Permitted Development) and need the detailed architectural drawings required to clear Building Regulations.",
-            includes: [
-                "Measured survey",
-                "Current scaled drawings",
-                "Proposed scaled drawings",
-                "Detailed building regulations drawings",
-                "Submission to Building Control",
-                "Building regulations compliance guidance",
-            ],
-        },
-        {
-            name: "Bespoke Package",
-            price: "POA",
-            bestFor: "Large & Custom Builds",
-            intro: "For major renovations, new-build properties, premium smart-homes, or multi-unit residential developments requiring custom design consultation.",
-            includes: [
-                "Everything in Technical Package",
-                "Custom architectural concept design",
-                "Premium 3D spatial rendering layouts",
-                "Site feasibility & planning analysis",
-                "Direct specialist project advisory",
-                "Fast-tracked application compilation",
-            ],
-        },
-
-    ];
-
-    function handlePackageSelect(packageName) {
-        setSelectedPackage(packageName);
     }
 
-    function showNextDrawing() {
-        setDrawingIndex((prev) => (prev + 1) % drawingImages.length);
-    }
-
-    function showPrevDrawing() {
-        setDrawingIndex((prev) =>
-            prev === 0 ? drawingImages.length - 1 : prev - 1
-        );
-    }
-
-    const testimonials = [
-        {
-            name: "James R.",
-            role: "Rear Extension Planning Drawings",
-            text: "Crafman made the whole process straightforward. The drawings were clear, professional, and exactly what we needed to move ahead with our extension plans.",
-        },
-        {
-            name: "Sophie M.",
-            role: "Loft Conversion Drawings",
-            text: "Really impressed with the communication and speed. They explained each step clearly and delivered a drawing package that gave us confidence to proceed.",
-        },
-        {
-            name: "Daniel T.",
-            role: "Planning Application Support",
-            text: "We wanted a reliable service for our home project and Crafman delivered. The drawings looked great and the advice throughout the process was very helpful.",
-        },
-        {
-            name: "Aisha K.",
-            role: "Single Storey Extension Plans",
-            text: "Professional, responsive, and easy to work with. Everything was laid out clearly and the drawings captured exactly what we discussed.",
-        },
-        {
-            name: "Michael B.",
-            role: "House Extension Drawings",
-            text: "From the survey to the final plans, everything felt organised and well handled. It made a stressful part of the project much easier.",
-        },
-    ];
-
-    const visibleTestimonials = isMobile
-        ? [testimonials[testimonialIndex]]
-        : [
-            testimonials[testimonialIndex],
-            testimonials[(testimonialIndex + 1) % testimonials.length],
-            testimonials[(testimonialIndex + 2) % testimonials.length],
-        ];
-
-    function showPrevTestimonials() {
-        setTestimonialIndex((prev) =>
-            prev === 0 ? testimonials.length - 1 : prev - 1
-        );
-    }
-
-    function showNextTestimonials() {
-        setTestimonialIndex((prev) => (prev + 1) % testimonials.length);
-    }
-
-    const postcodeToArea = {
-        // Romford / Havering / Dagenham
-        RM1: "Romford", RM2: "Gidea Park", RM3: "Harold Wood", RM4: "Havering-atte-Bower",
-        RM5: "Collier Row", RM6: "Chadwell Heath", RM7: "Rush Green", RM8: "Dagenham",
-        RM9: "Dagenham", RM10: "Dagenham", RM11: "Hornchurch", RM12: "Hornchurch",
-        RM13: "Rainham", RM14: "Upminster", RM15: "South Ockendon", RM16: "Chafford Hundred",
-        RM17: "Grays", RM19: "Purfleet", RM20: "West Thurrock",
-        // Ilford / Redbridge / Epping Forest
-        IG1: "Ilford", IG2: "Gants Hill", IG3: "Seven Kings", IG4: "Redbridge",
-        IG5: "Clayhall", IG6: "Barkingside", IG7: "Chigwell", IG8: "Woodford Green",
-        IG9: "Buckhurst Hill", IG10: "Loughton", IG11: "Barking",
-        // East London Core
-        E1: "Whitechapel", E2: "Bethnal Green", E3: "Bow", E4: "Chingford",
-        E5: "Clapton", E6: "East Ham", E7: "Forest Gate", E8: "Hackney",
-        E9: "Homerton", E10: "Leyton", E11: "Leytonstone", E12: "Manor Park",
-        E13: "Plaistow", E14: "Canary Wharf", E15: "Stratford", E16: "Canning Town",
-        E17: "Walthamstow", E18: "South Woodford",
-        // Brentwood & Basildon Regions
-        CM13: "Brentwood", CM14: "Brentwood", CM15: "Shenfield",
-        SS14: "Basildon", SS15: "Laindon",
-        // Kent / South London Border (Cross-River Targets)
-        DA1: "Dartford", DA5: "Bexley", DA8: "Erith", DA14: "Sidcup",
-        DA15: "Blackfen", DA16: "Welling", SE9: "Eltham", SE10: "Greenwich",
-        SE18: "Woolwich", SE28: "Thamesmead"
-    };
-
-    const drawingsSchema = {
+    const schema = {
         "@context": "https://schema.org",
         "@graph": [
-            {
-                "@type": "GeneralContractor",
-                "@id": "https://www.crafman.co.uk/#organization",
-                "name": "Crafman Design and Build",
-                "legalName": "Crafman Building and Landscaping Ltd",
-                "url": "https://www.crafman.co.uk",
-                "image": "https://www.crafman.co.uk/images/drawings-hero.jpg",
-                "address": {
-                    "@type": "PostalAddress",
-                    "streetAddress": "Marsh Wy",
-                    "addressLocality": "London",
-                    "postalCode": "RM13 8EU",
-                    "addressCountry": "GB"
-                }
-            },
-            {
-                "@type": "Service",
-                "name": "Planning Drawings & Permission Support London & Essex",
-                "description": "Professional measured surveys, planning drawings, and building control packages for London and Essex homeowners.",
-                "provider": { "@id": "https://www.crafman.co.uk/#organization" },
-                "areaServed": ["London", "Essex"],
-                "hasOfferCatalog": {
-                    "@type": "OfferCatalog",
-                    "name": "Architectural Drawing Packages",
-                    "itemListElement": packages.map(pkg => ({
-                        "@type": "Offer",
-                        "itemOffered": {
-                            "@type": "Service",
-                            "name": pkg.name,
-                            "description": pkg.intro
-                        },
-                        "priceSpecification": {
-                            "@type": "PriceSpecification",
-                            "price": pkg.price.replace(/[^0-9]/g, ''),
-                            "priceCurrency": "GBP"
-                        }
-                    }))
-                }
-            },
-            {
-                "@type": "FAQPage",
-                "@id": "https://www.crafman.co.uk/drawings-planning#faq",
-                "mainEntity": [
-                    {
-                        "@type": "Question",
-                        "name": "Do I need planning permission for an extension in London?",
-                        "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": "Many London extensions fall under Permitted Development, but larger projects require full planning permission. Crafman provides professional architectural drawings and handles the entire council submission process."
-                        }
-                    },
-                    {
-                        "@type": "Question",
-                        "name": "What is included in a Crafman planning drawing package?",
-                        "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": "Crafman drawing packages include a comprehensive measured survey, existing and proposed scaled floor plans, elevations, sections, and full support for council planning submissions."
-                        }
-                    }
-                ]
-            }
+            { "@type": "Organization", "@id": "https://www.crafman.co.uk/#organization", "name": "Crafman Design and Build", "url": "https://www.crafman.co.uk" },
+            { "@type": "Service", "name": "Architectural Drawings and Planning Support", "provider": { "@id": "https://www.crafman.co.uk/#organization" }, "areaServed": ["London", "Essex"], "description": "Measured surveys, extension and loft planning drawings, council submission and Building Regulations drawings." },
+            { "@type": "FAQPage", "mainEntity": FAQS.map(({ q, a }) => ({ "@type": "Question", "name": q, "acceptedAnswer": { "@type": "Answer", "text": a } })) }
         ]
     };
 
-    return (
-        <Layout>
-            <Helmet>
-                <title>Planning Drawings & Permission London | Crafman | London & Essex</title>
-                <meta
-                    name="description"
-                    content="Professional planning drawings and permission support in London & Essex. Fixed-price packages for extensions, lofts, and renovations starting from £950."
-                />
-                <link rel="canonical" href="https://crafman.co.uk/drawings-planning" />
+    return <Layout>
+        <Helmet>
+            <title>Architectural Drawings & Planning London & Essex | Crafman</title>
+            <meta name="description" content="Architectural drawings for extensions, lofts, garden rooms and renovations across London & Essex. Measured surveys, council submissions and Building Regulations packages. Request a quote." />
+            <link rel="canonical" href="https://www.crafman.co.uk/drawings-planning" />
+            <meta property="og:image" content="https://www.crafman.co.uk/images/heroImage.png" />
+            <script type="application/ld+json">{JSON.stringify(schema)}</script>
+        </Helmet>
 
-                <script>
-                    {`
-                        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-                        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-                        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-                        })(window,document,'script','dataLayer','GTM-PLFBQMWH');
-                    `}
-                </script>
-
-                <script
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(drawingsSchema) }}
-                />
-            </Helmet>
-
-            
-
-            <noscript>
-                <iframe
-                    src="https://www.googletagmanager.com/ns.html?id=GTM-PLFBQMWH"
-                    height="0"
-                    width="0"
-                    style={{ display: 'none', visibility: 'hidden' }}
-                />
-            </noscript>
-
-            <div
-                style={{
-                    width: "100%",
-                    maxWidth: "100%",
-                    overflowX: "hidden",
-                    position: "relative",
-                }}
-            >
-                <>
-                    
-
-                    <div className="bg-[#09090b] min-h-screen text-white">
-                        {/* 3D Craffy Hero ONLY loads on the Drawings & Planning Landing Page */}
-                        <CraffyHeroSection />
-
-                        {/* Rest of your Drawings & Planning page content below */}
+        <div className="dp-page">
+            {/* Your Layout component owns the site header, including its phone/navigation. */}
+            <main>
+                <section className="dp-hero" aria-label="Architectural drawings and planning">
+                    <div className="dp-hero-image">
+                        <img src="/images/heroImage.png" fetchPriority="high" alt="Crafman architectural drawings transitioning into a contemporary rear extension" />
                     </div>
-
-                    {/* --- UPDATED: MOBILE-OPTIMIZED INTERACTIVE DRAWINGS SHOWCASE GALLERY --- */}
-                    <section
-                        id="portfolio-showcase"
-                        style={{
-                            borderTop: "1px solid #e7e5e4",
-                            borderBottom: "1px solid #e7e5e4",
-                            background: "#fcfbf8",
-                            width: "100%",
-                            overflow: "hidden"
-                        }}
-                    >
-                        <div style={{ ...section, padding: isMobile ? "48px 16px" : "64px 20px" }}>
-                            {/* Header Stack */}
-                            <div style={{ maxWidth: "760px", margin: "0 auto", textAlign: "center", marginBottom: isMobile ? "24px" : "36px" }}>
-                                <div style={{ fontSize: "12px", letterSpacing: "2px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>
-                                    Our Portfolio
-                                </div>
-                                <h2 style={{ margin: "10px 0 8px", fontSize: isMobile ? "28px" : "42px", lineHeight: "1.1", color: "#1f1f1f", letterSpacing: "-0.5px", fontWeight: "900" }}>
-                                    Blueprint to reality: Sample project outputs
-                                </h2>
-                                <p style={{ margin: "0 auto", maxWidth: "600px", color: "#57534e", fontSize: "15px", lineHeight: "1.5" }}>
-                                    Explore the exact quality of our 3D visualization models, municipal planning packages, and surgical building control technical drawings.
-                                </p>
+                    {/* Real HTML heading for SEO/accessibility. The hero image contains decorative headline artwork. */}
+                    <h1 className="dp-visually-hidden">Architectural Drawings and Planning in London and Essex</h1>
+                    <div className="dp-hero-cta">
+                        <div className="dp-wrap dp-hero-cta-inner">
+                            <div>
+                                <div className="dp-eyebrow dp-gold">DRAWINGS • PLANNING • BUILDING REGULATIONS</div>
+                                <p>Tell us what you want to build. We'll help you identify the right drawings and approval route.</p>
                             </div>
-
-                            {/* Master Slider Container */}
-                            <div style={{ maxWidth: "960px", margin: "0 auto", display: "grid", gap: isMobile ? "12px" : "20px" }}>
-
-                                {/* Focal Display Frame */}
-                                <div
-                                    style={{
-                                        position: "relative",
-                                        width: "100%",
-                                        height: isMobile ? "260px" : "520px",
-                                        borderRadius: "24px",
-                                        background: "#1f1f1f",
-                                        border: "1px solid #e7e5e4",
-                                        boxShadow: "0 20px 40px rgba(0,0,0,0.06)",
-                                        overflow: "hidden",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center"
-                                    }}
-                                >
-                                    {/* Live Image Frame */}
-                                    <img
-                                        src={drawingImages[drawingIndex].src}
-                                        alt={`Crafman Professional Architectural Sample - ${drawingImages[drawingIndex].label}`}
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "contain",
-                                            transition: "all 0.3s ease"
-                                        }}
-                                    />
-
-                                    {/* Technical Category Label Badge Overlay */}
-                                    <span
-                                        style={{
-                                            position: "absolute",
-                                            top: "16px",
-                                            left: "16px",
-                                            background: "rgba(31, 31, 31, 0.85)",
-                                            backdropFilter: "blur(8px)",
-                                            WebkitBackdropFilter: "blur(8px)",
-                                            color: "#E2BA6E",
-                                            padding: "6px 14px",
-                                            borderRadius: "8px",
-                                            fontSize: "12px",
-                                            fontWeight: "800",
-                                            textTransform: "uppercase",
-                                            letterSpacing: "1px",
-                                            border: "1px solid rgba(226, 186, 110, 0.3)",
-                                            zIndex: 3
-                                        }}
-                                    >
-                                        📐 {drawingImages[drawingIndex].label}
-                                    </span>
-
-                                    {/* Left Control Arrow */}
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            showPrevDrawing();
-                                            window.dataLayer = window.dataLayer || [];
-                                            window.dataLayer.push({ event: "portfolio_nav_click", direction: "prev", item_index: drawingIndex });
-                                        }}
-                                        aria-label="Previous image"
-                                        style={{
-                                            position: "absolute",
-                                            left: "16px",
-                                            width: "44px",
-                                            height: "44px",
-                                            borderRadius: "50%",
-                                            border: "none",
-                                            background: "rgba(255,255,255,0.9)",
-                                            color: "#1c1917",
-                                            fontSize: "20px",
-                                            fontWeight: "bold",
-                                            cursor: "pointer",
-                                            display: "grid",
-                                            placeItems: "center",
-                                            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                                            transition: "transform 0.15s",
-                                            zIndex: 3
-                                        }}
-                                    >
-                                        ←
-                                    </button>
-
-                                    {/* Right Control Arrow */}
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            showNextDrawing();
-                                            window.dataLayer = window.dataLayer || [];
-                                            window.dataLayer.push({ event: "portfolio_nav_click", direction: "next", item_index: drawingIndex });
-                                        }}
-                                        aria-label="Next image"
-                                        style={{
-                                            position: "absolute",
-                                            right: "16px",
-                                            width: "44px",
-                                            height: "44px",
-                                            borderRadius: "50%",
-                                            border: "none",
-                                            background: "rgba(255,255,255,0.9)",
-                                            color: "#1c1917",
-                                            fontSize: "20px",
-                                            fontWeight: "bold",
-                                            cursor: "pointer",
-                                            display: "grid",
-                                            placeItems: "center",
-                                            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                                            transition: "transform 0.15s",
-                                            zIndex: 3
-                                        }}
-                                    >
-                                        →
-                                    </button>
-                                </div>
-
-                                {/* 🚀 FIXED: Hardware-Locked Micro Thumbnail Strip Scroller Tray */}
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        gap: "10px",
-                                        overflowX: "auto",
-                                        width: "100%",
-                                        maxWidth: "100%",
-                                        padding: "6px 4px 14px 4px",
-                                        scrollBehavior: "smooth",
-                                        WebkitOverflowScrolling: "touch", // Fluid momentum swipe for iPhone
-                                        boxSizing: "border-box",
-                                        alignItems: "center"
-                                    }}
-                                >
-                                    {drawingImages.map((img, idx) => {
-                                        const isCurrent = idx === drawingIndex;
-                                        return (
-                                            <button
-                                                key={idx}
-                                                type="button"
-                                                onClick={() => {
-                                                    setDrawingIndex(idx);
-                                                    window.dataLayer = window.dataLayer || [];
-                                                    window.dataLayer.push({ event: "portfolio_thumbnail_click", item_index: idx });
-                                                }}
-                                                style={{
-                                                    padding: 0,
-                                                    background: "#1f1f1f",
-                                                    border: isCurrent ? "3px solid #A67C00" : "1px solid #e7e5e4",
-                                                    borderRadius: "12px",
-                                                    // 🔒 Locked Dimensions: Forces browser layout engine to respect sizes on mobile
-                                                    width: isMobile ? "80px" : "100px",
-                                                    minWidth: isMobile ? "80px" : "100px",
-                                                    height: isMobile ? "56px" : "70px",
-                                                    minHeight: isMobile ? "56px" : "70px",
-                                                    cursor: "pointer",
-                                                    overflow: "hidden",
-                                                    flexShrink: 0, // Stops flex container from crushing the thumbnail
-                                                    boxSizing: "border-box", // Prevents borders from distorting height math
-                                                    opacity: isCurrent ? 1 : 0.5,
-                                                    transition: "all 0.2s",
-                                                    outline: "none"
-                                                }}
-                                            >
-                                                <img
-                                                    src={img.src}
-                                                    alt=""
-                                                    style={{
-                                                        width: "100%",
-                                                        height: "100%",
-                                                        objectFit: "cover",
-                                                        display: "block"
-                                                    }}
-                                                />
-                                            </button>
-                                        );
-                                    })}
-                                </div>
+                            <div className="dp-hero-actions">
+                                <Cta href="#contact-form" onClick={() => sendEvent("hero_cta_click", { action: "request_review" })}>Get a project review</Cta>
+                                <Cta href="#packages" secondary onClick={() => sendEvent("hero_cta_click", { action: "view_packages" })}>See packages & prices</Cta>
                             </div>
                         </div>
-                    </section>
+                    </div>
+                </section>
 
-                    <section
-                        id="packages"
-                        style={{
-                            borderTop: "1px solid #e7e5e4",
-                            borderBottom: "1px solid #e7e5e4",
-                            background: "#fff",
-                        }}
-                    >
-                        <div style={{ ...section, padding: isMobile ? "40px 16px" : "64px 20px" }}>
-                            <div style={{ maxWidth: "760px", minWidth: 0, textAlign: isMobile ? "center" : "left" }}>
-                                <div style={{ fontSize: "12px", letterSpacing: "2px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>Packages</div>
-                                <h2 style={{ margin: "10px 0 8px", fontSize: isMobile ? "28px" : "42px", lineHeight: "1.1", color: "#1f1f1f", letterSpacing: "-0.5px" }}>Choose your project tier</h2>
-                            </div>
+                <section className="dp-proof-strip">
+                    <div className="dp-wrap dp-proof-grid">
+                        <span><MapPin size={18} /> London & Essex projects</span>
+                        <span><Ruler size={18} /> Measured surveys & scaled drawings</span>
+                        <span><FileCheck2 size={18} /> Council submission support</span>
+                    </div>
+                </section>
 
-                            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(280px, 1fr))", gap: isMobile ? "16px" : "20px", marginTop: isMobile ? "24px" : "36px", alignItems: "stretch" }}>
-                                {packages.map((pkg) => {
-                                    const isSelected = selectedPackage === pkg.name;
-                                    const isExpanded = expandedPackage === pkg.name || !isMobile;
-
-                                    return (
-                                        <div
-                                            key={pkg.name}
-                                            style={{
-                                                ...card,
-                                                minWidth: 0,
-                                                position: "relative",
-                                                background: pkg.featured ? "#1f1f1f" : "#fff",
-                                                color: pkg.featured ? "#fff" : "#1f1f1f",
-                                                border: pkg.featured ? "1px solid #1f1f1f" : "1px solid #e7e5e4",
-                                                borderRadius: "24px",
-                                                padding: isMobile ? "20px" : "26px",
-                                                boxSizing: "border-box",
-                                                boxShadow: pkg.featured ? "0 20px 40px rgba(28,25,23,0.14)" : "0 10px 24px rgba(28,25,23,0.04)",
-                                                transform: !isMobile && pkg.featured ? "translateY(-8px)" : "none",
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                justifyContent: "space-between",
-                                            }}
-                                        >
-                                            <div>
-                                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "4px" }}>
-                                                    <div>
-                                                        <span style={{
-                                                            display: "inline-block",
-                                                            padding: "2px 8px",
-                                                            borderRadius: "6px",
-                                                            background: pkg.featured ? "rgba(166, 124, 0, 0.2)" : "#f5f5f4",
-                                                            color: pkg.featured ? "#C6A243" : "#57534e",
-                                                            fontSize: "11px",
-                                                            fontWeight: "700",
-                                                            marginBottom: "6px",
-                                                            textTransform: "uppercase"
-                                                        }}>
-                                                            Best for: {pkg.bestFor}
-                                                        </span>
-                                                        <h3 style={{ margin: 0, fontSize: isMobile ? "20px" : "24px", fontWeight: "800" }}>{pkg.name}</h3>
-                                                    </div>
-                                                    {pkg.featured && (
-                                                        <span style={{ padding: "4px 10px", borderRadius: "999px", background: "#A67C00", color: "#fff", fontSize: "10px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "0.5px" }}>Popular</span>
-                                                    )}
-                                                </div>
-
-                                                <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "12px" }}>
-                                                    <span style={{ fontSize: isMobile ? "28px" : "36px", fontWeight: "900", color: pkg.featured ? "#fff" : "#1f1f1f" }}>{pkg.price}</span>
-                                                    <span style={{ fontSize: "12px", color: pkg.featured ? "#a8a29e" : "#78716c" }}>fixed cost</span>
-                                                </div>
-
-                                                <p style={{ margin: "0 0 16px", fontSize: "14px", lineHeight: "1.5", color: pkg.featured ? "#d6d3d1" : "#57534e" }}>{pkg.intro}</p>
-
-                                                {isMobile && (
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => {
-                                                            setExpandedPackage(isExpanded ? null : pkg.name);
-                                                            if (!isExpanded) {
-                                                                window.dataLayer = window.dataLayer || [];
-                                                                window.dataLayer.push({
-                                                                    event: "package_details_toggle",
-                                                                    package_name: pkg.name,
-                                                                    action: "expand",
-                                                                    device: "mobile"
-                                                                });
-                                                            }
-                                                        }}
-                                                        style={{
-                                                            display: "flex",
-                                                            alignItems: "center",
-                                                            justifyContent: "space-between",
-                                                            width: "100%",
-                                                            background: "none",
-                                                            border: "none",
-                                                            padding: "12px 0",
-                                                            color: pkg.featured ? "#C6A243" : "#A67C00",
-                                                            fontWeight: "700",
-                                                            fontSize: "13px",
-                                                            cursor: "pointer",
-                                                            borderTop: pkg.featured ? "1px solid #2e2a24" : "1px solid #f5f5f4",
-                                                        }}
-                                                    >
-                                                        <span>{isExpanded ? "Hide package details" : "Show package details"}</span>
-                                                        <span style={{ fontSize: "16px", transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }}>▼</span>
-                                                    </button>
-                                                )}
-
-                                                <div
-                                                    style={{
-                                                        display: isExpanded ? "grid" : "none",
-                                                        gap: "10px",
-                                                        paddingTop: isMobile ? "8px" : "16px",
-                                                        borderTop: !isMobile ? (pkg.featured ? "1px solid rgba(255,255,255,0.1)" : "1px solid #ece7df") : "none",
-                                                        animation: isMobile ? "faqFadeDown 0.2s ease" : "none",
-                                                    }}
-                                                >
-                                                    <div style={{ fontSize: "12px", fontWeight: "700", textTransform: "uppercase", color: pkg.featured ? "#a8a29e" : "#78716c", marginBottom: "4px" }}>Includes:</div>
-                                                    {pkg.includes.map((item) => (
-                                                        <div key={item} style={{ display: "flex", gap: "8px", alignItems: "center", fontSize: "14px" }}>
-                                                            <span style={{ color: pkg.featured ? "#C6A243" : "#A67C00", fontWeight: "900" }}>✓</span>
-                                                            <span style={{ color: pkg.featured ? "#f5f5f4" : "#44403c" }}>{item}</span>
-                                                        </div>
-                                                    ))}
-                                                    <div style={{ fontSize: "12px", color: pkg.featured ? "#a8a29e" : "#78716c", marginTop: "4px", fontStyle: "italic" }}>
-                                                        ⏱ Turnaround: 7–10 working days
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div style={{ marginTop: "24px" }}>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        handlePackageSelect(pkg.name);
-
-                                                        window.dataLayer = window.dataLayer || [];
-                                                        window.dataLayer.push({
-                                                            event: "package_button_click",
-                                                            package_name: pkg.name,
-                                                            package_price: pkg.price,
-                                                            is_featured: pkg.featured ? "yes" : "no"
-                                                        });
-
-                                                        document.getElementById("contact-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
-                                                    }}
-                                                    style={{
-                                                        width: "100%",
-                                                        minHeight: "48px",
-                                                        borderRadius: "14px",
-                                                        border: "none",
-                                                        background: isSelected ? "#A67C00" : (pkg.featured ? "#fff" : "#1f1f1f"),
-                                                        color: isSelected ? "#fff" : (pkg.featured ? "#1f1f1f" : "#fff"),
-                                                        fontSize: "14px",
-                                                        fontWeight: "800",
-                                                        cursor: "pointer",
-                                                        boxShadow: isSelected ? "0 8px 20px rgba(166,124,0,0.2)" : "none",
-                                                        transition: "all 0.2s",
-                                                    }}
-                                                >
-                                                    {isSelected ? "Selected" : "Get More Info"}
-                                                </button>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    </section>
-
-
-                    <section
-                        id="contact-form"
-                        style={{
-                            borderTop: "1px solid #e7e5e4",
-                            background: "#efebe6",
-                        }}
-                    >
-                        <div
-                            style={{
-                                maxWidth: "680px",
-                                margin: "0 auto",
-                                padding: isMobile ? "48px 16px" : "70px 24px",
-                                display: "grid",
-                                gap: "24px",
-                                boxSizing: "border-box",
-                            }}
-                        >
-                            <div style={{ textAlign: "center", minWidth: 0 }}>
-                                <div
-                                    style={{
-                                        fontSize: "12px",
-                                        letterSpacing: "2px",
-                                        textTransform: "uppercase",
-                                        color: "#78716c",
-                                        fontWeight: "700",
-                                    }}
-                                >
-
-                                </div>
-
-
-
-                                <p style={{ margin: "0 0 12px", color: "#57534e", fontSize: "14px", fontWeight: "500" }}>
-                                    No annoying sales calls. Just straight answers, clear advice, and zero pressure from our layout specialists.
-                                </p>
-
-                                {selectedPackage && (
-                                    <div
-                                        style={{
-                                            marginTop: "8px",
-                                            marginBottom: "16px",
-                                            display: "inline-flex",
-                                            alignItems: "center",
-                                            gap: "8px",
-                                            padding: "10px 14px",
-                                            borderRadius: "999px",
-                                            background: "#1f1f1f",
-                                            color: "#fff",
-                                            fontWeight: "700",
-                                            maxWidth: "100%",
-                                            flexWrap: "wrap",
-                                            lineHeight: "1.5",
-                                        }}
-                                    >
-                                        <span>Selected: {selectedPackage}</span>
-                                        <span style={{ opacity: 0.7 }}>•</span>
-                                        <span>
-                                            {packages.find((p) => p.name === selectedPackage)?.price}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-
-                            <div style={{ minWidth: 0 }}>
-                                <DrawingsPlanningForm
-                                    endpoint="https://formspree.io/f/maqlqgzz"
-                                    selectedPackage={selectedPackage}
-                                />
-                            </div>
-                        </div>
-                    </section>
-
-                    <section
-                        style={{
-                            borderTop: "1px solid #e7e5e4",
-                            borderBottom: "1px solid #e7e5e4",
-                            background: "#fff",
-                        }}
-                    >
-                        <div
-                            style={{
-                                ...section,
-                                padding: isMobile ? "48px 16px" : undefined,
-                            }}
-                        >
-                            <div
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    alignItems: "end",
-                                    gap: "20px",
-                                    flexWrap: "wrap",
-                                }}
-                            >
-                                <div style={{ maxWidth: "760px", minWidth: 0 }}>
-                                    <div
-                                        style={{
-                                            fontSize: "12px",
-                                            letterSpacing: "2px",
-                                            textTransform: "uppercase",
-                                            color: "#78716c",
-                                            fontWeight: "700",
-                                        }}
-                                    >
-                                        Testimonials
-                                    </div>
-
-                                    <h2
-                                        style={{
-                                            fontSize: isMobile ? "30px" : "40px",
-                                            marginTop: "12px",
-                                            marginBottom: "12px",
-                                            color: "#A67C00",
-                                            lineHeight: "1.08",
-                                        }}
-                                    >
-                                        What clients say about working with us
-                                    </h2>
-
-                                    <p
-                                        style={{
-                                            color: "#57534e",
-                                            lineHeight: "1.8",
-                                            margin: 0,
-                                            fontSize: isMobile ? "15px" : "16px",
-                                        }}
-                                    >
-                                        Clear communication, practical advice, and drawing packages
-                                        designed to help projects move forward with confidence.
-                                    </p>
-                                </div>
-
-                                <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
-                                    <button
-                                        type="button"
-                                        onClick={showPrevTestimonials}
-                                        aria-label="Previous testimonials"
-                                        style={{
-                                            height: "44px",
-                                            width: "44px",
-                                            borderRadius: "999px",
-                                            border: "1px solid #d6d3d1",
-                                            background: "#fff",
-                                            cursor: "pointer",
-                                            fontSize: "18px",
-                                        }}
-                                    >
-                                        ←
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        onClick={showNextTestimonials}
-                                        aria-label="Next testimonials"
-                                        style={{
-                                            height: "44px",
-                                            width: "44px",
-                                            borderRadius: "999px",
-                                            border: "1px solid #1c1917",
-                                            background: "#1c1917",
-                                            color: "#fff",
-                                            cursor: "pointer",
-                                            fontSize: "18px",
-                                        }}
-                                    >
-                                        →
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div
-                                style={{
-                                    display: "grid",
-                                    gridTemplateColumns: isMobile
-                                        ? "1fr"
-                                        : "repeat(auto-fit, minmax(260px, 1fr))",
-                                    gap: "20px",
-                                    marginTop: "30px",
-                                }}
-                            >
-                                {visibleTestimonials.map((item, index) => (
-                                    <div
-                                        key={`${item.name}-${index}`}
-                                        style={{
-                                            ...card,
-                                            minWidth: 0,
-                                            borderRadius: "22px",
-                                            border: "1px solid #e7e5e4",
-                                            boxShadow: "0 12px 26px rgba(28,25,23,0.05)",
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                marginBottom: "10px",
-                                                color: "#f59e0b",
-                                                fontSize: "18px",
-                                                letterSpacing: "1px",
-                                            }}
-                                        >
-                                            ★★★★★
-                                        </div>
-
-                                        <p
-                                            style={{
-                                                color: "#57534e",
-                                                lineHeight: "1.8",
-                                                marginTop: 0,
-                                                marginBottom: "16px",
-                                                fontSize: isMobile ? "15px" : "16px",
-                                            }}
-                                        >
-                                            “{item.text}”
-                                        </p>
-
-                                        <div style={{ fontWeight: "700", color: "#1f1f1f" }}>
-                                            {item.name}
-                                        </div>
-                                        <div style={{ color: "#78716c", fontSize: "14px" }}>
-                                            {item.role}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <div
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    gap: "8px",
-                                    marginTop: "22px",
-                                    flexWrap: "wrap",
-                                }}
-                            >
-                                {testimonials.map((_, i) => (
-                                    <button
-                                        key={i}
-                                        type="button"
-                                        onClick={() => setTestimonialIndex(i)}
-                                        aria-label={`Go to testimonial ${i + 1}`}
-                                        style={{
-                                            width: i === testimonialIndex ? "24px" : "10px",
-                                            height: "10px",
-                                            borderRadius: "999px",
-                                            border: "none",
-                                            cursor: "pointer",
-                                            background: i === testimonialIndex ? "#1c1917" : "#d6d3d1",
-                                            padding: 0,
-                                            transition: "all 0.22s ease",
-                                        }}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* --- INTERACTIVE POSTCODE CHECKER UNIT --- */}
-                    <div
-                        style={{
-                            maxWidth: "460px",
-                            marginTop: "28px",
-                            background: "rgba(255, 255, 255, 0.02)",
-                            backdropFilter: "blur(12px)",
-                            WebkitBackdropFilter: "blur(12px)",
-                            border: "1px solid rgba(255, 255, 255, 0.08)",
-                            borderRadius: "16px",
-                            padding: "14px 16px",
-                            boxSizing: "border-box",
-                        }}
-                    >
-                        {checkerStatus !== 'success' ? (
-                            <form onSubmit={handlePostcodeCheck} style={{ margin: 0, width: "100%" }}>
-                                <label
-                                    htmlFor="hero-postcode-search"
-                                    style={{
-                                        display: "block",
-                                        fontSize: "11px",
-                                        fontWeight: "700",
-                                        color: "#a8a29e",
-                                        textTransform: "uppercase",
-                                        letterSpacing: "1px",
-                                        marginBottom: "8px"
-                                    }}
-                                >
-                                    Check Coverage & Council Compliance
-                                </label>
-                                <div style={{ display: "flex", gap: "8px" }}>
-                                    <input
-                                        id="hero-postcode-search"
-                                        type="text"
-                                        placeholder="Enter Postcode (e.g. RM1, IG7)"
-                                        value={postcode}
-                                        onChange={(e) => {
-                                            setPostcode(e.target.value);
-                                            if (checkerStatus === 'error') setCheckerStatus('idle');
-                                        }}
-                                        disabled={checkerStatus === 'loading'}
-                                        style={{
-                                            flex: 1,
-                                            height: "42px",
-                                            borderRadius: "10px",
-                                            border: checkerStatus === 'error' ? "1px solid #ef4444" : "1px solid rgba(255,255,255,0.15)",
-                                            background: "rgba(0, 0, 0, 0.3)",
-                                            color: "#fff",
-                                            padding: "0 12px",
-                                            fontSize: "13px",
-                                            outline: "none",
-                                            textTransform: "uppercase"
-                                        }}
-                                    />
-                                    <button
-                                        type="submit"
-                                        disabled={checkerStatus === 'loading'}
-                                        style={{
-                                            height: "42px",
-                                            padding: "0 16px",
-                                            borderRadius: "10px",
-                                            border: "none",
-                                            background: "linear-gradient(135deg, #A67C00 0%, #C6A243 100%)",
-                                            color: "#fff",
-                                            fontSize: "13px",
-                                            fontWeight: "800",
-                                            cursor: "pointer",
-                                            transition: "opacity 0.2s"
-                                        }}
-                                    >
-                                        {checkerStatus === 'loading' ? 'Checking...' : 'Check Area'}
-                                    </button>
-                                </div>
-                                {checkerStatus === 'error' && (
-                                    <p style={{ margin: "6px 0 0", fontSize: "12px", color: "#ef4444", fontWeight: "500" }}>
-                                        Please enter your location postcode.
-                                    </p>
-                                )}
-                            </form>
-                        ) : (
-                            <div
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "12px",
-                                    animation: "faqFadeDown 0.25s ease-out"
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        width: "28px",
-                                        height: "28px",
-                                        borderRadius: "50%",
-                                        background: "rgba(34, 197, 94, 0.15)",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        color: "#4ade80",
-                                        fontWeight: "900",
-                                        fontSize: "14px",
-                                        flexShrink: 0
-                                    }}
-                                >
-                                    ✓
-                                </div>
-                                <div>
-                                    {/* Dynamically tracks and references your incoming live location text elements */}
-                                    <p style={{ margin: 0, fontSize: "14px", fontWeight: "800", color: "#a8a29e" }}>
-                                        Council District {resolvedArea || postcode.toUpperCase()} is Fully Covered
-                                    </p>
-                                    <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#a8a29e" }}>
-                                        We have complete drawing and planning coverage in your local council hub.
-                                    </p>
-                                </div>
-                            </div>
-                        )}
-                    </div> 
-
-                    {/* --- RISK-REVERSAL PROTECTION --- */}
-                    <section
-                        style={{
-                            borderTop: "1px solid #e7e5e4",
-                            borderBottom: "1px solid #e7e5e4",
-                            background: "linear-gradient(180deg, #fdfbf7 0%, #fcf9f2 100%)",
-                            padding: isMobile ? "48px 16px" : "64px 24px",
-                            position: "relative",
-                            overflow: "hidden"
-                        }}
-                    >
-                        <div
-                            style={{
-                                position: "absolute",
-                                bottom: "-30%",
-                                right: "-10%",
-                                width: "350px",
-                                height: "350px",
-                                borderRadius: "50%",
-                                border: "2px dashed rgba(166, 124, 0, 0.06)",
-                                pointerEvents: "none"
-                            }}
-                        />
-
-                        <div style={{ maxWidth: "960px", margin: "0 auto", width: "100%" }}>
-                            <div
-                                style={{
-                                    display: "grid",
-                                    gridTemplateColumns: isMobile ? "1fr" : "auto 1fr",
-                                    gap: isMobile ? "24px" : "40px",
-                                    alignItems: "center",
-                                    background: "#ffffff",
-                                    padding: isMobile ? "28px 20px" : "40px 48px",
-                                    borderRadius: "28px",
-                                    border: "1px solid #eadfcb",
-                                    boxShadow: "0 20px 40px rgba(166, 124, 0, 0.04)"
-                                }}
-                            >
-                                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", margin: isMobile ? "0 auto" : "0" }}>
-                                    <div
-                                        style={{
-                                            width: isMobile ? "80px" : "100px",
-                                            height: isMobile ? "80px" : "100px",
-                                            borderRadius: "50%",
-                                            background: "linear-gradient(135deg, #1f1f1f 0%, #121212 100%)",
-                                            color: "#C6A243",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            boxShadow: "0 12px 24px rgba(0,0,0,0.15)",
-                                            border: "2px solid #A67C00"
-                                        }}
-                                    >
-                                        <ShieldCheck size={isMobile ? 40 : 48} strokeWidth={2} />
-                                    </div>
-                                </div>
-
-                                <div style={{ textAlign: isMobile ? "center" : "left" }}>
-                                    <div style={{ fontSize: "12px", letterSpacing: "1.5px", textTransform: "uppercase", color: "#A67C00", fontWeight: "800", marginBottom: "8px" }}>
-                                        Crafman Risk-Reversal Protection
-                                    </div>
-
-                                    <h2
-                                        style={{
-                                            margin: "0 0 12px 0",
-                                            fontSize: isMobile ? "24px" : "32px",
-                                            lineHeight: "1.15",
-                                            fontWeight: "900",
-                                            color: "#1c1917",
-                                            letterSpacing: "-0.5px"
-                                        }}
-                                    >
-                                        Our 100% Council Approval <br className="hidden sm:inline" />Money-Back Guarantee Scheme
-                                    </h2>
-
-                                    <p
-                                        style={{
-                                            margin: "0 0 20px 0",
-                                            color: "#57534e",
-                                            fontSize: isMobile ? "14px" : "15px",
-                                            lineHeight: "1.6",
-                                            maxWidth: "680px"
-                                        }}
-                                    >
-                                        We handle London and Essex applications with complete regulatory certainty. If we accept your architectural project parameters, we guarantee your plans will pass council assessment. In the rare event that your application faces an absolute refusal that cannot be bypassed via free re-drafts, **we will issue a full 100% refund of your drawing package fee**.
-                                    </p>
-
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            flexWrap: "wrap",
-                                            justifyContent: isMobile ? "center" : "flex-start",
-                                            gap: isMobile ? "12px" : "24px",
-                                            fontSize: "13px",
-                                            fontWeight: "700",
-                                            color: "#1c1917",
-                                            borderTop: "1px solid #f5f5f4",
-                                            paddingTop: "16px"
-                                        }}
-                                    >
-                                        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                                            <span style={{ color: "#166534" }}>✓</span> Zero Financial Risk
-                                        </div>
-                                        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                                            <span style={{ color: "#166534" }}>✓</span> Free Corrective Re-Drafts
-                                        </div>
-                                        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                                            <span style={{ color: "#166534" }}>✓</span> Vetted Planning Experts
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* --- TRUST SIGNALS BADGES --- */}
-                    <section
-                        style={{
-                            borderTop: "1px solid #e7e5e4",
-                            borderBottom: "1px solid #e7e5e4",
-                            background: "#fcfbf8",
-                        }}
-                    >
-                        <div style={{ ...section, padding: isMobile ? "40px 16px" : "48px 20px" }}>
-                            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, minmax(0, 1fr))", gap: isMobile ? "16px" : "24px", alignItems: "stretch" }}>
-                                <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
-                                    <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px" }}>
-                                        <svg viewBox="0 0 24 24" width="22" height="22" style={{ marginRight: "2px" }}>
-                                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-                                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-                                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.85z" fill="#FBBC05" />
-                                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-                                        </svg>
-                                        <span style={{ fontWeight: "800", color: "#1f1f1f", fontSize: "16px", letterSpacing: "-0.3px" }}>Google Rating</span>
-                                    </div>
-                                    <div style={{ color: "#f59e0b", fontSize: "18px", letterSpacing: "2px", marginBottom: "6px" }}>★★★★★</div>
-                                    <div style={{ fontSize: "22px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.1" }}>4.9 / 5.0</div>
-                                    <p style={{ margin: "6px 0 0", fontSize: "13px", color: "#78716c", fontWeight: "500" }}>Verified Homeowner Feedback</p>
-                                </div>
-
-                                <div style={{ ...card, background: "#fff", border: "1px solid #e7e5e4", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.03)" }}>
-                                    <div style={{ width: "42px", height: "42px", borderRadius: "10px", background: "#16a34a", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "12px", boxShadow: "0 4px 12px rgba(22,163,74,0.15)" }}>
-                                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                                            <path d="M9 11l2 2 4-4" />
-                                        </svg>
-                                    </div>
-                                    <h3 style={{ margin: "0 0 4px", fontSize: "16px", fontWeight: "800", color: "#1f1f1f", lineHeight: "1.2" }}>TrustMark Government Endorsed</h3>
-                                    <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#57534e", lineHeight: "1.4" }}>Government-endorsed quality standard for absolute technical compliance.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </>
-
-                
-
-                <section style={{ background: "#fcfbf8", padding: "32px 16px", borderBottom: "1px solid #e7e5e4" }}>
-                    <div style={{ ...section, maxWidth: "800px", margin: "0 auto" }}>
-                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: "20px" }}>
+                <section className="dp-section dp-light" id="how-it-works">
+                    <div className="dp-wrap">
+                        <div className="dp-centered dp-narrow"><span className="dp-eyebrow">A SIMPLE WAY TO START</span><h2>From your idea to the right approval route</h2><p>Know what happens next before paying for the wrong drawings or application.</p></div>
+                        <div className="dp-steps">
                             {[
-                                { step: "01", title: "Free Consultation", desc: "We map out layout viable options and real-time costs." },
-                                { step: "02", title: "Measured Survey & Draft", desc: "Millimeter-accurate mapping of your existing space." },
-                                { step: "03", title: "Council Submission", desc: "We manage the entire backend application package for you." }
-                            ].map((item, i) => (
-                                <div key={i} style={{ display: "flex", gap: "12px", alignItems: "start" }}>
-                                    <span style={{ fontSize: "20px", fontWeight: "900", color: "#A67C00", opacity: 0.4 }}>{item.step}</span>
-                                    <div>
-                                        <h4 style={{ margin: "0 0 4px 0", fontSize: "14px", fontWeight: "700", color: "#1c1917" }}>{item.title}</h4>
-                                        <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4" }}>{item.desc}</p>
-                                    </div>
-                                </div>
-                            ))}
+                                { icon: MessageCircle, n: "01", title: "Tell us about the property", text: "Share the postcode, the type of project and what you'd like to achieve." },
+                                { icon: PencilRuler, n: "02", title: "Choose the drawing package", text: "We'll discuss scope, survey requirements and the likely planning or technical route." },
+                                { icon: ClipboardCheck, n: "03", title: "Drawings & submission", text: "We prepare agreed documents and handle included submissions, keeping you informed." }
+                            ].map(item => <article className="dp-step" key={item.n}><div className="dp-step-icon"><item.icon size={24} /></div><span className="dp-step-num">{item.n}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}
+                        </div>
+                        <div className="dp-centered dp-section-cta"><Cta href="#contact-form">Discuss my project</Cta></div>
+                    </div>
+                </section>
+
+                <section className="dp-section dp-white" id="packages">
+                    <div className="dp-wrap">
+                        <div className="dp-section-heading"><div><span className="dp-eyebrow">CLEAR STARTING PRICES</span><h2>Choose the right package for your project</h2><p>Pricing begins at the amounts shown. We'll confirm your exact scope, inclusions and third-party charges before you proceed.</p></div><a className="dp-text-link" href="#contact-form">Not sure? Ask us <ArrowRight size={17} /></a></div>
+                        <div className="dp-package-grid">
+                            {PACKAGES.map(pkg => <article className={`dp-package ${pkg.popular ? "dp-package-featured" : ""}`} key={pkg.name}>
+                                {pkg.popular && <div className="dp-ribbon">Popular for extensions & lofts</div>}
+                                <div className="dp-package-top"><span className="dp-mini">{pkg.bestFor}</span><h3>{pkg.name}</h3><div className="dp-price">{pkg.price}</div><p>{pkg.intro}</p></div>
+                                <div className="dp-package-includes"><strong>What's included</strong>{pkg.includes.map(value => <div key={value}><Check size={16} /><span>{value}</span></div>)}</div>
+                                <button type="button" className={`dp-btn ${pkg.popular ? "dp-btn-gold" : "dp-btn-dark"} dp-btn-full`} onClick={() => selectPackage(pkg)}>Enquire about this package <ArrowRight size={17} /></button>
+                            </article>)}
+                        </div>
+                        <p className="dp-fineprint">Council fees, structural engineering, specialist reports and VAT (if applicable) should be confirmed in the individual quotation. Planning decisions are made by the relevant local authority.</p>
+                    </div>
+                </section>
+
+                <section className="dp-section dp-gallery-section" id="portfolio-showcase">
+                    <div className="dp-wrap">
+                        <div className="dp-centered dp-narrow"><span className="dp-eyebrow">REAL PROJECT DOCUMENTATION</span><h2>See the drawings and planning work</h2><p>Browse examples of planning decisions, floor plans, elevations and 3D visuals from our gallery.</p></div>
+                        <div className="dp-gallery">
+                            <div className="dp-gallery-stage"><img src={GALLERY[activeImage].src} alt={GALLERY[activeImage].label} loading="lazy" /><span className="dp-gallery-label">{GALLERY[activeImage].label}</span>
+                                <button type="button" className="dp-gallery-arrow dp-gallery-prev" aria-label="Previous drawing" onClick={() => { setActiveImage(i => (i + GALLERY.length - 1) % GALLERY.length); sendEvent("portfolio_nav_click", { direction: "prev", item_index: activeImage }); }}><ArrowLeft size={20} /></button>
+                                <button type="button" className="dp-gallery-arrow dp-gallery-next" aria-label="Next drawing" onClick={() => { setActiveImage(i => (i + 1) % GALLERY.length); sendEvent("portfolio_nav_click", { direction: "next", item_index: activeImage }); }}><ArrowRight size={20} /></button>
+                            </div>
+                            <div className="dp-thumbnails">{GALLERY.map((img, i) => <button type="button" key={`${img.src}-${i}`} className={i === activeImage ? "dp-thumb dp-thumb-active" : "dp-thumb"} onClick={() => { setActiveImage(i); sendEvent("portfolio_thumbnail_click", { item_index: i }); }} aria-label={`View ${img.label} ${i + 1}`} aria-pressed={i === activeImage}><img src={img.src} alt="" loading="lazy" /></button>)}</div>
+                        </div>
+                        <div className="dp-centered dp-section-cta"><Cta href="#contact-form">Get drawings for my property</Cta></div>
+                    </div>
+                </section>
+
+                <section className="dp-section dp-white" id="contact-form">
+                    <div className="dp-wrap dp-form-layout">
+                        <aside className="dp-form-intro">
+                            <span className="dp-eyebrow">YOUR NEXT STEP</span><h2>Tell us about your project</h2>
+                            <p>Share your property and project details using the form. We'll review your enquiry and explain the next practical step.</p>
+                            <div className="dp-form-benefits">
+                                <div><Check size={19} /> Guidance on planning vs permitted development</div>
+                                <div><Check size={19} /> The drawings and services likely to be required</div>
+                                <div><Check size={19} /> A clear starting point for pricing and scope</div>
+                            </div>
+                            {selectedPackage && <div className="dp-selected"><strong>Selected package</strong><div>{selectedPackage}</div><span>{PACKAGES.find(p => p.name === selectedPackage)?.price}</span></div>}
+                            <div className="dp-call-box"><Phone size={19} /><div><strong>Prefer to talk?</strong><a href={`tel:${PHONE}`} onClick={() => sendEvent("phone_click", { location: "contact_section" })}>{PHONE}</a></div></div>
+                        </aside>
+                        <div className="dp-form-card">
+                            <h3>Request your project review</h3><p>Complete the enquiry below. No obligation to proceed.</p>
+                            {/* CRITICAL: preserve existing form component, props and Formspree destination */}
+                            <DrawingsPlanningForm endpoint={FORM_ENDPOINT} selectedPackage={selectedPackage} />
                         </div>
                     </div>
                 </section>
 
-                <section
-                    style={{
-                        borderTop: "1px solid #e7e5e4",
-                        borderBottom: "1px solid #e7e5e4",
-                        background: "#fff",
-                        overflow: "hidden",
-                    }}
-                >
-                    <div style={{ ...section, padding: isMobile ? "32px 16px" : "64px 20px" }}>
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns: isMobile ? "1fr" : "1fr 1.1fr",
-                                gap: isMobile ? "20px" : "48px",
-                                alignItems: "center",
-                            }}
-                        >
-                            <div>
-                                <div style={{ fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>
-                                    Free Consultation
-                                </div>
-                                <h2
-                                    style={{
-                                        fontSize: isMobile ? "26px" : "40px",
-                                        marginTop: "6px",
-                                        marginBottom: "12px",
-                                        lineHeight: "1.15",
-                                        color: "#1f1f1f",
-                                        letterSpacing: "-0.5px",
-                                    }}
-                                >
-                                    Complete <span style={{ color: "#A67C00" }}>project visibility</span> before you spend a penny
-                                </h2>
-                                <p style={{ color: "#44403c", fontSize: "14px", lineHeight: "1.5", margin: "0 0 20px 0", fontWeight: "500" }}>
-                                    Get a clear roadmap for your home based on real-time London build costs and strict council guidelines—completely free.
-                                </p>
-                            </div>
-
-                            <div
-                                style={{
-                                    display: "grid",
-                                    gap: "16px",
-                                    background: "#fcfbf8",
-                                    padding: isMobile ? "16px" : "24px",
-                                    borderRadius: "20px",
-                                    border: "1px solid #e7e5e4"
-                                }}
-                            >
-                                {[
-                                    { title: "Planning Strategy", desc: "Full permission vs. Permitted Development tracking." },
-                                    { title: "Sizes & Layouts", desc: "A structural reality check of your layout goals." },
-                                    { title: "Real Build Costs", desc: "Accurate budgets based on fluid local material & trade costs." },
-                                    { title: "Property Value Return", desc: "An honest look at how your new floor area impacts market equity." }
-                                ].map((item, index) => (
-                                    <div
-                                        key={index}
-                                        style={{
-                                            display: "flex",
-                                            gap: "12px",
-                                            alignItems: "flex-start",
-                                            paddingTop: index !== 0 ? (isMobile ? "10px" : "12px") : "0",
-                                            borderTop: index !== 0 ? "1px solid #e7e5e4" : "none"
-                                        }}
-                                    >
-                                        <span style={{ color: "#A67C00", fontWeight: "800", fontSize: "14px", lineHeight: "1" }}>✓</span>
-                                        <div>
-                                            <h4 style={{ margin: "0 0 2px 0", fontSize: "14px", fontWeight: "700", color: "#1c1917" }}>{item.title}</h4>
-                                            <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4" }}>{item.desc}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                <section className="dp-section dp-postcode-section" id="coverage">
+                    <div className="dp-wrap dp-postcode-layout">
+                        <div><span className="dp-eyebrow dp-gold">LOCAL PLANNING KNOWLEDGE</span><h2>Check your council area</h2><p>Enter a London or Essex postcode to identify its district. We'll confirm whether we can take on your project when you enquire.</p></div>
+                        <form className="dp-postcode-card" onSubmit={checkPostcode}>
+                            <label htmlFor="dp-postcode">Property postcode</label>
+                            <div className="dp-postcode-row"><input id="dp-postcode" type="text" autoComplete="postal-code" value={postcode} onChange={e => { setPostcode(e.target.value); setPostcodeStatus("idle"); }} placeholder="e.g. RM8 2BY" aria-describedby="dp-postcode-result" /><button type="submit" disabled={postcodeStatus === "loading"}>{postcodeStatus === "loading" ? "Checking…" : "Check area"}</button></div>
+                            <div id="dp-postcode-result" aria-live="polite" className="dp-postcode-result">{postcodeStatus === "success" ? `District identified: ${postcodeResult}. Ask us to confirm service availability and planning requirements.` : postcodeStatus === "error" ? "We couldn't validate that postcode. Please check it and try again." : "District lookup only — not an assessment of planning permission or availability."}</div>
+                        </form>
                     </div>
                 </section>
 
-               
-
-
-                <section
-                    style={{
-                        borderTop: "1px solid #e7e5e4",
-                        borderBottom: "1px solid #e7e5e4",
-                        background: "#fcfbf8",
-                        overflow: "hidden",
-                    }}
-                >
-                    <div style={{ ...section, padding: isMobile ? "40px 16px" : "64px 20px" }}>
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns: isMobile ? "1fr" : "1fr 1.1fr",
-                                gap: isMobile ? "24px" : "48px",
-                                alignItems: "center",
-                            }}
-                        >
-                            <div>
-                                <div style={{ fontSize: "12px", letterSpacing: "2px", textTransform: "uppercase", color: "#78716c", fontWeight: "700" }}>
-                                    The Crafman Difference
-                                </div>
-                                <h2
-                                    style={{
-                                        fontSize: isMobile ? "30px" : "40px",
-                                        marginTop: "10px",
-                                        marginBottom: "14px",
-                                        lineHeight: "1.1",
-                                        color: "#1f1f1f",
-                                        letterSpacing: "-0.5px",
-                                    }}
-                                >
-                                    We handle the drawings. <br />We also <span style={{ color: "#A67C00" }}>build the project.</span>
-                                </h2>
-                                <p style={{ color: "#44403c", fontSize: "15px", lineHeight: "1.6", margin: 0, fontWeight: "500" }}>
-                                    Crafman is a fully integrated **Design & Build** contractor. We don’t just hand over drawings and walk away—our in-house team of master builders handles your entire project from first sketch to final brickwork.
-                                </p>
-                            </div>
-
-                            <div
-                                style={{
-                                    display: "grid",
-                                    gap: "14px",
-                                    background: "#fff",
-                                    padding: isMobile ? "20px" : "24px",
-                                    borderRadius: "20px",
-                                    border: "1px solid #e7e5e4",
-                                    boxShadow: "0 8px 24px rgba(0,0,0,0.02)"
-                                }}
-                            >
-                                {[
-                                    { title: "One Point of Contact", desc: "No friction or blame-shifting between architect and builder." },
-                                    { title: "Budget-Aware Design", desc: "Drawings are optimized for real-world build costs from day one." },
-                                    { title: "Full Project Delivery", desc: "From surveys and planning to structural engineering and construction." }
-                                ].map((item, index) => (
-                                    <div
-                                        key={index}
-                                        style={{
-                                            paddingTop: index !== 0 ? "12px" : "0",
-                                            borderTop: index !== 0 ? "1px solid #f5f5f4" : "none",
-                                            display: "flex",
-                                            gap: "12px",
-                                        }}
-                                    >
-                                        <span style={{ color: "#A67C00", fontWeight: "800", fontSize: "14px" }}>✓</span>
-                                        <div>
-                                            <h4 style={{ margin: "0 0 2px 0", fontSize: "14px", fontWeight: "700", color: "#1c1917" }}>{item.title}</h4>
-                                            <p style={{ margin: 0, fontSize: "13px", color: "#6b6661", lineHeight: "1.4" }}>{item.desc}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                <section className="dp-section dp-light" id="faqs">
+                    <div className="dp-wrap dp-faq-layout">
+                        <div><span className="dp-eyebrow">FREQUENT QUESTIONS</span><h2>Answers before you get started</h2><p>Planning can be confusing. Here are the questions we hear most often.</p><Cta href="#contact-form">Ask about my property</Cta></div>
+                        <div className="dp-faq-list">{FAQS.map((item, i) => <div className="dp-faq" key={item.q}><button type="button" aria-expanded={openFaq === i} onClick={() => setOpenFaq(openFaq === i ? -1 : i)}><span>{item.q}</span><ChevronDown size={19} className={openFaq === i ? "dp-chevron-open" : ""} /></button>{openFaq === i && <p>{item.a}</p>}</div>)}</div>
                     </div>
                 </section>
 
-                <section
-                    style={{
-                        borderTop: "1px solid #e7e5e4",
-                        borderBottom: "1px solid #e7e5e4",
-                        background: "linear-gradient(180deg, #ffffff 0%, #f8f5ef 100%)",
-                    }}
-                >
-                    <div style={section}>
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns: isMobile
-                                    ? "1fr"
-                                    : "minmax(280px, 0.9fr) minmax(320px, 1.1fr)",
-                                gap: "36px",
-                                alignItems: "start",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    position: isMobile ? "relative" : "sticky",
-                                    top: isMobile ? "auto" : "110px",
-                                    ...card,
-                                    background: "#1f1f1f",
-                                    color: "#fff",
-                                    border: "1px solid #1f1f1f",
-                                    minWidth: 0,
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        fontSize: "12px",
-                                        letterSpacing: "2px",
-                                        textTransform: "uppercase",
-                                        color: "#d6d3d1",
-                                        fontWeight: "700",
-                                    }}
-                                >
-                                    Frequently Asked Questions
-                                </div>
-
-                                <h2
-                                    style={{
-                                        fontSize: "42px",
-                                        marginTop: "12px",
-                                        marginBottom: "14px",
-                                        lineHeight: "1.08",
-                                    }}
-                                >
-                                    Drawings, planning permission and permitted development FAQs
-                                </h2>
-
-                                <p
-                                    style={{
-                                        color: "#f5f5f4",
-                                        lineHeight: "1.85",
-                                        marginBottom: "18px",
-                                    }}
-                                >
-                                    A few common questions clients ask before starting drawings,
-                                    planning, or technical packages.
-                                </p>
-
-                                <div style={{ display: "grid", gap: "10px" }}>
-                                    {[
-                                        "Planning permission guidance",
-                                        "Permitted development support",
-                                        "Package and drawing clarity",
-                                        "Make a change",
-                                    ].map((item) => (
-                                        <div
-                                            key={item}
-                                            style={{
-                                                padding: "10px 14px",
-                                                borderRadius: "999px",
-                                                border: "1px solid rgba(255,255,255,0.12)",
-                                                background: "rgba(255,255,255,0.06)",
-                                                color: "#fff",
-                                                fontSize: "14px",
-                                                fontWeight: "600",
-                                                width: "fit-content",
-                                                maxWidth: "100%",
-                                            }}
-                                        >
-                                            {item}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div style={{ display: "grid", gap: "14px", minWidth: 0 }}>
-                                {[
-                                    {
-                                        number: "01",
-                                        title: "Do I need planning permission for an extension?",
-                                        text: "Some extensions need planning permission, while others may fall under permitted development. This depends on the size, design, location, and type of property involved.",
-                                    },
-                                    {
-                                        number: "02",
-                                        title: "What is permitted development?",
-                                        text: "Permitted development allows certain works to be carried out without a full planning application, as long as the project stays within the relevant limits and conditions.",
-                                    },
-                                    {
-                                        number: "03",
-                                        title: "Do loft conversions always need planning permission?",
-                                        text: "Not always. Some loft conversions can fall under permitted development, but others may need planning permission depending on the roof changes, design, property type, and local restrictions.",
-                                    },
-                                    {
-                                        number: "04",
-                                        title: "Does internal reconfiguration need planning permission?",
-                                        text: "Internal reconfiguration often does not need planning permission, but it may still require building control input, structural design, or other technical drawings depending on the works involved.",
-                                    },
-                                    {
-                                        number: "05",
-                                        title: "What types of projects can you prepare drawings for?",
-                                        text: "We can prepare drawings for rear extensions, side return extensions, wraparound extensions, loft conversions, and internal layout changes, as well as other residential improvement works.",
-                                    },
-                                    {
-                                        number: "06",
-                                        title: "What drawings are included in your packages?",
-                                        text: "Depending on the package, drawings can include a measured survey, current scaled drawings, proposed scaled drawings, elevations, 3D rendering on request, council submission support, and building control drawings.",
-                                    },
-                                    {
-                                        number: "07",
-                                        title: "What is the difference between planning drawings and building control drawings?",
-                                        text: "Planning drawings are usually prepared to support a planning application or show the design proposal clearly. Building control drawings go further into technical detail for compliance and construction requirements.",
-                                    },
-                                    {
-                                        number: "08",
-                                        title: "Can you submit drawings to the council for me?",
-                                        text: "Yes. Our planning package and technical package can include submission to the council, depending on the level of support you need.",
-                                    },
-                                    {
-                                        number: "09",
-                                        title: "Do I need a measured survey before drawings are prepared?",
-                                        text: "In most cases, yes. A measured survey helps create an accurate base for the existing and proposed drawings, which is important for both planning and technical accuracy.",
-                                    },
-                                    {
-                                        number: "10",
-                                        title: "Can you advise whether my project is likely to fall under permitted development?",
-                                        text: "We can help review the type of project you are planning and guide you on whether it may fall under permitted development or is more likely to need a planning application.",
-                                    },
-                                ].map((item, index) => {
-                                    const isOpen = openFaq === index;
-
-                                    return (
-                                        <div
-                                            key={item.number}
-                                            style={{
-                                                ...card,
-                                                padding: "0",
-                                                overflow: "hidden",
-                                                border: "1px solid #e7e5e4",
-                                                background: isOpen ? "#fff" : index % 2 === 0 ? "#fff" : "#fcfbf8",
-                                                boxShadow: isOpen
-                                                    ? "0 16px 34px rgba(0,0,0,0.07)"
-                                                    : "0 8px 24px rgba(0,0,0,0.04)",
-                                                transition: "all 0.25s ease",
-                                                minWidth: 0,
-                                            }}
-                                        >
-                                            <button
-                                                type="button"
-                                                onClick={() => setOpenFaq((prev) => (prev === index ? -1 : index))}
-                                                style={{
-                                                    width: "100%",
-                                                    border: "none",
-                                                    background: "transparent",
-                                                    padding: 0,
-                                                    cursor: "pointer",
-                                                    textAlign: "left",
-                                                }}
-                                            >
-                                                <div
-                                                    style={{
-                                                        display: "grid",
-                                                        gridTemplateColumns: isMobile
-                                                            ? "56px 1fr 40px"
-                                                            : "72px 1fr auto",
-                                                        alignItems: "center",
-                                                        minWidth: 0,
-                                                    }}
-                                                >
-                                                    <div
-                                                        style={{
-                                                            background: isOpen || index % 3 === 1 ? "#A67C00" : "#1f1f1f",
-                                                            color: "#fff",
-                                                            display: "flex",
-                                                            alignItems: "center",
-                                                            justifyContent: "center",
-                                                            fontWeight: "800",
-                                                            fontSize: isMobile ? "16px" : "18px",
-                                                            letterSpacing: "1px",
-                                                            minHeight: "100%",
-                                                            padding: "24px 0",
-                                                        }}
-                                                    >
-                                                        {item.number}
-                                                    </div>
-
-                                                    <div style={{ padding: isMobile ? "18px 16px" : "22px 24px", minWidth: 0 }}>
-                                                        <h3
-                                                            style={{
-                                                                margin: 0,
-                                                                fontSize: isMobile ? "18px" : "22px",
-                                                                lineHeight: "1.35",
-                                                                color: "#1f1f1f",
-                                                                wordBreak: "break-word",
-                                                            }}
-                                                        >
-                                                            {item.title}
-                                                        </h3>
-                                                    </div>
-
-                                                    <div style={{ paddingRight: isMobile ? "16px" : "22px", fontSize: "20px", fontWeight: "700", color: "#78716c" }}>
-                                                        {isOpen ? "−" : "+"}
-                                                    </div>
-                                                </div>
-                                            </button>
-
-                                            {isOpen && (
-                                                <div
-                                                    style={{
-                                                        padding: isMobile ? "0 16px 20px 16px" : "0 24px 24px 96px",
-                                                        color: "#57534e",
-                                                        lineHeight: "1.85",
-                                                        animation: "faqFadeDown 0.22s ease",
-                                                    }}
-                                                >
-                                                    {item.text}
-                                                </div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-
-                                <div style={{ padding: "20px 22px", borderRadius: "18px", background: "#fff", border: "1px solid #e7e5e4", boxShadow: "0 8px 24px rgba(0,0,0,0.04)" }}>
-                                    <div style={{ fontSize: "12px", letterSpacing: "2px", textTransform: "uppercase", color: "#78716c", fontWeight: "700", marginBottom: "10px" }}>
-                                        Still unsure?
-                                    </div>
-                                    <p style={{ margin: 0, color: "#57534e", lineHeight: "1.85" }}>
-                                        If you are not sure which route your project falls under, the enquiry form is the best place to start. We can review the project type, package level, and likely next step with you.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <style>
-                            {`
-                                @keyframes faqFadeDown {
-                                    0% { opacity: 0; transform: translateY(-6px); }
-                                    100% { opacity: 1; transform: translateY(0); }
-                                }
-                                html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
-                                * { box-sizing: border-box; }
-                                img { max-width: 100%; }
-                            `}
-                        </style>
-                    </div>
-                </section>
-            </div>
-
-            <footer
-                style={{
-                    borderTop: "1px solid #e7e5e4",
-                    background: "#1f1f1f",
-                    color: "#d6d3d1",
-                    overflow: "hidden",
-                }}
-            >
-                <div
-                    style={{
-                        ...section,
-                        padding: isMobile ? "40px 16px 24px 16px" : "60px 20px 30px 20px",
-                    }}
-                >
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: isMobile ? "1fr" : "2fr 1fr 1fr",
-                            gap: isMobile ? "32px" : "40px",
-                            paddingBottom: "30px",
-                            borderBottom: "1px solid rgba(255,255,255,0.08)",
-                            alignItems: "start",
-                        }}
-                    >
-                        <div style={{ minWidth: 0 }}>
-                            <div style={{ fontSize: "18px", fontWeight: "800", color: "#fff", marginBottom: "12px", letterSpacing: "-0.3px" }}>
-                                Crafman <span style={{ color: "#C6A243", fontWeight: "400" }}>Architectural</span>
-                            </div>
-                            <p style={{ margin: "0 0 16px 0", fontSize: "14px", color: "#a8a29e", lineHeight: "1.5", maxWidth: "320px" }}>
-                                Professional architectural drawing packages and premium full-lifecycle residential construction across London & Essex.
-                            </p>
-                            <div style={{ fontSize: "13px", lineHeight: "1.6", color: "#78716c" }}>
-                                <strong style={{ color: "#fff", display: "block", marginBottom: "2px" }}>Registered Office:</strong>
-                                Crafman Building and Landscaping Ltd<br />
-                                Marsh Wy, Rainham<br />
-                                RM13 8EU
-                            </div>
-                        </div>
-
-                        <div>
-                            <div style={{ fontSize: "12px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "1.5px", color: "#fff", marginBottom: "14px" }}>
-                                Services
-                            </div>
-                            <div style={{ display: "grid", gap: "10px", fontSize: "14px" }}>
-                                <a href="#packages" style={{ color: "#a8a29e", textDecoration: "none" }}>Drawing Packages</a>
-                                <a href="#contact-form" style={{ color: "#a8a29e", textDecoration: "none" }}>Get a Quote</a>
-                                <a href="#packages" style={{ color: "#a8a29e", textDecoration: "none" }}>Design & Build Support</a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div style={{ fontSize: "12px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "1.5px", color: "#fff", marginBottom: "14px" }}>
-                                Contact
-                            </div>
-                            <div style={{ display: "grid", gap: "10px", fontSize: "14px" }}>
-                                <a href="tel:02081914122" style={{ color: "#C6A243", textDecoration: "none", fontWeight: "700" }}>
-                                    02081914122
-                                </a>
-                                <span style={{ color: "#a8a29e" }}>Mon – Fri: 8am – 6pm</span>
-                                <span style={{ color: "#78716c", fontSize: "12px" }}>Promo Code: CRAF100</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        style={{
-                            paddingTop: "20px",
-                            display: "flex",
-                            flexDirection: isMobile ? "column" : "row",
-                            justifyContent: "space-between",
-                            alignItems: isMobile ? "flex-start" : "center",
-                            gap: "12px",
-                            fontSize: "12px",
-                            color: "#78716c",
-                        }}
-                    >
-                        <div>
-                            © {new Date().getFullYear()} Crafman Building and Landscaping Ltd. All rights reserved.
-                        </div>
-                        <div style={{ display: "flex", gap: "16px" }}>
-                            <span>Company No. Reg in UK</span>
-                            <span>Vetted Master Builder</span>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-        </Layout>
-    );
+                <section className="dp-bottom-cta"><div className="dp-wrap dp-bottom-cta-inner"><div><span className="dp-eyebrow dp-gold">READY TO GET STARTED?</span><h2>Make the next step clear.</h2><p>Tell us about your extension, loft or renovation and we'll help you work out the drawing package you need.</p></div><div className="dp-bottom-actions"><Cta href="#contact-form">Start my enquiry</Cta><a href={`tel:${PHONE}`} className="dp-call-link" onClick={() => sendEvent("phone_click", { location: "bottom_cta" })}><Phone size={17} /> {PHONE}</a></div></div></section>
+            </main>
+            <footer className="dp-footer"><div className="dp-wrap dp-footer-inner"><div><strong>Crafman <span>Architectural</span></strong><p>Architectural drawings & planning support across London and Essex.</p><small>© {new Date().getFullYear()} Crafman Building and Landscaping Ltd.</small></div><div className="dp-footer-links"><a href="#packages">Packages</a><a href="#portfolio-showcase">Our work</a><a href="#faqs">FAQs</a><a href="#contact-form">Enquire</a><a href={`tel:${PHONE}`}>Call {PHONE}</a></div></div></footer>
+            <div className="dp-mobile-sticky" aria-label="Quick enquiry actions"><a href="#contact-form">Get a project review <ArrowRight size={17} /></a><a href={`tel:${PHONE}`} aria-label="Call Crafman"><Phone size={20} /></a></div>
+        </div>
+        <style>{`
+      .dp-page{--gold:${GOLD};--dark:${DARK};font-family:inherit;color:#231f19;overflow-x:clip} .dp-page *{box-sizing:border-box} .dp-page img{max-width:100%} .dp-wrap{width:min(1160px,calc(100% - 40px));margin-inline:auto} .dp-section{padding:76px 0;scroll-margin-top:85px} .dp-light{background:#f8f6f1}.dp-white{background:#fff}.dp-centered{text-align:center}.dp-narrow{max-width:680px;margin:0 auto}.dp-eyebrow{font-size:11px;font-weight:800;letter-spacing:1.8px;color:#977018}.dp-gold{color:#e4bc67}.dp-page h2{font-size:clamp(29px,3.6vw,43px);line-height:1.13;letter-spacing:-.9px;margin:12px 0 16px}.dp-page h3{line-height:1.24}.dp-page p{line-height:1.65}.dp-narrow p,.dp-section-heading p{color:#666058}.dp-btn{border:0;cursor:pointer;display:inline-flex;gap:12px;align-items:center;justify-content:center;padding:15px 21px;font:inherit;font-size:14px;font-weight:800;text-decoration:none;border-radius:9px;transition:transform .2s,background .2s;min-height:48px}.dp-btn:hover{transform:translateY(-2px)}.dp-btn-gold{background:linear-gradient(115deg,#a67c00,#c6a243);color:#fff}.dp-btn-outline{background:transparent;border:1px solid #a58a48;color:#fff}.dp-btn-dark{background:#211e19;color:#fff}.dp-btn-full{width:100%}.dp-visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}.dp-hero{background:#0d0d0b}.dp-hero-image img{display:block;width:100%;height:auto}.dp-hero-cta{background:#141310;border-top:1px solid #413923}.dp-hero-cta-inner{padding:19px 0;display:flex;align-items:center;justify-content:space-between;gap:28px}.dp-hero-cta p{color:#e0d9ca;margin:7px 0 0;font-size:14px;max-width:520px}.dp-hero-actions{display:flex;gap:10px;flex-shrink:0}.dp-proof-strip{background:#fff;border-bottom:1px solid #ede9df}.dp-proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:18px 0}.dp-proof-grid span{display:flex;align-items:center;justify-content:center;gap:9px;font-size:13px;font-weight:700;color:#4d473e}.dp-proof-grid svg{color:#a67c00;flex-shrink:0}.dp-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:35px}.dp-step{position:relative;background:#fff;border:1px solid #eae4d9;border-radius:16px;padding:26px}.dp-step-icon{display:inline-flex;background:#f7f0df;color:#a67c00;padding:12px;border-radius:12px}.dp-step-num{position:absolute;top:27px;right:25px;color:#c6b895;font-weight:900}.dp-step h3{font-size:20px;margin:18px 0 9px}.dp-step p{font-size:14px;color:#655f55;margin:0}.dp-section-cta{margin-top:30px}.dp-section-heading{display:flex;justify-content:space-between;align-items:end;gap:25px;margin-bottom:28px}.dp-section-heading>div{max-width:670px}.dp-section-heading p{margin:0}.dp-text-link{color:#8d6916;font-weight:800;text-decoration:none;display:inline-flex;gap:6px;align-items:center;white-space:nowrap}.dp-package-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.dp-package{position:relative;display:flex;flex-direction:column;min-width:0;border:1px solid #e4ded3;border-radius:16px;padding:24px;background:#fff}.dp-package-featured{background:#211f1b;color:#fff;border-color:#c6a243}.dp-ribbon{font-size:11px;color:#e8c875;font-weight:800;letter-spacing:.3px;margin-bottom:12px}.dp-mini{color:#9c792d;text-transform:uppercase;font-size:11px;font-weight:800;letter-spacing:1px}.dp-package-featured .dp-mini{color:#e4bc67}.dp-package h3{font-size:19px;margin:10px 0}.dp-price{font-size:28px;font-weight:900;margin-bottom:8px}.dp-package-top p{color:#6d655a;font-size:14px;margin:0}.dp-package-featured .dp-package-top p{color:#d2ccc1}.dp-package-includes{display:grid;gap:10px;margin:24px 0;flex:1;font-size:14px}.dp-package-includes strong{margin-bottom:4px}.dp-package-includes>div{display:flex;gap:10px;align-items:start}.dp-package-includes svg{flex-shrink:0;color:#ba963a}.dp-fineprint{font-size:12px;color:#756b61;margin-top:20px}.dp-gallery-section{background:#f7f5f0}.dp-gallery{max-width:900px;margin:30px auto 0}.dp-gallery-stage{height:min(54vw,480px);min-height:240px;position:relative;background:#222;border-radius:16px;overflow:hidden;display:flex;align-items:center;justify-content:center}.dp-gallery-stage>img{width:100%;height:100%;object-fit:contain}.dp-gallery-label{position:absolute;top:15px;left:15px;background:#1b1b1be5;color:#edc873;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:800}.dp-gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);display:grid;place-items:center;background:#ffffffed;color:#201d17;border:0;border-radius:50%;width:42px;height:42px;cursor:pointer}.dp-gallery-prev{left:12px}.dp-gallery-next{right:12px}.dp-thumbnails{display:flex;gap:9px;overflow-x:auto;padding:12px 0}.dp-thumb{flex:0 0 86px;height:61px;border:2px solid transparent;border-radius:8px;overflow:hidden;padding:0;background:#211f1b;opacity:.66;cursor:pointer}.dp-thumb-active{border-color:#a67c00;opacity:1}.dp-thumb img{height:100%;width:100%;object-fit:cover}.dp-form-layout{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:46px;align-items:start}.dp-form-intro{padding-top:10px}.dp-form-intro>p{color:#655f56;font-size:16px}.dp-form-benefits{display:grid;gap:15px;margin-top:28px}.dp-form-benefits>div{display:flex;align-items:start;gap:10px;font-weight:650}.dp-form-benefits svg{color:#9b761d;flex-shrink:0}.dp-selected{margin-top:25px;padding:18px;background:#f7f3e9;border:1px solid #e9ddc4;border-radius:12px}.dp-selected strong{display:block;font-size:12px;text-transform:uppercase;letter-spacing:1px}.dp-selected div{font-weight:800;margin-top:5px}.dp-selected span{color:#977018}.dp-call-box{display:flex;gap:12px;margin-top:28px;padding-top:24px;border-top:1px solid #e8e2d9}.dp-call-box svg{color:#987319}.dp-call-box strong,.dp-call-box a{display:block}.dp-call-box a{font-size:21px;color:#987319;font-weight:800;text-decoration:none;margin-top:4px}.dp-form-card{padding:24px;border:1px solid #e9e2d5;background:#fdfcf9;border-radius:16px;box-shadow:0 14px 35px #1d1b1610;min-width:0}.dp-form-card h3{font-size:23px;margin:0 0 4px}.dp-form-card>p{color:#6d675f;font-size:14px;margin:0 0 20px}.dp-postcode-section{background:#211e19;color:#fff}.dp-postcode-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}.dp-postcode-layout p{color:#d6cfc4;max-width:500px}.dp-postcode-card{background:#322e26;border:1px solid #554931;border-radius:13px;padding:22px;min-width:0}.dp-postcode-card label{display:block;font-size:13px;font-weight:750;margin-bottom:10px}.dp-postcode-row{display:flex;gap:9px}.dp-postcode-row input{min-width:0;flex:1;padding:13px;border-radius:7px;border:1px solid #746d5c;background:#fff;color:#231f19;font-size:15px}.dp-postcode-row button{border:0;background:#c6a243;color:#171714;border-radius:7px;font-weight:800;padding:10px 16px;cursor:pointer}.dp-postcode-row button:disabled{opacity:.6}.dp-postcode-result{font-size:12px;color:#d0c6b6;margin-top:12px;line-height:1.5}.dp-faq-layout{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:55px}.dp-faq-layout>div:first-child>p{margin-bottom:25px;color:#645d53}.dp-faq-list{display:grid;gap:11px}.dp-faq{border:1px solid #e3dccf;border-radius:12px;background:#fff;overflow:hidden}.dp-faq button{background:none;border:0;width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px;font:inherit;font-weight:800;font-size:15px;text-align:left;cursor:pointer;color:#231f19}.dp-faq svg{flex-shrink:0;transition:transform .2s}.dp-chevron-open{transform:rotate(180deg)}.dp-faq p{padding:0 20px 18px;margin:0;color:#625d54;font-size:14px}.dp-bottom-cta{background:#151411;color:#fff;padding:48px 0}.dp-bottom-cta-inner{display:flex;justify-content:space-between;align-items:center;gap:35px}.dp-bottom-cta h2{font-size:34px;margin:10px 0}.dp-bottom-cta p{color:#d6d0c6;max-width:590px;margin:0}.dp-bottom-actions{display:grid;gap:13px;justify-items:center;flex-shrink:0}.dp-call-link{color:#eac86c;display:flex;gap:9px;align-items:center;text-decoration:none;font-weight:800}.dp-footer{background:#11110f;color:#bcb7ae;border-top:1px solid #39352e}.dp-footer-inner{padding:32px 0;display:flex;justify-content:space-between;gap:25px}.dp-footer strong{color:#fff}.dp-footer strong span{color:#d5a93f}.dp-footer p{margin:7px 0;font-size:13px}.dp-footer small{font-size:12px}.dp-footer-links{display:flex;gap:15px;flex-wrap:wrap;align-content:center}.dp-footer-links a{color:#d6d0c4;text-decoration:none;font-size:13px}.dp-mobile-sticky{display:none}
+      @media(max-width:1000px){.dp-package-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dp-hero-cta-inner{flex-direction:column;text-align:center}.dp-hero-actions{justify-content:center}}
+      @media(max-width:768px){.dp-wrap{width:min(100% - 32px,1160px)}.dp-section{padding:52px 0}.dp-proof-grid{grid-template-columns:1fr;gap:11px;padding:15px 0}.dp-proof-grid span{justify-content:start}.dp-steps,.dp-package-grid,.dp-form-layout,.dp-postcode-layout,.dp-faq-layout{grid-template-columns:1fr}.dp-section-heading,.dp-bottom-cta-inner{flex-direction:column;align-items:start}.dp-hero-cta-inner{padding:20px 0}.dp-hero-actions{display:grid;width:100%}.dp-gallery-stage{height:290px}.dp-form-layout{gap:26px}.dp-postcode-layout{gap:17px}.dp-faq-layout{gap:22px}.dp-footer-inner{flex-direction:column}.dp-bottom-cta{padding-bottom:80px}.dp-mobile-sticky{display:flex;position:fixed;bottom:0;left:0;right:0;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:#151411;z-index:999;gap:9px;box-shadow:0 -5px 20px #0003}.dp-mobile-sticky a:first-child{flex:1;display:flex;gap:9px;justify-content:center;align-items:center;background:#c6a243;color:#161510;text-decoration:none;font-size:14px;font-weight:850;border-radius:8px;min-height:47px}.dp-mobile-sticky a:last-child{width:52px;display:grid;place-items:center;color:#e6ca78;border:1px solid #7e692d;border-radius:8px}.dp-page{padding-bottom:65px}}
+      @media(max-width:480px){.dp-hero-image img{width:100%;height:auto}.dp-page h2{font-size:29px}.dp-gallery-stage{height:245px}.dp-postcode-row{flex-direction:column}.dp-postcode-row button{min-height:45px}.dp-package{padding:20px}.dp-form-card{padding:16px}.dp-gallery-label{font-size:10px}}
+      @media(prefers-reduced-motion:reduce){.dp-page *{scroll-behavior:auto!important;transition:none!important}}
+    `}</style>
+    </Layout>;
 }

@@ -161,7 +161,7 @@ const contactSchema = {
         Prefer to contact us directly?
     </h3>
     <div style={{ color: "#57534e", lineHeight: "1.9" }}>
-        <p><strong>Phone:</strong> 02036335634</p>
+                                <p><strong>Phone:</strong> 020 8191 4122</p>
         <p><strong>Email:</strong> sales@crafman.co.uk</p> {/* Updated to sales@ */}
         <p><strong>Location:</strong> CEME, Marsh Way, Rainham RM13 8EU</p>
     </div>

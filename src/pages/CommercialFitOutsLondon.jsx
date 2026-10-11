@@ -808,7 +808,7 @@ const commercialSchema = {
                           </h3>
 
                           <div style={{ color: "#57534e", lineHeight: "1.9" }}>
-                              <p><strong>Phone:</strong> 02036335634</p>
+                              <p><strong>Phone:</strong> 020 8191 4122</p>
                               <p><strong>Email:</strong> sales@crafman.co.uk</p>
                               <p><strong>Location:</strong> London, United Kingdom</p>
                           </div>
@@ -952,7 +952,7 @@ const commercialSchema = {
             </p>
 
             <div style={{ marginTop: "20px", color: "#44403c", lineHeight: "1.9" }}>
-              <p><strong>Phone:</strong> 02036335634</p>
+                          <p><strong>Phone:</strong> 020 8191 4122</p>
               <p><strong>Email:</strong> info@crafman.co.uk</p>
               <p><strong>Location:</strong> London, United Kingdom</p>
             </div>
