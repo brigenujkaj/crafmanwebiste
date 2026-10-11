@@ -1,7 +1,8 @@
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-// Global style design token framework for the Crafman funnel
+// Global style design tokens for Crafman
 export const siteStyles = {
     page: {
         minHeight: "100vh",
@@ -29,7 +30,7 @@ export const siteStyles = {
         borderRadius: "12px",
         textDecoration: "none",
         fontWeight: "600",
-        textAlign: "center"
+        textAlign: "center",
     },
     buttonSecondary: {
         display: "inline-block",
@@ -40,7 +41,7 @@ export const siteStyles = {
         border: "1px solid #d6d3d1",
         textDecoration: "none",
         fontWeight: "600",
-        textAlign: "center"
+        textAlign: "center",
     },
     tag: {
         display: "inline-block",
@@ -57,19 +58,30 @@ export const siteStyles = {
     },
 };
 
-export default function DrawingsLayout({ children }) {
+export default function DrawingsLayout({
+    children,
+    hideHeader = false,
+}) {
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
         checkMobile();
+
         window.addEventListener("resize", checkMobile);
-        return () => window.removeEventListener("resize", checkMobile);
+
+        return () => {
+            window.removeEventListener("resize", checkMobile);
+        };
     }, []);
 
     const callLinkStyle = {
         display: "inline-block",
-        background: "linear-gradient(135deg, #A67C00 0%, #C6A243 100%)",
+        background:
+            "linear-gradient(135deg, #A67C00 0%, #C6A243 100%)",
         color: "#fff",
         textDecoration: "none",
         fontSize: "15px",
@@ -80,115 +92,126 @@ export default function DrawingsLayout({ children }) {
         boxShadow: "0 8px 18px rgba(166,124,0,0.18)",
         border: "none",
         cursor: "pointer",
-        transition: "transform 0.2s ease"
+        transition: "transform 0.2s ease",
     };
 
-    const navAboutLinkStyle = {
-        fontSize: "15px",
-        fontWeight: "700",
-        color: "#44403c",
-        textDecoration: "none",
-        padding: "8px 16px",
-        borderRadius: "8px",
-        transition: "all 0.2s ease",
+    const handlePhoneClick = () => {
+        // Preserve Google Ads / GTM conversion tracking
+        window.dataLayer = window.dataLayer || [];
+
+        window.dataLayer.push({
+            event: "direct_phone_click",
+            phone_number: "02081914122",
+            location: "Global Navbar Master Anchor Link",
+        });
     };
 
     return (
         <div style={siteStyles.page}>
-            {/* STICKY CONFIGURATION HEADER FUNNEL */}
-            <header
-                style={{
-                    position: "sticky",
-                    top: 0,
-                    zIndex: 50,
-                    background: "rgba(255,255,255,0.94)",
-                    backdropFilter: "blur(10px)",
-                    borderBottom: "1px solid #e7e5e4",
-                    boxShadow: "0 4px 18px rgba(0,0,0,0.03)",
-                }}
-            >
-                <div
+
+            {/* HEADER - hidden when hideHeader is true */}
+            {!hideHeader && (
+                <header
                     style={{
-                        maxWidth: "1200px",
-                        margin: "0 auto",
-                        padding: isMobile ? "12px 16px" : "16px 24px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        gap: "20px",
-                        flexWrap: "wrap",
+                        position: "sticky",
+                        top: 0,
+                        zIndex: 50,
+                        background: "rgba(255,255,255,0.94)",
+                        backdropFilter: "blur(10px)",
+                        borderBottom: "1px solid #e7e5e4",
+                        boxShadow:
+                            "0 4px 18px rgba(0,0,0,0.03)",
                     }}
                 >
-                    {/* BRAND IDENTIFIER */}
                     <div
                         style={{
-                            display: "inline-flex",
-                            flexDirection: "column",
-                            gap: "4px",
-                            minWidth: "220px",
+                            maxWidth: "1200px",
+                            margin: "0 auto",
+                            padding: isMobile
+                                ? "12px 16px"
+                                : "16px 24px",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            gap: "20px",
+                            flexWrap: "wrap",
                         }}
                     >
-                        <Link
-                            to="/"
-                            style={{
-                                fontSize: "30px",
-                                fontWeight: "800",
-                                textDecoration: "none",
-                                lineHeight: "1.05",
-                                letterSpacing: "-0.6px",
-                            }}
-                        >
-                            <span style={{ color: "#0F0F0F" }}>Crafman</span>{" "}
-                            <span style={{ color: "#A67C00" }}>Architectural</span>
-                        </Link>
-
+                        {/* BRAND */}
                         <div
                             style={{
-                                fontSize: "11px",
-                                color: "#78716C",
-                                letterSpacing: "2.5px",
-                                textTransform: "uppercase",
-                                fontWeight: "700",
+                                display: "inline-flex",
+                                flexDirection: "column",
+                                gap: "4px",
+                                minWidth: "220px",
                             }}
                         >
-                            Extension & Planning Drawings Made Simple
+                            <Link
+                                to="/"
+                                style={{
+                                    fontSize: "30px",
+                                    fontWeight: "800",
+                                    textDecoration: "none",
+                                    lineHeight: "1.05",
+                                    letterSpacing: "-0.6px",
+                                }}
+                            >
+                                <span style={{ color: "#0F0F0F" }}>
+                                    Crafman
+                                </span>{" "}
+                                <span style={{ color: "#A67C00" }}>
+                                    Architectural
+                                </span>
+                            </Link>
+
+                            <div
+                                style={{
+                                    fontSize: "11px",
+                                    color: "#78716C",
+                                    letterSpacing: "2.5px",
+                                    textTransform: "uppercase",
+                                    fontWeight: "700",
+                                }}
+                            >
+                                Extension & Planning Drawings Made Simple
+                            </div>
                         </div>
-                    </div>
 
-                    {/* DYNAMIC NAV ACTIONS */}
-                    <nav
-                        style={{
-                            display: "flex",
-                            gap: isMobile ? "4px" : "12px",
-                            alignItems: "center",
-                            justifyContent: "flex-end",
-                            flexWrap: "wrap",
-                            flex: 1,
-                        }}
-                    >
-                        
-
-                        <a
-                            href="tel:020 8191 4122"
-                            onClick={() => {
-                                // Google Ads / GTM conversion tracking hooks remain active
-                                window.dataLayer = window.dataLayer || [];
-                                window.dataLayer.push({
-                                    event: "direct_phone_click",
-                                    phone_number: "02081914122",
-                                    location: "Global Navbar Master Anchor Link"
-                                });
+                        {/* PHONE CTA */}
+                        <nav
+                            style={{
+                                display: "flex",
+                                gap: isMobile ? "4px" : "12px",
+                                alignItems: "center",
+                                justifyContent: "flex-end",
+                                flexWrap: "wrap",
+                                flex: 1,
                             }}
-                            style={callLinkStyle}
                         >
-                            📞 {isMobile ? "Call Office" : "Call Now: 02081914122"}
-                        </a>
-                    </nav>
-                </div>
-            </header>
+                            <a
+                                href="tel:02081914122"
+                                onClick={handlePhoneClick}
+                                style={callLinkStyle}
+                            >
+                                {isMobile
+                                    ? "📞 Call Office"
+                                    : "📞 Call Now: 02081914122"}
+                            </a>
+                        </nav>
+                    </div>
+                </header>
+            )}
 
-            {/* MAIN APP MOUNT POINT */}
-            <main>{children}</main>
+            {/* MAIN PAGE CONTENT */}
+            <main
+                style={{
+                    width: "100%",
+                    minHeight: "100vh",
+                }}
+            >
+                {children}
+            </main>
+
         </div>
     );
 }

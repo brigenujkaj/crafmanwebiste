@@ -143,7 +143,7 @@ export default function DrawingsPlanning() {
     ]
   };
 
-  return <Layout>
+  return <Layout hideHeader>
     <Helmet>
       <title>Architectural Drawings & Planning London & Essex | Crafman</title>
       <meta name="description" content="Architectural drawings for extensions, lofts, garden rooms and renovations across London & Essex. Measured surveys, council submissions and Building Regulations packages. Request a quote." />
