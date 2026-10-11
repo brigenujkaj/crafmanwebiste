@@ -234,7 +234,7 @@ export default function DrawingsPlanning() {
              
             </aside>
             <div className="dp-form-card">
-              <h3>Request your project review</h3><p>Complete the enquiry below. No obligation to proceed.</p>
+             
               {/* CRITICAL: preserve existing form component, props and Formspree destination */}
               <DrawingsPlanningForm endpoint={FORM_ENDPOINT} selectedPackage={selectedPackage} />
             </div>

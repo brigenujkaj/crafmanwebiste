@@ -34,7 +34,7 @@ export default function DrawingsPlanningForm({
     selectedPackage = "",
     buttonText = "Request Consultation",
     title = "Get your free project strategy",
-    intro = "We hate pushy sales calls as much as you do. You’ll speak directly with a practical planning strategist—just straight answers, clear package guidance, and zero pressure.",
+    intro = "",
 }) {
     const navigate = useNavigate();
 
