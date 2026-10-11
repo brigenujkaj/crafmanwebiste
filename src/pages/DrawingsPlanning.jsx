@@ -303,19 +303,13 @@ export default function DrawingsPlanning() {
 
                 <section className="dp-section dp-white" id="contact-form">
                     <div className="dp-wrap dp-form-layout">
-                        <aside className="dp-form-intro">
-                            <span className="dp-eyebrow">YOUR NEXT STEP</span><h2>Tell us about your project</h2>
-                            <p>Share your property and project details using the form. We'll review your enquiry and explain the next practical step.</p>
-                            <div className="dp-form-benefits">
-                                <div><Check size={19} /> Guidance on planning vs permitted development</div>
-                                <div><Check size={19} /> The drawings and services likely to be required</div>
-                                <div><Check size={19} /> A clear starting point for pricing and scope</div>
-                            </div>
+                        
+                           
+                          
                             {selectedPackage && <div className="dp-selected"><strong>Selected package</strong><div>{selectedPackage}</div><span>{PACKAGES.find(p => p.name === selectedPackage)?.price}</span></div>}
-                            <div className="dp-call-box"><Phone size={19} /><div><strong>Prefer to talk?</strong><a href={`tel:${PHONE}`} onClick={() => sendEvent("phone_click", { location: "contact_section" })}>{PHONE}</a></div></div>
-                        </aside>
+                           
                         <div className="dp-form-card">
-                            <h3>Request your project review</h3><p>Complete the enquiry below. No obligation to proceed.</p>
+                            
                             {/* CRITICAL: preserve existing form component, props and Formspree destination */}
                             <DrawingsPlanningForm endpoint={FORM_ENDPOINT} selectedPackage={selectedPackage} />
                         </div>

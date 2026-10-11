@@ -33,7 +33,7 @@ export default function DrawingsPlanningForm({
     endpoint = "https://formspree.io/f/maqlqgzz",
     selectedPackage = "",
     buttonText = "Request Consultation",
-    title = "Get your free project strategy",
+    title = "",
     intro = "",
 }) {
     const navigate = useNavigate();
