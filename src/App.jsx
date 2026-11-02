@@ -18,6 +18,7 @@ import Landscaping from "./pages/Landscaping.jsx";
 import ThankYouPage from "./components/ThankYouPage";
 import CraffyHeroSection from './components/CraffyHeroSection';
 import CraffyThankYouPage from "./components/CraffyThankYouPage";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 
 // TEMP (until you build it)
@@ -80,6 +81,7 @@ export default function App() {
             <Route path="/case-studies/:slug" element={<CaseStudyDetail />} />
             <Route path="/thank-you" element={<ThankYouPage />} />
             <Route path="/craffy-thank-you" element={<CraffyThankYouPage />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       
          
     </Routes>
