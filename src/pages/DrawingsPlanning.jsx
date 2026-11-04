@@ -301,18 +301,78 @@ export default function DrawingsPlanning() {
                     </div>
                 </section>
 
-                <section className="dp-section dp-white" id="contact-form">
-                    <div className="dp-wrap dp-form-layout">
-                        
-                           
-                          
-                            {selectedPackage && <div className="dp-selected"><strong>Selected package</strong><div>{selectedPackage}</div><span>{PACKAGES.find(p => p.name === selectedPackage)?.price}</span></div>}
-                           
-                        <div className="dp-form-card">
-                            
-                            {/* CRITICAL: preserve existing form component, props and Formspree destination */}
-                            <DrawingsPlanningForm endpoint={FORM_ENDPOINT} selectedPackage={selectedPackage} />
+                <section id="contact-form" style={{ backgroundColor: "#09090b", padding: "60px 20px 80px" }}>
+                    <div style={{
+                        maxWidth: "1140px",
+                        margin: "0 auto",
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+                        gap: "36px",
+                        alignItems: "center"
+                    }}>
+
+                        {/* LEFT: THE BOOKING FORM */}
+                        <DrawingsPlanningForm />
+
+                        {/* RIGHT: TRUST, TIMELINE & PROOF PANEL */}
+                        <div style={{ color: "#ffffff", padding: "10px" }}>
+                            <div style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "6px",
+                                backgroundColor: "rgba(30, 58, 138, 0.35)",
+                                border: "1px solid rgba(59, 130, 246, 0.3)",
+                                color: "#93c5fd",
+                                padding: "6px 14px",
+                                borderRadius: "30px",
+                                fontSize: "11px",
+                                fontWeight: "700",
+                                marginBottom: "16px"
+                            }}>
+                                <span>✓</span> DIRECT ARCHITECTURAL STRATEGY
+                            </div>
+
+                            <h2 style={{ fontSize: "32px", fontWeight: "900", lineHeight: "1.2", margin: "0 0 16px" }}>
+                                Speak with a Practical <span style={{ color: "#3b82f6" }}>Planning Strategist</span>
+                            </h2>
+
+                            <p style={{ color: "#a1a1aa", fontSize: "15px", lineHeight: "1.6", margin: "0 0 24px" }}>
+                                No pushy sales reps. You will speak directly with an architectural designer who knows North London, East London, and Essex council guidelines inside out.
+                            </p>
+
+                            {/* VALUE POINTS */}
+                            <div style={{ display: "grid", gap: "14px", marginBottom: "28px" }}>
+                                {[
+                                    { title: "Guaranteed 7-Day Drafting", desc: "Fast turnaround so your project is never held up." },
+                                    { title: "Fixed Fees from £950 + VAT", desc: "No unexpected add-ons or hidden architect hourly rates." },
+                                    { title: "100% Council Sign-Off Track Record", desc: "Plans engineered strictly to Permitted Development & Building Regs limits." },
+                                    { title: "Unlimited Revisions Included", desc: "We refine your layout until you and your council are completely satisfied." },
+                                ].map((item, idx) => (
+                                    <div key={idx} style={{
+                                        backgroundColor: "#121215",
+                                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                                        padding: "14px 18px",
+                                        borderRadius: "14px"
+                                    }}>
+                                        <strong style={{ display: "block", color: "#34d399", fontSize: "14px", marginBottom: "2px" }}>
+                                            ✓ {item.title}
+                                        </strong>
+                                        <span style={{ color: "#a1a1aa", fontSize: "12.5px" }}>{item.desc}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* DIRECT ESCAPE ROUTE */}
+                            <div style={{ borderTop: "1px solid rgba(255, 255, 255, 0.1)", paddingTop: "18px" }}>
+                                <span style={{ fontSize: "12px", color: "#71717a", textTransform: "uppercase", fontWeight: "700" }}>
+                                    Need Immediate Advice?
+                                </span>
+                                <div style={{ marginTop: "8px", fontSize: "16px", fontWeight: "800" }}>
+                                    Call office line: <a href="tel:02081914122" style={{ color: "#60a5fa", textDecoration: "none" }}>020 8191 4122</a>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </section>
 
