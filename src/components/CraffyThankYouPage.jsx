@@ -22,7 +22,7 @@ export default function CraffyThankYouPage() {
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({
                 event: "craffy_thank_you_page_view",
-                source: leadData.source || "Craffy AI Assistant",
+                source: leadData.source || "Crafman",
                 postcode: leadData.postcode || "N/A",
             });
         }
@@ -70,10 +70,10 @@ export default function CraffyThankYouPage() {
                     </div>
 
                     <h1 style={styles.mainTitle}>
-                        Craffy is Processing Your Site Report!
+                        Our Team is Processing Your Site Report!
                     </h1>
                     <p style={styles.subTitle}>
-                        Thank you{leadData.name ? `, ${leadData.name}` : ""}. Craffy has received your property details and dispatched your query to our London & Essex strategy team.
+                        Thank you{leadData.name ? `, ${leadData.name}` : ""}. Our team has received your property details and dispatched your query to our London & Essex strategy team.
                     </p>
                 </div>
 
@@ -126,7 +126,7 @@ export default function CraffyThankYouPage() {
                         <div style={styles.stepBadge}>1</div>
                         <div>
                             <h4 style={styles.stepTitle}>Council Planning History Check</h4>
-                            <p style={styles.stepDesc}>Craffy analyzes local council history, permitted development limits, and sewer/boundary records for your site.</p>
+                            <p style={styles.stepDesc}>Our Team analyzes local council history, permitted development limits, and sewer/boundary records for your site.</p>
                         </div>
                     </div>
 
