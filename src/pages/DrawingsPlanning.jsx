@@ -262,7 +262,7 @@ export default function DrawingsPlanning() {
                                 <h1>Architectural drawings designed for <em>council approval</em></h1>
 
                                 <p className="dp-hero-lead">
-                                    Specialist extension and loft conversion plans across <strong>Barnet, Enfield, Chingford, Woodford, Chigwell, Loughton & Epping</strong>. Fixed design fees from £950 with guaranteed 7-day draft turnaround.
+                                    Specialist extension and loft conversion plans across <strong>Barnet, Enfield, Chingford, Woodford, Chigwell, Loughton & Epping</strong>. Fixed design fees from £1150 with guaranteed 7-day draft turnaround.
                                 </p>
 
                                 <div className="dp-hero-bullets">
@@ -603,7 +603,33 @@ export default function DrawingsPlanning() {
                 </div>
             </div>
 
-            <style>{`
+            <style>{
+
+            `
+
+            /* Force the root document to match your dark background and remove all edge margins */
+html, body, #root {
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: #0b0d0d !important;
+  border: none !important;
+  outline: none !important;
+  width: 100% !important;
+  min-height: 100vh !important;
+  overflow-x: hidden !important;
+}
+
+/* Ensure the landing page fills the entire viewport without gaps */
+.dp-page {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  width: 100% !important;
+  min-height: 100vh !important;
+  background-color: #0b0d0d !important;
+}
+
+
                 .dp-page{--gold:#C6A243;--gold-light:#E8CB82;--ink:#0b0d0d;--panel:#151818;--panel2:#1c2020;--muted:#aeb2ae;--line:rgba(232,203,130,.15);background:var(--ink);color:#f3f3ed;font-family:Arial,Helvetica,sans-serif;overflow-x:clip}
                 .dp-page *{box-sizing:border-box}.dp-page img{max-width:100%}.dp-page a:focus-visible,.dp-page button:focus-visible,.dp-page input:focus-visible{outline:3px solid #e8cb82;outline-offset:3px}
                 .dp-wrap{width:min(1240px,calc(100% - 48px));margin-inline:auto}.dp-section{padding:86px 0;scroll-margin-top:90px}.dp-centered{text-align:center}.dp-narrow{max-width:720px;margin:0 auto}.dp-eyebrow{color:var(--gold-light);font-size:11px;letter-spacing:2.2px;font-weight:850}.dp-gold{color:var(--gold-light)}
