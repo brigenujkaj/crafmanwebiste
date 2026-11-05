@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
+import { syncLeadToCrafmanOS } from "../lib/crafmanLeadIntake.js";
 
 const FORM_ENDPOINT = "https://formspree.io/f/xnjopzqe";
 
@@ -382,6 +383,25 @@ export default function RenovationCalculator() {
                     "Something went wrong. Please try again."
                 );
             }
+
+            await syncLeadToCrafmanOS({
+                client_name: lead.name,
+                email: lead.email,
+                phone: lead.phone,
+                project_type: projectLabels[projectType],
+                description: [
+                    payload.projectDescription,
+                    payload.size ? `Area: ${payload.size} ${payload.sizeUnit}` : "",
+                    payload.specLabel ? `Specification: ${payload.specLabel}` : "",
+                    payload.bathroomSpecLabel ? `Bathroom specification: ${payload.bathroomSpecLabel}` : "",
+                    payload.kitchenLength ? `Kitchen length: ${payload.kitchenLength} ${payload.kitchenLengthUnit}` : "",
+                    payload.kitchenDesignLabel ? `Kitchen design: ${payload.kitchenDesignLabel}` : "",
+                    `Estimate: ${payload.estimateDisplay}`,
+                ].filter(Boolean).join("\n"),
+                estimated_value_low: result.isPOA ? undefined : result.low,
+                estimated_value_high: result.isPOA ? undefined : result.high,
+                form_name: "Renovation Cost Calculator",
+            });
 
             setShowResult(true);
             setSubmitStatus({

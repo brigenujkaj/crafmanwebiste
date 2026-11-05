@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, useRef } from "react";
+import { syncLeadToCrafmanOS } from "../lib/crafmanLeadIntake.js";
 
 const FORM_ENDPOINT = "https://formspree.io/f/xzdkevbg";
 
@@ -91,16 +92,39 @@ export default function DrivewayCalculator() {
         if (isMobile) setTimeout(scrollToResults, 300);
 
         try {
+            const formPayload = {
+                ...lead,
+                configuration: { gardenSize, primarySurface, addTurf, hasSlope },
+                estimatedRange: calculatedEstimate.range,
+                scopeDetails: calculatedEstimate.description,
+            };
             const res = await fetch(FORM_ENDPOINT, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", Accept: "application/json" },
-                body: JSON.stringify({ 
-                    ...lead, 
-                    configuration: { gardenSize, primarySurface, addTurf, hasSlope },
-                    estimatedRange: calculatedEstimate.range,
-                    scopeDetails: calculatedEstimate.description 
-                }),
+                body: JSON.stringify(formPayload),
             });
+
+            if (res.ok) {
+                await syncLeadToCrafmanOS({
+                    client_name: lead.name,
+                    email: lead.email,
+                    phone: lead.phone,
+                    postcode: lead.postcode,
+                    project_type: "landscaping",
+                    description: [
+                        `Garden size: ${gardenSize}`,
+                        `Primary surface: ${primarySurface}`,
+                        `Add turf: ${addTurf ? "Yes" : "No"}`,
+                        `Sloping site: ${hasSlope ? "Yes" : "No"}`,
+                        `Flower beds: ${lead.flowerBeds ? "Yes" : "No"}`,
+                        `Steps: ${lead.steps ? "Yes" : "No"}`,
+                        `Estimated range: ${calculatedEstimate.range}`,
+                        `Scope: ${calculatedEstimate.description}`,
+                    ].join("\n"),
+                    form_name: "Driveway & Landscaping Cost Calculator",
+                });
+            }
+
             setSubmitStatus({ loading: false, success: res.ok });
         } catch (err) {
             setSubmitStatus({ loading: false, success: false });

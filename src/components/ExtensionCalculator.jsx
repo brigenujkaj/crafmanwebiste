@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, useRef } from "react";
+import { syncLeadToCrafmanOS } from "../lib/crafmanLeadIntake.js";
 
 const FORM_ENDPOINT = "https://formspree.io/f/xzdkevbg";
 
@@ -85,11 +86,36 @@ export default function ExtensionCalculator() {
         if (isMobile) setTimeout(scrollToResults, 300);
 
         try {
+            const formPayload = { ...lead, totals, size };
             const res = await fetch(FORM_ENDPOINT, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", Accept: "application/json" },
-                body: JSON.stringify({ ...lead, totals, size }),
+                body: JSON.stringify(formPayload),
             });
+
+            if (res.ok) {
+                await syncLeadToCrafmanOS({
+                    client_name: lead.name,
+                    email: lead.email,
+                    phone: lead.phone,
+                    postcode: lead.postcode,
+                    project_type: "rear_extension",
+                    description: [
+                        `Extension size: ${size} m²`,
+                        `Add kitchen: ${lead.addKitchen ? "Yes" : "No"}`,
+                        `Add bathroom: ${lead.addBathroom ? "Yes" : "No"}`,
+                        `Add flooring: ${lead.addFlooring ? "Yes" : "No"}`,
+                        `Add skylights: ${lead.addSkylights ? "Yes" : "No"}`,
+                        `External door type: ${getDoorLabel()}`,
+                        `Calculator estimate: £${totals.grandTotal.toLocaleString("en-GB")}`,
+                        `Estimated added value: £${totals.estimatedAddedValue.toLocaleString("en-GB")}`,
+                    ].join("\n"),
+                    estimated_value_low: totals.grandTotal,
+                    estimated_value_high: totals.grandTotal,
+                    form_name: "House Extension Cost Calculator",
+                });
+            }
+
             setSubmitStatus({ loading: false, success: res.ok });
         } catch (err) {
             setSubmitStatus({ loading: false, success: false });
