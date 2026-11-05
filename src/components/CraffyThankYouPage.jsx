@@ -104,7 +104,7 @@ export default function CraffyThankYouPage() {
 
                         <div style={styles.hudItem}>
                             <span style={styles.hudLabel}>DRAWINGS RATE</span>
-                            <strong style={{ color: '#34d399', fontSize: '15px' }}>FIXED £950 + VAT</strong>
+                            <strong style={{ color: '#34d399', fontSize: '15px' }}>FIXED £1150 + VAT</strong>
                         </div>
 
                         <div style={styles.hudItem}>
