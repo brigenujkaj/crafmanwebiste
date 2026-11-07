@@ -1,0 +1,24 @@
+
+/* Extension lead form and conversion success page */
+.extension-lead-form-wrap{width:100%;max-width:760px;margin:0 auto;padding:clamp(24px,5vw,48px);background:#fff;border:1px solid #e9e4da;border-radius:20px;box-shadow:0 20px 55px rgba(20,19,15,.07);box-sizing:border-box}
+.extension-lead-form-heading{margin-bottom:28px}
+.extension-lead-eyebrow{display:inline-block;color:#a4873e;font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase}
+.extension-lead-form-heading h2{margin:10px 0 8px;color:#1d1c18;font-size:clamp(26px,4vw,36px);line-height:1.15;letter-spacing:-.035em}
+.extension-lead-form-heading p{margin:0;color:#706d64;font-size:14px}
+.extension-lead-form{display:grid;gap:18px}
+.extension-lead-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.extension-lead-optional{color:#88847a;font-weight:500}
+.extension-lead-submit{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:54px;padding:14px 22px;border:0;border-radius:10px;background:#171714;color:#fff;text-decoration:none;font:inherit;font-weight:750;cursor:pointer;transition:transform .2s ease,background .2s ease}
+.extension-lead-submit:hover{transform:translateY(-2px);background:#9a792f}
+.extension-lead-submit:disabled{opacity:.65;cursor:wait;transform:none}
+.extension-lead-privacy{margin:0;color:#89857b;font-size:11px;text-align:center}
+.extension-lead-error{margin:0;padding:12px 14px;border-radius:8px;background:#fff1f0;color:#a12620;font-size:13px}
+.extension-lead-spinner{animation:extensionLeadSpin 1s linear infinite}
+@keyframes extensionLeadSpin{to{transform:rotate(360deg)}}
+.extension-form-success{min-height:75vh;padding:60px 20px;display:grid;place-items:center;background:#f6f4ef}
+.extension-form-success-card{width:100%;max-width:620px;padding:clamp(28px,5vw,54px);border:1px solid #e7e1d5;border-radius:22px;background:#fff;text-align:center;box-shadow:0 22px 60px rgba(25,23,16,.07);box-sizing:border-box}
+.extension-form-success-icon{width:76px;height:76px;margin:0 auto 22px;border-radius:50%;display:grid;place-items:center;background:#f5f0e3;color:#9a792f}
+.extension-form-success-card h1{margin:12px 0;color:#1d1c18;font-size:clamp(30px,5vw,42px);line-height:1.1;letter-spacing:-.04em}
+.extension-form-success-card>p:not(.extension-lead-eyebrow){margin:0 auto 26px;max-width:470px;color:#706d64;line-height:1.75}
+.extension-success-link{margin-top:8px}
+@media(max-width:600px){.extension-lead-form-wrap{padding:23px 18px;border-radius:14px}.extension-lead-form-grid{grid-template-columns:1fr;gap:18px}.extension-lead-submit{width:100%}}

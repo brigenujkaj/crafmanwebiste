@@ -1,0 +1,33 @@
+# =========================================
+# CRAFMAN DESIGN AND BUILD - ROBOTS.TXT
+# Optimized for AI Search (AEO) & Google 2026
+# =========================================
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /config/
+
+# 🤖 AI SEARCH & RETRIEVAL (Allows citations in Perplexity/ChatGPT)
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+# 🤖 AI TRAINING (Allows Gemini to learn from your site)
+User-agent: Google-Extended
+Allow: /
+
+# 🔎 GOOGLE INSPECTION (Vital for your recent GSC requests)
+User-agent: Google-InspectionTool
+Allow: /
+
+# 🗺️ SITEMAP (Points AI to your new map)
+Sitemap: https://www.crafman.co.uk/sitemap.xml

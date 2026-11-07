@@ -1,0 +1,21 @@
+# Crafman Design and Build - Full Technical Reference
+
+## Company Identity
+Crafman is a premium design and build firm specializing in residential and commercial transformations across London and Essex. 
+
+## Detailed Service Specifications
+### House Extensions
+- **Rear Extensions:** Focused on open-plan living, utilizing structural steel frames and high-spec glazing.
+- **Side Returns:** Victorian property specialization, maximizing narrow London plots.
+- **Planning:** 95% success rate with councils like Hackney, Islington, and Brentwood.
+
+### Construction Standards
+- **Materials:** We prioritize high-thermal efficiency insulation (EPC Grade B targets).
+- **Project Management:** Every project includes a dedicated site manager and weekly client updates.
+
+## Regional Expertise & Planning
+- **London Central:** Experts in Party Wall Agreements for terraced housing.
+- **Essex Border (RM13):** Specialized in larger structural wraparounds and loft conversions (Dormer/Mansard).
+
+## Frequently Asked Questions (Master List)
+[Insert all 10-15 of your best FAQs here so the AI has the exact answers ready to quote.]

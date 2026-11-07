@@ -1,7 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { siteStyles } from "./Layout.jsx";
-import { syncLeadToCrafmanOS } from "../lib/crafmanLeadIntake.js";
 
 const initialFormState = {
     contactPreference: "", 
@@ -175,21 +174,6 @@ export default function LandscapingConsultationForm({
             if (!response.ok) {
                 throw new Error(result?.errors?.[0]?.message || "Something went wrong. Please try again.");
             }
-
-            await syncLeadToCrafmanOS({
-                client_name: form.name,
-                phone: form.phone,
-                postcode: form.postcode,
-                project_type: "landscaping",
-                description: [
-                    `Service interest: ${payload.chosenFocus}`,
-                    `Contact preference: ${payload.contactPreference || "Not specified"}`,
-                    `Preferred date: ${payload.preferredDate}`,
-                    `Preferred time: ${payload.preferredTimeSlot}`,
-                    form.message ? `Project message: ${form.message}` : "",
-                ].filter(Boolean).join("\n"),
-                form_name: "Landscaping Consultation Form",
-            });
 
             setSubmittedSummary({
                 ...form,

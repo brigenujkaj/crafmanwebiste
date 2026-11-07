@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { siteStyles } from "./Layout.jsx";
-import { syncLeadToCrafmanOS } from "../lib/crafmanLeadIntake.js";
 
 const STORAGE_KEY = "crafman_contact_form_v4";
 
@@ -459,39 +458,6 @@ export default function ContactForm({
                     result?.errors?.[0]?.message || "Something went wrong. Please try again."
                 );
             }
-
-            await syncLeadToCrafmanOS({
-                client_name: form.name,
-                email: form.email,
-                phone: form.phone,
-                postcode: form.postcode,
-                project_type: form.services.find((service) => service !== "Other") || form.otherService || form.services[0] || "other",
-                description: [
-                    form.services.length ? `Services requested: ${form.services.join(", ")}` : "",
-                    form.otherService ? `Other service: ${form.otherService}` : "",
-                    form.message ? `Project message: ${form.message}` : "",
-                    form.loftType ? `Loft type: ${form.loftType}` : "",
-                    form.loftBedrooms ? `Loft bedrooms: ${form.loftBedrooms}` : "",
-                    form.loftBathroom ? `Loft bathroom: ${form.loftBathroom}` : "",
-                    form.loftStaircase ? `Loft staircase: ${form.loftStaircase}` : "",
-                    form.extensionType ? `Extension type: ${form.extensionType}` : "",
-                    form.extensionStoreys ? `Extension storeys: ${form.extensionStoreys}` : "",
-                    form.kitchenScope ? `Kitchen scope: ${form.kitchenScope}` : "",
-                    form.bathroomCount ? `Bathroom count: ${form.bathroomCount}` : "",
-                    form.bathroomLayoutChanges ? `Bathroom layout changes: ${form.bathroomLayoutChanges}` : "",
-                    form.commercialType ? `Commercial type: ${form.commercialType}` : "",
-                    form.commercialSize ? `Commercial size: ${form.commercialSize}` : "",
-                    form.contactDays.length ? `Preferred contact days: ${form.contactDays.join(", ")}` : "",
-                    form.contactTime ? `Preferred contact time: ${form.contactTime}` : "",
-                    form.replyMethod ? `Reply method: ${form.replyMethod}` : "",
-                    form.ownsProperty ? `Owns property: ${form.ownsProperty}` : "",
-                    form.startTime ? `Desired start: ${form.startTime}` : "",
-                    `Lead score: ${leadScore}; lead quality: ${leadQuality}`,
-                ].filter(Boolean).join("\n"),
-                owned_property: form.ownsProperty,
-                desired_start: form.startTime,
-                form_name: "Main Website Contact Form",
-            });
 
             setSubmitStatus({
                 loading: false,
