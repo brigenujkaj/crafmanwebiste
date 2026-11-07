@@ -38,6 +38,30 @@ const capabilities = [
     { number: "04", title: "Building control", text: "Support with building regulations information, inspections and coordination.", icon: "control" },
 ];
 
+const coordinationServices = [
+    {
+        number: "01",
+        title: "Design & approvals",
+        detail: "In-house design coordination, planning permission and building notice / building control.",
+        note: "DESIGN · PLANNING · TECHNICAL",
+        icon: "design",
+    },
+    {
+        number: "02",
+        title: "The build",
+        detail: "Coordinated construction, trades, glazing supply and delivery on site.",
+        note: "CONSTRUCTION · COORDINATION",
+        icon: "build",
+    },
+    {
+        number: "03",
+        title: "Handover",
+        detail: "Final checks, completed details and handover of your finished space.",
+        note: "FINISHING · FINAL REVIEW",
+        icon: "handover",
+    },
+];
+
 const faqs = [
     {
         question: "Will my extension need planning permission?",
@@ -56,6 +80,51 @@ const faqs = [
         answer: "Cost depends on size, ground conditions, structure, access, specification and approvals. Share your property address and project type and we can discuss the right next step.",
     },
 ];
+
+
+function CoordinationIcon({ type }) {
+    const props = {
+        viewBox: "0 0 48 48",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: 1.55,
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+        "aria-hidden": true,
+    };
+
+    const drawings = {
+        design: (
+            <>
+                <path d="M8 39 30 17" />
+                <path d="m26 13 5-5 9 9-5 5" />
+                <path d="m8 39 2-8 6 6-8 2Z" />
+                <path d="M25 27h14v12H25z" />
+                <path d="M29 31h6M29 35h6" />
+            </>
+        ),
+        build: (
+            <>
+                <path d="M7 40h34" />
+                <path d="M10 40V22l14-9 14 9v18" />
+                <path d="M18 40V28h12v12" />
+                <path d="M6 17 24 6l18 11" />
+                <path d="M15 22h18" />
+            </>
+        ),
+        handover: (
+            <>
+                <path d="M8 24 24 11l16 13" />
+                <path d="M12 22v17h24V22" />
+                <path d="M20 39V28h8v11" />
+                <circle cx="35" cy="13" r="7" />
+                <path d="m32 13 2 2 4-4" />
+            </>
+        ),
+    };
+
+    return <svg {...props}>{drawings[type] || drawings.build}</svg>;
+}
 
 function LineIcon({ type, size = 26 }) {
     const common = {
@@ -484,42 +553,387 @@ body:has(.hx-page) #root {
 
 
 
-/* Animated black-and-gold facts strip — only uses claims already present on the page. */
-.hx-stats-strip{position:relative;z-index:3;background:#0b0b09;color:#f4ecd8;border-top:1px solid rgba(200,166,75,.42);border-bottom:1px solid rgba(200,166,75,.42)}
-.hx-stats-inner{width:min(1180px,100%);margin:0 auto;padding:42px 30px;display:grid;grid-template-columns:minmax(180px,.75fr) minmax(0,2fr);align-items:center;gap:42px}
-.hx-stats-intro h2{margin:10px 0 0;font-size:clamp(25px,3vw,36px);line-height:1.02;letter-spacing:-.045em;color:#f5ecd6}
-.hx-stats-intro h2 em{color:#e6cd83;font-style:normal}
-.hx-stats-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
-.hx-stat{min-width:0;padding:4px clamp(14px,2.6vw,34px);border-left:1px solid rgba(200,166,75,.32)}
-.hx-stat-value{display:flex;align-items:baseline;gap:2px;color:#e6cd83;font-size:clamp(38px,5vw,56px);font-weight:850;letter-spacing:-.065em;line-height:1;font-variant-numeric:tabular-nums}
-.hx-stat-suffix{font-size:.72em}
-.hx-stat-label{margin-top:9px;color:#f4ecd8;font-size:13px;font-weight:800;line-height:1.3}
-.hx-stat-detail{max-width:190px;margin:6px 0 0;color:#b8ad91;font-size:11px;line-height:1.5}
-@media(max-width:760px){
-  .hx-stats-inner{padding:30px 18px;grid-template-columns:1fr;gap:20px}
-  .hx-stats-intro h2 br{display:none}
-  .hx-stats-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .hx-stat{padding:2px 10px;border-left:1px solid rgba(200,166,75,.32)}
-  .hx-stat:first-child{padding-left:0;border-left:0}
-  .hx-stat-value{font-size:clamp(31px,9vw,43px)}
-  .hx-stat-label{font-size:11px;line-height:1.25}
-  .hx-stat-detail{font-size:10px;line-height:1.4}
+/* Crafman at a glance — compact black-and-gold stats panel */
+.hx-stats-strip{
+  position:relative;
+  z-index:3;
+  width:100%;
+  color:#f4ecd8;
+  background:#0b0b09;
+  border-top:1px solid rgba(200,166,75,.45);
+  border-bottom:1px solid rgba(200,166,75,.45);
 }
-@media(max-width:380px){
-  .hx-stats-inner{padding:26px 14px}
+.hx-stats-inner{
+  width:min(1180px,100%);
+  margin:0 auto;
+  padding:32px 30px 29px;
+}
+.hx-stats-heading h2{
+  margin:9px 0 20px;
+  color:#f6efdc;
+  font-size:clamp(25px,3vw,32px);
+  line-height:1.08;
+  letter-spacing:-.045em;
+}
+.hx-stats-heading h2 em{color:#e1c16b;font-style:normal}
+.hx-stats-numbers{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  align-items:stretch;
+}
+.hx-stat{
+  min-width:0;
+  padding:2px 18px 3px;
+  border-left:1px solid rgba(200,166,75,.38);
+}
+.hx-stat:first-child{padding-left:0;border-left:0}
+.hx-stat-value{
+  display:flex;
+  align-items:baseline;
+  gap:1px;
+  color:#e3c16a;
+  font-size:clamp(40px,5vw,52px);
+  font-weight:850;
+  letter-spacing:-.075em;
+  line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.hx-stat-prefix,.hx-stat-suffix{font-size:.72em}
+.hx-stat-label{
+  max-width:180px;
+  margin-top:8px;
+  color:#f4ecd8;
+  font-size:12px;
+  font-weight:800;
+  line-height:1.3;
+}
+.hx-stat-detail{
+  max-width:220px;
+  margin:5px 0 0;
+  color:#b8ad91;
+  font-size:10px;
+  line-height:1.4;
+}
+@media(max-width:640px){
+  .hx-stats-inner{padding:27px 17px 25px}
+  .hx-stats-heading h2{font-size:26px;margin:8px 0 18px}
+  .hx-stats-numbers{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .hx-stat{padding:2px 10px 3px}
+  .hx-stat:first-child{padding-left:0}
+  .hx-stat-value{font-size:clamp(33px,9.6vw,46px)}
+  .hx-stat-label{font-size:10px;line-height:1.28;margin-top:7px}
+  .hx-stat-detail{font-size:9px;line-height:1.35}
+  .hx-stats-footnote{font-size:9px;margin-top:11px}
+}
+@media(max-width:360px){
+  .hx-stats-inner{padding-right:14px;padding-left:14px}
   .hx-stat{padding-right:7px;padding-left:7px}
-  .hx-stat-value{font-size:31px}
-  .hx-stat-label{font-size:10px}
-  .hx-stat-detail{font-size:9px}
+  .hx-stat-value{font-size:32px}
+  .hx-stat-label{font-size:9px}
 }
 @media(prefers-reduced-motion:reduce){
   .hx-stat-value{transition:none!important}
 }
 
+
+/* 100% project coordination — refined three-stage architectural sequence */
+.hx-coordination-section{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  color:#f4ecd8;
+  background:
+    radial-gradient(ellipse at 85% 8%,rgba(197,161,70,.14),transparent 35%),
+    linear-gradient(118deg,#080807 0%,#11110e 50%,#090908 100%);
+  border-top:1px solid rgba(200,166,75,.42);
+  border-bottom:1px solid rgba(200,166,75,.42);
+}
+.hx-coordination-section:before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:0;
+  opacity:.12;
+  pointer-events:none;
+  background-image:linear-gradient(rgba(221,191,109,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(221,191,109,.12) 1px,transparent 1px);
+  background-size:78px 78px;
+  mask-image:linear-gradient(90deg,transparent 0%,#000 48%,#000 100%);
+}
+.hx-coordination-inner{
+  width:min(1200px,100%);
+  margin:0 auto;
+  padding:72px 32px 76px;
+}
+.hx-coordination-topline{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  padding-bottom:17px;
+  border-bottom:1px solid rgba(201,169,89,.25);
+}
+.hx-coordination-caption{
+  color:#a99b77;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.19em;
+}
+.hx-coordination-intro{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:26px;
+  padding:36px 0 42px;
+}
+.hx-coordination-display{
+  color:#e3c16a;
+  font-size:clamp(70px,8.6vw,106px);
+  font-weight:850;
+  letter-spacing:-.105em;
+  line-height:.82;
+  text-shadow:0 14px 55px rgba(200,166,75,.12);
+}
+.hx-coordination-display span{
+  margin-left:3px;
+  font-size:.42em;
+  vertical-align:top;
+  letter-spacing:-.06em;
+}
+.hx-coordination-intro h2{
+  margin:0 0 9px;
+  color:#f6efdc;
+  font-size:clamp(30px,4vw,48px);
+  line-height:.98;
+  letter-spacing:-.06em;
+}
+.hx-coordination-intro h2 em{color:#e3c16a;font-style:normal}
+.hx-coordination-intro p{
+  max-width:440px;
+  margin:0;
+  color:#bdb194;
+  font-size:13px;
+  line-height:1.6;
+}
+.hx-coordination-link{
+  display:inline-flex;
+  align-items:center;
+  gap:17px;
+  justify-self:end;
+  padding:0 0 8px;
+  color:#e5c873;
+  border-bottom:1px solid rgba(229,200,115,.55);
+  text-decoration:none;
+  font-size:11px;
+  font-weight:800;
+  transition:gap .2s ease,color .2s ease;
+}
+.hx-coordination-link:hover{gap:24px;color:#fff0c5}
+.hx-coordination-journey{
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:28px;
+  padding-top:2px;
+}
+.hx-coordination-rail{
+  position:absolute;
+  top:42px;
+  left:14%;
+  right:14%;
+  height:1px;
+  background:linear-gradient(90deg,rgba(200,166,75,.2),rgba(226,194,105,.8),rgba(200,166,75,.2));
+}
+.hx-coordination-rail span{
+  position:absolute;
+  top:-3px;
+  left:0;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#e5c873;
+  box-shadow:0 0 0 5px rgba(229,200,115,.12),0 0 22px rgba(229,200,115,.8);
+  animation:hxCoordinationPulse 3.5s ease-in-out infinite;
+}
+.hx-coordination-stage{
+  position:relative;
+  min-width:0;
+  padding:0 0 0 20px;
+  border-left:1px solid rgba(201,169,89,.25);
+  animation:hxFadeUp .65s ease both;
+}
+.hx-coordination-stage-visual{
+  position:relative;
+  z-index:1;
+  display:flex;
+  min-height:88px;
+  align-items:flex-start;
+  justify-content:space-between;
+}
+.hx-coordination-stage-icon{
+  width:66px;
+  height:66px;
+  display:grid;
+  place-items:center;
+  color:#e5c873;
+  border:1px solid rgba(210,177,91,.62);
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 25%,#29251a,#11110e 72%);
+  box-shadow:0 0 0 8px rgba(200,166,75,.045),0 12px 28px rgba(0,0,0,.25);
+  transition:transform .22s ease,background .22s ease,border-color .22s ease;
+}
+.hx-coordination-stage-icon svg{width:32px;height:32px}
+.hx-coordination-stage:hover .hx-coordination-stage-icon{
+  transform:translateY(-4px) scale(1.04);
+  background:radial-gradient(circle at 35% 25%,#39301a,#17140d 72%);
+  border-color:#f0d27b;
+}
+.hx-coordination-stage-number{
+  padding:8px 0 0 10px;
+  color:#e4c16c;
+  font-size:10px;
+  font-weight:850;
+  letter-spacing:.15em;
+}
+.hx-coordination-stage-number i{
+  color:#7f765f;
+  font-style:normal;
+  font-weight:600;
+}
+.hx-coordination-stage-copy{
+  margin-top:19px;
+  padding-top:16px;
+  border-top:1px solid rgba(201,169,89,.27);
+}
+.hx-coordination-stage-note{
+  display:block;
+  margin-bottom:11px;
+  color:#d0ae58;
+  font-size:8px;
+  font-weight:850;
+  letter-spacing:.16em;
+}
+.hx-coordination-stage-copy h3{
+  margin:0;
+  color:#f5ebd1;
+  font-size:clamp(20px,2vw,25px);
+  line-height:1.15;
+  letter-spacing:-.04em;
+}
+.hx-coordination-stage-copy p{
+  max-width:300px;
+  margin:10px 0 0;
+  color:#b5a989;
+  font-size:12px;
+  line-height:1.65;
+}
+@media(max-width:820px){
+  .hx-coordination-inner{padding:58px 24px 62px}
+  .hx-coordination-intro{
+    grid-template-columns:auto minmax(0,1fr);
+    gap:18px;
+  }
+  .hx-coordination-display{font-size:clamp(64px,12vw,88px)}
+  .hx-coordination-link{grid-column:2;justify-self:start;margin-top:0}
+  .hx-coordination-journey{gap:17px}
+  .hx-coordination-stage{padding-left:14px}
+  .hx-coordination-stage-copy h3{font-size:20px}
+}
+@media(max-width:600px){
+  .hx-coordination-inner{padding:43px 19px 47px}
+  .hx-coordination-topline{align-items:flex-start;flex-direction:column;gap:8px;padding-bottom:14px}
+  .hx-coordination-caption{font-size:8px}
+  .hx-coordination-intro{
+    grid-template-columns:auto minmax(0,1fr);
+    align-items:center;
+    gap:13px;
+    padding:26px 0 29px;
+  }
+  .hx-coordination-display{font-size:clamp(56px,17vw,76px)}
+  .hx-coordination-intro h2{font-size:clamp(25px,7.2vw,34px)}
+  .hx-coordination-intro p{font-size:10px;line-height:1.45}
+  .hx-coordination-link{font-size:10px;grid-column:2;margin-top:1px}
+  .hx-coordination-journey{
+    grid-template-columns:1fr;
+    gap:0;
+    padding:0 0 0 1px;
+  }
+  .hx-coordination-rail{
+    top:31px;
+    bottom:31px;
+    left:32px;
+    right:auto;
+    width:1px;
+    height:auto;
+    background:linear-gradient(180deg,rgba(200,166,75,.2),rgba(226,194,105,.8),rgba(200,166,75,.2));
+  }
+  .hx-coordination-rail span{
+    top:0;
+    left:-3px;
+    animation:hxCoordinationPulseVertical 3.5s ease-in-out infinite;
+  }
+  .hx-coordination-stage{
+    display:grid;
+    grid-template-columns:66px minmax(0,1fr);
+    align-items:center;
+    gap:17px;
+    min-height:114px;
+    padding:12px 0;
+    border-left:0;
+  }
+  .hx-coordination-stage-visual{
+    min-height:0;
+    align-items:center;
+    justify-content:center;
+  }
+  .hx-coordination-stage-icon{width:64px;height:64px}
+  .hx-coordination-stage-icon svg{width:30px;height:30px}
+  .hx-coordination-stage-number{
+    position:absolute;
+    top:4px;
+    left:75px;
+    padding:0;
+    font-size:8px;
+  }
+  .hx-coordination-stage-copy{
+    align-self:stretch;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    margin:0;
+    padding:17px 0 10px;
+    border-top:1px solid rgba(201,169,89,.23);
+  }
+  .hx-coordination-stage-note{font-size:7px;margin-bottom:7px}
+  .hx-coordination-stage-copy h3{font-size:18px}
+  .hx-coordination-stage-copy p{margin-top:5px;font-size:10px;line-height:1.5}
+}
+@media(max-width:360px){
+  .hx-coordination-inner{padding-right:15px;padding-left:15px}
+  .hx-coordination-intro{gap:9px}
+  .hx-coordination-display{font-size:54px}
+  .hx-coordination-intro h2{font-size:24px}
+  .hx-coordination-stage{grid-template-columns:60px minmax(0,1fr);gap:13px}
+  .hx-coordination-stage-icon{width:58px;height:58px}
+  .hx-coordination-stage-number{left:68px}
+  .hx-coordination-stage-copy h3{font-size:16px}
+}
+@keyframes hxCoordinationPulse{
+  0%,100%{transform:translateX(0);opacity:.75}
+  50%{transform:translateX(10px);opacity:1}
+}
+@keyframes hxCoordinationPulseVertical{
+  0%,100%{transform:translateY(0);opacity:.75}
+  50%{transform:translateY(10px);opacity:1}
+}
+@media(prefers-reduced-motion:reduce){
+  .hx-coordination-stage,.hx-coordination-stage-icon,.hx-coordination-link{animation:none!important;transition:none!important}
+  .hx-coordination-rail span{animation:none!important}
+}
+
 `;
 
 
-function AnimatedStat({ value, suffix = "", label, detail }) {
+function AnimatedStat({ value, prefix = "", suffix = "", label, detail }) {
     const [count, setCount] = useState(0);
     const [started, setStarted] = useState(false);
     const ref = useRef(null);
@@ -561,11 +975,11 @@ function AnimatedStat({ value, suffix = "", label, detail }) {
 
     return (
         <div className="hx-stat" ref={ref}>
-            <div className="hx-stat-value" aria-label={`${value}${suffix} ${label}`}>
-                <span>{count}</span><span className="hx-stat-suffix">{suffix}</span>
+            <div className="hx-stat-value" aria-label={`${prefix}${value}${suffix} ${label}`}>
+                {prefix && <span className="hx-stat-prefix">{prefix}</span>}<span>{count}</span>{suffix && <span className="hx-stat-suffix">{suffix}</span>}
             </div>
             <div className="hx-stat-label">{label}</div>
-            <p className="hx-stat-detail">{detail}</p>
+            {detail && <p className="hx-stat-detail">{detail}</p>}
         </div>
     );
 }
@@ -643,19 +1057,60 @@ export default function HouseExtensions() {
                     <div className="hx-hero-side-label">EXTENSIONS · DESIGN · BUILD</div>
                 </section>
 
-                <section className="hx-stats-strip" aria-label="Crafman at a glance">
-                    <div className="hx-stats-inner">
-                        <div className="hx-stats-intro">
-                            <span className="hx-eyebrow hx-eyebrow-light">CRAFMAN AT A GLANCE</span>
-                            <h2>Experience.<br /><em>Clear direction.</em></h2>
+
+                <section className="hx-coordination-section" id="project-coordination">
+                    <div className="hx-coordination-inner">
+                        <div className="hx-coordination-topline">
+                            <span className="hx-eyebrow hx-eyebrow-light">ONE TEAM · EVERY STAGE</span>
+                            <span className="hx-coordination-caption">FROM THE FIRST DRAWING TO HANDOVER</span>
                         </div>
-                        <div className="hx-stats-grid">
-                            <AnimatedStat value={20} suffix="+" label="Years' industry experience"  />
-                            <AnimatedStat suffix="+" value={15} label="Years Insurance-Backed Guarantee"  />
-                            <AnimatedStat value={10} suffix="+" label="Yearly Projects Completed"  />
+
+                        <div className="hx-coordination-intro">
+                            <div className="hx-coordination-display">100<span>%</span></div>
+                            <div>
+                                <h2>Project <em>coordination.</em></h2>
+                                <p>One clear process. Three stages. One team keeping everything moving.</p>
+                            </div>
+                            <a href="#extension-enquiry" className="hx-coordination-link">
+                                Discuss your project <span aria-hidden="true">↗</span>
+                            </a>
+                        </div>
+
+                        <div className="hx-coordination-journey hx-coordination-journey-three">
+                            <div className="hx-coordination-rail" aria-hidden="true"><span /></div>
+                            {coordinationServices.map((service) => (
+                                <article className="hx-coordination-stage hx-coordination-stage-three" key={service.number}>
+                                    <div className="hx-coordination-stage-visual">
+                                        <span className="hx-coordination-stage-icon"><CoordinationIcon type={service.icon} /></span>
+                                        <span className="hx-coordination-stage-number">{service.number} <i>/ 03</i></span>
+                                    </div>
+                                    <div className="hx-coordination-stage-copy">
+                                        <span className="hx-coordination-stage-note">{service.note}</span>
+                                        <h3>{service.title}</h3>
+                                        <p>{service.detail}</p>
+                                    </div>
+                                </article>
+                            ))}
                         </div>
                     </div>
                 </section>
+
+                <section className="hx-stats-strip" aria-label="Crafman at a glance">
+                    <div className="hx-stats-inner">
+                        <div className="hx-stats-heading">
+                            <span className="hx-eyebrow hx-eyebrow-light">CRAFMAN AT A GLANCE</span>
+                            <h2>Experience. <em>Clear direction.</em></h2>
+                        </div>
+                        <div className="hx-stats-numbers">
+                            <AnimatedStat value={20} suffix="+" label="Years' industry experience" />
+                            <AnimatedStat value={9} label="Projects completed in 2026" />
+                            <AnimatedStat value={10} prefix="£" suffix="M" label="Insurance-backed guarantee" />
+                        </div>
+                        <p className="hx-stats-footnote">Limited project intake · £10M public liability · £5M employers' liability</p>
+                    </div>
+                </section>
+
+
 
                 <section className="hx-accreditations" aria-label="Accreditations and customer rating">
                     <div className="hx-accreditations-inner">
@@ -676,6 +1131,8 @@ export default function HouseExtensions() {
                         </div>
                     </div>
                 </section>
+
+
 
                 <section className="hx-section hx-types-section" id="extension-types">
                     <div className="hx-section-heading">
@@ -731,6 +1188,7 @@ export default function HouseExtensions() {
                         ))}
                     </div>
                 </section>
+
 
                 <section className="hx-process" id="process">
                     <div className="hx-process-inner">
