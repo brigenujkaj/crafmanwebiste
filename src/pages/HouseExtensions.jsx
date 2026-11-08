@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import ExtensionLeadForm from "../components/extensionLeadForm.jsx";
@@ -64,20 +64,96 @@ const coordinationServices = [
 
 const faqs = [
     {
-        question: "Will my extension need planning permission?",
-        answer: "Some projects may fall under permitted development, while others need planning permission. It depends on the property, the proposed dimensions, previous work and any local restrictions. We can help review the likely route.",
+        question: "Do I need planning permission for a house extension in London?",
+        answer: "Not every house extension needs a householder planning application. Some projects may qualify as permitted development, but the rules depend on the original house, the dimensions and position of the proposed work, previous extensions and restrictions affecting the property. Conservation areas, listed-building controls, Article 4 Directions and planning conditions can change what is allowed. We can discuss the likely planning route after reviewing the property and your proposed layout; the local planning authority makes the formal planning decision.",
     },
     {
-        question: "Can you manage the design and build?",
-        answer: "Yes. Crafman offers a coordinated design-and-build approach, bringing the architectural service, planning coordination, technical input and construction together around the agreed project scope.",
+        question: "What is permitted development for a house extension?",
+        answer: "Permitted development is a set of national planning rights that can allow certain home improvements without a full planning application, provided every relevant limit and condition is met. The assessment can include the size, height, location, materials, boundary distances and the amount of previous building work. The original house is an important reference point, so an older extension or outbuilding can affect the calculation. Never assume that a neighbour's extension means the same design is permitted at your address.",
     },
     {
-        question: "Which areas do you cover?",
-        answer: "We focus on selected areas of North London, Greater London and Essex. Send us your property postcode and we can confirm whether your location is within our service area.",
+        question: "Can I build a larger single-storey rear extension under prior approval?",
+        answer: "In England, some larger single-storey rear extensions may use the permitted development neighbour consultation route, often called prior approval. The route has eligibility rules, dimensional limits and a formal process with the local planning authority. It is not automatic permission and does not apply to every property or every design. The authority consults adjoining neighbours and considers the proposal under the relevant procedure. We can help identify whether this route may be relevant to your project.",
     },
     {
-        question: "How much does a house extension cost?",
-        answer: "Cost depends on size, ground conditions, structure, access, specification and approvals. Share your property address and project type and we can discuss the right next step.",
+        question: "Do double-storey extensions need planning permission?",
+        answer: "A two-storey extension is more restricted than many single-storey rear extensions. Permitted development rights may be limited by how far it extends beyond the original rear wall, its proximity to boundaries, its roof design and whether the property is in a designated area. Side extensions over one storey generally need a householder planning application. The exact position should be checked against current rules and the property's planning history before committing to a design.",
+    },
+    {
+        question: "Can I build a side-return or wraparound extension on a terraced house?",
+        answer: "A side-return or wraparound extension can be a practical way to use the narrow space beside and behind a London terrace. Feasibility depends on the width and condition of the side passage, neighbouring windows, drainage, foundations, access, daylight and planning constraints. A wraparound combines rear and side areas, so the planning assessment needs to consider the whole enlarged footprint rather than treating each part in isolation.",
+    },
+    {
+        question: "What is the difference between planning permission and building regulations?",
+        answer: "Planning permission deals with whether the proposed development is acceptable in planning terms, including its appearance, scale, location and effect on the area. Building regulations deal with how the work is designed and constructed so that it meets applicable standards for matters such as structure, fire safety, energy performance, ventilation, drainage and access. A project can need one approval, both, or in some cases neither; permitted development does not remove the need to comply with building regulations.",
+    },
+    {
+        question: "What is the difference between a Building Notice and Full Plans?",
+        answer: "These are different routes for dealing with building regulations in England. A Full Plans submission allows drawings and technical information to be checked by building control before work proceeds, which can help identify issues early on. A Building Notice is a more limited notification route and is not suitable for every project or every site. The appropriate route depends on the work, the property and the building control body's requirements. It is separate from planning permission.",
+    },
+    {
+        question: "Will my extension need building regulations approval?",
+        answer: "Many extensions need building regulations approval, including work involving new structural elements, foundations, walls, roofs, drainage, insulation, glazing or changes to fire safety. The exact requirements depend on the design and scope. Building control inspections may be needed at relevant stages, and completion documentation should be retained. The design and construction should allow the required checks to take place.",
+    },
+    {
+        question: "Will I need an architect or structural engineer?",
+        answer: "A well-developed design is important before construction starts. Architectural drawings set out the proposed layout, dimensions and appearance and can support planning and building regulations submissions. A structural engineer may be needed to design items such as steel beams, lintels, foundations or other load-bearing elements. The need for specialist input depends on the existing building and the proposed structural changes.",
+    },
+    {
+        question: "Will removing the wall between my kitchen and dining room need a steel beam?",
+        answer: "It may do, but this should never be decided by appearance alone. A wall may support floors, roof structure or other parts of the building. A competent structural assessment is needed to establish the load path and specify any beam, padstones, bearings or temporary support. Building regulations approval and inspection requirements should also be considered before the wall is removed.",
+    },
+    {
+        question: "Do I need a Party Wall Agreement before building an extension?",
+        answer: "The Party Wall etc. Act 1996 may apply to certain work on a shared wall, work close to a boundary and some excavations near neighbouring buildings. It is separate from planning permission and building regulations. Whether notice is required depends on the precise work and distances involved. The Act has formal notice periods and procedures, so check the position early and obtain advice from a suitably experienced party wall professional where necessary.",
+    },
+    {
+        question: "How much does a house extension cost in North London?",
+        answer: "There is no reliable single price for every extension. The cost is affected by floor area, the type of extension, ground conditions, foundations, structural steel, drainage changes, access, glazing, internal finishes, kitchen or bathroom work, professional fees and the level of specification. A clear scope and coordinated drawings make it easier to develop a meaningful project estimate. We discuss the property and proposed work before advising on the next step.",
+    },
+    {
+        question: "How long does a house extension take to build?",
+        answer: "The construction period varies with the size and complexity of the project, site access, ground conditions, structural work, weather, material availability and the number of trades involved. Design development, planning and building regulations processes also take time before the build begins. A realistic programme should be prepared around the actual scope and approvals rather than relying on a generic number of weeks.",
+    },
+    {
+        question: "Can you help with design, planning and construction as one project?",
+        answer: "Crafman Design & Build offers a coordinated design-to-build approach for house extensions. The service can bring together design development, planning route coordination, technical and structural input, building control coordination and construction. The exact services and responsibilities are agreed for each project so that the scope is clear before work starts.",
+    },
+    {
+        question: "What happens during the design and approvals stage?",
+        answer: "The first stage is to understand the property, the way you use it and what you want the extension to achieve. The proposed layout and design are developed, then the likely planning route is considered. Where required, planning information, technical drawings and structural input are coordinated, followed by the relevant building regulations or building control process. The work that is needed depends on the property and the design.",
+    },
+    {
+        question: "What happens during construction?",
+        answer: "Once the project scope, relevant approvals and construction arrangements are in place, the build can move through the agreed sequence. Depending on the project, this can include site preparation, excavation and foundations, drainage, structural work, walls and roof, windows and doors, insulation, first-fix services, plastering and internal finishes. The actual sequence and included work are set out for the individual project.",
+    },
+    {
+        question: "What is included at handover?",
+        answer: "Handover is the final stage of the agreed project. It involves reviewing the completed work, noting any outstanding items that need attention and passing on relevant completion information and documents that apply to the project. The handover requirements depend on the contract, specification and approvals for the work.",
+    },
+    {
+        question: "Can an extension include bi-fold doors, sliding doors or roof lanterns?",
+        answer: "Glazing choices can be considered as part of the design. Bi-fold doors, sliding doors, rooflights and roof lanterns each affect the appearance, structure, thermal performance, daylight and budget of the extension. Opening sizes, support requirements, glass specification and product details should be coordinated with the architectural and structural design and the applicable building regulations.",
+    },
+    {
+        question: "Can an extension improve the layout of an existing home?",
+        answer: "Yes. An extension can create space for an open-plan kitchen and dining area, a larger family room, a utility room, a ground-floor study or a more useful connection to the garden. Good planning considers circulation, daylight, storage, heating, ventilation and how the new space connects to the existing house, not only the extra floor area.",
+    },
+    {
+        question: "Do you work across North London, Greater London and Essex?",
+        answer: "Crafman focuses on selected areas of North London, Greater London and Essex. Availability depends on the property's postcode, the project type and current capacity. Send the property postcode with your enquiry and the team can confirm whether the location is within the service area. We do not claim to cover every borough or every Essex postcode.",
+    },
+    {
+        question: "What information should I provide when requesting an extension discussion?",
+        answer: "The most useful starting details are your name, email address, property address and postcode, the type of extension you are considering and a short description of what you would like to achieve. Approximate dimensions, photographs, existing drawings or planning history can also help at a later stage, but you can start with the basic enquiry form on this page.",
+    },
+    {
+        question: "Do you offer free architectural drawings with a project?",
+        answer: "Yes. Crafman offers complimentary architectural drawings with any project that you appoint Crafman to carry out as the builder. The offer is available across project types such as house extensions, renovations and new builds. The drawing package, level of detail and project requirements are agreed during the initial consultation. Submitting an enquiry does not itself trigger a free drawing package; the offer applies when Crafman is appointed to deliver the construction project.",
+    },
+    {
+        question: "Does permitted development mean I can start building straight away?",
+        answer: "Not necessarily. You should first confirm that the proposal meets all permitted development conditions and that no local or property-specific restriction removes those rights. Other requirements may still apply, including building regulations, Party Wall notices, drainage approvals, covenants or listed-building consent. Some larger single-storey extensions also require the prior approval process. Check the complete position before starting work.",
     },
 ];
 
@@ -930,6 +1006,159 @@ body:has(.hx-page) #root {
   .hx-coordination-rail span{animation:none!important}
 }
 
+
+
+/* Hero enquiry form: editorial copy on the left, conversion form on the right. */
+.hx-hero{min-height:730px;align-items:center}
+.hx-hero-layout{
+  position:relative;z-index:2;width:min(1220px,100%);margin:0 auto;padding:78px 30px 82px;
+  display:grid;grid-template-columns:minmax(0,1.13fr) minmax(360px,.82fr);gap:clamp(30px,5vw,76px);align-items:center;
+}
+.hx-hero-content{width:auto;max-width:690px;margin:0;padding:0;animation:hxFadeUp .8s ease both}
+.hx-hero h1{max-width:690px;font-size:clamp(52px,6.3vw,82px)}
+.hx-hero-content>p{max-width:470px}
+.hx-hero-form-wrap{width:100%;max-width:460px;justify-self:end;scroll-margin-top:110px}
+
+.hx-hero-offer{
+  display:flex;align-items:flex-start;gap:13px;max-width:500px;margin:23px 0 0;padding:13px 15px;
+  border:1px solid rgba(230,205,131,.48);border-left:3px solid #e6cd83;
+  background:linear-gradient(105deg,rgba(200,166,75,.17),rgba(15,15,13,.56));
+  box-shadow:0 12px 32px rgba(0,0,0,.13);
+}
+.hx-hero-offer-mark{
+  flex:0 0 31px;width:31px;height:31px;display:grid;place-items:center;margin-top:2px;
+  border:1px solid rgba(230,205,131,.55);border-radius:50%;color:#e6cd83;font-size:16px;
+}
+.hx-hero-offer-copy{display:grid;gap:3px;min-width:0}
+.hx-hero-offer-kicker{color:#e6cd83;font-size:8px;font-weight:850;letter-spacing:.18em;text-transform:uppercase}
+ .hx-hero-offer-copy strong{color:#fff3d2;font-size:15px;line-height:1.25;letter-spacing:-.025em;text-transform:uppercase}
+.hx-free-highlight{display:inline-block;color:#f0d47f;background:rgba(230,205,131,.12);padding:0 3px;text-decoration:underline;text-decoration-color:#e6cd83;text-decoration-thickness:2px;text-underline-offset:4px}
+.hx-hero-offer-copy p{margin:1px 0 0;color:#e1d8c2;font-size:11px;line-height:1.55}
+.hx-hero-offer-copy small{margin-top:2px;color:#a99d80;font-size:9px;line-height:1.45}
+.hx-claim-drawings-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;width:fit-content;min-height:39px;margin-top:12px;padding:0 14px;border:1px solid #e6cd83;border-radius:2px;background:#c8a64b;color:#090908;text-decoration:none;font-size:10px;font-weight:900;letter-spacing:.055em;text-transform:uppercase;box-shadow:0 5px 16px rgba(0,0,0,.18);transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+.hx-claim-drawings-btn:hover{transform:translateY(-2px);background:#e6cd83;box-shadow:0 8px 22px rgba(0,0,0,.28)}
+.hx-claim-drawings-btn:focus-visible{outline:2px solid #fff3d2;outline-offset:4px}
+.hx-claim-drawings-btn .hx-free-highlight{color:#090908;background:rgba(255,255,255,.3);text-decoration-color:#090908;text-underline-offset:3px}
+.hx-hero .hx-hero-side-label{z-index:2}
+.hx-faq-intro{max-width:820px;margin:-7px 0 31px;color:#c0b38f;font-size:14px;line-height:1.8}
+.hx-faq-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:38px;border-top:1px solid rgba(200,166,75,.38)}
+.hx-faq-item{min-width:0;padding:0;border-bottom:1px solid rgba(200,166,75,.28)}
+.hx-faq-question{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0;padding:20px 2px;color:#f2e6c5;font-size:16px;font-weight:800;line-height:1.35;letter-spacing:-.02em;cursor:pointer}
+.hx-faq-question::-webkit-details-marker{display:none}
+.hx-faq-question::marker{content:""}
+.hx-faq-question:hover{color:#e6cd83}
+.hx-faq-question:focus-visible{outline:2px solid #e6cd83;outline-offset:4px;border-radius:2px}
+.hx-faq-toggle{width:28px;height:28px;display:grid;place-items:center;flex:0 0 28px;border:1px solid rgba(200,166,75,.55);border-radius:50%;color:#e6cd83;background:rgba(200,166,75,.06);font-size:19px;font-weight:400;line-height:1}
+.hx-faq-toggle::before{content:"+"}
+.hx-faq-item[open] .hx-faq-toggle::before{content:"−"}
+.hx-faq-answer{max-width:none;margin:0;padding:0 45px 22px 2px;color:#c0b38f;font-size:13px;line-height:1.8;animation:hxFadeUp .2s ease both}
+.hx-faq-sources{display:grid;gap:9px;margin-top:34px;padding:22px 24px;border:1px solid rgba(200,166,75,.3);background:#10100e}
+.hx-faq-sources strong{margin-bottom:3px;color:#f2e6c5;font-size:12px;letter-spacing:.05em;text-transform:uppercase}
+.hx-faq-sources a{color:#e6cd83;font-size:12px;line-height:1.6;text-decoration:none}
+.hx-faq-sources a:hover{text-decoration:underline}
+.hx-faq-disclaimer{max-width:920px;margin:18px 0 0;color:#93886c;font-size:11px;line-height:1.7}
+@media(max-width:1020px){
+  .hx-hero{min-height:0}
+  .hx-hero-layout{grid-template-columns:minmax(0,1fr) minmax(330px,.86fr);gap:28px;padding-top:70px;padding-bottom:70px}
+  .hx-hero h1{font-size:clamp(48px,6vw,68px)}
+  .hx-hero-meta{margin-top:36px}
+}
+@media(max-width:760px){
+  .hx-hero-layout{grid-template-columns:1fr;gap:26px;padding:105px 22px 48px}
+  .hx-hero-content{max-width:650px}
+  .hx-hero h1{font-size:clamp(48px,11vw,68px)}
+  .hx-hero-meta{margin-top:27px}
+  .hx-hero-form-wrap{max-width:560px;justify-self:stretch;margin:0 auto;width:100%}
+  .hx-hero{align-items:stretch}
+  .hx-faq-list{grid-template-columns:1fr;column-gap:0}
+}
+@media(max-width:640px){
+  .hx-hero-layout{padding:102px 17px 35px;gap:24px}
+  .hx-hero-content{padding:0}
+  .hx-hero h1{font-size:clamp(44px,12.5vw,62px);margin:17px 0 14px}
+  .hx-hero-content>p{font-size:15px;line-height:1.55}
+  .hx-hero-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:22px}
+  .hx-hero-actions .hx-button{width:100%;min-height:48px;padding:0 10px;gap:7px;font-size:10px}
+  .hx-hero-meta{margin-top:23px;gap:8px;font-size:9px}
+  .hx-hero-meta i{width:3px;height:3px}
+  .hx-hero-form-wrap{max-width:none}
+  .hx-hero-offer{max-width:none;margin-top:17px;padding:12px 13px}
+  .hx-hero-offer-copy strong{font-size:13px}
+  .hx-hero-offer-copy p{font-size:10px}
+  .hx-faq-intro{font-size:12px;line-height:1.75;margin-bottom:22px}
+  .hx-faq-item{padding:0}
+  .hx-faq-question{font-size:14px;padding:17px 0}
+  .hx-faq-answer{font-size:12px;line-height:1.75;padding:0 38px 18px 2px}
+  .hx-faq-sources{padding:18px 15px}
+  .hx-faq-sources a{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){.hx-hero-content{animation:none}}
+
+/* Premium black-and-gold footer, consistent with the extension landing page. */
+.hx-footer{position:relative;background:#080807;color:#f4ecd8;border-top:1px solid rgba(200,166,75,.48)}
+.hx-footer-inner{width:min(1220px,100%);margin:0 auto;padding:54px 30px 22px}
+.hx-footer-grid{display:grid;grid-template-columns:1.35fr .8fr 1fr .9fr;gap:36px;padding-bottom:38px}
+.hx-footer-brand{max-width:330px}
+.hx-footer-wordmark{display:inline-block;margin:0 0 13px;color:#f6efdc;font-size:19px;font-weight:900;letter-spacing:.13em;text-decoration:none}
+.hx-footer-wordmark span{color:#e3c16a}
+.hx-footer-brand p,.hx-footer-area-copy{margin:0;color:#bdb194;font-size:12px;line-height:1.8}
+.hx-footer-offer{display:inline-flex;margin-top:16px;color:#e6cd83;font-size:11px;font-weight:800;line-height:1.5;text-decoration:none;border-bottom:1px solid rgba(230,205,131,.45);padding-bottom:5px}
+.hx-footer-heading{margin:3px 0 15px;color:#e6cd83;font-size:9px;font-weight:850;letter-spacing:.18em;text-transform:uppercase}
+.hx-footer-links,.hx-footer-contact{display:grid;gap:11px}
+.hx-footer-links a,.hx-footer-contact a{width:fit-content;color:#eee5cf;font-size:12px;line-height:1.5;text-decoration:none;transition:color .2s ease}
+.hx-footer-links a:hover,.hx-footer-contact a:hover{color:#e6cd83}
+.hx-footer-contact a{font-weight:700}
+.hx-footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-top:18px;border-top:1px solid rgba(200,166,75,.22);color:#887f69;font-size:10px;line-height:1.6}
+.hx-footer-bottom a{color:#bfa96d;text-decoration:none}
+.hx-footer-bottom a:hover{color:#f2e6c5}
+@media(max-width:900px){.hx-footer-grid{grid-template-columns:1.2fr 1fr;row-gap:30px}}
+@media(max-width:640px){.hx-footer-inner{padding:43px 20px 18px}.hx-footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 20px;padding-bottom:27px}.hx-footer-brand{grid-column:1/-1;max-width:420px}.hx-footer-bottom{align-items:flex-start;flex-direction:column;gap:7px;font-size:9px}}
+
+
+/* Ad-group-only choice modal: activated solely by crafman_entry=architectural-drawings. */
+.hx-intent-modal{
+  position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:20px;
+  background:rgba(0,0,0,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.hx-intent-dialog{
+  position:relative;width:min(560px,100%);padding:clamp(27px,5vw,44px);
+  color:#f4ecd8;background:radial-gradient(ellipse at 90% 0%,rgba(200,166,75,.14),transparent 42%),linear-gradient(145deg,#191916,#090908);
+  border:1px solid rgba(200,166,75,.66);box-shadow:0 28px 90px rgba(0,0,0,.58);
+}
+.hx-intent-dialog:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#9e7a2c,#ead18a,#9e7a2c)}
+.hx-intent-close{
+  position:absolute;top:13px;right:14px;width:34px;height:34px;display:grid;place-items:center;
+  border:1px solid rgba(230,205,131,.35);border-radius:50%;background:rgba(255,255,255,.04);
+  color:#e6cd83;font-size:21px;line-height:1;cursor:pointer;
+}
+.hx-intent-kicker{display:block;margin-bottom:13px;color:#e6cd83;font-size:9px;font-weight:850;letter-spacing:.2em;text-transform:uppercase}
+.hx-intent-dialog h2{max-width:450px;margin:0 36px 12px 0;color:#f6efdc;font-size:clamp(29px,5vw,42px);line-height:1.02;letter-spacing:-.055em}
+.hx-intent-dialog h2 em{color:#e6cd83;font-style:normal}
+.hx-intent-intro{max-width:440px;margin:0 0 25px;color:#c0b38f;font-size:13px;line-height:1.75}
+.hx-intent-options{display:grid;gap:11px}
+.hx-intent-option{
+  width:100%;display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:17px 18px;
+  text-align:left;text-decoration:none;border:1px solid rgba(200,166,75,.5);border-radius:2px;
+  transition:transform .2s ease,border-color .2s ease,background .2s ease;
+}
+.hx-intent-option:hover{transform:translateY(-2px);border-color:#f0d27b}
+.hx-intent-option-primary{background:#c8a64b;color:#090908;border-color:#e6cd83}
+.hx-intent-option-primary:hover{background:#e6cd83}
+.hx-intent-option-secondary{background:rgba(255,255,255,.035);color:#f4ecd8}
+.hx-intent-option-title{font-size:14px;font-weight:850;line-height:1.35;letter-spacing:-.01em}
+.hx-intent-option-detail{font-size:11px;line-height:1.55;opacity:.82}
+.hx-intent-option-primary .hx-intent-option-detail{color:#211b0b}
+.hx-intent-option-secondary .hx-intent-option-detail{color:#c0b38f}
+.hx-intent-footnote{margin:16px 0 0;color:#95896c;font-size:10px;line-height:1.6}
+@media(max-width:520px){
+  .hx-intent-modal{padding:13px;align-items:end}
+  .hx-intent-dialog{padding:30px 20px 22px}
+  .hx-intent-dialog h2{font-size:31px}
+  .hx-intent-intro{font-size:12px;margin-bottom:20px}
+  .hx-intent-option{padding:15px}
+}
+@media(prefers-reduced-motion:reduce){.hx-intent-option{transition:none}}
+
 `;
 
 
@@ -985,7 +1214,41 @@ function AnimatedStat({ value, prefix = "", suffix = "", label, detail }) {
 }
 
 export default function HouseExtensions() {
-    const [openFaq, setOpenFaq] = useState(0);
+    const [showDrawingsIntent, setShowDrawingsIntent] = useState(false);
+    const drawingsIntentButtonRef = useRef(null);
+
+    // This chooser is shown only when the Architectural Drawings Google Ads ad group
+    // appends ?crafman_entry=architectural-drawings to this extension landing page.
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("crafman_entry") === "architectural-drawings") {
+            setShowDrawingsIntent(true);
+        }
+    }, []);
+
+    const closeDrawingsIntent = useCallback((choice = "dismissed") => {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("crafman_entry");
+        window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: "crafman_drawings_intent_choice", choice });
+        setShowDrawingsIntent(false);
+    }, []);
+
+    useEffect(() => {
+        if (!showDrawingsIntent) return undefined;
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        drawingsIntentButtonRef.current?.focus();
+        const handleKeyDown = (event) => {
+            if (event.key === "Escape") closeDrawingsIntent();
+        };
+        document.addEventListener("keydown", handleKeyDown);
+        return () => {
+            document.body.style.overflow = previousOverflow;
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [showDrawingsIntent, closeDrawingsIntent]);
 
     const schema = {
         "@context": "https://schema.org",
@@ -994,18 +1257,41 @@ export default function HouseExtensions() {
         legalName: "Crafman Building and Landscaping Ltd",
         url: "https://www.crafman.co.uk/house-extensions-london",
         image: "https://www.crafman.co.uk/images/extensionBackground.jpeg",
+        telephone: "+442081914122",
+        email: "sales@crafman.co.uk",
+        description: "House extension design and build services in selected areas of North London, Greater London and Essex. Services include design coordination, planning route coordination, technical input, building control coordination and construction.",
         areaServed: [
-            { "@type": "Place", name: "North London" },
-            { "@type": "Place", name: "Greater London" },
-            { "@type": "AdministrativeArea", name: "Essex" },
+            { "@type": "Place", name: "Selected areas of North London" },
+            { "@type": "Place", name: "Selected areas of Greater London" },
+            { "@type": "AdministrativeArea", name: "Selected areas of Essex" },
         ],
-        makesOffer: {
-            "@type": "Offer",
-            itemOffered: {
-                "@type": "Service",
-                name: "House extension design and build",
-                serviceType: "House extensions",
-            },
+        knowsAbout: [
+            "House extensions", "Single-storey rear extensions", "Double-storey rear extensions",
+            "Side-return extensions", "Wraparound extensions", "Double-storey side extensions",
+            "Planning permission", "Permitted development", "Prior approval",
+            "Building regulations", "Building control", "Structural coordination", "Design and build",
+            "Architectural drawings", "Complimentary architectural drawings with construction projects",
+        ],
+        hasOfferCatalog: {
+            "@type": "OfferCatalog",
+            name: "House extension services",
+            itemListElement: [
+                "Single-storey extensions", "Double-storey extensions", "Side-return extensions",
+                "Wraparound extensions", "Double-storey side extensions", "Extension design and approvals",
+                "Extension construction and handover",
+            ].map((name) => ({
+                "@type": "Offer",
+                itemOffered: { "@type": "Service", name },
+            })).concat([{
+                "@type": "Offer",
+                name: "Complimentary architectural drawings with every project",
+                description: "Crafman provides complimentary architectural drawings for projects appointed to Crafman for construction, including eligible extensions, renovations and new builds. The drawing package and scope are agreed during the project consultation.",
+                itemOffered: {
+                    "@type": "Service",
+                    name: "Architectural drawings",
+                    description: "Architectural drawings prepared for a construction project delivered by Crafman Design & Build."
+                }
+            }]),
         },
     };
 
@@ -1023,40 +1309,120 @@ export default function HouseExtensions() {
         <>
             <style>{HOUSE_EXTENSIONS_STYLES}</style>
             <Helmet>
-                <title>House Extensions North London | Crafman Design & Build</title>
+                <title>House Extensions North London | Design & Build | Crafman</title>
                 <meta
                     name="description"
-                    content="Plan your house extension with Crafman Design & Build. Architectural design, planning coordination and construction across selected areas of North London, Greater London and Essex."
+                    content="House extension design and build in selected areas of North London, Greater London and Essex. Ask about free architectural drawings with every Crafman construction project."
                 />
+                <meta name="robots" content="index,follow,max-image-preview:large" />
+                <meta property="og:type" content="website" />
+                <meta property="og:title" content="House Extensions North London | Crafman Design & Build" />
+                <meta property="og:description" content="House extension design and build, from design and approvals through construction to handover." />
+                <meta property="og:url" content="https://www.crafman.co.uk/house-extensions-london" />
+                <meta property="og:image" content="https://www.crafman.co.uk/images/extensionBackground.jpeg" />
                 <link rel="canonical" href="https://www.crafman.co.uk/house-extensions-london" />
                 <script type="application/ld+json">{JSON.stringify(schema)}</script>
                 <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
             </Helmet>
 
             <ExtensionHeader />
-            <main className="hx-page">
+            <main className="hx-page" id="top">
                 <section className="hx-hero">
                     <div className="hx-hero-image" />
                     <div className="hx-hero-shade" />
-                    <div className="hx-hero-content">
-                        <span className="hx-eyebrow hx-eyebrow-light">CRAFMAN DESIGN & BUILD · NORTH LONDON</span>
-                        <h1>Make more room.<br /><em>Make it yours.</em></h1>
-                        <p>House extensions, planned and built around the way you live.</p>
-                        <div className="hx-hero-actions">
-                            <a className="hx-button hx-button-gold" href="#extension-enquiry">Discuss your project <span>↗</span></a>
-                            <a className="hx-button hx-button-outline" href="#extension-types">Explore extensions</a>
+                    <div className="hx-hero-layout">
+                        <div className="hx-hero-content">
+                            <span className="hx-eyebrow hx-eyebrow-light">CRAFMAN DESIGN & BUILD · NORTH LONDON</span>
+                            <h1>Make more room.<br /><em>Make it yours.</em></h1>
+                            <p>House extensions, planned and built around the way you live.</p>
+                            <aside className="hx-hero-offer" aria-label="Free architectural drawings offer">
+                                <span className="hx-hero-offer-mark" aria-hidden="true">✦</span>
+                                <span className="hx-hero-offer-copy">
+                                    <span className="hx-hero-offer-kicker">A Crafman project offer</span>
+                                    <strong><span className="hx-free-highlight">Free</span> architectural drawings</strong>
+                                    <p>Complimentary drawings with any project you appoint Crafman to build — from extensions and renovations to new builds.</p>
+                                    <small>Drawing package and scope are agreed during your project consultation.</small>
+                                    <a className="hx-claim-drawings-btn" href="#hero-extension-enquiry" aria-label="Claim free architectural drawings by discussing your project with Crafman">
+                                        Claim <span className="hx-free-highlight">free</span> drawings <span aria-hidden="true">↗</span>
+                                    </a>
+                                </span>
+                            </aside>
+                            <div className="hx-hero-actions">
+                                <a className="hx-button hx-button-gold" href="#hero-extension-enquiry">Discuss your project <span>↗</span></a>
+                                <a className="hx-button hx-button-outline" href="#extension-types">Explore extensions</a>
+                            </div>
+                            <div className="hx-hero-meta">
+                                <span>Family-run team</span>
+                                <i />
+                                <span>20+ years' industry experience</span>
+                                <i />
+                                <span>Design to build</span>
+                            </div>
                         </div>
-                        <div className="hx-hero-meta">
-                            <span>Family-run team</span>
-                            <i />
-                            <span>20+ years' industry experience</span>
-                            <i />
-                            <span>Design to build</span>
+                        <div className="hx-hero-form-wrap" id="hero-extension-enquiry">
+                            <ExtensionLeadForm compact />
                         </div>
                     </div>
                     <div className="hx-hero-side-label">EXTENSIONS · DESIGN · BUILD</div>
                 </section>
 
+                <section className="hx-stats-strip" aria-label="Crafman at a glance">
+                    <div className="hx-stats-inner">
+                        <div className="hx-stats-heading">
+                            <span className="hx-eyebrow hx-eyebrow-light">CRAFMAN AT A GLANCE</span>
+                            <h2>Experience. <em>Clear direction.</em></h2>
+                        </div>
+                        <div className="hx-stats-numbers">
+                            <AnimatedStat value={20} suffix="+" label="Years' industry experience" />
+                            <AnimatedStat value={9} label="Projects completed in 2026" />
+                            <AnimatedStat value={10} prefix="£" suffix="M" label="Insurance-backed guarantee" />
+                        </div>
+                        <p className="hx-stats-footnote">Limited project intake · £10M public liability · £5M employers' liability</p>
+                    </div>
+                </section>
+
+                <section className="hx-project-section">
+                    <div className="hx-project-copy">
+                        <span className="hx-eyebrow hx-eyebrow-light">A REAL CROFTMAN PROJECT</span>
+                        <h2>Built around<br /><em>real homes.</em></h2>
+                        <p>Explore a Greenwich rear extension, from the early groundworks through to the completed shell.</p>
+                        <Link to="/case-studies" className="hx-text-link">See project work <span>↗</span></Link>
+                    </div>
+                    <div className="hx-project-gallery">
+                        <figure className="hx-project-image hx-project-image-large">
+                            <img src="/images/greenwichExt/rendering.png" alt="Completed rear extension exterior at a Crafman project" loading="lazy" />
+                            <figcaption>THE FINISHED EXTENSION</figcaption>
+                        </figure>
+                        <figure className="hx-project-image hx-project-image-small">
+                            <img src="/images/greenwichExt/foundation.png" alt="Foundation works during a rear extension project" loading="lazy" />
+                            <figcaption>FOUNDATIONS</figcaption>
+                        </figure>
+                        <figure className="hx-project-image hx-project-image-small">
+                            <img src="/images/greenwichExt/shellCompleted.png" alt="Rear extension shell at a Crafman project" loading="lazy" />
+                            <figcaption>BUILD PROGRESS</figcaption>
+                        </figure>
+                    </div>
+                </section>
+
+                <section className="hx-accreditations" aria-label="Accreditations and customer rating">
+                    <div className="hx-accreditations-inner">
+                        <div className="hx-accreditation-intro">
+                            <span className="hx-eyebrow">BUILT ON TRUST</span>
+                            <strong>Quality at every stage.</strong>
+                        </div>
+                        <div className="hx-accreditation-logos">
+                            <div className="hx-accreditation-logo hx-fmb-logo">
+                                <img src="/images/fmb.jpeg" alt="Federation of Master Builders" loading="lazy" />
+                            </div>
+                            <div className="hx-accreditation-logo hx-trustmark-logo">
+                                <img src="/images/trustmark.jpeg" alt="TrustMark Government Endorsed Quality" loading="lazy" />
+                            </div>
+                            <div className="hx-accreditation-logo hx-google-logo">
+                                <img src="/images/google5Star.jpeg" alt="Google five-star rating graphic" loading="lazy" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 <section className="hx-coordination-section" id="project-coordination">
                     <div className="hx-coordination-inner">
@@ -1095,44 +1461,6 @@ export default function HouseExtensions() {
                     </div>
                 </section>
 
-                <section className="hx-stats-strip" aria-label="Crafman at a glance">
-                    <div className="hx-stats-inner">
-                        <div className="hx-stats-heading">
-                            <span className="hx-eyebrow hx-eyebrow-light">CRAFMAN AT A GLANCE</span>
-                            <h2>Experience. <em>Clear direction.</em></h2>
-                        </div>
-                        <div className="hx-stats-numbers">
-                            <AnimatedStat value={20} suffix="+" label="Years' industry experience" />
-                            <AnimatedStat value={9} label="Projects completed in 2026" />
-                            <AnimatedStat value={10} prefix="£" suffix="M" label="Insurance-backed guarantee" />
-                        </div>
-                        <p className="hx-stats-footnote">Limited project intake · £10M public liability · £5M employers' liability</p>
-                    </div>
-                </section>
-
-
-
-                <section className="hx-accreditations" aria-label="Accreditations and customer rating">
-                    <div className="hx-accreditations-inner">
-                        <div className="hx-accreditation-intro">
-                            <span className="hx-eyebrow">BUILT ON TRUST</span>
-                            <strong>Quality at every stage.</strong>
-                        </div>
-                        <div className="hx-accreditation-logos">
-                            <div className="hx-accreditation-logo hx-fmb-logo">
-                                <img src="/images/fmb.jpeg" alt="Federation of Master Builders" loading="lazy" />
-                            </div>
-                            <div className="hx-accreditation-logo hx-trustmark-logo">
-                                <img src="/images/trustmark.jpeg" alt="TrustMark Government Endorsed Quality" loading="lazy" />
-                            </div>
-                            <div className="hx-accreditation-logo hx-google-logo">
-                                <img src="/images/google5Star.jpeg" alt="Google five-star rating graphic" loading="lazy" />
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-
 
                 <section className="hx-section hx-types-section" id="extension-types">
                     <div className="hx-section-heading">
@@ -1147,28 +1475,7 @@ export default function HouseExtensions() {
                     </div>
                 </section>
 
-                <section className="hx-project-section">
-                    <div className="hx-project-copy">
-                        <span className="hx-eyebrow hx-eyebrow-light">A REAL CROFTMAN PROJECT</span>
-                        <h2>Built around<br /><em>real homes.</em></h2>
-                        <p>Explore a Greenwich rear extension, from the early groundworks through to the completed shell.</p>
-                        <Link to="/case-studies" className="hx-text-link">See project work <span>↗</span></Link>
-                    </div>
-                    <div className="hx-project-gallery">
-                        <figure className="hx-project-image hx-project-image-large">
-                            <img src="/images/greenwichExt/rendering.png" alt="Completed rear extension exterior at a Crafman project" loading="lazy" />
-                            <figcaption>THE FINISHED EXTENSION</figcaption>
-                        </figure>
-                        <figure className="hx-project-image hx-project-image-small">
-                            <img src="/images/greenwichExt/foundation.png" alt="Foundation works during a rear extension project" loading="lazy" />
-                            <figcaption>FOUNDATIONS</figcaption>
-                        </figure>
-                        <figure className="hx-project-image hx-project-image-small">
-                            <img src="/images/greenwichExt/shellCompleted.png" alt="Rear extension shell at a Crafman project" loading="lazy" />
-                            <figcaption>BUILD PROGRESS</figcaption>
-                        </figure>
-                    </div>
-                </section>
+
 
                 <section className="hx-section hx-capabilities" id="capabilities">
                     <div className="hx-section-heading hx-heading-compact">
@@ -1190,6 +1497,7 @@ export default function HouseExtensions() {
                 </section>
 
 
+
                 <section className="hx-process" id="process">
                     <div className="hx-process-inner">
                         <div className="hx-process-heading">
@@ -1207,34 +1515,37 @@ export default function HouseExtensions() {
                 <section className="hx-section hx-faq-section" id="faqs">
                     <div className="hx-section-heading hx-heading-compact">
                         <div>
-                            <span className="hx-eyebrow">A FEW QUICK ANSWERS</span>
-                            <h2>Good to <em>know.</em></h2>
+                            <span className="hx-eyebrow">HOUSE EXTENSION GUIDE</span>
+                            <h2>Questions, <em>answered.</em></h2>
                         </div>
-                        <a className="hx-text-link" href="#extension-enquiry">Ask us about your project <span>↗</span></a>
+                        <a className="hx-text-link" href="#extension-enquiry">Discuss your property <span>↗</span></a>
                     </div>
+                    <p className="hx-faq-intro">Clear information about house extensions, planning permission, permitted development, building regulations, design, construction and project handover. Every property is different, so the right advice starts with the address and the proposed work.</p>
                     <div className="hx-faq-list">
-                        {faqs.map((item, index) => (
-                            <article className={`hx-faq-item ${openFaq === index ? "is-open" : ""}`} key={item.question}>
-                                <button
-                                    type="button"
-                                    className="hx-faq-question"
-                                    aria-expanded={openFaq === index}
-                                    onClick={() => setOpenFaq(openFaq === index ? -1 : index)}
-                                >
+                        {faqs.map((item) => (
+                            <details className="hx-faq-item" key={item.question}>
+                                <summary className="hx-faq-question">
                                     <span>{item.question}</span>
-                                    <span className="hx-faq-chevron">{openFaq === index ? "−" : "+"}</span>
-                                </button>
-                                {openFaq === index && <p className="hx-faq-answer">{item.answer}</p>}
-                            </article>
+                                    <span className="hx-faq-toggle" aria-hidden="true" />
+                                </summary>
+                                <p className="hx-faq-answer">{item.answer}</p>
+                            </details>
                         ))}
                     </div>
+                    <div className="hx-faq-sources">
+                        <strong>Useful official guidance</strong>
+                        <a href="https://www.planningportal.co.uk/permission/common-projects/extensions/" target="_blank" rel="noreferrer">Planning Portal: house extensions and planning permission ↗</a>
+                        <a href="https://www.gov.uk/government/publications/permitted-development-rights-for-householders-technical-guidance" target="_blank" rel="noreferrer">GOV.UK: permitted development technical guidance ↗</a>
+                        <a href="https://www.gov.uk/government/publications/preventing-and-resolving-disputes-in-relation-to-party-walls/the-party-wall-etc-act-1996-explanatory-booklet" target="_blank" rel="noreferrer">GOV.UK: Party Wall etc. Act 1996 guidance ↗</a>
+                    </div>
+                    <p className="hx-faq-disclaimer">This guide is general information, not planning, legal, structural or building control advice. Rules and requirements depend on the property, the location and the proposed work. Confirm the position with the relevant local authority and appropriately qualified professionals before starting construction.</p>
                 </section>
 
                 <section className="hx-enquiry-section" id="extension-enquiry">
                     <div className="hx-enquiry-copy">
                         <span className="hx-eyebrow hx-eyebrow-light">LET'S TALK ABOUT YOUR HOME</span>
                         <h2>Ready for<br /><em>more space?</em></h2>
-                        <p>Tell us a little about the property and the project you have in mind.</p>
+                        <p>Tell us a little about the property and the project you have in mind. Ask us about complimentary architectural drawings when you appoint Crafman to deliver your project.</p>
                         <div className="hx-enquiry-contact">
                             <a href="tel:02081914122">020 8191 4122</a>
                             <a href="mailto:sales@crafman.co.uk">sales@crafman.co.uk</a>
@@ -1245,6 +1556,99 @@ export default function HouseExtensions() {
                     </div>
                 </section>
             </main>
+
+            {showDrawingsIntent && (
+                <div
+                    className="hx-intent-modal"
+                    role="presentation"
+                    onMouseDown={(event) => {
+                        if (event.target === event.currentTarget) closeDrawingsIntent();
+                    }}
+                >
+                    <section
+                        className="hx-intent-dialog"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="hx-intent-title"
+                        aria-describedby="hx-intent-description"
+                    >
+                        <button
+                            className="hx-intent-close"
+                            type="button"
+                            aria-label="Close choices and continue browsing"
+                            onClick={closeDrawingsIntent}
+                        >×</button>
+                        <span className="hx-intent-kicker">A QUICK QUESTION BEFORE YOU CONTINUE</span>
+                        <h2 id="hx-intent-title">What are you looking for <em>help with?</em></h2>
+                        <p className="hx-intent-intro" id="hx-intent-description">
+                            We can help with architectural drawings on their own, or coordinate the drawings and the complete construction project.
+                        </p>
+                        <div className="hx-intent-options">
+                            <button
+                                ref={drawingsIntentButtonRef}
+                                type="button"
+                                className="hx-intent-option hx-intent-option-primary"
+                                onClick={() => closeDrawingsIntent("build_and_drawings")}
+                            >
+                                <span className="hx-intent-option-title">I'm interested in the build too</span>
+                                <span className="hx-intent-option-detail">Free architectural drawings available when you appoint Crafman to carry out the construction project.</span>
+                            </button>
+                            <Link
+                                className="hx-intent-option hx-intent-option-secondary"
+                                to="/drawings-planning"
+                                onClick={() => {
+                                    window.dataLayer = window.dataLayer || [];
+                                    window.dataLayer.push({ event: "crafman_drawings_intent_choice", choice: "drawings_only" });
+                                }}
+                            >
+                                <span className="hx-intent-option-title">I'm only interested in architectural drawings</span>
+                                <span className="hx-intent-option-detail">Take me to Crafman's standalone Drawings & Planning service.</span>
+                            </Link>
+                        </div>
+                        <p className="hx-intent-footnote">The complimentary drawings offer applies when Crafman is appointed to deliver the construction project. The drawing scope is agreed during consultation.</p>
+                    </section>
+                </div>
+            )}
+
+            <footer className="hx-footer" aria-label="Crafman Design & Build footer">
+                <div className="hx-footer-inner">
+                    <div className="hx-footer-grid">
+                        <div className="hx-footer-brand">
+                            <a className="hx-footer-wordmark" href="/" aria-label="Crafman Design & Build home">CRAFMAN <span>DESIGN & BUILD</span></a>
+                            <p>Thoughtful design and coordinated construction for homes across selected areas of North London, Greater London and Essex.</p>
+                            <a className="hx-footer-offer" href="#hero-extension-enquiry">Ask about complimentary architectural drawings ↗</a>
+                        </div>
+
+                        <nav aria-label="Extension page links">
+                            <h2 className="hx-footer-heading">Explore</h2>
+                            <div className="hx-footer-links">
+                                <a href="#extension-types">Extension types</a>
+                                <a href="#capabilities">Our services</a>
+                                <a href="#process">How we work</a>
+                                <a href="#faqs">Extension FAQs</a>
+                            </div>
+                        </nav>
+
+                        <div>
+                            <h2 className="hx-footer-heading">Get in touch</h2>
+                            <div className="hx-footer-contact">
+                                <a href="tel:02081914122">020 8191 4122</a>
+                                <a href="mailto:sales@crafman.co.uk">sales@crafman.co.uk</a>
+                                <a href="#extension-enquiry">Request a project discussion ↗</a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h2 className="hx-footer-heading">Where we work</h2>
+                            <p className="hx-footer-area-copy">Selected areas of North London, Greater London and Essex. Please provide your postcode so we can confirm whether your property is within our current service area.</p>
+                        </div>
+                    </div>
+                    <div className="hx-footer-bottom">
+                        <span>© {new Date().getFullYear()} Crafman Building and Landscaping Ltd. All rights reserved.</span>
+                        <a href="#top">Back to top ↑</a>
+                    </div>
+                </div>
+            </footer>
 
             <a className="hx-mobile-cta" href="#extension-enquiry">Discuss your extension <span>↗</span></a>
         </>
