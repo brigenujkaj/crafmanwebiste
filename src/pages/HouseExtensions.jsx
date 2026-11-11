@@ -1386,11 +1386,11 @@ export default function HouseExtensions() {
                         <span className="hx-eyebrow hx-eyebrow-light">A REAL CROFTMAN PROJECT</span>
                         <h2>Built around<br /><em>real homes.</em></h2>
                         <p>Explore a Greenwich rear extension, from the early groundworks through to the completed shell.</p>
-                        <Link to="/case-studies" className="hx-text-link">See project work <span>↗</span></Link>
+                      <Link to="" className="hx-text-link">See project work <span>↗</span></Link>
                     </div>
                     <div className="hx-project-gallery">
                         <figure className="hx-project-image hx-project-image-large">
-                            <img src="/images/greenwichExt/rendering.png" alt="Completed rear extension exterior at a Crafman project" loading="lazy" />
+                            <img src="/images/greenwichExt/rendering.jpeg" alt="Completed rear extension exterior at a Crafman project" loading="lazy" />
                             <figcaption>THE FINISHED EXTENSION</figcaption>
                         </figure>
                         <figure className="hx-project-image hx-project-image-small">

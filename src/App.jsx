@@ -1,4 +1,6 @@
-import { Routes, Route, Link } from "react-router-dom";
+
+import { Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 // REAL PAGES
 import Home from "./pages/Home.jsx";
@@ -9,81 +11,99 @@ import Abotu from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
 import CommercialFitOutsLondon from "./pages/CommercialFitOutsLondon.jsx";
 import DrawingsPlanning from "./pages/DrawingsPlanning.jsx";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import Projects from "./pages/Projects.jsx";
 import CaseStudies from "./pages/CaseStudies.jsx";
 import CaseStudyDetail from "./pages/CaseStudyDetail.jsx";
 import Landscaping from "./pages/Landscaping.jsx";
 import ThankYouPage from "./components/ThankYouPage";
-import CraffyHeroSection from './components/CraffyHeroSection';
 import CraffyThankYouPage from "./components/CraffyThankYouPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import CrafmanIntroSplash from "./components/CrafmanIntroSplash.jsx";
 
-
-// TEMP (until you build it)
-function TestPage({ title }) {
-  return (
-    <div style={{ padding: "40px" }}>
-      <h1>{title}</h1>
-      <p>Page working.</p>
-      <Link to="/">Back</Link>
-    </div>
-  );
-}
-
+// Scroll to page sections when a URL contains a hash
 function ScrollToHash() {
-  const { hash } = useLocation();
+    const { hash } = useLocation();
 
-  useEffect(() => {
-    if (hash) {
-      const el = document.querySelector(hash);
-      if (el) {
-        setTimeout(() => {
-          el.scrollIntoView({ behavior: "smooth" });
-        }, 100);
-      }
-    }
-  }, [hash]);
+    useEffect(() => {
+        if (!hash) return;
 
-  return null;
+        const timer = setTimeout(() => {
+            const element = document.querySelector(hash);
+            if (element) {
+                element.scrollIntoView({ behavior: "smooth" });
+            }
+        }, 150);
+
+        return () => clearTimeout(timer);
+    }, [hash]);
+
+    return null;
 }
 
 export default function App() {
     return (
+        <>
+            <ScrollToHash />
 
-    <Routes>
-      {/* ✅ REAL HOME PAGE */}
-      <Route path="/" element={<Home />} />
+            {/* Crafman logo intro */}
+            <CrafmanIntroSplash />
 
-      {/* ✅ WORKING PAGES */}
-          <Route path="/house-extensions-london" element={<HouseExtensions />} />
+            {/* Website pages */}
+            <Routes>
+                <Route path="/" element={<Home />} />
 
-          <Route path="/house-extensions-essex" element={<HouseExtensionsEssex />} />
+                <Route
+                    path="/house-extensions-london"
+                    element={<HouseExtensions />}
+                />
 
+                <Route
+                    path="/house-extensions-essex"
+                    element={<HouseExtensionsEssex />}
+                />
 
-      <Route path="/renovations-london" element={<RenovationsLondon />} />
-      <Route path="/about" element={<Abotu />} />
-      <Route path="/contact" element={<Contact />} />
-          <Route path="/commercial-fit-outs-london" element={<CommercialFitOutsLondon />} />
-          <Route path="/projects" element={<Projects />} />
-      <Route path="/drawings-planning" element={<DrawingsPlanning />} />
-      <Route path="/drawings-planning" element={<DrawingsPlanning />} />
-      <Route path="/landscaping" element={<Landscaping />} />
+                <Route
+                    path="/renovations-london"
+                    element={<RenovationsLondon />}
+                />
 
+                <Route path="/about" element={<Abotu />} />
 
-      {/* ✅ TEMP PAGE */}
-          <Route path="/contact" element={<TestPage title="Contact" />} />
+                <Route path="/contact" element={<Contact />} />
 
+                <Route
+                    path="/commercial-fit-outs-london"
+                    element={<CommercialFitOutsLondon />}
+                />
 
+                <Route path="/projects" element={<Projects />} />
 
-          <Route path="/case-studies" element={<CaseStudies />} />
-            <Route path="/case-studies/:slug" element={<CaseStudyDetail />} />
-            <Route path="/thank-you" element={<ThankYouPage />} />
-            <Route path="/craffy-thank-you" element={<CraffyThankYouPage />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-      
-         
-    </Routes>
-  );
+                <Route
+                    path="/drawings-planning"
+                    element={<DrawingsPlanning />}
+                />
+
+                <Route path="/landscaping" element={<Landscaping />} />
+
+                <Route path="/case-studies" element={<CaseStudies />} />
+
+                <Route
+                    path="/case-studies/:slug"
+                    element={<CaseStudyDetail />}
+                />
+
+                <Route path="/thank-you" element={<ThankYouPage />} />
+
+                <Route
+                    path="/craffy-thank-you"
+                    element={<CraffyThankYouPage />}
+                />
+
+                <Route
+                    path="/privacy-policy"
+                    element={<PrivacyPolicy />}
+                />
+            </Routes>
+        </>
+    );
 }

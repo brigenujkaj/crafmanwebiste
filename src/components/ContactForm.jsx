@@ -481,10 +481,10 @@ export default function ContactForm({
         width: "100%",
         padding: "14px",
         borderRadius: "12px",
-        border: "1px solid #d6d3d1",
+        border: "1px solid #4a432f",
         fontSize: "15px",
         boxSizing: "border-box",
-        background: "#fff",
+        background: "#10100e",
         outline: "none",
     };
 
@@ -495,62 +495,67 @@ export default function ContactForm({
 
     const pillStyle = (active) => ({
         padding: "12px 14px",
-        borderRadius: "12px",
-        border: active ? "1px solid #1c1917" : "1px solid #d6d3d1",
-        background: active ? "#1c1917" : "#fff",
-        color: active ? "#fff" : "#1f1f1f",
+        minHeight: "46px",
+        borderRadius: "8px",
+        border: active ? "1px solid #e6cd83" : "1px solid rgba(200,166,75,.28)",
+        background: active ? "linear-gradient(135deg,#e0c16e,#c8a64b)" : "#151511",
+        color: active ? "#11110e" : "#e9dfc7",
         cursor: "pointer",
-        fontWeight: "600",
-        fontSize: "14px",
+        fontWeight: "700",
+        fontSize: "13px",
         textAlign: "center",
-        transition: "all 0.2s ease",
-        boxShadow: active ? "0 10px 24px rgba(28,25,23,0.14)" : "none",
+        transition: "transform .22s ease, border-color .22s ease, background .22s ease, box-shadow .22s ease",
+        boxShadow: active ? "0 9px 24px rgba(200,166,75,.16)" : "none",
     });
 
     const serviceCardStyle = (active) => ({
-        padding: "16px",
-        borderRadius: "14px",
-        border: active ? "1px solid #1c1917" : "1px solid #d6d3d1",
-        background: active ? "#f5f5f4" : "#fff",
+        position: "relative",
+        minHeight: "66px",
+        padding: "16px 16px 16px 42px",
+        borderRadius: "8px",
+        border: active ? "1px solid #e6cd83" : "1px solid rgba(200,166,75,.28)",
+        background: active ? "linear-gradient(135deg,rgba(200,166,75,.2),rgba(200,166,75,.08))" : "#151511",
+        color: active ? "#f6e8bd" : "#e9dfc7",
         cursor: "pointer",
-        fontWeight: "600",
-        fontSize: "15px",
+        fontWeight: "700",
+        fontSize: "13px",
         textAlign: "left",
-        transition: "all 0.22s ease",
+        transition: "transform .22s ease, border-color .22s ease, background .22s ease, box-shadow .22s ease",
         transform: active ? "translateY(-2px)" : "translateY(0)",
-        boxShadow: active ? "0 14px 30px rgba(28,25,23,0.08)" : "0 1px 2px rgba(0,0,0,0.03)",
+        boxShadow: active ? "0 12px 28px rgba(200,166,75,.1)" : "0 4px 12px rgba(0,0,0,.12)",
     });
 
     const stepButtonStyle = (active, current) => ({
-        width: "36px",
-        height: "36px",
-        borderRadius: "999px",
+        width: "34px",
+        height: "34px",
+        borderRadius: "50%",
         display: "grid",
         placeItems: "center",
-        fontWeight: "700",
-        fontSize: "14px",
-        border: active ? "1px solid #1c1917" : "1px solid #d6d3d1",
-        background: current ? "#1c1917" : active ? "#292524" : "#fff",
-        color: active ? "#fff" : "#57534e",
-        transition: "all 0.2s ease",
+        fontWeight: "800",
+        fontSize: "12px",
+        border: active ? "1px solid #e6cd83" : "1px solid #4a432f",
+        background: active ? "#c8a64b" : "#151511",
+        color: active ? "#11110e" : "#aa9e80",
+        boxShadow: current ? "0 0 0 5px rgba(200,166,75,.1)" : "none",
+        transition: "all 0.24s ease",
         flexShrink: 0,
     });
 
     const reviewItemStyle = {
         padding: "14px 0",
-        borderBottom: "1px solid #e7e5e4",
+        borderBottom: "1px solid #373225",
         display: "grid",
         gap: "4px",
     };
 
     const trustPillStyle = {
-        padding: "10px 12px",
-        borderRadius: "999px",
-        background: "#f5f5f4",
-        border: "1px solid #e7e5e4",
-        fontSize: "13px",
-        fontWeight: "600",
-        color: "#44403c",
+        padding: "11px 13px",
+        borderRadius: "7px",
+        background: "#151511",
+        border: "1px solid rgba(200,166,75,.24)",
+        fontSize: "11px",
+        fontWeight: "700",
+        color: "#d8cba9",
         textAlign: "center",
     };
 
@@ -610,14 +615,14 @@ export default function ContactForm({
                             display: "grid",
                             gap: "16px",
                             padding: "18px",
-                            border: "1px solid #e7e5e4",
-                            borderRadius: "16px",
-                            background: "#fafaf9",
+                            border: "1px solid rgba(200,166,75,.24)",
+                            borderRadius: "8px",
+                            background: "#141411",
                         }}
                     >
                         <div>
                             <h4 style={{ margin: "0 0 6px", fontSize: "18px" }}>Loft-specific details</h4>
-                            <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
+                            <p style={{ margin: 0, color: "#b7ad95", lineHeight: "1.7" }}>
                                 These help us qualify the project properly before we reply.
                             </p>
                         </div>
@@ -708,16 +713,16 @@ export default function ContactForm({
                             display: "grid",
                             gap: "16px",
                             padding: "18px",
-                            border: "1px solid #e7e5e4",
-                            borderRadius: "16px",
-                            background: "#fafaf9",
+                            border: "1px solid rgba(200,166,75,.24)",
+                            borderRadius: "8px",
+                            background: "#141411",
                         }}
                     >
                         <div>
                             <h4 style={{ margin: "0 0 6px", fontSize: "18px" }}>
                                 Extension-specific details
                             </h4>
-                            <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
+                            <p style={{ margin: 0, color: "#b7ad95", lineHeight: "1.7" }}>
                                 A little more detail helps us understand the scope faster.
                             </p>
                         </div>
@@ -769,14 +774,14 @@ export default function ContactForm({
                             display: "grid",
                             gap: "16px",
                             padding: "18px",
-                            border: "1px solid #e7e5e4",
-                            borderRadius: "16px",
-                            background: "#fafaf9",
+                            border: "1px solid rgba(200,166,75,.24)",
+                            borderRadius: "8px",
+                            background: "#141411",
                         }}
                     >
                         <div>
                             <h4 style={{ margin: "0 0 6px", fontSize: "18px" }}>Kitchen details</h4>
-                            <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
+                            <p style={{ margin: 0, color: "#b7ad95", lineHeight: "1.7" }}>
                                 A quick scope check helps us respond more accurately.
                             </p>
                         </div>
@@ -806,14 +811,14 @@ export default function ContactForm({
                             display: "grid",
                             gap: "16px",
                             padding: "18px",
-                            border: "1px solid #e7e5e4",
-                            borderRadius: "16px",
-                            background: "#fafaf9",
+                            border: "1px solid rgba(200,166,75,.24)",
+                            borderRadius: "8px",
+                            background: "#141411",
                         }}
                     >
                         <div>
                             <h4 style={{ margin: "0 0 6px", fontSize: "18px" }}>Bathroom details</h4>
-                            <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
+                            <p style={{ margin: 0, color: "#b7ad95", lineHeight: "1.7" }}>
                                 These answers help us understand complexity and likely workflow.
                             </p>
                         </div>
@@ -865,16 +870,16 @@ export default function ContactForm({
                             display: "grid",
                             gap: "16px",
                             padding: "18px",
-                            border: "1px solid #e7e5e4",
-                            borderRadius: "16px",
-                            background: "#fafaf9",
+                            border: "1px solid rgba(200,166,75,.24)",
+                            borderRadius: "8px",
+                            background: "#141411",
                         }}
                     >
                         <div>
                             <h4 style={{ margin: "0 0 6px", fontSize: "18px" }}>
                                 Commercial fit-out details
                             </h4>
-                            <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
+                            <p style={{ margin: 0, color: "#b7ad95", lineHeight: "1.7" }}>
                                 This helps us understand the type and scale of the space.
                             </p>
                         </div>
@@ -926,7 +931,7 @@ export default function ContactForm({
                         <p
                             style={{
                                 margin: "0 0 6px",
-                                color: "#78716c",
+                                color: "#aa9e80",
                                 fontSize: "13px",
                                 fontWeight: "700",
                                 letterSpacing: "0.04em",
@@ -938,7 +943,7 @@ export default function ContactForm({
                         <h3 style={{ margin: "0 0 8px", fontSize: "24px" }}>
                             {stepMeta[1].title}
                         </h3>
-                        <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
+                        <p style={{ margin: 0, color: "#b7ad95", lineHeight: "1.7" }}>
                             {stepMeta[1].text}
                         </p>
                     </div>
@@ -946,9 +951,9 @@ export default function ContactForm({
                     <div
                         style={{
                             padding: "18px",
-                            borderRadius: "16px",
-                            background: "#fafaf9",
-                            border: "1px solid #e7e5e4",
+                            borderRadius: "8px",
+                            background: "#141411",
+                            border: "1px solid #373225",
                             display: "grid",
                             gap: "10px",
                         }}
@@ -956,7 +961,7 @@ export default function ContactForm({
                         <strong style={{ fontSize: "16px" }}>
                             Tell us about your project and we’ll come back with practical next steps.
                         </strong>
-                        <span style={{ color: "#57534e", lineHeight: "1.7" }}>
+                        <span style={{ color: "#b7ad95", lineHeight: "1.7" }}>
                             Select all that apply. Many enquiries involve more than one type of work.
                         </span>
                     </div>
@@ -984,7 +989,7 @@ export default function ContactForm({
                     </div>
 
                     {form.services.length > 0 && (
-                        <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
+                        <p style={{ margin: 0, color: "#b7ad95", lineHeight: "1.7" }}>
                             Selected: <strong>{form.services.join(", ")}</strong>
                         </p>
                     )}
@@ -1002,7 +1007,7 @@ export default function ContactForm({
                     </label>
 
                     {serviceAreaNote && (
-                        <p style={{ margin: 0, color: "#78716c", fontSize: "14px" }}>
+                        <p style={{ margin: 0, color: "#aa9e80", fontSize: "14px" }}>
                             {serviceAreaNote}
                         </p>
                     )}
@@ -1017,7 +1022,7 @@ export default function ContactForm({
                         <p
                             style={{
                                 margin: "0 0 6px",
-                                color: "#78716c",
+                                color: "#aa9e80",
                                 fontSize: "13px",
                                 fontWeight: "700",
                                 letterSpacing: "0.04em",
@@ -1029,7 +1034,7 @@ export default function ContactForm({
                         <h3 style={{ margin: "0 0 8px", fontSize: "24px" }}>
                             {stepMeta[2].title}
                         </h3>
-                        <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
+                        <p style={{ margin: 0, color: "#b7ad95", lineHeight: "1.7" }}>
                             {stepMeta[2].text}
                         </p>
                     </div>
@@ -1102,7 +1107,7 @@ export default function ContactForm({
                         <p
                             style={{
                                 margin: "0 0 6px",
-                                color: "#78716c",
+                                color: "#aa9e80",
                                 fontSize: "13px",
                                 fontWeight: "700",
                                 letterSpacing: "0.04em",
@@ -1114,7 +1119,7 @@ export default function ContactForm({
                         <h3 style={{ margin: "0 0 8px", fontSize: "24px" }}>
                             {stepMeta[3].title}
                         </h3>
-                        <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
+                        <p style={{ margin: 0, color: "#b7ad95", lineHeight: "1.7" }}>
                             {stepMeta[3].text}
                         </p>
                     </div>
@@ -1195,7 +1200,7 @@ export default function ContactForm({
                         <p
                             style={{
                                 margin: "0 0 6px",
-                                color: "#78716c",
+                                color: "#aa9e80",
                                 fontSize: "13px",
                                 fontWeight: "700",
                                 letterSpacing: "0.04em",
@@ -1207,7 +1212,7 @@ export default function ContactForm({
                         <h3 style={{ margin: "0 0 8px", fontSize: "24px" }}>
                             {stepMeta[4].title}
                         </h3>
-                        <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
+                        <p style={{ margin: 0, color: "#b7ad95", lineHeight: "1.7" }}>
                             {stepMeta[4].text}
                         </p>
                     </div>
@@ -1228,10 +1233,10 @@ export default function ContactForm({
                     <div
                         style={{
                             padding: "16px",
-                            borderRadius: "16px",
-                            background: "#fafaf9",
-                            border: "1px solid #e7e5e4",
-                            color: "#57534e",
+                            borderRadius: "8px",
+                            background: "#141411",
+                            border: "1px solid #373225",
+                            color: "#b7ad95",
                             lineHeight: "1.7",
                         }}
                     >
@@ -1291,7 +1296,7 @@ export default function ContactForm({
                     <p
                         style={{
                             margin: "0 0 6px",
-                            color: "#78716c",
+                            color: "#aa9e80",
                             fontSize: "13px",
                             fontWeight: "700",
                             letterSpacing: "0.04em",
@@ -1303,7 +1308,7 @@ export default function ContactForm({
                     <h3 style={{ margin: "0 0 8px", fontSize: "24px" }}>
                         {stepMeta[5].title}
                     </h3>
-                    <p style={{ margin: 0, color: "#57534e", lineHeight: "1.7" }}>
+                    <p style={{ margin: 0, color: "#b7ad95", lineHeight: "1.7" }}>
                         {stepMeta[5].text}
                     </p>
                 </div>
@@ -1311,25 +1316,25 @@ export default function ContactForm({
                 <div
                     style={{
                         padding: "16px",
-                        borderRadius: "16px",
-                        background: "#f5f5f4",
-                        border: "1px solid #e7e5e4",
+                        borderRadius: "8px",
+                        background: "#201d15",
+                        border: "1px solid #373225",
                     }}
                 >
                     <strong style={{ display: "block", marginBottom: "6px" }}>
                         Thanks — you’ve given us enough detail to provide a useful first response.
                     </strong>
-                    <span style={{ color: "#57534e", lineHeight: "1.7" }}>
+                    <span style={{ color: "#b7ad95", lineHeight: "1.7" }}>
                         We aim to reply within 1 working day.
                     </span>
                 </div>
 
                 <div
                     style={{
-                        border: "1px solid #e7e5e4",
-                        borderRadius: "16px",
+                        border: "1px solid #373225",
+                        borderRadius: "8px",
                         padding: "6px 18px",
-                        background: "#fafaf9",
+                        background: "#141411",
                     }}
                 >
                     <div style={reviewItemStyle}>
@@ -1474,18 +1479,198 @@ export default function ContactForm({
 
     return (
         <div
+            className="crafman-contact-form"
             style={{
                 ...(cardStyle || card),
                 position: "relative",
                 overflow: "hidden",
+                padding: "clamp(22px, 3vw, 34px)",
+                borderRadius: "10px",
+                border: "1px solid rgba(200,166,75,.34)",
+                background: "radial-gradient(ellipse at 90% 0%, rgba(200,166,75,.10), transparent 34%), linear-gradient(145deg,#11110f,#090908)",
+                color: "#f4ecd8",
+                boxShadow: "0 22px 60px rgba(0,0,0,.28)",
             }}
         >
             <style>
                 {`
+
+                    .crafman-contact-form {
+                        isolation: isolate;
+                        font-family: Inter, Arial, sans-serif;
+                    }
+                    .crafman-contact-form::before {
+                        content: "";
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        height: 2px;
+                        background: linear-gradient(90deg, transparent, #c8a64b 22%, #f0d98e 50%, #c8a64b 78%, transparent);
+                        opacity: .9;
+                        pointer-events: none;
+                    }
+                    .crafman-contact-form__eyebrow {
+                        display: block;
+                        margin-bottom: 11px;
+                        color: #c8a64b;
+                        font-size: 9px;
+                        font-weight: 850;
+                        letter-spacing: .2em;
+                        line-height: 1.5;
+                        text-transform: uppercase;
+                    }
+                    .crafman-contact-form__heading {
+                        margin-bottom: 10px !important;
+                        color: #f5ecd6;
+                        font-size: clamp(27px, 3vw, 36px) !important;
+                        line-height: 1.06;
+                        letter-spacing: -.055em;
+                        font-weight: 800;
+                    }
+                    .crafman-contact-form__heading span { color: #e2c16b; }
+                    .crafman-contact-form__intro {
+                        max-width: 560px;
+                        margin-top: 0;
+                        color: #b7ad95 !important;
+                        font-size: 13px;
+                        line-height: 1.75 !important;
+                    }
+                    .crafman-contact-form p { color: #b7ad95; }
+                    .crafman-contact-form h3,
+                    .crafman-contact-form h4 { color: #f0e5c9; letter-spacing: -.025em; }
+                    .crafman-contact-form strong { color: #e8d9b5; }
+                    .crafman-contact-form label { color: #e4d8bd; font-size: 12px; font-weight: 700; }
+                    .crafman-contact-form input,
+                    .crafman-contact-form select,
+                    .crafman-contact-form textarea {
+                        min-height: 48px;
+                        padding: 13px 14px !important;
+                        border: 1px solid rgba(200,166,75,.28) !important;
+                        border-radius: 7px !important;
+                        background: #0b0b09 !important;
+                        color: #f4ecd8 !important;
+                        font: 500 14px Inter, Arial, sans-serif !important;
+                        box-shadow: inset 0 1px 0 rgba(255,255,255,.025) !important;
+                        transition: border-color .2s ease, box-shadow .2s ease, background .2s ease !important;
+                    }
+                    .crafman-contact-form textarea { min-height: 125px; line-height: 1.65 !important; }
+                    .crafman-contact-form input::placeholder,
+                    .crafman-contact-form textarea::placeholder { color: #82785f !important; opacity: 1; }
+                    .crafman-contact-form input:focus,
+                    .crafman-contact-form select:focus,
+                    .crafman-contact-form textarea:focus {
+                        outline: none !important;
+                        border-color: #d6b65d !important;
+                        box-shadow: 0 0 0 3px rgba(200,166,75,.12) !important;
+                        background: #11110d !important;
+                    }
+                    .crafman-contact-form select option { background: #11110e; color: #f4ecd8; }
+                    .crafman-contact-form__restore-notice {
+                        border: 1px solid rgba(200,166,75,.35) !important;
+                        border-radius: 7px !important;
+                        background: rgba(200,166,75,.08) !important;
+                    }
+                    .crafman-contact-form__progress {
+                        padding: 17px 17px 14px;
+                        border: 1px solid rgba(200,166,75,.2);
+                        border-radius: 8px;
+                        background: rgba(255,255,255,.018);
+                    }
+                    .crafman-contact-form__step-count {
+                        color: #e6cd83 !important;
+                        font-size: 11px;
+                        letter-spacing: .12em;
+                        text-transform: uppercase;
+                    }
+                    .crafman-contact-form__step-count span { color: #8f846b; }
+                    .crafman-contact-form__autosave { color: #9e947d !important; font-size: 10px !important; }
+                    .crafman-contact-form__autosave span { color: #c8a64b; margin-right: 5px; }
+                    .crafman-contact-form__progress-track {
+                        background: #302b20 !important;
+                        border-radius: 99px !important;
+                    }
+                    .crafman-contact-form__progress-fill {
+                        background: linear-gradient(90deg,#a7832e,#e8cc79) !important;
+                        border-radius: 99px !important;
+                        box-shadow: 0 0 12px rgba(200,166,75,.22);
+                    }
+                    .crafman-contact-form__step-labels {
+                        display: grid;
+                        grid-template-columns: repeat(5,minmax(0,1fr));
+                        gap: 5px;
+                        color: #77705d;
+                        font-size: 9px;
+                        font-weight: 700;
+                        letter-spacing: .02em;
+                        text-align: center;
+                    }
+                    .crafman-contact-form__step-labels span.is-current { color: #e6cd83; }
+                    .crafman-contact-form__step-labels span.is-complete { color: #c6a34d; }
+                    .crafman-contact-form__step-content { min-width: 0; }
+                    .crafman-contact-form__step-content > div { min-width: 0; }
+                    .crafman-contact-form button {
+                        font-family: Inter, Arial, sans-serif;
+                        transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease, opacity .2s ease;
+                    }
+                    .crafman-contact-form button:hover:not(:disabled) { transform: translateY(-2px); }
+                    .crafman-contact-form button:focus-visible {
+                        outline: 2px solid #e6cd83;
+                        outline-offset: 3px;
+                    }
+                    .crafman-contact-form button:disabled { transform: none !important; }
+                    .crafman-contact-form button[type="submit"],
+                    .crafman-contact-form__form > div:last-child button:last-child {
+                        min-height: 49px;
+                        padding: 0 23px !important;
+                        border: 1px solid #e6cd83 !important;
+                        border-radius: 6px !important;
+                        background: linear-gradient(135deg,#e2c16b,#c8a64b) !important;
+                        color: #12110d !important;
+                        font-size: 12px !important;
+                        font-weight: 850 !important;
+                        letter-spacing: .04em;
+                        box-shadow: 0 10px 28px rgba(200,166,75,.13) !important;
+                    }
+                    .crafman-contact-form__form > div:last-child button:first-child {
+                        min-height: 49px;
+                        padding: 0 20px !important;
+                        border: 1px solid rgba(200,166,75,.3) !important;
+                        border-radius: 6px !important;
+                        background: #151511 !important;
+                        color: #e9dfc7 !important;
+                        font-size: 12px !important;
+                    }
+                    .crafman-contact-form [style*="background: rgb(20, 20, 17)"],
+                    .crafman-contact-form [style*="background: rgb(21, 21, 17)"] {
+                        border-color: rgba(200,166,75,.22) !important;
+                    }
+                    .crafman-contact-form__form > div:last-child {
+                        padding-top: 15px;
+                        border-top: 1px solid rgba(200,166,75,.2);
+                    }
+                    @media (max-width: 600px) {
+                        .crafman-contact-form { padding: 19px !important; border-radius: 8px !important; }
+                        .crafman-contact-form__progress { padding: 13px 11px 11px; gap: 10px !important; }
+                        .crafman-contact-form__step-track { gap: 5px !important; }
+                        .crafman-contact-form__step-item { gap: 5px !important; }
+                        .crafman-contact-form__step-labels { font-size: 8px; letter-spacing: -.02em; }
+                        .crafman-contact-form__autosave { max-width: 150px; text-align: right; }
+                        .crafman-contact-form__form > div:last-child { gap: 8px !important; }
+                        .crafman-contact-form__form > div:last-child button { flex: 1; padding: 0 12px !important; }
+                    }
+                    @media (prefers-reduced-motion: reduce) {
+                        .crafman-contact-form *, .crafman-contact-form *::before, .crafman-contact-form *::after {
+                            animation-duration: .01ms !important;
+                            transition-duration: .01ms !important;
+                            scroll-behavior: auto !important;
+                        }
+                    }
+
                     @keyframes slideInFromRight {
                         0% {
                             opacity: 0;
-                            transform: translateX(34px);
+                            transform: translateX(18px);
                         }
                         100% {
                             opacity: 1;
@@ -1496,7 +1681,7 @@ export default function ContactForm({
                     @keyframes slideInFromLeft {
                         0% {
                             opacity: 0;
-                            transform: translateX(-34px);
+                            transform: translateX(-18px);
                         }
                         100% {
                             opacity: 1;
@@ -1506,20 +1691,21 @@ export default function ContactForm({
                 `}
             </style>
 
-            <h2 style={{ marginTop: 0, fontSize: "30px" }}>Start your enquiry</h2>
-            <p style={{ color: "#57534e", lineHeight: "1.8", marginBottom: "22px" }}>
-                Tell us about your project and we’ll reply with practical next steps and the best
-                way to move things forward.
+            <span className="crafman-contact-form__eyebrow">CRAFMAN DESIGN & BUILD · PROJECT ENQUIRY</span>
+            <h2 className="crafman-contact-form__heading" style={{ marginTop: 0, fontSize: "30px" }}>Let’s talk about your project<span>.</span></h2>
+            <p className="crafman-contact-form__intro" style={{ color: "#b7ad95", lineHeight: "1.8", marginBottom: "22px" }}>
+                Share a few details about your plans. We’ll review your enquiry and come back with practical next steps.
             </p>
 
             {showRestoreNotice && (
                 <div
+                    className="crafman-contact-form__restore-notice"
                     style={{
                         marginBottom: "18px",
                         padding: "14px 16px",
-                        borderRadius: "14px",
-                        border: "1px solid #e7e5e4",
-                        background: "#fafaf9",
+                        borderRadius: "7px",
+                        border: "1px solid #373225",
+                        background: "#141411",
                         display: "flex",
                         justifyContent: "space-between",
                         gap: "12px",
@@ -1527,7 +1713,7 @@ export default function ContactForm({
                         flexWrap: "wrap",
                     }}
                 >
-                    <span style={{ color: "#57534e", fontSize: "14px", lineHeight: "1.6" }}>
+                    <span style={{ color: "#b7ad95", fontSize: "14px", lineHeight: "1.6" }}>
                         Your progress was restored automatically.
                     </span>
 
@@ -1537,7 +1723,7 @@ export default function ContactForm({
                         style={{
                             border: "none",
                             background: "transparent",
-                            color: "#1c1917",
+                            color: "#c8a64b",
                             fontWeight: "700",
                             cursor: "pointer",
                             padding: 0,
@@ -1548,7 +1734,7 @@ export default function ContactForm({
                 </div>
             )}
 
-            <div style={{ display: "grid", gap: "14px", marginBottom: "26px" }}>
+            <div className="crafman-contact-form__progress" style={{ display: "grid", gap: "14px", marginBottom: "26px" }}>
                 <div
                     style={{
                         display: "flex",
@@ -1558,16 +1744,17 @@ export default function ContactForm({
                         flexWrap: "wrap",
                     }}
                 >
-                    <p style={{ margin: 0, color: "#57534e", fontWeight: "600" }}>
-                        Step {step} of {totalSteps}
+                    <p className="crafman-contact-form__step-count" style={{ margin: 0, color: "#b7ad95", fontWeight: "700" }}>
+                        STEP {step} <span>/ {totalSteps}</span>
                     </p>
 
-                    <p style={{ margin: 0, color: "#78716c", fontSize: "14px" }}>
-                        Auto-saved as you go
+                    <p className="crafman-contact-form__autosave" style={{ margin: 0, color: "#aa9e80", fontSize: "12px" }}>
+                        <span aria-hidden="true">✓</span> Progress saved automatically
                     </p>
                 </div>
 
                 <div
+                    className="crafman-contact-form__step-track"
                     style={{
                         display: "grid",
                         gridTemplateColumns: "repeat(5, 1fr)",
@@ -1578,6 +1765,7 @@ export default function ContactForm({
                     {[1, 2, 3, 4, 5].map((item) => (
                         <div
                             key={item}
+                            className="crafman-contact-form__step-item"
                             style={{
                                 display: "flex",
                                 alignItems: "center",
@@ -1590,7 +1778,7 @@ export default function ContactForm({
                                 <div
                                     style={{
                                         height: "4px",
-                                        background: step > item ? "#1c1917" : "#e7e5e4",
+                                        background: step > item ? "#c8a64b" : "#373225",
                                         borderRadius: "999px",
                                         flex: 1,
                                         transition: "background 0.2s ease",
@@ -1602,44 +1790,36 @@ export default function ContactForm({
                 </div>
 
                 <div
+                    className="crafman-contact-form__progress-track"
                     style={{
                         width: "100%",
-                        height: "8px",
-                        background: "#e7e5e4",
+                        height: "6px",
+                        background: "#373225",
                         borderRadius: "999px",
                         overflow: "hidden",
                     }}
                 >
                     <div
+                        className="crafman-contact-form__progress-fill"
                         style={{
                             width: `${progress}%`,
                             height: "100%",
-                            background: "#1c1917",
+                            background: "#c8a64b",
                             transition: "width 0.3s ease",
                         }}
                     />
                 </div>
 
-                <div
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
-                        gap: "8px",
-                        color: "#78716c",
-                        fontSize: "13px",
-                        fontWeight: "600",
-                    }}
-                >
-                    <span>Project</span>
-                    <span>Details</span>
-                    <span>Preferences</span>
-                    <span>Contact</span>
-                    <span>Review</span>
+                <div className="crafman-contact-form__step-labels">
+                    {["Project", "Details", "Preferences", "Contact", "Review"].map((label, index) => (
+                        <span key={label} className={step === index + 1 ? "is-current" : step > index + 1 ? "is-complete" : ""}>{label}</span>
+                    ))}
                 </div>
             </div>
 
-            <form onSubmit={handleSubmit} style={{ display: "grid", gap: "20px" }}>
+            <form className="crafman-contact-form__form" onSubmit={handleSubmit} style={{ display: "grid", gap: "20px" }}>
                 <div
+                    className="crafman-contact-form__step-content"
                     key={step}
                     style={{
                         animation: `${animationName} 0.35s cubic-bezier(0.22, 1, 0.36, 1)`,
@@ -1650,13 +1830,13 @@ export default function ContactForm({
                 </div>
 
                 {submitStatus.success && (
-                    <p style={{ margin: 0, color: "#166534", fontWeight: "600" }}>
+                    <p style={{ margin: 0, color: "#a7d4a0", fontWeight: "600" }}>
                         Thanks — your enquiry has been sent successfully.
                     </p>
                 )}
 
                 {submitStatus.error && (
-                    <p style={{ margin: 0, color: "#b91c1c", fontWeight: "600" }}>
+                    <p style={{ margin: 0, color: "#ff9c91", fontWeight: "600" }}>
                         {submitStatus.error}
                     </p>
                 )}
@@ -1677,8 +1857,8 @@ export default function ContactForm({
                         style={{
                             padding: "14px 20px",
                             borderRadius: "12px",
-                            border: "1px solid #d6d3d1",
-                            background: "#fff",
+                            border: "1px solid #4a432f",
+                            background: "#10100e",
                             cursor: step === 1 ? "not-allowed" : "pointer",
                             opacity: step === 1 ? 0.5 : 1,
                             fontWeight: "600",
