@@ -17,37 +17,27 @@ const DARK = "#171714";
 
 const PACKAGES = [
     {
-        name: "Extension / Loft Planning Package", price: "From £1,149", bestFor: "House extensions & lofts", popular: true,
+        name: "Extension Planning Package", price: "From £1,149", bestFor: "House extensions", popular: true,
         intro: "For homeowners who need measured drawings and a planning submission for a proposed extension or loft.",
         includes: ["Measured survey", "Existing scaled plans", "Proposed scaled plans", "Elevations", "Council submission", "Planning guidance"]
     },
     {
-        name: "Garden Room Package", price: "From £649", bestFor: "Garden offices, gyms & studios",
-        intro: "Drawings and advice for an outbuilding, including an initial permitted development assessment.",
-        includes: ["Measured survey", "Site and boundary mapping", "Proposed drawings", "Elevations", "Permitted development assessment"]
+        name: "Loft Planning Package", price: "From £1,149", bestFor: "Lofts", popular: true,
+        intro: "For homeowners who need measured drawings and a planning submission for a proposed extension or loft.",
+        includes: ["Measured survey", "Existing scaled plans", "Proposed scaled plans", "Elevations", "Council submission", "Planning guidance"]
     },
+
     {
         name: "Layout Alteration Package", price: "From £549", bestFor: "Internal layouts & knock-throughs",
         intro: "Explore a more practical internal layout before committing to construction.",
         includes: ["Measured survey", "Existing floor plans", "Proposed layout options", "Structural opening indicators"]
     },
-    {
-        name: "Building Control Package", price: "From £649", bestFor: "Technical / Building Regulations drawings",
-        intro: "Detailed architectural information for a project that is proceeding to the Building Regulations stage.",
-        includes: ["Measured survey", "Existing scaled drawings", "Proposed scaled drawings", "Detailed Building Regulations drawings", "Building Control submission", "Compliance guidance"]
-    },
-    {
-        name: "Bespoke Package", price: "Price on request", bestFor: "Larger or unusual projects",
-        intro: "A tailored design and documentation service for projects requiring a different level of support.",
-        includes: ["Project-specific scope", "Concept and layout development", "Feasibility review", "Specialist coordination as agreed", "Custom quotation"]
-    },
+    
+   
 ];
 
 const GALLERY = [
-    { src: "/images/approvals/barkingApproval.jpeg", label: "Planning decision – Barking" },
-    { src: "/images/approvals/greenwichApproval.jpeg", label: "Planning decision – Greenwich" },
-    { src: "/images/approvals/southwarkApproval.jpeg", label: "Planning decision – Southwark" },
-    { src: "/images/approvals/croydonApproval.jpeg", label: "Planning decision – Croydon" },
+
     { src: "/images/drawingsex14.png", label: "3D visual" },
     { src: "/images/drawingsex15.png", label: "3D visual" },
     { src: "/images/drawingsex13.png", label: "Floor plan" },
@@ -223,10 +213,9 @@ export default function DrawingsPlanning() {
                             </div>
                             <p className="dp-hero-assurance"><ShieldCheck size={16} /> No-obligation enquiry. Clear scope before you proceed.</p>
                         </div>
-                        <div className="dp-hero-visual" role="img" aria-label="Architectural plans transitioning into a modern completed house extension">
-                            {/* Reuses your existing image but crops away its embedded text on desktop. */}
-                            <img src="/images/heroImage.png" fetchPriority="high" alt="" />
-                            <div className="dp-visual-stamp"><PencilRuler size={16} /> FROM CONCEPT TO PLANNING</div>
+                        <div className="contact-form" role="img" aria-label="Architectural plans transitioning into a modern completed house extension">
+                            {/* LEFT: THE BOOKING FORM */}
+                            <DrawingsPlanningForm />
                         </div>
                     </div>
                     <div className="dp-hero-bottom-glow" aria-hidden="true" />

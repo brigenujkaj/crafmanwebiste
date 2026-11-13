@@ -5,6 +5,7 @@ import { useEffect } from "react";
 // REAL PAGES
 import Home from "./pages/Home.jsx";
 import HouseExtensions from "./pages/HouseExtensions.jsx";
+import HouseExtensionsSE from "./pages/HouseExtensionsSE.jsx";
 import HouseExtensionsEssex from "./pages/HouseExtensionsEssex.jsx";
 import RenovationsLondon from "./pages/RenovationsLondon.jsx";
 import Abotu from "./pages/About.jsx";
@@ -55,6 +56,11 @@ export default function App() {
                 <Route
                     path="/house-extensions-london"
                     element={<HouseExtensions />}
+                />
+
+                <Route
+                    path="/house-extensions-london-se"
+                    element={<HouseExtensionsSE />}
                 />
 
                 <Route

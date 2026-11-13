@@ -159,7 +159,7 @@ export default function ExtensionLeadForm() {
                 }
             }
 
-            navigate("/extensionFormSuccess", { replace: true, state: { submitted: true } });
+            navigate("/thank-you", { replace: true, state: { submitted: true } });
         } catch (error) {
             setStatus({
                 loading: false,
